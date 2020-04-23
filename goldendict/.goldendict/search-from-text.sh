@@ -54,15 +54,6 @@ calibre () {
   done
 }
 
-oxford () {
-  grep "\b$1\b" $HOME/.goldendict/oxford5000.txt > /dev/null
-  if [ $? -eq 0 ] ; then
-    echo "<b>oxford level</b>"
-    grep "\b$1\b" $HOME/.goldendict/oxford5000.txt
-    echo "<br>"
-  fi
-}
-
 subtitles () {
   match_flag=false
   subtitles_directory=$HOME/Nutstore/subtitles
@@ -83,6 +74,15 @@ subtitles () {
     done
     echo "</details>"
   done
+}
+
+oxford () {
+  grep "\b$1\b" $HOME/.goldendict/oxford5000.txt > /dev/null
+  if [ $? -eq 0 ] ; then
+    echo "<b>oxford level</b>"
+    grep "\b$1\b" $HOME/.goldendict/oxford5000.txt
+    echo "<br>"
+  fi
 }
 
 cat << 'EOF'
