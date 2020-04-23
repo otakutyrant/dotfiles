@@ -1,6 +1,7 @@
 #!/bin/bash
 
 zotero () {
+  echo "<b>calibre</b>"
   pdf_directory=$HOME/.zotero/zotero/yg83zi0h.default/zotero/storage
   tmp_directory=$HOME/tmp/zotero_txt
   sum=0
@@ -20,9 +21,11 @@ zotero () {
   done
   unset IFS
   echo "PDF count: $sum"
+  echo "<br>"
 }
 
 calibre () {
+  echo "<b>calibre</b>"
   calibre_directory=$HOME/Calibre
   grep --include \*.txt -lr "\<$1\>" $calibre_directory | while read line; do
     headline="$(basename "$line" .txt)"
@@ -36,13 +39,32 @@ calibre () {
     done
     echo "</details>"
   done
+  echo "<br>"
 }
 
 oxford () {
-  echo "<br>"
+  echo "<b>oxford level</b>"
   grep "\b$1\b" $HOME/.goldendict/oxford5000.txt
+  echo "<br>"
 }
 
+subtitles () {
+  echo "<b>subtitles</b>"
+  subtitles_directory=$HOME/Nutstore/subtitles
+  grep -lr "\<$1\>" $subtitles_directory | while read line; do
+    filename=`basename $line`
+    echo "<details>"
+    count="$(grep -c "\<$1\>" "$line")"
+    echo "<summary>$filename <b>$count</b></summary>"
+    grep -rIh --color=no "\<$1\>" "$line" | while read line; do
+      echo $line | sed "s|\b$1\b|<b>&</b>|g"
+      echo "<br>"
+      echo "<br>"
+    done
+    echo "</details>"
+  done
+  echo "<br>"
+}
 
 cat << 'EOF'
 <!DOCTYPE html>
@@ -52,6 +74,7 @@ EOF
 
 #zotero "$1"
 calibre "$1"
+subtitles "$1"
 oxford "$1"
 
 cat << 'EOF'
