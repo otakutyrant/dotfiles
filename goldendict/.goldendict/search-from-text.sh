@@ -83,7 +83,6 @@ subtitles () {
     done
     echo "</details>"
   done
-  echo "<br>"
 }
 
 cat << 'EOF'
