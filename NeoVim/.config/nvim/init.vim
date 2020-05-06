@@ -249,6 +249,11 @@ endif
 
   " http://www.skywind.me/blog/archives/2084
   set tags=./.tags;,.tags
+
+  " make neovim work in python virtual environment
+  " https://github.com/neovim/neovim/issues/1887#issuecomment-280497141
+  let g:python3_host_prog='/usr/bin/python'
+  let g:python_host_prog='/usr/bin/python2'
 " }
 
 " searching/moving {
