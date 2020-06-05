@@ -45,7 +45,10 @@ def lemma_to_inflections(lemma: str) -> list:
 
 def search_from_directory(directory: Path, keyword: str, suffix: str) -> str:
     lemma = word_to_lemma(keyword)
-    inflections = lemma_to_inflections(lemma)
+    if lemma is None:
+        inflections = [keyword]
+    else:
+        inflections = lemma_to_inflections(lemma)
     record = ''
 
     for pathname in directory.rglob(f'*.{suffix}'):
