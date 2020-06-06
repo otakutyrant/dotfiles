@@ -13,3 +13,5 @@ The original lemma.en.txt comes from [skywind3000/ECDICT](https://raw.githubuser
 The search_from_text supports global search for a keyword of any length, like "delusion", "ask for", and "get rid of", in a Calibre diretory which have some txts, or in a subtitles directory which have some srt files. And it can shows what oxford level a keyword is too.
 
 I recommend use this script in GolddenDict as a program. Note that it only passes test on my own Linux, it may take your own a little effort to make it work on other systems.
+
+The only dependence is sh. I use Arch Linux so I `pacman -S python-sh` immediately.
