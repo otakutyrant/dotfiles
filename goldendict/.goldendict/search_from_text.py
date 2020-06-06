@@ -13,18 +13,14 @@ import sh
 def word_to_lemma(word: str):
     lemma_pathname = Path('/home/otakutyrant/Projects/ECDICT/lemma.en.txt')
     result = None
-    other_result = None
     with suppress(sh.ErrorReturnCode_1):
         _ = sh.egrep(f'([^-\']|^){word}([^-\']|$)', str(lemma_pathname))
         result = sh.egrep(f'\\b{word}\\b', _in=_)
-        other_result = sh.egrep(f'^{word}', _in=result)
-    if other_result is not None:
-        lemma = sh.sed(f's|\\({word}\\).*|\\1|g', _in=other_result)
-        lemma = lemma.strip()
-        return lemma
-    elif result is not None:
-        lemma = sh.sed('s|\\([a-z]*\\).*|\\1|g', _in=result)
-        lemma = lemma.strip()
+    if result is not None:
+        if '/' in result:
+            lemma = result.split(' ')[0].split('/')[0]
+        else:
+            lemma = result.split(' ')[0]
         return lemma
     else:
         return None
