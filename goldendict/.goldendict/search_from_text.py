@@ -1,6 +1,5 @@
 #!/bin/env python3.8
 
-from contextlib import suppress
 from functools import partial
 from pathlib import Path
 import sys
@@ -13,17 +12,17 @@ import sh
 def word_to_lemma(word: str):
     lemma_pathname = Path('/home/otakutyrant/Projects/ECDICT/lemma.en.txt')
     result = None
-    with suppress(sh.ErrorReturnCode_1):
+    try:
         _ = sh.egrep(f'([^-\']|^){word}([^-\']|$)', str(lemma_pathname))
         result = sh.egrep(f'\\b{word}\\b', _in=_)
-    if result is not None:
+    except sh.ErrorReturnCode_1:
+        return None
+    else:
         if '/' in result:
             lemma = result.split(' ')[0].split('/')[0]
         else:
             lemma = result.split(' ')[0]
         return lemma
-    else:
-        return None
 
 
 def lemma_to_inflections(lemma: str) -> list:
