@@ -36,7 +36,7 @@ def lemma_to_inflections(lemma: str) -> list:
     line = sh.egrep(f'\\b{lemma}\\b', _in=line)
     inflections = line.split()[-1].split(',')
     if lemma not in inflections:
-        inflections.append(lemma)
+        inflections.insert(0, lemma)
     return inflections
 
 
