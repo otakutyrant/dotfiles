@@ -7,25 +7,23 @@ import sys
 
 import sh
 
+# sh.RunCommand class is a str subtype
+
 
 def word_to_lemma(word: str):
     lemma_pathname = Path('/home/otakutyrant/Projects/ECDICT/lemma.en.txt')
     result = None
     other_result = None
     with suppress(sh.ErrorReturnCode_1):
-        result = sh.egrep(
-                f'([^-\']|^){word}([^-\']|$)', str(lemma_pathname)
-        ).stdout.decode()
-        result = sh.egrep(f'\\b{word}\\b', _in=result).stdout.decode()
-        other_result = sh.egrep(f'^{word}', _in=result).stdout.decode()
+        _ = sh.egrep(f'([^-\']|^){word}([^-\']|$)', str(lemma_pathname))
+        result = sh.egrep(f'\\b{word}\\b', _in=_)
+        other_result = sh.egrep(f'^{word}', _in=result)
     if other_result is not None:
-        lemma = sh.sed(
-                f's|\\({word}\\).*|\\1|g', _in=other_result).stdout.decode()
+        lemma = sh.sed(f's|\\({word}\\).*|\\1|g', _in=other_result)
         lemma = lemma.strip()
         return lemma
     elif result is not None:
-        lemma = sh.sed(
-                's|\\([a-z]*\\).*|\\1|g', _in=result).stdout.decode()
+        lemma = sh.sed('s|\\([a-z]*\\).*|\\1|g', _in=result)
         lemma = lemma.strip()
         return lemma
     else:
@@ -34,9 +32,7 @@ def word_to_lemma(word: str):
 
 def lemma_to_inflections(lemma: str) -> list:
     lemma_pathname = Path('/home/otakutyrant/Projects/ECDICT/lemma.en.txt')
-    line = sh.egrep(
-            f'([^-\']|^){lemma}([^-\']|$)',
-            str(lemma_pathname)).stdout.decode()
+    line = sh.egrep(f'([^-\']|^){lemma}([^-\']|$)', str(lemma_pathname))
     line = sh.egrep(f'\\b{lemma}\\b', _in=line)
     inflections = line.split()[-1].split(',')
     if lemma not in inflections:
@@ -48,18 +44,19 @@ def search_from_directory(directory: Path, keyword: str, suffix: str) -> str:
     lemma = word_to_lemma(keyword)
     if lemma is None:
         inflections = [keyword]
+        keyword = '{}'.format(keyword)
     else:
         inflections = lemma_to_inflections(lemma)
+        keyword = '({})'.format('|'.join(inflections))
     record = ''
 
     for pathname in directory.rglob(f'*.{suffix}'):
         count = None
         running_command = None
         with suppress(sh.ErrorReturnCode_1):
-            combined_keywords = '({})'.format('|'.join(inflections))
-            running_command = sh.egrep('-c', combined_keywords, f'{pathname}')
+            running_command = sh.egrep('-c', keyword, f'{pathname}')
         if running_command is not None and running_command.exit_code == 0:
-            count = running_command.stdout.decode()
+            count = int(running_command)
             record += '<details>'
             record += f'<summary>{pathname.stem} <b>{count}</b></summary>'
             for keyword in inflections:
@@ -95,7 +92,8 @@ def oxford(keyword: str) -> str:
     if lemma is not None:
         keyword = lemma
     try:
-        record = sh.egrep(f'\\b{keyword}\\b', str(pathname)).stdout.decode()
+        record = sh.egrep(
+                f'\\b{keyword}\\b', str(pathname)).stdout.decode().strip()
     except sh.ErrorReturnCode_1:
         return ""
     else:
