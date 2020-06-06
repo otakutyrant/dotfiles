@@ -1,6 +1,7 @@
 #!/bin/env python3.8
 
 from functools import partial
+import itertools
 from pathlib import Path
 import sys
 
@@ -36,13 +37,21 @@ def lemma_to_inflections(lemma: str) -> list:
 
 
 def search_from_directory(directory: Path, keyword: str, suffix: str) -> str:
-    lemma = word_to_lemma(keyword)
-    if lemma is None:
-        inflections = [keyword]
-        pattern = '\\b{}\\b'.format(keyword)
-    else:
-        inflections = lemma_to_inflections(lemma)
-        pattern = '\\b({})\\b'.format('|'.join(inflections))
+    combinations = []
+    words = keyword.split(' ')
+    for word in words:
+        lemma = word_to_lemma(word)
+        if lemma is None:
+            combinations.append((word,))
+        else:
+            inflections = lemma_to_inflections(lemma)
+            combinations.append(inflections)
+    keywords = list(itertools.product(*combinations))
+
+    def words_to_keyword(words):
+        return ' '.join(words)
+    keywords = [words_to_keyword(words) for words in keywords]
+    pattern = '\\b({})\\b'.format('|'.join(keywords))
     record = ''
 
     for pathname in directory.rglob(f'*.{suffix}'):
