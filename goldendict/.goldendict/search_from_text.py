@@ -54,18 +54,18 @@ def search_from_directory(directory: Path, keyword: str, suffix: str) -> str:
         count = None
         running_command = None
         with suppress(sh.ErrorReturnCode_1):
-            running_command = sh.egrep('-c', keyword, f'{pathname}')
+            running_command = sh.egrep('-c', f'\\b{keyword}\\b', f'{pathname}')
         if running_command is not None and running_command.exit_code == 0:
             count = int(running_command)
             record += '<details>'
             record += f'<summary>{pathname.stem} <b>{count}</b></summary>'
             for inflection in inflections:
                 try:
-                    sh.egrep(inflection, f'{pathname}')
+                    sh.egrep(f'\\b{inflection}\\b', f'{pathname}')
                 except Exception:
                     pass
                 else:
-                    for line in sh.egrep(inflection, f'{pathname}'):
+                    for line in sh.egrep(f'\\b{inflection}\\b', f'{pathname}'):
                         record += sh.sed(
                                 f's|\\b{inflection}\\b|<b>&</b>|g', _in=line
                         ).stdout.decode().strip()
