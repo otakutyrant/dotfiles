@@ -44,33 +44,29 @@ def search_from_directory(directory: Path, keyword: str, suffix: str) -> str:
     lemma = word_to_lemma(keyword)
     if lemma is None:
         inflections = [keyword]
-        keyword = '{}'.format(keyword)
+        pattern = '\\b{}\\b'.format(keyword)
     else:
         inflections = lemma_to_inflections(lemma)
-        keyword = '({})'.format('|'.join(inflections))
+        pattern = '\\b({})\\b'.format('|'.join(inflections))
     record = ''
 
     for pathname in directory.rglob(f'*.{suffix}'):
         count = None
         running_command = None
-        with suppress(sh.ErrorReturnCode_1):
-            running_command = sh.egrep('-c', f'\\b{keyword}\\b', f'{pathname}')
-        if running_command is not None and running_command.exit_code == 0:
+        try:
+            running_command = sh.egrep('-c', pattern, f'{pathname}')
+        except sh.ErrorReturnCode_1:
+            pass
+        else:
             count = int(running_command)
             record += '<details>'
             record += f'<summary>{pathname.stem} <b>{count}</b></summary>'
-            for inflection in inflections:
-                try:
-                    sh.egrep(f'\\b{inflection}\\b', f'{pathname}')
-                except Exception:
-                    pass
-                else:
-                    for line in sh.egrep(f'\\b{inflection}\\b', f'{pathname}'):
-                        record += sh.sed(
-                                f's|\\b{inflection}\\b|<b>&</b>|g', _in=line
-                        ).stdout.decode().strip()
-                        record += '<br>'
-                        record += '<br>'
+            for line in sh.egrep(pattern, f'{pathname}'):
+                record += sh.sed(
+                        '-E', f's/{pattern}/<b>&<\\/b>/g', _in=line
+                ).stdout.decode().strip()
+                record += '<br>'
+                record += '<br>'
             record += '</details>'
     if record != '':
         record = f"""
