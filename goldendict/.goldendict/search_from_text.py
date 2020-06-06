@@ -9,9 +9,11 @@ import sh
 
 # sh.RunCommand class is a str subtype
 
+lemma_pathname = Path.home() / '.goldendict/lemma.en.txt'
+oxford_pathname = Path.home() / '.goldendict/oxford5000.txt'
+
 
 def word_to_lemma(word: str):
-    lemma_pathname = Path('/home/otakutyrant/Projects/ECDICT/lemma.en.txt')
     result = None
     try:
         _ = sh.egrep(f'([^-\']|^){word}([^-\']|$)', str(lemma_pathname))
@@ -27,7 +29,6 @@ def word_to_lemma(word: str):
 
 
 def lemma_to_inflections(lemma: str) -> list:
-    lemma_pathname = Path('/home/otakutyrant/Projects/ECDICT/lemma.en.txt')
     line = sh.egrep(f'([^-\']|^){lemma}([^-\']|$)', str(lemma_pathname))
     line = sh.egrep(f'\\b{lemma}\\b', _in=line)
     inflections = line.split()[-1].split(',')
@@ -87,13 +88,13 @@ subtitles = partial(search_from_directory, subtitles_directory, suffix='srt')
 
 
 def oxford(keyword: str) -> str:
-    pathname = Path.home() / '.goldendict/oxford5000.txt'
     lemma = word_to_lemma(keyword)
     if lemma is not None:
         keyword = lemma
     try:
         record = sh.egrep(
-                f'\\b{keyword}\\b', str(pathname)).stdout.decode().strip()
+                f'\\b{keyword}\\b', str(oxford_pathname)
+        ).stdout.decode().strip()
     except sh.ErrorReturnCode_1:
         return ""
     else:
