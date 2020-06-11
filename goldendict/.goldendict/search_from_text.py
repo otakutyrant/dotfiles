@@ -10,7 +10,6 @@ import sh
 # sh.RunCommand class is a str subtype
 
 lemma_pathname = Path.home() / '.goldendict/lemma.en.txt'
-oxford_pathname = Path.home() / '.goldendict/oxford5000.txt'
 
 
 def word_to_lemma(word: str):
@@ -87,25 +86,6 @@ subtitles_directory = Path.home() / 'Nutstore/subtitles'
 subtitles = partial(search_from_directory, subtitles_directory, suffix='srt')
 
 
-def oxford(keyword: str) -> str:
-    lemma = word_to_lemma(keyword)
-    if lemma is not None:
-        keyword = lemma
-    try:
-        record = sh.egrep(
-                f'\\b{keyword}\\b', str(oxford_pathname)
-        ).stdout.decode().strip()
-    except sh.ErrorReturnCode_1:
-        return ""
-    else:
-        return f"""
-        <b>oxford level</b>
-        {record}
-        <br>
-        """
-        return ""
-
-
 def main():
     keyword = sys.argv[1]
     record = """
@@ -113,7 +93,7 @@ def main():
     <html>
     <body>
     """
-    functions = (calibre, subtitles, oxford)
+    functions = (calibre, subtitles)
     for function in functions:
         record += function(keyword)
     record += """
