@@ -88,20 +88,19 @@ subtitles = partial(search_from_directory, subtitles_directory, suffix='srt')
 
 def main():
     keyword = sys.argv[1]
-    record = """
-    <!DOCTYPE html>
-    <html>
-    <body>
-    """
+    record = """<!DOCTYPE html>
+<html>
+<body>
+"""
     functions = (calibre, subtitles)
     for function in functions:
         record += function(keyword)
-    record += """
-    </body>
-    </html>
-    """
-    return record
+    record += """</body>
+</html>"""
+    line_numbers = len(record.split('\n'))
+    if line_numbers > 5:
+        print(record)
 
 
 if __name__ == '__main__':
-    print(main())
+    main()
