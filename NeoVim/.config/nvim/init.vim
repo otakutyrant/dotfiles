@@ -128,6 +128,10 @@ endif
     let g:indentLine_color_term = 239
     let g:indentLine_color_gui = '#A4E57E'
     let g:indentLine_char = '┆'
+  " force apostrophes to appear constantly
+  " https://github.com/Yggdroot/indentLine/issues/140#issuecomment-624662832
+  Plug 'elzr/vim-json'
+    let g:vim_json_syntax_conceal = 0
   " eat my big powerline!
   Plug 'bling/vim-airline'
     let g:airline_symbols = {}
