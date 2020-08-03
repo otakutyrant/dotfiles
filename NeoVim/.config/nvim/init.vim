@@ -117,6 +117,7 @@ endif
   " improve appreance
   " colorful pairs
   Plug 'luochen1990/rainbow'
+    let g:rainbow_active = 1
   " my colorscheme
   Plug 'morhetz/gruvbox'
     let g:gruvbox_italic=1
