@@ -125,3 +125,6 @@ anki
 
 ## Dictionary
 goldendict
+
+## Screen Recording
+obs-studio
