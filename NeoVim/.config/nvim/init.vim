@@ -76,7 +76,7 @@ endif
     Plug 'roxma/vim-hug-neovim-rpc'
     let g:deoplete#enable_at_startup = 1
   " syntax checker
-  Plug 'w0rp/ale'
+  Plug 'dense-analysis/ale'
   " TODO explicit every linter for language
   " let g:ale_linters_explicit = 1
     let g:ale_completion_delay = 500
