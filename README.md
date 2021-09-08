@@ -7,7 +7,7 @@ Let me explain some diretories.
 
 ## Default Applications
 
-I follow [Desktop entries](https://wiki.archlinux.org/index.php/Desktop_entries) to set my [Default applications](https://wiki.archlinux.org/index.php/Default_applications#MIME_types_and_desktop_entries), and I do not use any DE, so there are only a `$HOME/.config/mimeapps.list` inside, at the same time, I set some environments to appoint default applications in the Shell sections.
+No DE settings. Instead I follow [Desktop entries](https://wiki.archlinux.org/index.php/Desktop_entries) to set [Default applications](https://wiki.archlinux.org/index.php/Default_applications#MIME_types_and_desktop_entries), while some related environments are set in `.zshenv`.
 
 ## Git
 
