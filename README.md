@@ -11,15 +11,11 @@ No DE settings. Instead I follow [Desktop entries](https://wiki.archlinux.org/in
 
 ## Git
 
-I use less as the pager for git, and set some aliases.
-
-I use meld as the differ for git.
-
-No `.gitignore`, I advise that set `.gitgnore` for every program by yourself, just pull `github/gitignore` immediately.
+Nvimpager and meld are recommended as pager and merge tool respectively.
 
 ## X11
 
-.config/gtk-3.0/bookmarks: use for Nautilus.
+.config/gtk-3.0/bookmarks: for Nautilus.
 .config/gtk-3.0/setting.ini: GTK+ 3 config.
 .config/.gtkrc-2.0: GTK+ 2 config.
 .xinitrc & .Xmodmap: X11 config.
