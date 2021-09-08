@@ -16,3 +16,4 @@ X11/.config/gtk-3.0/settings.ini
 Python/Projects
 NeoVim/.config/nvim/plugged
 NeoVim/.config/nvim/.netrwhist
+NeoVim/.local/share
