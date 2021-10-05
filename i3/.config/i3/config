@@ -32,7 +32,7 @@ floating_modifier $mod
 # start an terminal
 bindsym $mod+Return exec termite
 # start a browser
-bindsym $mod+c exec chromium
+bindsym $mod+c exec google-chrome-stable
 # start dmenu (a program launcher)
 bindsym $mod+d exec dmenu_run -fn 'Dorid Sans Mono-9'
 # If it need athority, just run this instead:
