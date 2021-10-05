@@ -14,35 +14,29 @@ lemma_pathname = Path.home() / '.goldendict/lemma.en.txt'
 lemma_file = open(lemma_pathname)
 
 
-def word_to_lemma(word: str):
+def word_to_inflections(word: str):
     for line in lemma_file:
         match = re.search(rf'(?=[^-\']|^)\b{word}\b(?=[^-\']|$)', line)
         if match:
-            result = line
-            lemma = result.split(' ')[0].split('/')[0]
-            return lemma
+            lemma = line.split(' ')[0].split('/')[0]
+            inflections = line.split()[-1].split(',')
+            if lemma not in inflections:
+                inflections.insert(0, lemma)
+            else:
+                index = inflections.index(lemma)
+                inflections[0], inflections[index] = inflections[index], inflections[0]
+            return inflections
     return None
-
-
-def lemma_to_inflections(lemma: str) -> list:
-    line = sh.egrep(f'([^-\']|^){lemma}([^-\']|$)', str(lemma_pathname))
-    line = sh.egrep(f'\\b{lemma}\\b', _in=line)
-    inflections = line.split()[-1].split(',')
-    if lemma not in inflections:
-        inflections.insert(0, lemma)
-    return inflections
 
 
 def search_from_directory(directory: Path, keyword: str, suffix: str) -> str:
     combinations = []
     words = keyword.split(' ')
     for word in words:
-        lemma = word_to_lemma(word)
-        print(lemma)
-        if lemma is None:
+        inflections = word_to_inflections(word)
+        if inflections is None:
             combinations.append((word,))
         else:
-            inflections = lemma_to_inflections(lemma)
             combinations.append(inflections)
     keywords = list(itertools.product(*combinations))
 
