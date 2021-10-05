@@ -1,8 +1,9 @@
-#!/bin/env python3.8
+#!/bin/env python
 
 from functools import partial
 import itertools
 from pathlib import Path
+import re
 import sys
 
 import sh
@@ -10,21 +11,17 @@ import sh
 # sh.RunCommand class is a str subtype
 
 lemma_pathname = Path.home() / '.goldendict/lemma.en.txt'
+lemma_file = open(lemma_pathname)
 
 
 def word_to_lemma(word: str):
-    result = None
-    try:
-        _ = sh.egrep(f'([^-\']|^){word}([^-\']|$)', str(lemma_pathname))
-        result = sh.egrep(f'\\b{word}\\b', _in=_)
-    except sh.ErrorReturnCode_1:
-        return None
-    else:
-        if '/' in result:
+    for line in lemma_file:
+        match = re.search(rf'(?=[^-\']|^)\b{word}\b(?=[^-\']|$)', line)
+        if match:
+            result = line
             lemma = result.split(' ')[0].split('/')[0]
-        else:
-            lemma = result.split(' ')[0]
-        return lemma
+            return lemma
+    return None
 
 
 def lemma_to_inflections(lemma: str) -> list:
@@ -41,6 +38,7 @@ def search_from_directory(directory: Path, keyword: str, suffix: str) -> str:
     words = keyword.split(' ')
     for word in words:
         lemma = word_to_lemma(word)
+        print(lemma)
         if lemma is None:
             combinations.append((word,))
         else:
@@ -104,3 +102,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+    # word_to_lemma('foodstuff')
