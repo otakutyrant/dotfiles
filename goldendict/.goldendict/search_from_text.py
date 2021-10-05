@@ -78,7 +78,7 @@ def search_from_directory(directory: Path, keyword: str, suffix: str) -> str:
     return record
 
 
-calibre_directory = Path.home() / 'Calibre'
+calibre_directory = Path.home() / 'Calibre Library'
 calibre = partial(search_from_directory, calibre_directory, suffix='txt')
 subtitles_directory = Path.home() / 'Nutstore/subtitles'
 subtitles = partial(search_from_directory, subtitles_directory, suffix='srt')
