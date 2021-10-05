@@ -89,4 +89,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-    # word_to_lemma('foodstuff')
