@@ -6,10 +6,6 @@ from pathlib import Path
 import re
 import sys
 
-import sh
-
-# sh.RunCommand class is a str subtype
-
 lemma_pathname = Path.home() / '.goldendict/lemma.en.txt'
 lemma_file = open(lemma_pathname)
 
@@ -47,20 +43,17 @@ def search_from_directory(directory: Path, keyword: str, suffix: str) -> str:
     record = ''
 
     for pathname in directory.rglob(f'*.{suffix}'):
-        count = None
-        running_command = None
-        try:
-            running_command = sh.egrep('-c', pattern, f'{pathname}')
-        except sh.ErrorReturnCode_1:
-            pass
-        else:
-            count = int(running_command)
+        lines = []
+        with open(pathname) as file_:
+            for line in file_:
+                if re.search(pattern, line):
+                    lines.append(line)
+        count = len(lines)
+        if count > 0:
             record += '<details>'
             record += f'<summary>{pathname.stem} <b>{count}</b></summary>'
-            for line in sh.egrep(pattern, f'{pathname}'):
-                record += sh.sed(
-                        '-E', f's/{pattern}/<b>&<\\/b>/g', _in=line
-                ).stdout.decode().strip()
+            for line in lines:
+                record += re.sub(f'({pattern})', r'<b>\1</b>', line).strip()
                 record += '<br>'
                 record += '<br>'
             record += '</details>'
