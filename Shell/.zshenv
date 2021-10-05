@@ -14,10 +14,10 @@ export VISUAL="nvim"
 export XDG_CONFIG_HOME="$HOME/.config"
 # These addresses are assigned by cow.
 proxy () {
-  export http_proxy="http://127.0.0.1:8123"
-  export https_proxy="http://127.0.0.1:8123"
-  export HTTP_PROXY="http://127.0.0.1:8123"
-  export HTTPS_PROXY="http://127.0.0.1:8123"
+  export http_proxy="http://127.0.0.1:2340"
+  export https_proxy="http://127.0.0.1:2340"
+  export HTTP_PROXY="http://127.0.0.1:2340"
+  export HTTPS_PROXY="http://127.0.0.1:2340"
   echo "http proxy on"
 }
 noproxy () {
