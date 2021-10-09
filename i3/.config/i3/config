@@ -120,7 +120,7 @@ workspace_layout tabbed
 
 # Automatically putting clients on specific workspaces.
 assign [class="Termite"] 1: Term
-assign [class="Chromium"] 2: Web
+assign [class="google-chrome"] 2: Web
 assign [class="Google-chrome"] 2: Web
 assign [class="MPlayer"] 3: Media
 assign [class="Steam"] 3: Media
@@ -187,7 +187,7 @@ bar {
 # Automatically starting applications on i3 startup.
 exec compton -b -c
 exec termite -e tmuxen.sh
-exec chromium
+exec google-chrome
 exec fcitx
 exec synapse
 exec rescuetime
