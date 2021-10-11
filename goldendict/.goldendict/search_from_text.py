@@ -43,6 +43,8 @@ def search_from_directory(directory: Path, keyword: str, suffix: str) -> str:
     record = ''
 
     for pathname in directory.rglob(f'*.{suffix}'):
+        if 'lemma' in pathname.name or 'deck' in pathname.name:
+            continue
         lines = []
         with open(pathname) as file_:
             for line in file_:
