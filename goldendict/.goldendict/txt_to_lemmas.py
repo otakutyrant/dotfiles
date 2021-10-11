@@ -1,47 +1,51 @@
 #!/bin/env python
 
 from collections import Counter
-from functools import partial
-import itertools
 from pathlib import Path
-import re
-import sys
 
-lemma_pathname = Path.home() / '.goldendict/lemma.en.txt'
-lemma_file = open(lemma_pathname)
-
-
-def word_to_inflections(word: str):
-    lemma_file.seek(0)
-    for line in lemma_file:
-        match = re.search(rf'(?=[^-\']|^)\b{word.lower()}\b(?=[^-\']|$)', line)
-        if match:
-            lemma = line.split(' ')[0].split('/')[0]
-            inflections = line.split()[-1].split(',')
-            if lemma not in inflections:
-                inflections.insert(0, lemma)
-            else:
-                index = inflections.index(lemma)
-                inflections[0], inflections[index] = inflections[index], inflections[0]
-            return inflections
-    return [word]
+from search_from_text import word_to_inflections
 
 
 def main():
-    pathname = Path(sys.argv[1])
-    directory = pathname.parent
-    lemmas = Counter()
-    with open(pathname) as file_:
-        for index, line in enumerate(file_):
-            for word in line.split():
-                if word.isalpha():
-                    lemma = word_to_inflections(word)[0]
-                    lemmas[lemma] += 1
-            if index % 10 == 0:
-                print(index)
-    with open(directory / 'lemmas.txt', 'w') as lemma_file:
-        for key, value in lemmas.most_common():
-            lemma_file.write(f'{key} {value}\n')
+    hashmap = {}
+    lemma_pathname = Path.home() / '.goldendict/lemma.en.txt'
+    with open(lemma_pathname) as lemma_file:
+        for line in lemma_file:
+            lemma, _, inflections = line.split(' ')
+            lemma = lemma.split('/')[0]
+            hashmap[lemma] = lemma
+            inflections = inflections.split(',')
+            for inflection in inflections:
+                hashmap[inflection] = lemma
+    for pathname in (Path.home() / 'Calibre Library').glob('**/*.txt'):
+        # if pathname != Path('/home/otakutyrant/Calibre Library/Hourly History/The Black Death_ A History From Begi (65)/The Black Death_ A History From - Hourly History.txt'):
+        if pathname.name == 'lemmas.txt':
+            continue
+        lemma_pathname = pathname.parent / 'lemmas.txt'
+        with open(pathname) as file_, open(lemma_pathname, 'w') as lemma_file:
+            words = [
+                    word
+                    for line in file_
+                    for word in line.split()
+                    if word.isalpha() and word.isascii()
+            ]
+            set_ = set(words)
+            words = [
+                    word.lower()
+                    if word.lower() in set_
+                    else word
+                    for word in words
+            ]
+            lemmas = [
+                    hashmap[word.lower()]
+                    if word.lower() in hashmap
+                    else word
+                    for word in words
+            ]
+            counter = Counter(lemmas)
+            for word, count in counter.most_common():
+                lemma_file.write(f'{word} {count}\n')
+        print(f'{pathname} done.')
 
 
 if __name__ == '__main__':
