@@ -2,7 +2,6 @@
   " Map leader key from backslash to comma, which is confortable to human.
   let mapleader = ","
   " easy
-  nnoremap ; :
   nnoremap <Tab> %
 " }
 
