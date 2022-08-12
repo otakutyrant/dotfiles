@@ -68,6 +68,13 @@ endif
   " https://stackoverflow.com/a/13682379/1546088
   Plug 'vim-scripts/star-search'
 
+  function! UpdateRemotePlugins(...)
+    " Needed to refresh runtime files
+    let &rtp=&rtp
+    UpdateRemotePlugins
+  endfunction
+  Plug 'gelguy/wilder.nvim', { 'do': function('UpdateRemotePlugins') }
+
   " syntax support
   " complete
   Plug 'Shougo/deoplete.nvim'
@@ -181,6 +188,23 @@ endif
 
   call plug#end()
 " }
+
+" Plug wilder.nvim
+call wilder#setup({'modes': [':', '/', '?']})
+" 'border'            : 'single', 'double', 'rounded' or 'solid'
+"                     : can also be a list of 8 characters,
+"                     : see :h wilder#popupmenu_border_theme() for more details
+" 'highlights.border' : highlight to use for the border`
+" 'highlighter' : applies highlighting to the candidates
+call wilder#set_option('renderer', wilder#popupmenu_renderer({
+      \ 'highlighter': wilder#basic_highlighter(),
+      \ }))
+call wilder#set_option('renderer', wilder#popupmenu_renderer(wilder#popupmenu_border_theme({
+      \ 'highlights': {
+      \   'border': 'Normal',
+      \ },
+      \ 'border': 'rounded',
+      \ })))
 
 " windows {
   " do not scroll synchronously
