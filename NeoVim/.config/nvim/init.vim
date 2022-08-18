@@ -93,12 +93,9 @@ endif
     let g:ale_lint_on_insert_leave = 1
     let g:airline#extensions#ale#enabled = 1
 
-    let g:ale_c_gcc_options = '-Wall -O2 -std=c99'
-    let g:ale_cpp_gcc_options = '-Wall -O2 -std=c++14'
-    let g:ale_c_cppcheck_options = ''
-    let g:ale_cpp_cppcheck_options = ''
+    let g:ale_cpp_cc_options = '-Wall -O2 -std=c++17'
 
-    let g:ale_linters = {'python': ['flake8']}
+    let g:ale_linters = {'python': ['flake8'], 'cpp': ['cc']}
 
     let g:ale_sign_error = "‼"
     hi! clear SpellBad
