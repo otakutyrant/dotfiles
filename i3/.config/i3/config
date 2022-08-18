@@ -30,7 +30,7 @@ font pango:Sarasa Term SC 12
 floating_modifier $mod
 
 # start an terminal
-bindsym $mod+Return exec termite
+bindsym $mod+Return exec alacritty
 # start a browser
 bindsym $mod+c exec google-chrome-stable
 # start dmenu (a program launcher)
