@@ -13,7 +13,7 @@ set $mod Mod4
 
 # Font for window titles. Will also be used by the bar unless a different font
 # is used in the bar {} block below.
-font pango:Sarasa Term SC 12
+font pango:Sarasa Mono Slab SC Semibold 12
 
 # This font is widely installed, provides lots of unicode glyphs, right-to-left
 # text rendering and scalability on retina/hidpi displays (thanks to pango).
@@ -172,7 +172,7 @@ bindsym XF86Battery exec gnome-power-statistics
 # finds out, if available
 bar {
   tray_output primary
-  font pango: Sarasa Term SC 14
+  font pango: Sarasa Mono Slab SC Semibold 12
   status_command $HOME/abs/i3status-rust/target/release/i3status-rs $HOME/.config/i3/status.toml
   colors {
     separator #666666
