@@ -147,8 +147,9 @@ multilib=true
 # Multimedia
 
   ## Sound
-  yaourt -S --noconfirm --needed alsa-utils pulseaudio paprefs pavucontrol \
-      pulseaudio-alsa
+  ## TODO How to get rid of pulseaudio totally?
+  yaourt -S --noconfirm --needed alsa-utils paprefs pavucontrol \
+    pipewire pipewire-alsa pipiewire-pulse
 
   ## Browser plugins TODO
   # https://wiki.archlinux.org/index.php/Browser_plugins
