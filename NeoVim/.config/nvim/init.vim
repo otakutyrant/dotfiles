@@ -93,7 +93,7 @@ endif
     let g:ale_lint_on_insert_leave = 1
     let g:airline#extensions#ale#enabled = 1
 
-    let g:ale_cpp_cc_options = '-Wall -O2 -std=c++17'
+    let g:ale_cpp_clangtidy_options = '-Wall -O2 -std=c++17'
 
     let g:ale_linters = {'python': ['flake8'], 'cpp': ['clangtidy']}
 
