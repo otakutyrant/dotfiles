@@ -173,7 +173,7 @@ bindsym XF86Battery exec gnome-power-statistics
 bar {
   tray_output primary
   font pango: Sarasa Mono Slab SC Semibold 12
-  status_command $HOME/abs/i3status-rust/target/release/i3status-rs $HOME/.config/i3/status.toml
+  status_command i3status-rs $HOME/.config/i3/status.toml
   colors {
     separator #666666
     background #666666
