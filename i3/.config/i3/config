@@ -203,3 +203,7 @@ exec fragments
 # use two wallpapers for each screen by Nitrogen
 # https://faq.i3wm.org/question/6247/assigning-individual-wallpaper-to-monitors.1.html
 exec --no-startup-id nitrogen --restore
+
+# use geoclue for redshift
+# https://wiki.archlinux.org/title/Redshift#Automatic_location_based_on_GeoClue2
+exec --no-startup-id /usr/lib/geoclue-2.0/demos/agent
