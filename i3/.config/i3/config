@@ -185,20 +185,20 @@ bar {
 }
 
 # Automatically starting applications on i3 startup.
-exec compton -b -c
-exec termite -e tmuxen.sh
-exec google-chrome
-exec fcitx
-exec synapse
-exec rescuetime
-exec xautolock -time 7 -locker i3lock --image $HOME/lock -t
-exec nm-applet
-exec redshift-gtk
-exec goldendict
+exec --no-startup-id compton -b -c
+exec --no-startup-id alacritty -e tmuxen.sh
+exec --no-startup-id google-chrome
+exec --no-startup-id fcitx5
+exec --no-startup-id synapse
+exec --no-startup-id rescuetime
+exec --no-startup-id xautolock -time 7 -locker i3lock --image $HOME/lock -t
+exec --no-startup-id nm-applet
+exec --no-startup-id redshift-gtk
+exec --no-startup-id goldendict
 # https://faq.i3wm.org/question/2332/flexible-monitor-setup.1.html
 exec xrandr --output DVI-D-0 --off --output HDMI-0 --primary --mode 1920x1080 --pos 0x0 --rotate normal --output DP-0 --off --output DP-1 --off --output DP-2 --off --output DP-3 --off --output DP-4 --off --output DP-5 --off
 # https://wiki.archlinux.org/index.php/Feh#Set_the_wallpaper
-exec fragments
+exec --no-startup-id fragments
 
 # use two wallpapers for each screen by Nitrogen
 # https://faq.i3wm.org/question/6247/assigning-individual-wallpaper-to-monitors.1.html
@@ -207,3 +207,5 @@ exec --no-startup-id nitrogen --restore
 # use geoclue for redshift
 # https://wiki.archlinux.org/title/Redshift#Automatic_location_based_on_GeoClue2
 exec --no-startup-id /usr/lib/geoclue-2.0/demos/agent
+
+exec --no-startup-id cfw
