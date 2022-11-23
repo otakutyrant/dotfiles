@@ -1,0 +1,8 @@
+# https://wiki.archlinux.org/title/Fcitx5#Integration
+# Put these env variables in .xprofile instead of .xinitrc because display manager only source the former
+export GTK_IM_MODULE=fcitx
+export QT_IM_MODULE=fcitx
+export XMODIFIERS=@im=fcitx
+export LC_CTYPE="zh_CN.UTF-8"
+export SDL_IM_MODULE=fcitx
+export GLFW_IM_MODULE=ibus

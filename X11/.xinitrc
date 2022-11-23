@@ -19,13 +19,6 @@ if [ -d /etc/X11/xinit/xinitrc.d ]; then
   unset f
 fi
 
-# Set Fcitx as IME
-# https://wiki.archlinux.org/index.php/Fcitx_(简体中文)#.E9.9D.9E.E6.A1.8C.E9.9D.A2.E7.8E.AF.E5.A2.83
-export GTK_IM_MODULE=fcitx
-export QT_IM_MODULE=fcitx
-export XMODIFIERS="@im=fcitx"
-export LC_CTYPE="zh_CN.UTF-8"
-
 # https://wiki.archlinux.org/index.php/Activating_Numlock_on_Bootup#startx
 numlockx &
 
