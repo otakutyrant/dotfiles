@@ -209,3 +209,5 @@ exec --no-startup-id nitrogen --restore
 exec --no-startup-id /usr/lib/geoclue-2.0/demos/agent
 
 exec --no-startup-id cfw
+
+exec --no-startup-id nutstore
