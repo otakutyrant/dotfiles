@@ -1,33 +1,48 @@
 # basic command line tools
+autojump
 git
 htop
 less
+less
 man
+nvimpager-git
 ranger
 stow
 the_silver_searcher
 tldr
 tmux
+tree
 zsh
 
 # editor
 neovim python-pynvim
 
 # network
+create_ap
 curl
+iputils
+networkmanager
 openssh
 rsync
 wget
+whois
 
 # programming languages
 cmake ctags
 python python-pip
 
 # GPU
-nvidia-utils
 nvidia
+nvidia-utils
 cuda
 cudnn
 
 # others
+dpkg linux-headers lsof modinfo
 tensorboard
+
+# archiving and compression tools
+bzip2 gzip p7zip tar unrar unzip xz zip
+
+# system information viewers
+alsi hardinfo lsb-release
