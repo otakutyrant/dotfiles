@@ -35,5 +35,3 @@
 [status]
   # showStash only work for 2.14.0 and later
   showStash = true
-[http]
-	proxy = http://127.0.0.1:2340
