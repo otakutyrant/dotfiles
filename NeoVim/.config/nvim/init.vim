@@ -1,5 +1,5 @@
 " More user-friendly mapping of key {
-  " Map leader key from backslash to comma, which is confortable to human.
+  " Map leader key from backslash to comma, which is comfortable to human.
   let mapleader = ","
   " easy
   nnoremap <Tab> %
@@ -53,7 +53,7 @@ endif
       let g:ackprg = 'ag --vimgrep'
     endif
     cnoreabbrev Ack Ack!
-    " <C-r><C-W> can input the cuurent word in the command line mode
+    " <C-r><C-W> can input the current word in the command line mode
     " by the way, you can use <C-w> to delete the current word when you do not need it
     nnoremap <Leader>a :Ack! <C-r><C-w>
   " more powerful replace
@@ -117,7 +117,7 @@ endif
     au! BufRead,BufNewFile *.proto setfiletype proto
   augroup end
 
-  " improve appreance
+  " improve appearance
   " colorful pairs
   Plug 'luochen1990/rainbow'
     let g:rainbow_active = 1
@@ -278,6 +278,12 @@ call wilder#set_option('renderer', wilder#popupmenu_renderer(wilder#popupmenu_bo
   " https://github.com/neovim/neovim/issues/1887#issuecomment-280497141
   let g:python3_host_prog='/usr/bin/python'
   let g:python_host_prog='/usr/bin/python2'
+
+  " spell check
+  " https://jdhao.github.io/2019/04/29/nvim_spell_check/
+  set spelllang=en,cjk
+  set spellsuggest=best,9
+  nnoremap <leader>s :set spell!<cr>
 " }
 
 " searching/moving {
@@ -286,9 +292,9 @@ call wilder#set_option('renderer', wilder#popupmenu_renderer(wilder#popupmenu_bo
   set smartcase
   " so you do not need add 'g' after every replace command
   set gdefault
-  " awhen a bracket is inserted, briefly jump to the matching one
+  " when a bracket is inserted, briefly jump to the matching one
   set showmatch
-  " cancle highlight search so easy
+  " cancel highlight search so easy
   nnoremap <leader><space> :nohlsearch<cr>
 " }
 
