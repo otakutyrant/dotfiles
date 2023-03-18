@@ -1,6 +1,33 @@
-ranger htop neovim python-pynvim openssh python python-pip cmake git stow wget curl man zsh htop tldr the_silver_searcher cmake less tensorboard tmux ctags rsync
+# basic command line tools
+git
+htop
+less
+man
+ranger
+stow
+the_silver_searcher
+tldr
+tmux
+zsh
 
+# editor
+neovim python-pynvim
+
+# network
+curl
+openssh
+rsync
+wget
+
+# programming languages
+cmake ctags
+python python-pip
+
+# GPU
 nvidia-utils
 nvidia
 cuda
 cudnn
+
+# others
+tensorboard
