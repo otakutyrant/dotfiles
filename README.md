@@ -3,9 +3,11 @@ dotfiles
 
 I [use GNU Stow to manage my dotfiles](http://brandon.invergo.net/news/2012-05-26-using-gnu-stow-to-manage-your-dotfiles.html) with elaborate comments inside.
 
+It may be inconvenient to manage DE via dotfiles. I do not use any DE but i3.
+
 ## Default Applications
 
-No DE settings. Instead I follow [Desktop entries](https://wiki.archlinux.org/index.php/Desktop_entries) to set [Default applications](https://wiki.archlinux.org/index.php/Default_applications#MIME_types_and_desktop_entries), while some related environments are set in `.zshenv`.
+I follow [XDG MIME Applications](https://wiki.archlinux.org/title/XDG_MIME_Applications) to set [Default applications](https://wiki.archlinux.org/index.php/Default_applications), meanwhile some related environments are set in `.zshenv`.
 
 ## Git
 
