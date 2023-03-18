@@ -1,4 +1,4 @@
-ranger htop neovim python-pynvim openssh python python-pip cmake git stow wget curl man zsh htop tldr the_silver_searcher cmake less tensorboard tmux ctags
+ranger htop neovim python-pynvim openssh python python-pip cmake git stow wget curl man zsh htop tldr the_silver_searcher cmake less tensorboard tmux ctags rsync
 
 nvidia-utils
 nvidia
