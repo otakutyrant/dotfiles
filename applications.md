@@ -8,15 +8,13 @@ steam
 
 ## Network Managers
 networkmanager network-manager-applet
-# https://wiki.archlinux.org/index.php/GNOME/Keyring TODO
-gnome-keyring libgnome-keyring seahorse
 ## Web browsers
-google-chrome firefox opera
+google-chrome
 ## Downloaders
 ### BitTorrent clients
-deluge
+fragments
 ### Video downloaders
-you-get
+yt-dlp
 ## Communication
 ### Email clients
 thunderbird mailspring
@@ -40,14 +38,14 @@ deadbeef mplayer
 volumeicon
 ## Video
 ### Video players
-mpv vlc mediainfo
+mpv mediainfo
 ### Subtitles
 aegisub
 
 # Utilities
 
 ## Terminal emulators
-termite
+alacritty
 ## Files
 ### File managers
 # https://wiki.archlinux.org/index.php/File_manager_functionality#Thumbnail_previews
@@ -70,7 +68,7 @@ xclip
 nitrogen
 ## Package management see general.sh
 ## Input method editor
-fcitx-im fcitx-rime fcitx-im fcitx-configtool fcitx-qt5
+fcitx5-im fcitx5-rime fcitx5-mozc 
 
 # Documents
 
@@ -128,3 +126,16 @@ goldendict-git
 
 ## Screen Recording
 obs-studio
+
+## X11
+arandr
+compton
+i3
+lxappearance
+lxdm
+xorg xorg-xinit xorg-xmodmap xorg-xprop xsel
+xfce4-notifyd
+
+## font
+ttf-sarasa-gothic
+deepin-gtk-theme deepin-icon-theme
