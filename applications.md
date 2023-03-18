@@ -11,7 +11,7 @@ networkmanager network-manager-applet
 # https://wiki.archlinux.org/index.php/GNOME/Keyring TODO
 gnome-keyring libgnome-keyring seahorse
 ## Web browsers
-google-chrome chromium-pepper-flash firefox opera
+google-chrome firefox opera
 ## Downloaders
 ### BitTorrent clients
 deluge
@@ -62,7 +62,7 @@ baobab
 ## System monitoring
 gnome-system-monitor htop
 ## System information viewers
-alsi cpu-g-bzr hardinfo lsb-release
+alsi hardinfo lsb-release
 ## Power management see general.sh
 ## Clipboard managers
 xclip
@@ -95,7 +95,7 @@ mcomix
 ## Screen lockers
 xautolock i3lock
 ## Hash checkers
-gtkhash gtkhash-nautilus
+gtkhash
 
 # Science
 
@@ -117,14 +117,14 @@ nutstore nautilus-nutstore
 teamviewer
 
 ## Safe plugins
-upeditor aliedit
+upeditor
 
 ## Others
-weatherboy whois create_ap openssh linux-headers rescuetime autojump tree gnome-control-center
+whois create_ap openssh linux-headers autojump tree gnome-control-center
 anki
 
 ## Dictionary
-goldendict
+goldendict-git
 
 ## Screen Recording
 obs-studio
