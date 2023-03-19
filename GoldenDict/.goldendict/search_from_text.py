@@ -4,6 +4,7 @@ import itertools
 import re
 import sys
 from pathlib import Path
+from typing import List
 
 from yattag import Doc
 
@@ -11,7 +12,7 @@ lemma_pathname = Path.home() / ".goldendict/lemma.en.txt"
 lemma_file = open(lemma_pathname)
 
 
-def word_to_inflections(word: str):
+def word_to_inflections(word: str) -> List[str]:
     for line in lemma_file:
         match = re.search(rf"(?=[^-\']|^)\b{word}\b(?=[^-\']|$)", line)
         if match:
@@ -26,30 +27,32 @@ def word_to_inflections(word: str):
                     inflections[0],
                 )
             return inflections
-    return None
+    else:
+        return [word]
 
 
 def words_to_keyword(words) -> str:
     return " ".join(words)
 
 
-def search_from_directory(
-    directory: Path, keyword: str, suffix: str, doc, tag, text
-):
-    combinations = []
+def keyword_to_pattern(keyword: str) -> str:
     words = keyword.split(" ")
+    combinations = []
     for word in words:
         inflections = word_to_inflections(word)
-        if inflections is None:
-            combinations.append((word,))
-        else:
-            combinations.append(inflections)
+        combinations.append(inflections)
     keywords = [
         words_to_keyword(words)
         for words in list(itertools.product(*combinations))
     ]
     pattern = "\\b({})\\b".format("|".join(keywords))
+    return pattern
 
+
+def search_from_directory(
+    directory: Path, keyword: str, suffix: str, doc, tag, text
+):
+    pattern = keyword_to_pattern(keyword)
     for pathname in directory.rglob(f"*.{suffix}"):
         if "lemma" in pathname.name or "deck" in pathname.name:
             continue
