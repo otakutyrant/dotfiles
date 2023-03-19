@@ -3,7 +3,6 @@
 import itertools
 import re
 import sys
-from functools import partial
 from pathlib import Path
 
 lemma_pathname = Path.home() / ".goldendict/lemma.en.txt"
@@ -65,21 +64,7 @@ def search_from_directory(directory: Path, keyword: str, suffix: str) -> str:
                 record += "<br>"
                 record += "<br>"
             record += "</details>"
-    if record != "":
-        record = (
-            f"""
-        <b>{directory.stem}</b>
-        <br>
-        """
-            + record
-        )
     return record
-
-
-calibre_directory = Path.home() / "Calibre Library"
-calibre = partial(search_from_directory, calibre_directory, suffix="txt")
-subtitles_directory = Path.home() / "Nutstore/subtitles"
-subtitles = partial(search_from_directory, subtitles_directory, suffix="srt")
 
 
 def main():
@@ -88,14 +73,11 @@ def main():
 <html>
 <body>
 """
-    functions = (calibre, subtitles)
-    for function in functions:
-        record += function(keyword)
+    calibre_directory = Path.home() / "Calibre Library"
+    record += search_from_directory(calibre_directory, keyword, suffix="txt")
     record += """</body>
 </html>"""
-    line_numbers = len(record.split("\n"))
-    if line_numbers > 5:
-        print(record)
+    print(record)
 
 
 if __name__ == "__main__":
