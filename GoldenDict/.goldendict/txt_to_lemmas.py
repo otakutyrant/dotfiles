@@ -9,7 +9,7 @@ def main():
     lemma_pathname = Path.home() / ".goldendict/lemma.en.txt"
     with open(lemma_pathname) as lemma_file:
         for line in lemma_file:
-            lemma, _, inflections = line.split(" ")
+            lemma, _, inflections = line.strip().split(" ")
             lemma = lemma.split("/")[0]
             hashmap[lemma] = lemma
             inflections = inflections.split(",")
