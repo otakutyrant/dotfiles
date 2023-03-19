@@ -5,6 +5,8 @@ import re
 import sys
 from pathlib import Path
 
+from yattag import Doc
+
 lemma_pathname = Path.home() / ".goldendict/lemma.en.txt"
 lemma_file = open(lemma_pathname)
 
@@ -31,7 +33,9 @@ def words_to_keyword(words) -> str:
     return " ".join(words)
 
 
-def search_from_directory(directory: Path, keyword: str, suffix: str) -> str:
+def search_from_directory(
+    directory: Path, keyword: str, suffix: str, doc, tag, text
+):
     combinations = []
     words = keyword.split(" ")
     for word in words:
@@ -45,7 +49,6 @@ def search_from_directory(directory: Path, keyword: str, suffix: str) -> str:
         for words in list(itertools.product(*combinations))
     ]
     pattern = "\\b({})\\b".format("|".join(keywords))
-    record = ""
 
     for pathname in directory.rglob(f"*.{suffix}"):
         if "lemma" in pathname.name or "deck" in pathname.name:
@@ -57,27 +60,29 @@ def search_from_directory(directory: Path, keyword: str, suffix: str) -> str:
                     lines.append(line)
         count = len(lines)
         if count > 0:
-            record += "<details>"
-            record += f"<summary>{pathname.stem} <b>{count}</b></summary>"
-            for line in lines:
-                record += re.sub(f"({pattern})", r"<b>\1</b>", line).strip()
-                record += "<br>"
-                record += "<br>"
-            record += "</details>"
-    return record
+            with tag("details"):
+                with tag("summary"):
+                    doc.asis(f"{pathname.stem} <b>{count}</b>")
+                for line in lines:
+                    line = re.sub(f"({pattern})", r"<b>\1</b>", line).strip()
+                    doc.asis(line)
+                    doc.stag("br")
+                    doc.stag("br")
 
 
 def main():
     keyword = sys.argv[1]
-    record = """<!DOCTYPE html>
-<html>
-<body>
-"""
+
     calibre_directory = Path.home() / "Calibre Library"
-    record += search_from_directory(calibre_directory, keyword, suffix="txt")
-    record += """</body>
-</html>"""
-    print(record)
+    doc, tag, text = Doc().tagtext()
+
+    doc.asis("<!DOCTYPE html>")
+    with tag("html"):
+        with tag("body"):
+            search_from_directory(
+                calibre_directory, keyword, "txt", doc, tag, text
+            )
+    print(doc.getvalue())
 
 
 if __name__ == "__main__":
