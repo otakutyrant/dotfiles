@@ -35,11 +35,23 @@ def words_to_keyword(words) -> str:
     return " ".join(words)
 
 
+# to support searching all cases of the keywrod
+def augment_to_all_cases(inflections):
+    lowers = [inflection.lower() for inflection in inflections]
+    uppers = [inflection.upper() for inflection in inflections]
+    capitals = [
+        inflection[0].upper() + inflection[1:].lower()
+        for inflection in inflections
+    ]
+    return lowers + uppers + capitals
+
+
 def keyword_to_pattern(keyword: str) -> str:
     words = keyword.split(" ")
     combinations = []
     for word in words:
         inflections = word_to_inflections(word)
+        inflections = augment_to_all_cases(inflections)
         combinations.append(inflections)
     keywords = [
         words_to_keyword(words)
