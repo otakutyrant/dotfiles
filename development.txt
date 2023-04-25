@@ -13,6 +13,10 @@ tldr
 tmux
 tree
 zsh
+# for vidir
+moreutils
+# for qmv
+renameutils
 
 # editor
 neovim python-pynvim
