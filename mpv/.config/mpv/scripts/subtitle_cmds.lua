@@ -56,7 +56,7 @@ function copy_subtitle()
     local subtext = mp.get_property("sub-text")
     if subtext and subtext ~= '' then
         os.execute("echo '" .. escape(subtext) .. "' | xclip -selection clipboard -i")
-        mp.osd_message(subtext, 0.5)
+        mp.osd_message("subtitles copied", 0.5)
     else
         mp.osd_message("No subtitles present", 0.5)
     end
