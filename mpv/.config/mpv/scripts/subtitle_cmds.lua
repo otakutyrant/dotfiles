@@ -1,3 +1,5 @@
+-- Based on https://github.com/perogiue/mpv-scripts
+--
 -- ___Usage___:
 --- ab-loop-sub [autopause]: Set ab-loop to current subtitle. Specify 'autopause' arg to pause before every loop
 --- copy-subtitle:           Copy current subtitle to clipboard. Works on mac 10.13 and windows 10
