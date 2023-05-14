@@ -95,7 +95,8 @@ endif
 
     let g:ale_cpp_clangtidy_options = '-Wall -O2 -std=c++17'
 
-    let g:ale_linters = {'python': ['flake8'], 'cpp': ['clangtidy']}
+    let g:ale_linters = {'python': ['ruff'], 'cpp': ['clangtidy']}
+    let g:ale_fixers = {'python': ['ruff']}
 
     let g:ale_sign_error = "‼"
     hi! clear SpellBad
