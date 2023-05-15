@@ -13,6 +13,7 @@ tldr
 tmux
 tree
 zsh
+cloc
 
 # editor
 neovim python-pynvim
@@ -29,7 +30,7 @@ whois
 
 # programming languages
 cmake ctags
-python python-pip
+python python-pip ruff python-ruff
 
 # GPU
 nvidia
