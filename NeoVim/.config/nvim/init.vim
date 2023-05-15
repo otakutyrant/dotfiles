@@ -285,6 +285,8 @@ call wilder#set_option('renderer', wilder#popupmenu_renderer(wilder#popupmenu_bo
   set spelllang=en,cjk
   set spellsuggest=best,9
   nnoremap <leader>s :set spell!<cr>
+
+  nnoremap <leader>B :Black<cr>
 " }
 
 " searching/moving {
