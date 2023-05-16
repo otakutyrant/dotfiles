@@ -1,4 +1,4 @@
 # https://black.readthedocs.io/en/stable/the_black_code_style/current_style.html#line-length
 line-length = 88
 # ruff doesn't support B950 currently: https://github.com/charliermarsh/ruff/issues/389
-select = ["C", "E", "F", "W", "B", "I"]
+select = ["C", "E", "F", "W", "B"]
