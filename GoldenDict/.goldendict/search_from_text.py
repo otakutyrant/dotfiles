@@ -66,23 +66,26 @@ def search_from_directory(
 ):
     pattern = keyword_to_pattern(keyword)
     for pathname in directory.rglob(f"*.{suffix}"):
-        if "lemma" in pathname.name or "deck" in pathname.name:
-            continue
-        lines = []
-        with open(pathname) as file_:
-            for line in file_:
-                if re.search(pattern, line):
-                    lines.append(line)
-        count = len(lines)
-        if count > 0:
-            with tag("details"):
-                with tag("summary"):
-                    doc.asis(f"{pathname.stem} <b>{count}</b>")
-                for line in lines:
-                    line = re.sub(f"({pattern})", r"<b>\1</b>", line).strip()
-                    doc.asis(line)
-                    doc.stag("br")
-                    doc.stag("br")
+        if pathname.parent.name[:5] == pathname.stem[:5]:
+            # Due to the directory name is incomplete unexpectedly,
+            # I have to compare slices of them.
+            lines = []
+            with open(pathname) as file_:
+                for line in file_:
+                    if re.search(pattern, line):
+                        lines.append(line)
+            count = len(lines)
+            if count > 0:
+                with tag("details"):
+                    with tag("summary"):
+                        doc.asis(f"{pathname.stem} <b>{count}</b>")
+                    for line in lines:
+                        line = re.sub(
+                            f"({pattern})", r"<b>\1</b>", line
+                        ).strip()
+                        doc.asis(line)
+                        doc.stag("br")
+                        doc.stag("br")
 
 
 def main():
