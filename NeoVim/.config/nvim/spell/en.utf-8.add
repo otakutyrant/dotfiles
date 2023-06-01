@@ -20,3 +20,11 @@ neovim
 io
 ignorecase
 config
+txt
+QWidget
+prefs
+QLineEdit
+QPushButton
+QVBoxLayout
+QFileDialog
+QLabel
