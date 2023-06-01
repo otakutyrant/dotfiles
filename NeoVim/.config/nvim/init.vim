@@ -94,9 +94,10 @@ endif
     let g:airline#extensions#ale#enabled = 1
 
     let g:ale_cpp_clangtidy_options = '-Wall -O2 -std=c++17'
+    let g:ale_sh_shfmt_options = '-i 2 -ci -bn'
 
-    let g:ale_linters = {'python': ['ruff'], 'cpp': ['clangtidy']}
-    let g:ale_fixers = {'python': ['ruff']}
+    let g:ale_linters = {'python': ['ruff'], 'cpp': ['clangtidy'], 'sh': ['shellcheck']}
+    let g:ale_fixers = {'python': ['ruff'], 'sh': ['shfmt']}
 
     let g:ale_sign_error = "‼"
     hi! clear SpellBad
