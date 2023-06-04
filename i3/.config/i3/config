@@ -30,7 +30,7 @@ font pango:Sarasa Mono Slab SC Semibold 12
 floating_modifier $mod
 
 # start an terminal
-bindsym $mod+Return exec alacritty
+bindsym $mod+Return exec kitty
 # start a browser
 bindsym $mod+c exec google-chrome-stable
 # start dmenu (a program launcher)
