@@ -5,6 +5,3 @@
 [submodule "Shell/.zsh-custom/plugins/zsh-edit"]
 	path = Shell/.zsh-custom/plugins/zsh-edit
 	url = https://github.com/marlonrichert/zsh-edit.git
-[submodule "mpv/.config/mpv/scripts/submpv"]
-	path = mpv/.config/mpv/scripts/submpv
-	url = https://github.com/yassin-l/submpv.git
