@@ -5,8 +5,10 @@ repos:
     hooks:
       - id: isort
         name: isort (python)
+        hook-stage: commit
   - repo: https://github.com/psf/black
     rev: 23.1.0
     hooks:
       - id: black
         args: [--config=./pyproject.toml]
+        hook-stage: commit
