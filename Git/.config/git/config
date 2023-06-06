@@ -2,6 +2,7 @@
   a = add
   b = branch
   c = commit
+  c = !gitc
   co = checkout
   d = diff
   l = log
