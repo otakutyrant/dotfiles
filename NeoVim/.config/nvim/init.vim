@@ -67,6 +67,8 @@ endif
   " do not search forward when match it
   " https://stackoverflow.com/a/13682379/1546088
   Plug 'vim-scripts/star-search'
+  " programmer dictionary to enhance spell in NeoVIm
+  Plug 'psliwka/vim-dirtytalk', { 'do': ':DirtytalkUpdate' }
 
   function! UpdateRemotePlugins(...)
     " Needed to refresh runtime files
@@ -167,7 +169,7 @@ endif
     noremap <m-n> :LeaderfBuffer<cr>
     noremap <m-m> :LeaderfTag<cr>
     let g:Lf_StlSeparator = { 'left': '', 'right': '', 'font': ''  }
-   
+
     let g:Lf_RootMarkers = ['.project', '.root', '.svn', '.git']
     let g:Lf_WorkingDirectoryMode = 'Ac'
     let g:Lf_WindowHeight = 0.30
@@ -283,7 +285,7 @@ call wilder#set_option('renderer', wilder#popupmenu_renderer(wilder#popupmenu_bo
 
   " spell check
   " https://jdhao.github.io/2019/04/29/nvim_spell_check/
-  set spelllang=en,cjk
+  set spelllang=en,programming,cjk
   set spellsuggest=best,9
   nnoremap <leader>s :set spell!<cr>
   autocmd FileType gitcommit setlocal spell
