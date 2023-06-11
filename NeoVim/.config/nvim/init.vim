@@ -289,6 +289,9 @@ call wilder#set_option('renderer', wilder#popupmenu_renderer(wilder#popupmenu_bo
   set spellsuggest=best,9
   nnoremap <leader>s :set spell!<cr>
   autocmd FileType gitcommit setlocal spell
+  " ignore the first word capitalization in gitcommit
+  " https://vi.stackexchange.com/questions/36372/how-to-get-vim-spell-checker-to-ignore-the-first-word-capitalization
+  autocmd FileType gitcommit setlocal spellcapcheck=
   autocmd FileType markdown setlocal spell
   autocmd FileType text setlocal spell
 
