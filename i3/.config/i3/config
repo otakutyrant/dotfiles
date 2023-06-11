@@ -113,7 +113,7 @@ bindsym Mod1+Print exec scrot -s -e 'mv $f ~/SceenShot && feh ~/ScreenShot/$f'
 
 # no border
 default_border none
-default_floating_border none
+default_floating_border pixel
 
 # defalt container layout
 workspace_layout tabbed
