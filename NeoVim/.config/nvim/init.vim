@@ -208,8 +208,6 @@ call wilder#set_option('renderer', wilder#popupmenu_renderer(wilder#popupmenu_bo
       \ })))
 
 " windows {
-  " do not scroll synchronously
-  set noscrollbind
   " split windows so easy
   nnoremap <leader>v <C-w>v<C-w>l
   nnoremap <leader>s <C-w>s<C-w>j
