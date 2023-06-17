@@ -248,8 +248,6 @@ call wilder#set_option('renderer', wilder#popupmenu_renderer(wilder#popupmenu_bo
   set scrolloff=3
   " complete till longest common string
   set wildmode=longest
-  " enable all mouse mode
-  set mouse=a
   set undolevels=1000
   " ignore file’s mode lines; use vimrc configurations instead
   set nomodeline
