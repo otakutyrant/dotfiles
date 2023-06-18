@@ -211,12 +211,6 @@ call wilder#set_option('renderer', wilder#popupmenu_renderer(wilder#popupmenu_bo
   nnoremap <C-l> <C-w>l
 " }
 
-" backup {
-  " put all your tmp file in ~/.vim!
-  set backup
-  set backupdir=~/.local/share/nvim/backup
-" }
-
 " text typesetting {
   " show line number
   set number
