@@ -1,6 +1,4 @@
 " More user-friendly mapping of key {
-  " Map leader key from backslash to comma, which is comfortable to human.
-  let mapleader = ","
   " easy
   nnoremap <Tab> %
 " }
