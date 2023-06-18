@@ -1,8 +1,3 @@
-" More user-friendly mapping of key {
-  " easy
-  nnoremap <Tab> %
-" }
-
 " https://github.com/junegunn/vim-plug/wiki/tips#automatic-installation
 if empty(glob('~/.local/share/nvim/site/autoload/plug.vim'))
   silent !curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs
