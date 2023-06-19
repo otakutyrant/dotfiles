@@ -211,40 +211,10 @@ call wilder#set_option('renderer', wilder#popupmenu_renderer(wilder#popupmenu_bo
   nnoremap <C-l> <C-w>l
 " }
 
-" text typesetting {
-  " show line number
-  set number
-  " and the line number is relative with the current line
-  set relativenumber
-  " highlight the longest column
-  set colorcolumn=80
-  " highlight the current line in the cursor
-  set cursorline
-  " highlight the current column in the cursor
-  set cursorcolumn
-  highlight Cursorcolumn cterm=NONE ctermbg=darkred ctermfg=white
-  highlight Folded ctermbg=grey ctermfg=black
-  " distinguish tab, trail space and nbsp
-  " http://vi.stackexchange.com/a/430/5663
-  set list
-  set listchars=tab:␉·,trail:␠,nbsp:¬
-" }
-
 " general {
-  " minimal number of screen lines to keep above and below the cursor
-  set scrolloff=3
   " complete till longest common string
   set wildmode=longest
-  set undolevels=1000
-  " ignore file’s mode lines; use vimrc configurations instead
-  set nomodeline
   set foldmethod=indent
-  " display a confirmation dialog when closing an unsaved file
-  set confirm
-  " redraw screen only when we need to
-  set lazyredraw
-  " write forcibly as root
-  cmap w!! w !sudo tee % >/dev/null
   autocmd FocusLost * silent! up
   nnoremap <leader>w :w<cr>
   nnoremap <leader>e :q<cr>
