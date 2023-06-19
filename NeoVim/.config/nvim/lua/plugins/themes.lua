@@ -1,0 +1,15 @@
+return {
+    {
+        "folke/tokyonight.nvim",
+        lazy = false,
+        priority = 1000,
+        opts = {},
+        config = function()
+            -- Enable 24-bit RGB color in the TUI, which is better than the tranditional 256 term colors.
+            vim.opt.termguicolors = true
+            -- Use tokyonight theme.
+            vim.cmd.colorscheme('tokyonight')
+        end,
+    }
+}
+
