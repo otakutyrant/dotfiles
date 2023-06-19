@@ -234,14 +234,5 @@ call wilder#set_option('renderer', wilder#popupmenu_renderer(wilder#popupmenu_bo
   nnoremap <leader>B :Black<cr>
 " }
 
-" searching/moving {
-  set ignorecase
-  " override the ignorecase option if the search pattern contains upper case characters
-  set smartcase
-  " so you do not need add 'g' after every replace command
-  set gdefault
-  " when a bracket is inserted, briefly jump to the matching one
-  set showmatch
   " cancel highlight search so easy
   nnoremap <leader><space> :nohlsearch<cr>
-" }
