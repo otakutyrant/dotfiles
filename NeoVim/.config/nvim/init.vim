@@ -231,11 +231,6 @@ call wilder#set_option('renderer', wilder#popupmenu_renderer(wilder#popupmenu_bo
   " http://www.skywind.me/blog/archives/2084
   set tags=./.tags;,.tags
 
-  " make neovim work in python virtual environment
-  " https://github.com/neovim/neovim/issues/1887#issuecomment-280497141
-  let g:python3_host_prog='/usr/bin/python'
-  let g:python_host_prog='/usr/bin/python2'
-
   " spell check
   " https://jdhao.github.io/2019/04/29/nvim_spell_check/
   set spelllang=en,programming,cjk
