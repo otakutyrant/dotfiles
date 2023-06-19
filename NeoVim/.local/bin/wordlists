@@ -1,5 +1,0 @@
-#!/bin/bash
-#
-# customize personal spellcheck dictionary in vim-dirtytalk
-
-nvim $HOME/dotfiles/NeoVim/.local/share/nvim/plugged/vim-dirtytalk/wordlists/others.words
