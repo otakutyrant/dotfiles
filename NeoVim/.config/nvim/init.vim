@@ -245,10 +245,3 @@ call wilder#set_option('renderer', wilder#popupmenu_renderer(wilder#popupmenu_bo
   " cancel highlight search so easy
   nnoremap <leader><space> :nohlsearch<cr>
 " }
-
-" indentation {
-" " best indent config
-  set tabstop=2
-  set expandtab
-  set shiftwidth=2
-" }
