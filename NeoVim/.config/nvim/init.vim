@@ -231,18 +231,6 @@ call wilder#set_option('renderer', wilder#popupmenu_renderer(wilder#popupmenu_bo
   " http://www.skywind.me/blog/archives/2084
   set tags=./.tags;,.tags
 
-  " spell check
-  " https://jdhao.github.io/2019/04/29/nvim_spell_check/
-  set spelllang=en,programming,cjk
-  set spellsuggest=best,9
-  nnoremap <leader>s :set spell!<cr>
-  autocmd FileType gitcommit setlocal spell
-  " ignore the first word capitalization in gitcommit
-  " https://vi.stackexchange.com/questions/36372/how-to-get-vim-spell-checker-to-ignore-the-first-word-capitalization
-  autocmd FileType gitcommit setlocal spellcapcheck=
-  autocmd FileType markdown setlocal spell
-  autocmd FileType text setlocal spell
-
   nnoremap <leader>B :Black<cr>
 " }
 
