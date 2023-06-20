@@ -68,7 +68,7 @@ xclip
 nitrogen
 ## Package management see general.sh
 ## Input method editor
-fcitx5-im fcitx5-rime fcitx5-mozc 
+fcitx5-im fcitx5-rime fcitx5-mozc
 
 # Documents
 
@@ -84,7 +84,7 @@ neovim python-neovim
 ### PDF and DjVu
 llpp
 ### Pager
-nvimpager-git
+page-git
 ### Comic book
 mcomix
 

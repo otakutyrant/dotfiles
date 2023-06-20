@@ -14,10 +14,6 @@
   g = log --graph --all --date=format-local:'%Y-%m-%d %H:%M:%S' --format="\"%h %d %cd %s\""
 [color]
   ui = on
-  pager = no
-[core]
-  # with nvimpager, you can have all pros of powerful NeoVim.
-  pager = nvimpager
 [credential]
   # store your credentials permanently
   # https://stackoverflow.com/a/12240995/1546088
