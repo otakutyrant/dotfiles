@@ -78,8 +78,16 @@ vim.opt.shiftwidth = 4
 
 -- ## Modified keymaps
 
+-- Set mapleader as space rather than comma, the later is used for search jump.
 vim.g.mapleader = ' '
+
 -- ## Additional keymaps
+--
 -- Write forcibly as root in Command-line mode.
 -- https://stackoverflow.com/questions/2600783/how-does-the-vim-write-with-sudo-trick-work
 vim.keymap.set('c', 'w!!', 'w !sudo tee %', { desc = 'Save with sudo privileges.' })
+
+-- Write with a fast keymap ` w`.
+vim.keymap.set("n", "<leader>w", ":w<cr>")
+-- Quit with a fast keymap ` q`.
+vim.keymap.set("n", "<leader>q", ":q<cr>")
