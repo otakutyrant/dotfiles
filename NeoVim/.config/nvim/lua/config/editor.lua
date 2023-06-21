@@ -87,7 +87,13 @@ vim.g.mapleader = ' '
 -- https://stackoverflow.com/questions/2600783/how-does-the-vim-write-with-sudo-trick-work
 vim.keymap.set('c', 'w!!', 'w !sudo tee %', { desc = 'Save with sudo privileges.' })
 
--- Write with a fast keymap ` w`.
-vim.keymap.set("n", "<leader>w", ":w<cr>")
--- Quit with a fast keymap ` q`.
-vim.keymap.set("n", "<leader>q", ":q<cr>")
+vim.keymap.set("n", "<leader>w", ":w<cr>", { desc = "Quick save." })
+vim.keymap.set("n", "<leader>q", ":q<cr>", { desc = "Quick quit." })
+vim.keymap.set("n", "<leader> ", ":nohlsearch<cr>", { desc = "Quick no highlight." })
+vim.keymap.set('v', '<leader>y', '"+y', { desc = 'Copy to system clipboard' })
+vim.keymap.set('n', '<leader>p', '"+p', { desc = 'Paste from system clipboard' })
+
+vim.keymap.set('n', '<leader>1', '1gt<cr>', { desc = 'Jump to the first tabpage.' })
+vim.keymap.set('n', '<leader>2', '2gt<cr>', { desc = 'Jump to the second tabpage.' })
+vim.keymap.set('n', '<leader>3', '3gt<cr>', { desc = 'Jump to the third tabpage.' })
+vim.keymap.set('n', '<leader>4', '4gt<cr>', { desc = 'Jump to the fourth tabpage.' })
