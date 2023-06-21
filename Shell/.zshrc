@@ -135,6 +135,9 @@ alias stow="stow --no-folding --target=$HOME"
 # -D: Uninstall dotfiles.
 alias unstow="stow -D --target=$HOME"
 
+# Pretty output so it can pipe into pagers.
+alias rg="rg -p"
+
 source /usr/share/fzf/completion.zsh
 source /usr/share/fzf/key-bindings.zsh
 export FZF_DEFAULT_COMMAND='fd --type f --strip-cwd-prefix --hidden --follow --exclude .git'
