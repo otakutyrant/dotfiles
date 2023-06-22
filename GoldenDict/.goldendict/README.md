@@ -2,12 +2,12 @@ The original lemma.en.txt comes from [skywind3000/ECDICT](https://raw.githubuser
 
 > En Lemma Database (version 1.0.3)
 > Compiled by Lin Wei (https://github.com/skywind3000), Mar 28, 2017
-> by referencing the 100M+ words in the British National Corpus (BNC), 
+> by referencing the 100M+ words in the British National Corpus (BNC),
 > NodeBox Linguistics and Yasumasa Someya's lemma list.
 > This lemma list is provided "as is" and is free to use for any research
-> and/or educational purposes. 
+> and/or educational purposes.
 > The list currently contains 186,523 words (tokens) in 84,487 lemma groups.
-> If you have any questions or comments about this lemma list, feel free 
+> If you have any questions or comments about this lemma list, feel free
 > to contact me (skywind3000@163.com), at any time..
 
 The search_from_text supports global search for a keyword of any length, like "delusion", "ask for", and "get rid of", in a Calibre diretory which have some txts, or in a subtitles directory which have some srt files. And it can shows what oxford level a keyword is too.
