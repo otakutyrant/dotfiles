@@ -84,6 +84,6 @@ nvim_treesitter_textobjects = {
 }
 
 return {
-    nvim_treestiter,
+    nvim_treesitter,
     nvim_treesitter_context,
 }
