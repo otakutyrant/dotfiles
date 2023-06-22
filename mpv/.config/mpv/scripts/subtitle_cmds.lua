@@ -11,7 +11,7 @@ function pause_on_sub_loop(prop, value)
         _G.abloopavoidjankpause = false
         return
     end
-    if value and value ~= '' then
+    if value and value ~= "" then
         local startloop = mp.get_property("ab-loop-a")
         local substart = mp.get_property("sub-start")
         if substart and startloop and substart == startloop then
@@ -38,26 +38,29 @@ function ab_loop_sub(autopause)
             mp.osd_message("A-B Loop Subtitle", 0.5)
 
             local suboffset = mp.get_property("sub-delay")
-            mp.set_property_number("ab-loop-a", substart  + suboffset)
+            mp.set_property_number("ab-loop-a", substart + suboffset)
             mp.set_property_number("ab-loop-b", subend + suboffset + 0.075)
 
             _G.abloopavoidjankpause = true
-            if autopause then mp.observe_property("sub-text", "native", pause_on_sub_loop) end
+            if autopause then
+                mp.observe_property("sub-text", "native", pause_on_sub_loop)
+            end
         else
             mp.osd_message("No subtitles present", 0.5)
         end
     end
-
 end
 
 function escape(s)
-  return (s:gsub('\'', '\'\\\'\''))
+    return (s:gsub("'", "'\\''"))
 end
 
 function copy_subtitle()
     local subtext = mp.get_property("sub-text")
-    if subtext and subtext ~= '' then
-        os.execute("echo '" .. escape(subtext) .. "' | xclip -selection clipboard -i")
+    if subtext and subtext ~= "" then
+        os.execute(
+            "echo '" .. escape(subtext) .. "' | xclip -selection clipboard -i"
+        )
         mp.osd_message("subtitles copied", 0.5)
     else
         mp.osd_message("No subtitles present", 0.5)

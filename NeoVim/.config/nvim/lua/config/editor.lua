@@ -9,33 +9,33 @@ vim.opt.cursorline = true
 -- Highlight the screen column of the cursor.
 vim.opt.cursorcolumn = true
 -- Highlight the screen column 80 for conventional code styles.
-vim.opt.colorcolumn = '80'
+vim.opt.colorcolumn = "80"
 -- Reveal and distinguish tab, trail space and nbsp more legibly.
 -- http://vi.stackexchange.com/a/430/5663
 -- Because trail space is enough, I discard the eol marker.
 vim.opt.list = true
-vim.opt.listchars = { tab = "␉·", trail = "␠", nbsp = "¬", }
+vim.opt.listchars = { tab = "␉·", trail = "␠", nbsp = "¬" }
 
 -- ## Spell
 
 -- Enable spell checker in some filetypes.
-local spell_group = vim.api.nvim_create_augroup('spell_group', {clear = true})
-vim.api.nvim_create_autocmd('FileType', {
+local spell_group = vim.api.nvim_create_augroup("spell_group", { clear = true })
+vim.api.nvim_create_autocmd("FileType", {
     pattern = { "gitcommit", "text", "markdown" },
     group = spell_group,
     callback = function()
         vim.opt_local.spell = true
-    end
+    end,
 })
-vim.api.nvim_create_autocmd('FileType', {
+vim.api.nvim_create_autocmd("FileType", {
     pattern = { "gitcommit" },
     group = spell_group,
     callback = function()
         vim.opt_local.spellcapcheck = ""
-    end
+    end,
 })
 -- Adopt American English spell and avoid regarding cjk chars as spell error.
-vim.opt.spelllang = { "en_us", "cjk", }
+vim.opt.spelllang = { "en_us", "cjk" }
 
 -- # Behavior setting
 
@@ -56,10 +56,16 @@ vim.opt.smartcase = true
 -- To avoid failing to find NeoVim module in virtual environment, figure out the system Python for NeoVim.
 -- https://github.com/neovim/neovim/issues/1887#issuecomment-280653872
 if vim.fn.exists("$VIRTUAL_ENV") == 1 then
-    local python_path = vim.fn.substitute(vim.fn.system("which -a python3 | head -n2 | tail -n1"), "\n", "", "g")
+    local python_path = vim.fn.substitute(
+        vim.fn.system("which -a python3 | head -n2 | tail -n1"),
+        "\n",
+        "",
+        "g"
+    )
     vim.g.python3_host_prog = python_path
 else
-    local python_path = vim.fn.substitute(vim.fn.system("which python3"), "\n", "", "g")
+    local python_path =
+        vim.fn.substitute(vim.fn.system("which python3"), "\n", "", "g")
     vim.g.python3_host_prog = python_path
 end
 
@@ -79,21 +85,56 @@ vim.opt.shiftwidth = 4
 -- ## Modified keymaps
 
 -- Set mapleader as space rather than comma, the later is used for search jump.
-vim.g.mapleader = ' '
+vim.g.mapleader = " "
 
 -- ## Additional keymaps
 --
 -- Write forcibly as root in Command-line mode.
 -- https://stackoverflow.com/questions/2600783/how-does-the-vim-write-with-sudo-trick-work
-vim.keymap.set('c', 'w!!', 'w !sudo tee %', { desc = 'Save with sudo privileges.' })
+vim.keymap.set(
+    "c",
+    "w!!",
+    "w !sudo tee %",
+    { desc = "Save with sudo privileges." }
+)
 
 vim.keymap.set("n", "<leader>w", ":w<cr>", { desc = "Quick save." })
 vim.keymap.set("n", "<leader>q", ":q<cr>", { desc = "Quick quit." })
-vim.keymap.set("n", "<leader> ", ":nohlsearch<cr>", { desc = "Quick no highlight." })
-vim.keymap.set('v', '<leader>y', '"+y', { desc = 'Copy to system clipboard' })
-vim.keymap.set('n', '<leader>p', '"+p', { desc = 'Paste from system clipboard' })
+vim.keymap.set(
+    "n",
+    "<leader> ",
+    ":nohlsearch<cr>",
+    { desc = "Quick no highlight." }
+)
+vim.keymap.set("v", "<leader>y", '"+y', { desc = "Copy to system clipboard" })
+vim.keymap.set(
+    "n",
+    "<leader>p",
+    '"+p',
+    { desc = "Paste from system clipboard" }
+)
 
-vim.keymap.set('n', '<leader>1', '1gt<cr>', { desc = 'Jump to the first tabpage.' })
-vim.keymap.set('n', '<leader>2', '2gt<cr>', { desc = 'Jump to the second tabpage.' })
-vim.keymap.set('n', '<leader>3', '3gt<cr>', { desc = 'Jump to the third tabpage.' })
-vim.keymap.set('n', '<leader>4', '4gt<cr>', { desc = 'Jump to the fourth tabpage.' })
+vim.keymap.set(
+    "n",
+    "<leader>1",
+    "1gt<cr>",
+    { desc = "Jump to the first tabpage." }
+)
+vim.keymap.set(
+    "n",
+    "<leader>2",
+    "2gt<cr>",
+    { desc = "Jump to the second tabpage." }
+)
+vim.keymap.set(
+    "n",
+    "<leader>3",
+    "3gt<cr>",
+    { desc = "Jump to the third tabpage." }
+)
+vim.keymap.set(
+    "n",
+    "<leader>4",
+    "4gt<cr>",
+    { desc = "Jump to the fourth tabpage." }
+)
