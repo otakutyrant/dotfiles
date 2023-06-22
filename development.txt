@@ -2,8 +2,7 @@
 autojump
 git
 htop
-less
-less
+page-git
 man
 ranger
 stow
@@ -29,7 +28,10 @@ whois
 
 # programming languages
 cmake ctags
-python python-pip ruff python-ruff
+python python-pip ruff python-ruff ruff-lsp pyright
+lua stylua lua-language-server
+yamlfmt
+rust cargo
 
 # GPU
 nvidia
