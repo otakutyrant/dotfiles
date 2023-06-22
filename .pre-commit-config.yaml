@@ -32,3 +32,7 @@ repos:
       - id: black
         args: [--config=./pyproject.toml]
         hook-stage: commit
+  - repo: https://github.com/JohnnyMorganz/StyLua
+    rev: v0.18.0
+    hooks:
+      - id: stylua # or stylua-system / stylua-github
