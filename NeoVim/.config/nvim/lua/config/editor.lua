@@ -164,6 +164,46 @@ vim.keymap.set(
     { desc = "Jump to the fourth tabpage." }
 )
 
+-- ## Windows management
+
+vim.keymap.set(
+    "n",
+    "<leader>h",
+    "<C-W>h",
+    { desc = "Quick move from right to left between windows." }
+)
+vim.keymap.set(
+    "n",
+    "<leader>j",
+    "<C-W>j",
+    { desc = "Quick move from up to down between windows." }
+)
+vim.keymap.set(
+    "n",
+    "<leader>k",
+    "<C-W>k",
+    { desc = "Quick move from down to up between windows." }
+)
+vim.keymap.set(
+    "n",
+    "<leader>l",
+    "<C-W>l",
+    { desc = "Quick move from left to right between windows." }
+)
+
+vim.keymap.set(
+    "n",
+    "<leader>v",
+    ":vsplit<cr>",
+    { desc = "Quick split vertically." }
+)
+vim.keymap.set(
+    "n",
+    "<leader>s",
+    ":split<cr>",
+    { desc = "Quick split horizontally." }
+)
+
 -- # Others
 
 -- Disable useless netrw.
