@@ -163,3 +163,9 @@ vim.keymap.set(
     "4gt<cr>",
     { desc = "Jump to the fourth tabpage." }
 )
+
+-- # Others
+
+-- Disable useless netrw.
+vim.g.loaded_netrw = 1
+vim.g.loaded_netrwPlugin = 1
