@@ -34,6 +34,9 @@ function MyTabLine()
         tabline = tabline .. " " .. project_name .. " "
     end
 
+    -- Set the end of the last tabpage.
+    tabline = tabline .. "%#TabLineFill#%T"
+
     return tabline
 end
 vim.go.tabline = "%!v:lua.MyTabLine()"
