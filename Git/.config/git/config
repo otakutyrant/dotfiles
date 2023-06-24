@@ -2,26 +2,26 @@
   a = add
   b = branch
   c = commit
-  c = !gitc
+  c = !gitc # A personal command, see the document in its source code.
   co = checkout
   d = diff
   l = log
   s = status
   f = fetch
-  # use custom committer date format and unify to a time zone
+  # Use custom committer date format and unify to a time zone.
   # https://stackoverflow.com/a/32990187/1546088
   # https://stackoverflow.com/a/34778736/1546088
   g = log --graph --all --date=format-local:'%Y-%m-%d %H:%M:%S' --format="\"%h %d %cd %s\""
 [color]
   ui = on
 [credential]
-  # store your credentials permanently
+  # Store your credentials permanently.
   # https://stackoverflow.com/a/12240995/1546088
   helper = store
 [merge]
   tool = meld
 [push]
-  # ignore boring warning
+  # Ignore a boring warning.
   # http://stackoverflow.com/questions/13148066/warning-push-default-is-unset-its-implicit-value-is-changing-in-git-2-0
   default = simple
 [user]
@@ -30,5 +30,5 @@
 [log]
   decorate = auto
 [status]
-  # showStash only work for 2.14.0 and later
+  # ShowStash only work for 2.14.0 and later.
   showStash = true
