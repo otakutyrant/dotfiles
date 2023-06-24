@@ -1,33 +1,17 @@
-# Path to your oh-my-zsh installation.
+# Oh My Zsh
+
+# Deploy oh-my-zsh.
 export ZSH=$HOME/.oh-my-zsh
 
 # Set name of the theme to load.
-# Look in ~/.oh-my-zsh/themes/
-# Optionally, if you set this to "random", it'll load a random theme each
-# time that oh-my-zsh is loaded.
-ZSH_THEME="bullet-train"
+ZSH_THEME="bullet-train" # From .zsh-custom/themes.
 BULLETTRAIN_RUBY_SHOW=false
 BULLETTRAIN_HG_SHOW=false
 BULLETTRAIN_EXEC_TIME_SHOW=true
 
-# Uncomment the following line to use case-sensitive completion.
-# CASE_SENSITIVE="true"
-
-# Uncomment the following line to use hyphen-insensitive completion. Case
-# sensitive completion must be off. _ and - will be interchangeable.
-# HYPHEN_INSENSITIVE="true"
-
-# Uncomment the following line to disable bi-weekly auto-update checks.
-# DISABLE_AUTO_UPDATE="true"
-
-# Uncomment the following line to change how often to auto-update (in days).
-# export UPDATE_ZSH_DAYS=13
-
-# Uncomment the following line to disable colors in ls.
-# DISABLE_LS_COLORS="true"
-
-# Uncomment the following line to disable auto-setting terminal title.
-# DISABLE_AUTO_TITLE="true"
+# Uncomment the following line to use hyphen-insensitive completion.
+# Case sensitive completion must be off. _ and - will be interchangeable.
+HYPHEN_INSENSITIVE="true"
 
 # Uncomment the following line to enable command auto-correction.
 ENABLE_CORRECTION="true"
@@ -35,112 +19,118 @@ ENABLE_CORRECTION="true"
 # Uncomment the following line to display red dots whilst waiting for completion.
 COMPLETION_WAITING_DOTS="true"
 
-# Uncomment the following line if you want to disable marking untracked files
-# under VCS as dirty. This makes repository status check for large repositories
-# much, much faster.
-# DISABLE_UNTRACKED_FILES_DIRTY="true"
-
-# Uncomment the following line if you want to change the command execution time
-# stamp shown in the history command output.
-# The optional three formats: "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
-# HIST_STAMPS="yyyy.mm.dd"
-
 # Would you like to use another custom folder than $ZSH/custom?
 ZSH_CUSTOM=$HOME/.zsh-custom
 
-# Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
+# Which plugins would you like to load?
+# (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(systemd pacman pikaur github z zsh-edit)
+plugins=(systemd pacman pikaur github z zsh-edit) # TODO: refine
 
-# User configuration
-
+# Deploy oh-my-zsh.
 source $ZSH/oh-my-zsh.sh
-# Set all your custom environment variables in .zshenv
+
+# # User customization
+
+# Set all your custom environment variables in .zshenv.
 source $HOME/.zshenv
-# https://wiki.archlinux.org/index.php/Pkgfile#Zsh
-source /usr/share/doc/pkgfile/command-not-found.zsh
-# https://github.com/wting/autojump
-[[ -s /etc/profile.d/autojump.sh ]] && source /etc/profile.d/autojump.sh
 
 # Set personal aliases, overriding those provided by oh-my-zsh libs,
-# plugins, and themes. Aliases can be placed here, though oh-my-zsh
-# users are encouraged to define aliases within the ZSH_CUSTOM folder.
+# plugins, and themes. Aliases can be placed here,
+# though oh-my-zsh users are encouraged to define aliases
+# within the ZSH_CUSTOM folder.
 # For a full list of active aliases, run `alias`.
 
-alias l='ls --color=auto'
-alias vi='nvim'
-alias cl='clang'
+# Dotenvs could be modularized also. It is .zshrc's responsiblity
+# to iterates over all subdirectories in $XDG_CONFIG_HOME and
+# sources any dotenv files found within them.
+# To avoid unknown-unknown duplicate alias, use alias_or_warning.
 
-alias sw='sudo wifi-menu'
-
-# Enables ssh trusted X11 forwarding.
-alias ssh='ssh -Y'
-# https://wiki.archlinux.org/index.php/Core_utilities#Colored_output_2
-alias ll='ls -alFh --color=auto'
-# https://wiki.archlinux.org/index.php/Core_utilities#Colored_output
-alias grep='grep --color'
-alias rm='rm -Iv --one-file-system'
-alias mkdir='mkdir -pv'
-alias dstat='dstat -cdlmnpsy'
-# Let WPS-Office use gtk style
-alias wps='wps -style gtk'
-alias et='et -style gtk'
-alias wpp='wpp -style gtk'
-
-# https://coderwall.com/p/ohk6cg/remote-access-to-ipython-notebooks-via-ssh
-alias jupyter-server='ipython notebook --no-browser'
-alias jupyter-local='ssh -N -f -L localhost:8888:localhost:8888'
-
-# Use yaourt/pkgfile alias in Ubuntu
-# https://github.com/robbyrussell/oh-my-zsh/blob/master/plugins/archlinux/archlinux.plugin.zsh
-if (( $+commands[apt-get] )); then
-  alias yaupg='sudo apt update'
-  alias yain='sudo apt install'
-  alias yare='sudo apt remove'
-  if (( $+commands[apt-cache] )); then
-    alias yarep='apt-cache show'
+function alias_or_warning() {
+  local a="$1"
+  local b="$2"
+  # Check if the alias already exists
+  if alias "$a" >/dev/null 2>&1; then
+    echo "Warning: Alias '$a' already exists." >&2
+    local line_num file_name
+    read line_num file_name <<< "$funcfiletrace"
+    echo "Conflict position: '$file_name', '$line_num'"
   else
-    alias yarep='aptitude show'
+    # If it doesn't, create the alias
+    alias "$a"="$b"
   fi
-  alias yareps='apt search'
-  if (( $+commands[dpkg] )); then
-    alias yaloc='dpkg -s'
-  else
-    alias yaloc='aptitude show'
-  fi
-  if (( $+commands[aptitude] )); then
-    yalocs() {
-      aptitude search '~i(~n $1|-d $1)'
-    }
-  fi
-  alias pkgfile='apt-file search'
-fi
+}
 
-# Improve colored output by ls
-# https://wiki.archlinux.org/index.php/Core_utilities#Colored_output_2
+# Iterate over all subdirectories in XDG_CONFIG_HOME.
+for dir in "$XDG_CONFIG_HOME"/*/; do
+  # Check if the directory contains a file named "dotenv".
+  if [[ -f "${dir}/dotenv" ]]; then
+    # If it does, source it.
+    source "${dir}/dotenv"
+  fi
+done
+
+# Here are some aliases and enviroment varaibles that are not suitable
+# to put into individual stow packages.
+
+# Improve colored output by ls.
 eval "$(dircolors -b)"
+# - `--color=auto` enables colorized output for the `ls` command,
+# with colors indicating different file types and attributes.
+alias l="ls --color=auto" # Override internal alias fron ohmyzsh.
+# - `-a` (or `--all`) shows all files, including hidden files
+# (those that start with a dot).
+# - `-l` (or `--long`) shows the files in a long format, with details
+# such as permissions, owner, size, and modification time.
+# - `-F` (or `--classify`) adds a trailing character to each file name
+# to indicate its type (e.g., `/` for directories, `*` for executables,
+# `@` for symbolic links).
+# - `-h` (or `--human-readable`) shows file sizes in a human-readable format
+# (e.g., "1.2K" instead of "1234").
+# - `--color=auto` enables colorized output for the `ls` command,
+# with colors indicating different file types and attributes.
+alias ll="ls -alFh --color=auto" # Override internal alias fron ohmyzsh.
 
-alias fixssh='eval `tmux showenv -s SSH_AUTH_SOCK`'
-if { [ "$TERM" = "screen" ] && [ -n "$TMUX" ]; } then
-  eval fixssh
-fi
+# Other coretuils.
+# Add safe features to rm and give feedboacks when deleting files.
+# - `-I` (or `--interactive`) prompts the user before deleting any files,
+# to confirm that they really want to delete them. This is a safety feature
+# that helps prevent accidental deletions.
+# - `-v` (or `--verbose`) prints the name of each file as it is deleted,
+# to provide feedback to the user.
+# - `--one-file-system` prevents `rm` from crossing file system boundaries
+# when deleting files. This is another safety feature
+# that helps prevent accidental deletions of files on other file systems.
+alias_or_warning rm "rm -Iv --one-file-system"
+# Make parent directories as needed and give feedbacks when making directories.
+alias mkdir="nocorrect mkdir -pv" # Override internal alias fron ohmyzsh.
 
-alias kill='kill -9'
-
-# --no-folding: When the directory doesn't exist, create it rather than symlink it, in order to avoid other irrelevant files, generated by the software, appear in dotfiles directory thereafter.
+# stow:
+# --no-folding: When the directory doesn't exist, create it rather than symlink it,
+# in order to avoid other irrelevant files, generated by the software,
+# appear in dotfiles directory thereafter.
 # --target=$HOME: Install dotfiles in $HOME.
-alias stow="stow --no-folding --target=$HOME"
+alias_or_warning stow "stow --no-folding --target=$HOME"
 # -D: Uninstall dotfiles.
-alias unstow="stow -D --target=$HOME"
+alias_or_warning unstow "stow -D --target=$HOME"
 
-# Pretty output so it can pipe into pagers.
-alias rg="rg -p"
+# pkgfile: Embed pkgfile hint that when command not found, hint the relative
+# package name as far as it can.
+# https://wiki.archlinux.org/title/Zsh#pkgfile_%22command_not_found%22_handler
+source /usr/share/doc/pkgfile/command-not-found.zsh
 
+# autojump:
+# https://github.com/wting/autojump TODO: use z instead?
+[[ -s /etc/profile.d/autojump.sh ]] && source /etc/profile.d/autojump.sh
+
+# ripgrep: Pretty output so it can pipe into pagers.
+alias_or_warning rg "rg -p"
+
+# fzf: Enhance shell wish fzf.
 source /usr/share/fzf/completion.zsh
 source /usr/share/fzf/key-bindings.zsh
-export FZF_DEFAULT_COMMAND='fd --type f --strip-cwd-prefix --hidden --follow --exclude .git'
+export FZF_DEFAULT_COMMAND="fd --type f --strip-cwd-prefix --hidden --follow --exclude .git"
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
-
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
