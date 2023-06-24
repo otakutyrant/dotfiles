@@ -1,1 +1,2 @@
 alias_or_warning vi "nvim"
+alias_or_warning cvi 'nvim -p -c "tabdo lcd %:p:h"'
