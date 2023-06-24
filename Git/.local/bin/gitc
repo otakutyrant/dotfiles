@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Make git commit to begin with file name automatically when there is only one changed file
+# Make git commit to begin with file name automatically when there is only one changed file.
 
 changed_file_count=$(git diff --staged --name-only | wc -l)
 if [ "$changed_file_count" -eq 1 ]; then
