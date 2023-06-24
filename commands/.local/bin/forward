@@ -1,10 +1,9 @@
 #!/bin/bash
-# bind the remote port to a random local port for an alias of the remote
-read LOWERPORT UPPERPORT < /proc/sys/net/ipv4/ip_local_port_range
-while :
-do
-  PORT="`shuf -i $LOWERPORT-$UPPERPORT -n 1`"
-  ss -lpn | grep -q ":$PORT " || break
+# Bind the remote port to a random local port for an alias of the remote.
+read lower_port upper_port < /proc/sys/net/ipv4/ip_local_port_range
+while :; do
+  port="$(shuf -i "$lower_port-$upper_port" -n 1)"
+  ss -lpn | grep -q ":$port " || break
 done
-echo $PORT
-parallel ::: "ssh -N -L $PORT:localhost:$2 $1" "sleep 0.5; chromium http://localhost:$PORT"
+echo "$port"
+parallel ::: "ssh -N -L $port:localhost:$2 $1" "sleep 0.5; chromium http://localhost:$port"
