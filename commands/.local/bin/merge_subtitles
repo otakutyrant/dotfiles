@@ -1,4 +1,5 @@
 #!/bin/env python
+# Iterate some srt files, and combine those lines without punctions util the last one has.
 import sys
 from pathlib import Path
 
