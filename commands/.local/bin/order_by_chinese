@@ -1,4 +1,6 @@
 #!/bin/env python
+# In the current directory, rename all files which contain Chinese number so some file managers, which use lexcigraphic order, can sort the files correctly.
+# For example, you can use this script to sort downloaded Chinese videos from a playlist like https://www.youtube.com/playlist?list=PLzc5ffj3_Cb5mPVzIFiJelpInJjae8NG2
 import re
 import shutil
 from pathlib import Path
