@@ -1,4 +1,5 @@
 #!/bin/env python
+# Use whisper to transribe some videos and combine incorrectly-puncutated lines automatically.
 import sys
 from pathlib import Path
 
