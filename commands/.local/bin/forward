@@ -1,5 +1,5 @@
 #!/bin/bash
-# Bind the remote port to a random local port for an alias of the remote.
+# Bind the remote port to a random local port as an alias of the remote.
 read lower_port upper_port < /proc/sys/net/ipv4/ip_local_port_range
 while :; do
   port="$(shuf -i "$lower_port-$upper_port" -n 1)"
