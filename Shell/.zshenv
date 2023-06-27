@@ -83,3 +83,7 @@ alias history="fc -t "$HIST_FORMAT" -il 1"
 # produce millisecond result for time
 # https://unix.stackexchange.com/a/453339/34173
 TIMEFMT=$'\n================\nCPU\t%P\nuser\t%*U\nsystem\t%*S\ntotal\t%*E'
+
+# Force GBM as a backend as it has wider Wayland compositor support.
+export GBM_BACKEND=nvidia-drm
+export __GLX_VENDOR_LIBRARY_NAME=nvidia
