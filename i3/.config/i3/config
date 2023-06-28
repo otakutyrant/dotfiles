@@ -42,11 +42,11 @@ bindsym $mod+Shift+l focus right
 # enter fullscreen mode for the focused container
 bindsym $mod+f fullscreen toggle
 
-# change container layout (stacked, tabbed, toggle split), make "p" alias pile for stacking,
-# because $mod+s is used for split vertically.
+# change container layout (stacked, tabbed, toggle split), make "p" alias pile
+# for stacking, because $mod+s is used for split vertically.
 bindsym $mod+p layout tabbed
-bindsym $mod+s layout splith
-bindsym $mod+v layout splitv
+bindsym $mod+minus layout splith
+bindsym $mod+bar layout splitv
 
 # toggle tiling / floating
 bindsym $mod+Shift+space floating toggle
@@ -285,7 +285,10 @@ bar {
 }
 
 # # Scratchpad
-bindsym $mod+minus move scratchpad
-bindsym $mod+plus scratchpad show
+# Because conventional $mod+minus is occupied. Use the up-right key of HHKB,
+# asciitilde instead. `~` is used to swap letter case in Vim, analogous to its
+# assignment # here exactly.
+bindsym $mod+asciitilde move scratchpad
+bindsym $mod+Shift+asciitilde scratchpad show
 exec --no-startup-id gedit ~/scratchpad
-for_window [title="scratchpad"] move scratchpad
+for_window [class = "Gedit", title = "scratchpad"] move scratchpad
