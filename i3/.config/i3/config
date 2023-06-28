@@ -36,8 +36,9 @@ bindsym $mod+Shift+k focus up
 bindsym $mod+Shift+l focus right
 
 # split in horizontal orientation, alias "s" as split
-
+bindsym $mod+s split horizontal
 # split in vertical orientation
+bindsym $mod+v split vertical
 
 # enter fullscreen mode for the focused container
 bindsym $mod+f fullscreen toggle
@@ -291,4 +292,4 @@ bar {
 bindsym $mod+asciitilde move scratchpad
 bindsym $mod+Shift+asciitilde scratchpad show
 exec --no-startup-id gedit ~/scratchpad
-for_window [class = "Gedit", title = "scratchpad"] move scratchpad
+for_window [class = "Gedit" title = "scratchpad"] move scratchpad
