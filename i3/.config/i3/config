@@ -43,11 +43,12 @@ bindsym $mod+v split vertical
 # enter fullscreen mode for the focused container
 bindsym $mod+f fullscreen toggle
 
-# change container layout (stacked, tabbed, toggle split), make "p" alias pile
-# for stacking, because $mod+s is used for split vertically.
-bindsym $mod+p layout tabbed
-bindsym $mod+minus layout splith
-bindsym $mod+bar layout splitv
+# Organize all windows in tabbed layout.
+bindsym $mod+t layout tabbed
+# Distribute all windows vertically with Win+-.
+bindsym $mod+minus layout splitv
+# Distribute all windows horizontally with Win+|.
+bindsym $mod+bar layout splith
 
 # toggle tiling / floating
 bindsym $mod+Shift+space floating toggle
