@@ -87,3 +87,5 @@ TIMEFMT=$'\n================\nCPU\t%P\nuser\t%*U\nsystem\t%*S\ntotal\t%*E'
 # Force GBM as a backend as it has wider Wayland compositor support.
 export GBM_BACKEND=nvidia-drm
 export __GLX_VENDOR_LIBRARY_NAME=nvidia
+# Due to mouse cursor will disappear in Wayland with Nvidia property diriver.
+export WLR_NO_HARDWARE_CURSORS=1
