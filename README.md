@@ -1,3 +1,9 @@
+# Glossary
+
+Amazingly, "split window horizontally/vertically" is terribly ambiguous in [Linux](https://english.stackexchange.com/q/293520/355018). As an ESL learner, I want to focus in the verb "split" itself. By instinct, if I split an object, I cut it through a horizontal line. But I think some other people may focus in object itself. In other words, if an object is split "horizontally", it become two objects, distributed in horizontal direction. No wonder some Linux software will split objects horizontally in two different ways, because they focus in either verb or noun.
+
+To be clear. In this repository, "split window horizontally" means to cut it through a horizontal line. However sometimes it is necessary to distribute windows horizontally or vertically. I won't use "split" but "distribute". I think "distribute all windows horizontally" is unambiguous. Due to some Linux software have a contract meaning of "split horizontally" from their reserved keywords in config, or even use "split" and "distribute" interchangeably, I will clarify them by comments, especially in i3.
+
 dotfiles
 ========
 
