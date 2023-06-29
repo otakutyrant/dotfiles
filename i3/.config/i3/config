@@ -198,8 +198,8 @@ bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute @DEFAULT_SOU
 # bindsym XF86AudioLowerVolume exec /usr/bin/pactl set-sink-volume @DEFAULT_SINK@ '-5%'
 # bindsym XF86AudioRaiseVolume exec /usr/bin/pactl set-sink-volume @DEFAULT_SINK@ '+5%'
 # bindsym XF86AudioMute exec /usr/bin/pactl set-sink-mute @DEFAULT_SINK@ toggle
-# Start a terminal
-bindsym $mod+Return exec kitty
+# Start a kitty and startup session with Win+return.
+bindsym $mod+Return exec kitty --session session -1
 
 # brightness control
 bindsym XF86MonBrightnessDown exec xbacklight -steps 1 -time 0 -dec 5
