@@ -274,7 +274,7 @@ exec --no-startup-id nutstore
 # finds out, if available
 bar {
   tray_output primary
-  font pango: Sarasa Mono Slab SC Semibold 12
+  font pango: JetBrainsMono Nerd Font 13
   status_command i3status-rs $HOME/.config/i3/status.toml
   colors {
     separator #666666
