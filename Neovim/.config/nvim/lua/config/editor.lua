@@ -78,6 +78,8 @@ vim.opt.showmatch = true
 vim.opt.matchtime = 1
 -- Override the ignorecase option if the search pattern contains upper case characters
 vim.opt.smartcase = true
+-- Fold by indent.
+vim.opt.foldmethod = "indent"
 -- To avoid failing to find NeoVim module in virtual environment, figure out the system Python for NeoVim.
 -- https://github.com/neovim/neovim/issues/1887#issuecomment-280653872
 if vim.fn.exists("$VIRTUAL_ENV") == 1 then
