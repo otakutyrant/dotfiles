@@ -1,0 +1,41 @@
+icons_format = "{icon} "
+
+[theme]
+theme = "slick"
+[theme.overrides]
+
+[icons]
+icons = "material-nf"
+[icons.overrides]
+bat = ["|E|", "|_|", "|=|", "|F|"]
+bat_charging = "|^| "
+
+[[block]]
+block = "net"
+device = "utun"
+
+[[block]]
+block = "load"
+format = "$1m.eng(w:4) $5m.eng(w:4) $15m.eng(w:4)"
+
+[[block]]
+block = "memory"
+format = " $icon $mem_total_used_percents.eng(w:2) "
+
+[[block]]
+block = "nvidia_gpu"
+
+[[block]]
+block = "disk_space"
+path = "/"
+info_type = "available"
+alert_unit = "GB"
+interval = 20
+warning = 20.0
+alert = 10.0
+format = " $icon $available.eng(w:2) "
+
+[[block]]
+block = "time"
+interval = 1
+format = " $timestamp.datetime(f:'%a %F %T') "

@@ -275,15 +275,7 @@ exec --no-startup-id nutstore
 bar {
   tray_output primary
   font pango: JetBrainsMono Nerd Font 13
-  status_command i3status-rs $HOME/.config/i3/status.toml
-  colors {
-    separator #666666
-    background #666666
-    statusline #dddddd
-    focused_workspace #268BD2 #268BD2 #ffffff
-    active_workspace #DC3231 #DC3231 #ffffff
-    inactive_workspace #333333 #333333 #ffffff
-  }
+  status_command i3status-rs
 }
 
 # # Scratchpad
