@@ -163,6 +163,42 @@ vim.keymap.set(
     "4gt<cr>",
     { desc = "Jump to the fourth tabpage." }
 )
+vim.keymap.set(
+    "n",
+    "<leader>5",
+    "5gt<cr>",
+    { desc = "Jump to the fourth tabpage." }
+)
+vim.keymap.set(
+    "n",
+    "<leader>6",
+    "6gt<cr>",
+    { desc = "Jump to the fourth tabpage." }
+)
+vim.keymap.set(
+    "n",
+    "<leader>7",
+    "7gt<cr>",
+    { desc = "Jump to the fourth tabpage." }
+)
+vim.keymap.set(
+    "n",
+    "<leader>8",
+    "8gt<cr>",
+    { desc = "Jump to the fourth tabpage." }
+)
+vim.keymap.set(
+    "n",
+    "<leader>9",
+    "9gt<cr>",
+    { desc = "Jump to the fourth tabpage." }
+)
+vim.keymap.set(
+    "n",
+    "<leader>0",
+    "10gt<cr>",
+    { desc = "Jump to the fourth tabpage." }
+)
 
 -- ## Windows management
 
