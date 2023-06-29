@@ -1,0 +1,10 @@
+layout horizontal
+launch
+launch
+new_tab
+layout horizontal
+launch
+launch
+new_tab Projects
+cd ~/Projects
+launch
