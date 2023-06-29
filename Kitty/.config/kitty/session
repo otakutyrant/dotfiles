@@ -1,10 +1,12 @@
 layout horizontal
 launch
 launch
+layout splits
 new_tab
 layout horizontal
 launch
 launch
+layout splits
 new_tab Projects
 cd ~/Projects
 launch
