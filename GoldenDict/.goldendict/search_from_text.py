@@ -46,25 +46,34 @@ def augment_to_all_cases(inflections):
     return lowers + uppers + capitals
 
 
-def keyword_to_pattern(keyword: str) -> str:
-    words = keyword.split(" ")
-    combinations = []
-    for word in words:
-        inflections = word_to_inflections(word)
-        inflections = augment_to_all_cases(inflections)
-        combinations.append(inflections)
-    keywords = [
-        words_to_keyword(words)
-        for words in list(itertools.product(*combinations))
-    ]
+def keyword_to_pattern(keyword: str, search_raw_keyword) -> str:
+    if search_raw_keyword:
+        keywords = [keyword]
+    else:
+        words = keyword.split(" ")
+        combinations = []
+        for word in words:
+            inflections = word_to_inflections(word)
+            inflections = augment_to_all_cases(inflections)
+            combinations.append(inflections)
+        keywords = [
+            words_to_keyword(words)
+            for words in list(itertools.product(*combinations))
+        ]
     pattern = "\\b({})\\b".format("|".join(keywords))
     return pattern
 
 
 def search_from_directory(
-    directory: Path, keyword: str, suffix: str, doc, tag, text
+    directory: Path,
+    keyword: str,
+    suffix: str,
+    doc,
+    tag,
+    text,
+    search_raw_keyword,
 ):
-    pattern = keyword_to_pattern(keyword)
+    pattern = keyword_to_pattern(keyword, search_raw_keyword)
     for pathname in directory.rglob(f"*.{suffix}"):
         if pathname.parent.name[:5] == pathname.stem[:5]:
             # Due to the directory name is incomplete unexpectedly,
@@ -89,7 +98,13 @@ def search_from_directory(
 
 
 def main():
-    keyword = sys.argv[1]
+    arguments = sys.argv[1].split(" ")
+    if len(arguments) >= 2 and arguments[-1] == "--no-inflection":
+        search_raw_keyword = True
+        keyword = " ".join(arguments[:-1])
+    else:
+        search_raw_keyword = False
+        keyword = sys.argv[1]
 
     calibre_directory = Path.home() / "Calibre Library"
     doc, tag, text = Doc().tagtext()
@@ -98,7 +113,13 @@ def main():
     with tag("html"):
         with tag("body"):
             search_from_directory(
-                calibre_directory, keyword, "txt", doc, tag, text
+                calibre_directory,
+                keyword,
+                "txt",
+                doc,
+                tag,
+                text,
+                search_raw_keyword,
             )
     print(doc.getvalue())
 
