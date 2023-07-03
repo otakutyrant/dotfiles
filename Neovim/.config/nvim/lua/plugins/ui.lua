@@ -16,6 +16,10 @@ Nvim_tree = {
     end,
 }
 
+Colorizer = {
+    "lilydjwg/colorizer",
+}
+
 -- Map F1 as mandate file manager.
 vim.keymap.set(
     "n",
@@ -24,4 +28,4 @@ vim.keymap.set(
     { desc = "Toggle filetree." }
 )
 
-return { Nvim_tree }
+return { Nvim_tree, Colorizer }
