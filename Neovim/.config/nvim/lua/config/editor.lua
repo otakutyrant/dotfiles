@@ -80,6 +80,8 @@ vim.opt.matchtime = 1
 vim.opt.smartcase = true
 -- Fold by indent.
 vim.opt.foldmethod = "indent"
+-- Keep undofile so that you still can undo even after you close and open a file again.
+vim.opt.undofile = true
 -- To avoid failing to find NeoVim module in virtual environment, figure out the system Python for NeoVim.
 -- https://github.com/neovim/neovim/issues/1887#issuecomment-280653872
 if vim.fn.exists("$VIRTUAL_ENV") == 1 then
