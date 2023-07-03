@@ -15,6 +15,9 @@ vim.opt.colorcolumn = "80"
 -- Because trail space is enough, I discard the eol marker.
 vim.opt.list = true
 vim.opt.listchars = { tab = "␉·", trail = "␠", nbsp = "¬" }
+-- Enable 24-bit RGB color in the TUI, which is better than
+-- the tranditional 256 term colors.
+vim.opt.termguicolors = true
 
 -- ## Tabline, defines how tabpages title looks like
 -- For convenience of cross-probjects development, show project names directly.
