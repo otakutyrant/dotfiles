@@ -25,6 +25,16 @@ local monokai = {
     },
 }
 
+-- A super theme supports plenty plugins and configurations.
+local nord = {
+    "shaunsingh/nord.nvim",
+    lazy = false,
+    priority = 1000,
+    names = {
+        "nord",
+    },
+}
+
 local function get_random_element(list)
     math.randomseed(os.time())
     -- Generate a random index within the range of the list size.
@@ -42,6 +52,7 @@ end
 local themes = {
     tokyonight,
     monokai,
+    nord,
 }
 local theme = get_random_element(themes)
 local theme_name = get_random_element(theme.names)
