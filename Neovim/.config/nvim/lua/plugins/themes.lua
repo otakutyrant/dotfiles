@@ -25,7 +25,7 @@ local monokai = {
     },
 }
 
-local function getRandomElement(list)
+local function get_random_element(list)
     math.randomseed(os.time())
     -- Generate a random index within the range of the list size.
     local index = math.random(#list)
@@ -43,8 +43,8 @@ local themes = {
     tokyonight,
     monokai,
 }
-local theme = getRandomElement(themes)
-local theme_name = getRandomElement(theme.names)
+local theme = get_random_element(themes)
+local theme_name = get_random_element(theme.names)
 theme.config = enable_colorscheme(theme_name)
 
 return themes
