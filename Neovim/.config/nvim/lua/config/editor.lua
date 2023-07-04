@@ -44,6 +44,9 @@ function MyTabLine()
 end
 vim.go.tabline = "%!v:lua.MyTabLine()"
 
+-- Set the global statusline.
+vim.opt.laststatus = 3
+
 -- ## Spell
 
 -- Enable spell checker in some filetypes.

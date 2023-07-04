@@ -20,6 +20,24 @@ local colorizer = {
     "lilydjwg/colorizer",
 }
 
+local lualine = {
+    "nvim-lualine/lualine.nvim",
+    lazy = false,
+    dependencies = "nvim-tree/nvim-web-devicons", -- For file icons.
+    config = function()
+        require("lualine").setup({
+            sections = {
+                lualine_x = {
+                    "%{get(g:, 'colors_name', 'default')}", -- colorscheme
+                    "encoding",
+                    "fileformat",
+                    "filetype",
+                },
+            },
+        })
+    end,
+}
+
 -- Map F1 as mandate file manager.
 vim.keymap.set(
     "n",
@@ -31,4 +49,5 @@ vim.keymap.set(
 return {
     nvim_tree,
     colorizer,
+    lualine,
 }
