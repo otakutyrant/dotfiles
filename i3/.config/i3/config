@@ -274,7 +274,7 @@ exec --no-startup-id nutstore
 # finds out, if available
 bar {
   tray_output primary
-  font pango: JetBrainsMono Nerd Font 13
+  font pango: JetBrainsMono Nerd Font 9
   status_command i3status-rs
 }
 
