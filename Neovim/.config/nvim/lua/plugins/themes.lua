@@ -27,6 +27,44 @@ local nord = {
     },
 }
 
+-- A super theme supports much plugins and configurations.
+local everforest = {
+    "sainnhe/everforest",
+    names = {
+        "everforest",
+    },
+}
+
+-- Supports multiple styles. TODO: Convert styles to names.
+local onedark = {
+    "navarasu/onedark.nvim",
+    names = {
+        "onedark",
+    },
+}
+
+local gruvbox = {
+    "ellisonleao/gruvbox.nvim",
+    names = {
+        "gruvbox",
+    },
+}
+
+local sonokai = {
+    "sainnhe/sonokai",
+    names = {
+        "sonokai",
+    },
+}
+
+-- Supports plenty plugins.
+local solarized = {
+    "shaunsingh/solarized.nvim",
+    names = {
+        "solarized",
+    },
+}
+
 local function get_random_element(list)
     math.randomseed(os.time())
     -- Generate a random index within the range of the list size.
@@ -45,6 +83,11 @@ local themes = {
     tokyonight,
     monokai,
     nord,
+    everforest,
+    onedark,
+    gruvbox,
+    sonokai,
+    solarized,
 }
 
 -- Make all theme plugins loaded early to set colorscheme thereafter.
