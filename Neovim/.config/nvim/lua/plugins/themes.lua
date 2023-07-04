@@ -35,7 +35,10 @@ local function getRandomElement(list)
     return list[index]
 end
 
-local themes = { tokyonight, monokai }
+local themes = {
+    tokyonight,
+    monokai,
+}
 local theme = getRandomElement(themes)
 theme.config = enable_colorscheme(theme)
 

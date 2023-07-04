@@ -2,7 +2,7 @@
 -- The plugin nvim-treesitter use treesitter to add features to NeoVim or enhance default features, like highlight.
 
 --- TODO: understand and refine it, then add it in the disable of highlight of nvim-treesitter.
-function disable_highlight_for_nvim_treesitter(lang, bufnr)
+local function disable_highlight_for_nvim_treesitter(lang, bufnr)
     if lang == "html" and vim.api.nvim_buf_line_count(bufnr) > 500 then
         return true
     end
@@ -14,7 +14,7 @@ function disable_highlight_for_nvim_treesitter(lang, bufnr)
     return false
 end
 
-nvim_treesitter = {
+local nvim_treesitter = {
     "nvim-treesitter/nvim-treesitter",
     event = { "BufReadPost", "BufNewFile" },
     -- Automatically update all parsers when the plugin is installed or updated.
@@ -29,14 +29,14 @@ nvim_treesitter = {
 }
 
 -- Show context the context of the currently visible buffer contents when you scroll.
-nvim_treesitter_context = {
+local nvim_treesitter_context = {
     "nvim-treesitter/nvim-treesitter-context",
     event = { "BufReadPost", "BufNewFile" },
     dependencies = { "nvim-treesitter/nvim-treesitter" },
 }
 
 --- TODO: understand and refine it, then decide whether to add it in the disable of highlight of nvim-treesitter.
-nvim_treesitter_textobjects = {
+local nvim_treesitter_textobjects = {
     "nvim-treesitter/nvim-treesitter-textobjects",
     event = { "BufReadPost", "BufNewFile" },
     dependencies = { "nvim-treesitter/nvim-treesitter" },

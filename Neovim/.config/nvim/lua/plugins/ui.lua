@@ -1,4 +1,4 @@
-Nvim_tree = {
+local nvim_tree = {
     "nvim-tree/nvim-tree.lua",
     lazy = false, -- Replace netrw exactly when opening a directory.
     dependencies = "nvim-tree/nvim-web-devicons", -- For file icons.
@@ -16,7 +16,7 @@ Nvim_tree = {
     end,
 }
 
-Colorizer = {
+local colorizer = {
     "lilydjwg/colorizer",
 }
 
@@ -28,4 +28,7 @@ vim.keymap.set(
     { desc = "Toggle filetree." }
 )
 
-return { Nvim_tree, Colorizer }
+return {
+    nvim_tree,
+    colorizer,
+}

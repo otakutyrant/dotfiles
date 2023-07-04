@@ -35,4 +35,6 @@ local nvim_lspconfig = {
     end,
 }
 
-return { nvim_lspconfig }
+return {
+    nvim_lspconfig,
+}

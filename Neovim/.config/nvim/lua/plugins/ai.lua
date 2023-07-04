@@ -1,7 +1,7 @@
 -- Lazy
 require("os")
 
-return {
+local chatgpt = {
     "jackMort/ChatGPT.nvim",
     dependencies = {
         "MunifTanjim/nui.nvim",
@@ -18,4 +18,8 @@ return {
                 .. "/.config/nvim/chatgpt_api.txt",
         })
     end,
+}
+
+return {
+    chatgpt,
 }

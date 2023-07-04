@@ -1,5 +1,5 @@
 -- A highly extendable fuzzy finder over lists.
-telescope = {
+local telescope = {
     "nvim-telescope/telescope.nvim",
     event = "VeryLazy",
     dependencies = {

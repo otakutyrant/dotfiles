@@ -10,4 +10,7 @@ local comment = {
         })
     end,
 }
-return { comment }
+
+return {
+    comment,
+}
