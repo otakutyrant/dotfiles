@@ -1,8 +1,5 @@
 local tokyonight = {
     "folke/tokyonight.nvim",
-    lazy = false,
-    priority = 1000,
-    opts = {},
     names = {
         "tokyonight",
         "tokyonight-night",
@@ -14,9 +11,6 @@ local tokyonight = {
 
 local monokai = {
     "tanvirtin/monokai.nvim",
-    lazy = false,
-    priority = 1000,
-    opts = {},
     names = {
         "monokai",
         "monokai_pro",
@@ -28,8 +22,6 @@ local monokai = {
 -- A super theme supports plenty plugins and configurations.
 local nord = {
     "shaunsingh/nord.nvim",
-    lazy = false,
-    priority = 1000,
     names = {
         "nord",
     },
@@ -54,6 +46,13 @@ local themes = {
     monokai,
     nord,
 }
+
+-- Make all theme plugins loaded early to set colorscheme thereafter.
+for _, theme in pairs(themes) do
+    theme.lazy = false
+    theme.priority = 1000
+end
+
 local theme = get_random_element(themes)
 local theme_name = get_random_element(theme.names)
 theme.config = enable_colorscheme(theme_name)
