@@ -84,6 +84,8 @@ vim.opt.showmatch = true
 vim.opt.matchtime = 1
 -- Override the ignorecase option if the search pattern contains upper case characters
 vim.opt.smartcase = true
+-- Substitue with g flag. Use \c when necessary.
+vim.opt.gdefault = true
 -- Fold by indent.
 vim.opt.foldmethod = "indent"
 -- Keep undofile so that you still can undo even after you close and open a file again.
