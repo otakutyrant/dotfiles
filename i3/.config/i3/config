@@ -282,7 +282,7 @@ bar {
 # Because conventional $mod+minus is occupied. Use the up-right key of HHKB,
 # asciitilde instead. `~` is used to swap letter case in Vim, analogous to its
 # assignment # here exactly.
-bindsym $mod+asciitilde move scratchpad
-bindsym $mod+Shift+asciitilde scratchpad show
+bindsym $mod+asciitilde scratchpad show
+bindsym $mod+Shift+asciitilde move scratchpad
 exec --no-startup-id gedit ~/scratchpad
 for_window [class = "Gedit" title = "scratchpad"] move scratchpad
