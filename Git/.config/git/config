@@ -13,8 +13,6 @@
 [user]
   name = otakutyrant
   email = otakutyrant@gmail.com
-[log]
-  decorate = auto
 [status]
   # ShowStash only work for 2.14.0 and later.
   showStash = true
