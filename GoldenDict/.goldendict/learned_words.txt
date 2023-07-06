@@ -15230,3 +15230,8 @@ enslave 4
 non-aggression 4
 mid-eighteenth 5
 stateroom 5
+co-ordinate 86
+mansion 23
+outright 20
+superorganism 19
+madam 17
