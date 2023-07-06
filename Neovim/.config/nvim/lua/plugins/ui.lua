@@ -17,7 +17,7 @@ local nvim_tree = {
 }
 
 local colorizer = {
-    "lilydjwg/colorizer",
+    "NvChad/nvim-colorizer.lua",
 }
 
 local lualine = {
