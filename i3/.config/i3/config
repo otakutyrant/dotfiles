@@ -157,10 +157,10 @@ bindsym $mod+Shift+d exec gksu dmenu_run
 
 # Autostart desktop files according to XDG.
 # https://wiki.archlinux.org/index.php/XDG_Autostart
-exec dex
+exec --no-startup-id dex --autostart --environment i3
 
 # https://faq.i3wm.org/question/2332/flexible-monitor-setup.1.html
-exec xrandr --output DVI-D-0 --primary --mode 1920x1080 --pos 0x0 --rotate normal --output HDMI-0 --mode 1920x1080 --pos 1920x0 --rotate normal --output DP-0 --off --output DP-1 --off --output DP-2 --off --output DP-3 --off --output DP-4 --off --output DP-5 --off
+exec --no-startup-id xrandr --output DVI-D-0 --primary --mode 1920x1080 --pos 0x0 --rotate normal --output HDMI-0 --mode 1920x1080 --pos 1920x0 --rotate normal --output DP-0 --off --output DP-1 --off --output DP-2 --off --output DP-3 --off --output DP-4 --off --output DP-5 --off
 
 # # Bar
 
