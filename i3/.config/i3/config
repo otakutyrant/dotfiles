@@ -122,13 +122,13 @@ bindsym $mod+Shift+9 move container to workspace number $ws9
 bindsym $mod+Shift+0 move container to workspace number $ws10
 
 # Automatically putting clients on specific workspaces.
-assign [class="Termite"] $ws1
+assign [class="kitty"] $ws1
 assign [class="google-chrome"] $ws2
-assign [class="MPlayer"] $ws3
-assign [class="Steam"] $ws3
+assign [class="mpv"] $ws3
+assign [class="steam"] $ws3
 assign [class="Zotero"] $ws4
-assign [class="Nautilus"] $ws4
-assign [class="GoldenDict"] $ws4
+assign [class="org.gnome.Nautilus"] $ws4
+assign [class="goldendict"] $ws4
 
 # Automatically putting workspaces on specific screens.
 workspace $ws1 output DVI-D-0
