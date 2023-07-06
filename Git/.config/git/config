@@ -1,13 +1,8 @@
 [alias]
-  a = add
-  b = branch
-  c = commit
   c = !gitc # A personal command, see the document in its source code.
   co = checkout
   d = diff
-  l = log
   s = status
-  f = fetch
   # Use custom committer date format and unify to a time zone.
   # https://stackoverflow.com/a/32990187/1546088
   # https://stackoverflow.com/a/34778736/1546088
