@@ -6,8 +6,6 @@
   # Use local date and concise format for log.
   # https://stackoverflow.com/q/7853332/12080580
   g = log --graph --all --date=format-local:'%Y-%m-%d %H:%M:%S' --format='%C(auto)%h%d %cd %s'
-[color]
-  ui = on
 [credential]
   # Store your credentials permanently.
   # https://stackoverflow.com/a/12240995/1546088
