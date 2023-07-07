@@ -1,0 +1,16 @@
+# If joshuto does not know how to open the file, it can resort to opening it
+# via xdg settings.
+xdg_open = true
+
+[display]
+# Set line numers relative.
+line_number_style = "relative"
+
+[preview]
+# Use kitty internal feature to preview images.
+# https://github.com/kamiyaa/joshuto/blob/main/docs/image_previews.md
+preview_script = "~/.config/joshuto/preview_file.sh"
+# The “shown” script will be called each time a file preview is shown by Joshuto.
+preview_shown_hook_script = "~/.config/joshuto/on_preview_shown"
+# The “removed” script will be called each time the file preview disappears in Joshuto.
+preview_removed_hook_script = "~/.config/joshuto/on_preview_removed"

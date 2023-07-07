@@ -1,0 +1,53 @@
+#!/bin/bash
+# Use icat to place an image on top of joshuto's preview window.
+
+FILE_PATH="$1" # Full path of the previewed file
+PREVIEW_X_COORD="$2" # x coordinate of upper left cell of preview area
+PREVIEW_Y_COORD="$3" # y coordinate of upper left cell of preview area
+PREVIEW_WIDTH="$4" # Width of the preview pane (number of fitting characters)
+PREVIEW_HEIGHT="$5" # Height of the preview pane (number of fitting characters)
+
+GAP=4
+
+# Pass file to this function to show with kitty +kitten icat.
+# --clear: remove all image currently displayed on the screen.
+# --transfer-mode: use memory to transfer images to terminal faster, maybe.
+function show_image {
+  local file_path="$1"
+  local gap="$2" # Inserting gaps will make the preview look better, maybe.
+  kitty +kitten icat \
+    --clear \
+    --transfer-mode=memory \
+    --place "${PREVIEW_WIDTH}x$(($PREVIEW_HEIGHT - $gap))@${PREVIEW_X_COORD}x$(($PREVIEW_Y_COORD + $gap))" \
+    "$file_path" 2>/dev/null
+}
+
+case "$(file -bL --mime-type "$FILE_PATH")" in
+  ## SVG, generate visual image cache.
+  image/svg+xml|image/svg)
+    file_name="$(echo -n "$FILE_PATH" | md5sum | awk '{print $1}').jpg"
+    cache_file="/tmp/joshuto-cache/$file_name"
+    if [ ! -f "$cache_file" ]; then
+      mkdir /tmp/joshuto-cache 2>/dev/null
+      convert -- "$FILE_PATH" "$cache_file" 2>/dev/null || exit 1
+    fi
+    show_image "$cache_file" $GAP ;;
+
+  ## Image
+  image/*)
+    show_image "$FILE_PATH" $GAP ;;
+
+  ## Video, generate visual preview cache.
+  video/*)
+    file_name="$(echo -n "$FILE_PATH" | md5sum | awk '{print $1}').jpg"
+    cache_file="/tmp/joshuto-cache/$file_name"
+    if [ ! -f "$cache_file" ]; then
+      mkdir /tmp/joshuto-cache 2>/dev/null
+      ffmpeg -ss 00:00:30 -i "$FILE_PATH" -vf 'scale=960:960:force_original_aspect_ratio=decrease' -vframes 1 "$cache_file" 2>/dev/null || exit 1
+    fi
+    show_image "$cache_file" $GAP ;;
+
+  # When no preview available, auto clear all image currently displayed on the screen.
+  *)
+    kitty +kitten icat --clear --transfer-mode=memory 2>/dev/null ;;
+esac

@@ -1,0 +1,4 @@
+#!/bin/bash
+# Clears any existing images on the screen when preview become invalid.
+
+kitty +kitten icat --transfer-mode=memory --clear 2>/dev/null
