@@ -27,7 +27,7 @@ ZSH_CUSTOM=$HOME/.zsh-custom
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(systemd pacman pikaur github z zsh-edit) # TODO: refine
+plugins=(systemd pacman pikaur github zsh-edit) # TODO: refine
 
 # Deploy oh-my-zsh.
 source $ZSH/oh-my-zsh.sh
@@ -121,10 +121,6 @@ alias_or_warning unstow "stow -D --target=$HOME"
 # https://wiki.archlinux.org/title/Zsh#pkgfile_%22command_not_found%22_handler
 source /usr/share/doc/pkgfile/command-not-found.zsh
 
-# autojump:
-# https://github.com/wting/autojump TODO: use z instead?
-[[ -s /etc/profile.d/autojump.sh ]] && source /etc/profile.d/autojump.sh
-
 # ripgrep: Pretty output so it can pipe into pagers.
 alias_or_warning rg "rg -p"
 
@@ -138,3 +134,6 @@ export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 # yt-dlp: Solve China network issue via proxy, and download Chinese subtitles
 # automatically.
 alias_or_warning "yt-dlp" "yt-dlp --proxy 127.0.0.1:2340 --write-subs --sub-langs zh-CN"
+
+# Use zoxide as z.
+eval "$(zoxide init zsh)"
