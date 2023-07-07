@@ -9,7 +9,7 @@ man-db
 tldr
 
 # File Manager
-ranger
+joshuto
 tree
 gvfs-mtp # Virtual filesystem implementation for GIO (Android, media player).
 gvfs-smb # For SMB protocol.
