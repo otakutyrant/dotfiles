@@ -57,6 +57,13 @@ local sonokai = {
     },
 }
 
+local rose_pine = {
+    "rose-pine/neovim",
+    names = {
+        "rose-pine",
+    },
+}
+
 local function get_random_element(list)
     math.randomseed(os.time())
     -- Generate a random index within the range of the list size.
@@ -79,6 +86,7 @@ local themes = {
     onedark,
     gruvbox,
     sonokai,
+    rose_pine,
 }
 
 -- Make all theme plugins loaded early to set colorscheme thereafter.
