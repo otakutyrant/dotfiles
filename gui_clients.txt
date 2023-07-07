@@ -1,0 +1,54 @@
+# To install all packages from this file, execute `pacman -S $(sed "/#/D" gui_clients.txt)`.
+
+google-chrome-stable # Web Browser
+
+steam # Game
+
+network-manager-applet # Tray for Network Manager
+
+motrix # BitTorrent clients
+
+feh # Image viewer
+
+scrot # Screenshot
+
+nautilus # File Manager
+
+baobab # Disk usage display
+
+gnome-system-monitor # System monitoring
+
+xsel # Clipboard manager
+
+fcitx5-im fcitx5-rime # Input method editor
+
+wps-office # Office suites
+
+dmenu synapse # Application launchers
+
+nutstore nautilus-nutstore # Cloud backup
+
+goldendict-ng-git # Dictionary
+
+obs-studio # Screen Recording
+
+gedit # Editor
+
+calibre # E-Book Manager
+
+archlinux-wallpaper # Arch Linux Official Wallpapers
+
+variety # Wallpaper Manager
+
+anki # Flashcards
+
+clash-for-windows-electron-bin clash-meta # Proxy
+
+# X11
+arandr
+i3 i3status-rust
+xorg xorg-xinit
+xsel # Copy from CLI clients to system clipboard
+xfce4-notifyd
+deepin-gtk-theme deepin-icon-theme
+dex # Autostart XDG desktop files
