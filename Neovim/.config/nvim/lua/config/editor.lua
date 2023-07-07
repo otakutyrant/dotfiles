@@ -212,6 +212,12 @@ vim.keymap.set(
     { desc = "Jump to the fourth tabpage." }
 )
 
+-- ## Aditional commands
+
+vim.api.nvim_create_user_command("RemoveTrailingWhitespaces", function()
+    vim.cmd([[silent %s/\s\+$//e]])
+end, {})
+
 -- ## Windows management
 
 vim.keymap.set(
