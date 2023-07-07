@@ -1,0 +1,91 @@
+# To install all packages from this file, execute `pacman -S $(sed "/#/D" cli_clients.txt)`.
+
+htop # Interactive Process Viewer
+
+page-git # Pager
+
+# Linux Manual
+man-db
+tldr
+
+# File Manager
+ranger
+tree
+gvfs-mtp # Virtual filesystem implementation for GIO (Android, media player).
+gvfs-smb # For SMB protocol.
+ntfs-3g # Microsoft Windows filesystem NTFS.
+fd # Simple, fast and user-friendly alternative to find.
+
+stow # Dofiles mamanger
+
+tmux # Terminal Multiplexer
+
+bash zsh # Shell
+
+neovim python-pynvim # Editor
+
+# Network
+curl
+wget
+iputils
+networkmanager
+openssh
+rsync
+whois
+yt-dlp # Youtube Downloader
+
+# Development
+make cmake # Building
+python-pre-commit # pre-commit
+lua stylua lua-language-server # Lua
+bash-language-server # Bash
+yamlfmt # YAML
+rust cargo # Rust
+cloc # Code analysis
+docker # Container
+opencv python-opencv # Image Processing
+gdb # Debug
+ripgrep # Grep
+fzf # Fuzzy search tool
+git # Version Control Tool
+# Python
+python
+python-pip
+ruff python-ruff ruff-lsp
+pyright # LSP
+ipython
+flake8
+python-isort
+# Python Library
+python-sh
+python-srt
+python-ntlk
+
+# Nvidia GPU
+nvidia
+nvidia-utils # It includes nvidia-smi.
+cuda cudnn
+
+# Operation System
+lsb-release # Show what the linux distribution is.
+pkgfile # List what package a file belong to.
+arch-install-scripts # Scripts to aid in installing Arch Linux
+archlinux-keyring # Trust chain
+
+# Archiving and Compression Tools
+bzip2 gzip p7zip tar unrar unzip xz zip
+
+# AI
+python-pytorch
+python-pytorch-opt-cuda
+tensorboard
+whisper-git # Transcribe
+
+# Font
+ttf-sarasa-gothic # CJK
+ttf-jetbrains-mono-nerd
+noto-fonts-emoji
+
+# Media
+ffmepg
+mediainfo # Viewing information about media files
