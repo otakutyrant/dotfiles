@@ -57,14 +57,6 @@ local sonokai = {
     },
 }
 
--- Supports plenty plugins.
-local solarized = {
-    "shaunsingh/solarized.nvim",
-    names = {
-        "solarized",
-    },
-}
-
 local function get_random_element(list)
     math.randomseed(os.time())
     -- Generate a random index within the range of the list size.
@@ -87,7 +79,6 @@ local themes = {
     onedark,
     gruvbox,
     sonokai,
-    solarized,
 }
 
 -- Make all theme plugins loaded early to set colorscheme thereafter.
