@@ -55,6 +55,44 @@ local fFHighlight = {
     end,
 }
 
+local noice = {
+    "folke/noice.nvim",
+    event = "VeryLazy",
+    dependencies = {
+        -- Used for proper rendering and multiple views.
+        "MunifTanjim/nui.nvim",
+        -- Used for notification view.
+        "rcarriga/nvim-notify",
+        -- Used for highlighting the cmdline and lsp docs.
+        "nvim-treesitter/nvim-treesitter",
+    },
+    config = function()
+        require("noice").setup({
+            lsp = {
+                -- Override markdown rendering so that cmp and other plugins use Treesitter.
+                override = {
+                    ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
+                    ["vim.lsp.util.stylize_markdown"] = true,
+                    ["cmp.entry.get_documentation"] = true,
+                },
+            },
+            -- Enabling some presets for easier configuration.
+            presets = {
+                -- Use a classic bottom cmdline for search.
+                bottom_search = true,
+                -- Position the cmdline and popupmenu together.
+                command_palette = true,
+                -- Long messages will be sent to a split.
+                long_message_to_split = true,
+                -- Enables an input dialog for inc-rename.nvim.
+                inc_rename = false,
+                -- Add a border to hover docs and signature help.
+                lsp_doc_border = false,
+            },
+        })
+    end,
+}
+
 -- Map F1 as mandate file manager.
 vim.keymap.set(
     "n",
@@ -69,4 +107,5 @@ return {
     lualine,
     indentline,
     fFHighlight,
+    noice,
 }
