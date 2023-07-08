@@ -64,6 +64,17 @@ local rose_pine = {
     },
 }
 
+local catppuccin = {
+    "catppuccin/nvim",
+    names = {
+        "catppuccin",
+        "catppuccin-latte",
+        "catppuccin-frappe",
+        "catppuccin-macchiato",
+        "catppuccin-mocha",
+    },
+}
+
 local function get_random_element(list)
     math.randomseed(os.time())
     -- Generate a random index within the range of the list size.
@@ -87,6 +98,7 @@ local themes = {
     gruvbox,
     sonokai,
     rose_pine,
+    catppuccin,
 }
 
 -- Make all theme plugins loaded early to set colorscheme thereafter.
