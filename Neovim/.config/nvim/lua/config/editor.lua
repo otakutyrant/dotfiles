@@ -19,7 +19,14 @@ vim.opt.showbreak = "↪"
 -- Enable 24-bit RGB color in the TUI, which is better than
 -- the tranditional 256 term colors.
 vim.opt.termguicolors = true
-
+-- Highlight briefly on yank.
+vim.api.nvim_create_autocmd("TextYankPost", {
+    pattern = "*",
+    callback = function()
+        vim.highlight.on_yank()
+    end,
+    desc = "Highlight briefly on yank",
+})
 -- ## Tabline, defines how tabpages title looks like
 -- For convenience of cross-probjects development, show project names directly.
 function MyTabLine()
