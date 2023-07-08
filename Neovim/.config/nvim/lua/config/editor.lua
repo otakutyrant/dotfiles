@@ -10,11 +10,12 @@ vim.opt.cursorline = true
 vim.opt.cursorcolumn = true
 -- Highlight the screen column 80 for conventional code styles.
 vim.opt.colorcolumn = "80"
--- Reveal and distinguish tab, trail space and nbsp more legibly.
+-- Reveal and distinguish tab, trail space, nbsp, and break more legibly.
 -- http://vi.stackexchange.com/a/430/5663
 -- Because trail space is enough, I discard the eol marker.
 vim.opt.list = true
 vim.opt.listchars = { tab = "␉·", trail = "␠", nbsp = "¬" }
+vim.opt.showbreak = "↪"
 -- Enable 24-bit RGB color in the TUI, which is better than
 -- the tranditional 256 term colors.
 vim.opt.termguicolors = true
