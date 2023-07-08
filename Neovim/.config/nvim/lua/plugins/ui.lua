@@ -38,6 +38,23 @@ local lualine = {
     end,
 }
 
+local indentline = {
+    "lukas-reineke/indent-blankline.nvim",
+    config = function()
+        require("indent_blankline").setup({
+            show_current_context = true,
+            show_current_context_start = true,
+        })
+    end,
+}
+
+local fFHighlight = {
+    "kevinhwang91/nvim-fFHighlight",
+    config = function()
+        require("fFHighlight").setup({})
+    end,
+}
+
 -- Map F1 as mandate file manager.
 vim.keymap.set(
     "n",
@@ -50,4 +67,6 @@ return {
     nvim_tree,
     colorizer,
     lualine,
+    indentline,
+    fFHighlight,
 }
