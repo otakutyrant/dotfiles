@@ -36,10 +36,20 @@ local everforest = {
 }
 
 -- Supports multiple styles. TODO: Convert styles to names.
+-- Due to the PR stucks, use my fork instead at the moment.
+-- https://github.com/navarasu/onedark.nvim/pull/178
 local onedark = {
-    "navarasu/onedark.nvim",
+    "otakutyrant/onedark.nvim",
+    branch = "multiple_colorschemes",
     names = {
-        "onedark",
+        "onedark-dark",
+        "onedark-darker",
+        "onedark-cool",
+        "onedark-deep",
+        "onedark-dark",
+        "onedark-warm",
+        "onedark-warmer",
+        "onedark-light",
     },
 }
 
