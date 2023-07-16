@@ -61,8 +61,6 @@ local noice = {
     dependencies = {
         -- Used for proper rendering and multiple views.
         "MunifTanjim/nui.nvim",
-        -- Used for notification view.
-        "rcarriga/nvim-notify",
         -- Used for highlighting the cmdline and lsp docs.
         "nvim-treesitter/nvim-treesitter",
     },
