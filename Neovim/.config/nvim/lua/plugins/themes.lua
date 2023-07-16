@@ -60,7 +60,9 @@ local sonokai = {
 local rose_pine = {
     "rose-pine/neovim",
     names = {
-        "rose-pine",
+        "rose-pine-dawn",
+        "rose-pine-main",
+        "rose-pine-moon",
     },
 }
 
