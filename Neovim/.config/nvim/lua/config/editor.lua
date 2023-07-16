@@ -225,6 +225,18 @@ vim.keymap.set(
     { desc = "Jump to the fourth tabpage." }
 )
 
+-- Do not jump when hitting `*`.
+-- https://github.com/neovim/neovim/discussions/24285#discussioncomment-6420615
+local function map_star()
+    vim.fn.setreg(
+        "/",
+        [[\V\<]] .. vim.fn.escape(vim.fn.expand("<cword>"), [[/\]]) .. [[\>]]
+    )
+    vim.fn.histadd("/", vim.fn.getreg("/"))
+    vim.opt.hlsearch = true
+end
+vim.keymap.set("n", "*", map_star)
+
 -- ## Aditional commands
 
 vim.api.nvim_create_user_command("RemoveTrailingWhitespaces", function()
