@@ -97,3 +97,9 @@ I noticed a trend that traditional GNU CLI clients are replaced by high-performa
 # China network issue
 
 There are some related configuration. Ignore them if you do not live in China.
+
+# Too many themes and you do not know which one is the best?
+
+Don't worry, only infants make choice, while adults want the whole enchilada! Just install all of them and random pick one every time you launch the client. You can consult how I do that in my [Neovim themes](Neovim/.config/nvim/lua/plugins/themes.lua`. When fate plays its hand, a captivating theme will gracefully unfurl.
+
+The random theme mechanism of kitty, i3, and so on is working in progress.
