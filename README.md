@@ -71,6 +71,7 @@ Note:
 6. If you want to adjust the border between windows, use mouse. All hierarchies support it.
 7. It seems that tmux can distribute windows too. But I have no interest to figure out how.
 8. i3 and kitty can distribute windows layout to tabbed, stacked, and so on. Explorer it by yourself.
+9. Although I said windows can be moved between tabs, I do not list related keymaps in the table.
 
 Do you notice the relation between master keys? They are distributed in the left-bottom part of my Happy Hacking Keyboard exactly. How well organized they are.
 
