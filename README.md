@@ -36,12 +36,12 @@ When you want to kill a windows, hit `master+q`.
 
 Now time to make the windows management hierarchical! In Linux, I use a windows manager, i3, to handles multiple GUI clients, including a virtual terminal, kitty. In turn, I use kitty to handles multiple CLI clients, including shells and an editor, Neovim. Eventually, I use Neovim to handles multiple files. The windows management of such three hierarchies are almost consistent, list as below:
 
-| Hierarchies      | name   | What do master keys call in them? | binded key |
-|------------------|--------|-----------------------------------|------------|
-| Windows Manager  | i3     | $mod                              | super      |
-| Virtual Terminal | kitty  | N/A                               | alt        |
-| Editor           | Neovim | <leader> key                      | space      |
-| Multiplixer      | tmux   | the prefix key                    | ctrl-w     |
+|    Hierarchies   |  name  | What do they manage? | What do master keys call in them? | binded key |
+|:----------------:|:------:|----------------------|:---------------------------------:|:----------:|
+| Windows Manager  | i3     | GUI clients          | $mod                              | super      |
+| Virtual Terminal | kitty  | CLI clients          | N/A                               | alt        |
+| Editor           | Neovim | Files                | key                               | space      |
+| Multiplixer      | tmux   | Remote sessions      | the prefix key                    | ctrl-w     |
 
 | name   | What do tabs call in them? | How to allocate a new tab? | How to jump to a tab? |
 |--------|----------------------------|----------------------------|-----------------------|
