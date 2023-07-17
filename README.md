@@ -18,6 +18,10 @@ Find a client which has highly refined default configuration so you do not overr
 
 As for Neovim. If you can use third-part tool to handle files, use them rather than install an corresponding plugin, like useless Black plugin because you can execute external commands in Ex command as `:!black %`. Tinkering Neovim is ceaseless.
 
+I use `.gitmodules` to git clone a submodule `oh-my-zsh`.
+
+`.pre-commit-config.yaml`, `pyproject.toml`, `stylua.toml` assure the unified coding style of dotfiles.
+
 # Introduction to unified, hierarchical windows management
 
 Before the introduction, let us make sure what split means. Amazingly, "split window horizontally/vertically" is terribly ambiguous in [Linux](https://english.stackexchange.com/q/293520/355018). As an ESL learner, I decide to focus in the verb "split" itself. By instinct, if I split an object, I cut it through a horizontal line. But some other people may focus in the object itself. In other words, when the object is split "horizontally", it becomes two objects, distributed in horizontal direction. No wonder some Linux software will split objects horizontally in two different ways, because they focus in either verb or noun.
@@ -90,7 +94,7 @@ I tried to migrate to Wayland but terminated, because Nvidia support is not good
 
 # Two lists to install in Arch Linux
 
-By the way, I use Arch Linux. So I maintained two lists for CLI clients and GUI clients, highly commented. After installing Arch Linux in a new machine, I install all packages from the files via this way like `pacman -S $(sed "/#/D" gui_clients.txt)`.
+By the way, I use Arch Linux. So I maintained two lists for [CLI clients](cli_clients.txt) and [GUI clients](gui_clients.txt), highly commented. After installing Arch Linux in a new machine, I install all packages from the files via this way like `pacman -S $(sed "/#/D" gui_clients.txt)`.
 
 I noticed a trend that traditional GNU CLI clients are replaced by high-performance Rust alternatives, like `find` is replaced by `fd`, `grep` by `ripgrep` or `fzf`, `less` by `page` and so on.
 
@@ -102,4 +106,4 @@ There are some related configuration. Ignore them if you do not live in China.
 
 Don't worry, only infants make choice, while adults want the whole enchilada! Just install all of them and random pick one every time you launch the client. You can consult how I do that in my [Neovim themes](Neovim/.config/nvim/lua/plugins/themes.lua). When fate plays its hand, a captivating theme will gracefully unfurl.
 
-The random theme mechanism of kitty, i3, and so on is working in progress.
+The random theme mechanism of kitty, i3, and so on is working in progress, but no guaranteed.
