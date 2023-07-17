@@ -1,18 +1,15 @@
 [Default Applications]
 
-application/pdf=llpp.desktop
-
 image/bmp=feh.desktop
-image/gif=eog.desktop
 image/jpeg=feh.desktop
 image/jpg=feh.desktop
 image/png=feh.desktop
 image/tiff=feh.desktop
 image/x-bmp=feh.desktop
 
-text/html=google-chrome.desktop
-text/plain=gedit.desktop;
+text/plain=nvim.desktop
 
+image/gif=mpv.desktop
 video/avi=mpv.desktop
 video/flv=mpv.desktop
 video/mp4=mpv.desktop
@@ -29,3 +26,6 @@ video/x-theora=mpv.desktop
 
 x-scheme-handler/http=google-chrome.desktop
 x-scheme-handler/https=google-chrome.desktop
+
+inode/directory=org.gnome.Nautilus.desktop
+x-scheme-handler/trash=org.gnome.Nautilus.desktop
