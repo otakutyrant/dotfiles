@@ -44,7 +44,7 @@ Now time to make the windows management hierarchical! In Linux, I use a windows 
 |:----------------:|:------:|----------------------|:---------------------------------:|:----------:|
 | Windows Manager  | i3     | GUI clients          | $mod                              | super      |
 | Virtual Terminal | kitty  | CLI clients          | N/A                               | alt        |
-| Editor           | Neovim | Files                | key                               | space      |
+| Editor           | Neovim | Files                | learder key                       | space      |
 | Multiplixer      | tmux   | Remote sessions      | the prefix key                    | ctrl-w     |
 
 | name   | What do tabs call in them? | How to allocate a new tab? | How to jump to a tab? |
