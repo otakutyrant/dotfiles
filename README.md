@@ -56,7 +56,7 @@ Now time to make the windows management hierarchical! In Linux, I use a windows 
 
 | name   | What do windows call in them? | How to move focus between windows? | How to split a window horizontally or vertically? | How to distribute windows horizontally or vertically? | How to kill a window? |
 |--------|-------------------------------|------------------------------------|---------------------------------------------------|-------------------------------------------------------|-----------------------|
-| i3     | window                        | mod+hjkl                           | super+s or super+v,                               | super+- or super+\|,                                  | super+q               |
+| i3     | window                        | super+hjkl                           | super+s or super+v,                               | super+- or super+\|,                                  | super+q               |
 | kitty  | window                        | alt+hjkl                           | alt+s or alt+v                                    | alt+- or alt+\|                                       | alt+q                 |
 | Neovim | window                        | space+hjkl                         | space+s or space+v                                | N/A                                                   | space+q               |
 | tmux   | pane                          | ctrl-w+hjkl                        | ctrl-w+s or ctrl-w+v                              | N/A                                                   | ctrl-w+q              |
