@@ -77,7 +77,7 @@ Do you notice the relation between master keys? They are distributed in the left
 
 Haplessly, kitty cannot handle remote sessions so far. So though I dislike tmux, it is still maintained as alternative to kitty in the dotfiles and listed in the table.
 
-![Here is the demonstration.](demp.png)
+![Here is the demonstration.](demo.png)
 
 # XDG
 
