@@ -17,6 +17,14 @@ local nvim_tree = {
     end,
 }
 
+-- Map F1 as mandate file manager.
+vim.keymap.set(
+    "n",
+    "<F1>",
+    ":NvimTreeToggle<CR>",
+    { desc = "Toggle filetree." }
+)
+
 -- Render color of a color code.
 local colorizer = {
     "NvChad/nvim-colorizer.lua",
@@ -59,14 +67,6 @@ local fFHighlight = {
         require("fFHighlight").setup({})
     end,
 }
-
--- Map F1 as mandate file manager.
-vim.keymap.set(
-    "n",
-    "<F1>",
-    ":NvimTreeToggle<CR>",
-    { desc = "Toggle filetree." }
-)
 
 return {
     nvim_tree,
