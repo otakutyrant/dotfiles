@@ -24,12 +24,7 @@ local surround = {
     end,
 }
 
-local lightbulb = {
-    "kosayoda/nvim-lightbulb",
-}
-
 return {
     comment,
     surround,
-    lightbulb,
 }
