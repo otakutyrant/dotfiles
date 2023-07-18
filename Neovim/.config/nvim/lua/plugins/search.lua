@@ -49,6 +49,15 @@ local telescope = {
     end,
 }
 
+-- Highlight and number the result when you use f or F to search a char.
+local fFHighlight = {
+    "kevinhwang91/nvim-fFHighlight",
+    config = function()
+        require("fFHighlight").setup({})
+    end,
+}
+
 return {
     telescope,
+    fFHighlight,
 }
