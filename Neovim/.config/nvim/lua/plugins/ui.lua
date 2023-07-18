@@ -1,3 +1,4 @@
+-- A file manager.
 local nvim_tree = {
     "nvim-tree/nvim-tree.lua",
     lazy = false, -- Replace netrw exactly when opening a directory.
@@ -16,10 +17,12 @@ local nvim_tree = {
     end,
 }
 
+-- Render color of a color code.
 local colorizer = {
     "NvChad/nvim-colorizer.lua",
 }
 
+-- Enhance statusline.
 local lualine = {
     "nvim-lualine/lualine.nvim",
     lazy = false,
@@ -38,6 +41,7 @@ local lualine = {
     end,
 }
 
+-- Make indents more obvious with vertical lines.
 local indentline = {
     "lukas-reineke/indent-blankline.nvim",
     config = function()
@@ -48,6 +52,7 @@ local indentline = {
     end,
 }
 
+-- Highlight and number the result when you use f or F to search a char.
 local fFHighlight = {
     "kevinhwang91/nvim-fFHighlight",
     config = function()
@@ -55,6 +60,7 @@ local fFHighlight = {
     end,
 }
 
+-- Fantastic TUI.
 local noice = {
     "folke/noice.nvim",
     event = "VeryLazy",
@@ -91,6 +97,7 @@ local noice = {
     end,
 }
 
+-- TODO: What is this? I do not know. Ready to delete it.
 local whichkey = {
     "folke/which-key.nvim",
     event = "VeryLazy",
