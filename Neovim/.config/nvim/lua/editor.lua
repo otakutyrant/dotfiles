@@ -55,6 +55,9 @@ vim.go.tabline = "%!v:lua.MyTabLine()"
 -- So use longest instead. `list` show all candidates after the common string.
 -- Note: this option only works for cmdline!
 vim.opt.wildmode = { "longest", "list" }
+-- When complete in the insert mode, it always show menu and info, and match
+-- the longest common string.
+vim.opt.completeopt = { "menu", "menuone", "longest", "preview" }
 -- Set the global statusline.
 vim.opt.laststatus = 3
 
