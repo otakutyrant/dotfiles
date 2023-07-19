@@ -29,3 +29,5 @@ x-scheme-handler/https=google-chrome.desktop
 
 inode/directory=org.gnome.Nautilus.desktop
 x-scheme-handler/trash=org.gnome.Nautilus.desktop
+
+application/epub+zip=calibre-ebook-viewer.desktop
