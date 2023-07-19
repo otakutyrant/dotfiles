@@ -1,11 +1,12 @@
 [alias]
-  c = !gitc # A personal command, see the document in its source code.
+  c = commit
   co = checkout
   d = diff
   s = status
   # Use local date and concise format for log.
   # https://stackoverflow.com/q/7853332/12080580
-  g = log --graph --all --date=format-local:'%Y-%m-%d %H:%M:%S' --format='%C(auto)%h%d %cd %s'
+  g = log --name-only --graph --all --date=format-local:'%Y-%m-%d %H:%M:%S' --format='%C(auto)%h%d %cd %s'
+  l = log --name-only
 [credential]
   # Store your credentials permanently.
   # https://stackoverflow.com/a/12240995/1546088
