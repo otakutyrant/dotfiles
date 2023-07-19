@@ -51,7 +51,10 @@ function MyTabLine()
     return tabline
 end
 vim.go.tabline = "%!v:lua.MyTabLine()"
-
+-- The default option of wildmenu is full. It won't stop at the common string.
+-- So use longest instead. `list` show all candidates after the common string.
+-- Note: this option only works for cmdline!
+vim.opt.wildmode = { "longest", "list" }
 -- Set the global statusline.
 vim.opt.laststatus = 3
 
