@@ -60,25 +60,8 @@ vim.opt.wildmode = { "longest", "list" }
 vim.opt.completeopt = { "menu", "menuone", "longest", "preview" }
 -- Set the global statusline.
 vim.opt.laststatus = 3
-
--- ## Spell
-
 -- Enable spell checker in some filetypes.
-local spell_group = vim.api.nvim_create_augroup("spell_group", { clear = true })
-vim.api.nvim_create_autocmd("FileType", {
-    pattern = { "gitcommit", "text", "markdown" },
-    group = spell_group,
-    callback = function()
-        vim.opt_local.spell = true
-    end,
-})
-vim.api.nvim_create_autocmd("FileType", {
-    pattern = { "gitcommit" },
-    group = spell_group,
-    callback = function()
-        vim.opt_local.spellcapcheck = ""
-    end,
-})
+vim.opt.spell = true
 -- Adopt American English spell and avoid regarding cjk chars as spell error.
 vim.opt.spelllang = { "en_us", "cjk" }
 
