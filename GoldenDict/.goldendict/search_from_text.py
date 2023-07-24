@@ -6,7 +6,7 @@ import sys
 from pathlib import Path
 from typing import List
 
-from yattag import Doc
+from yattag.doc import Doc
 
 lemma_pathname = Path.home() / ".goldendict/lemma.en.txt"
 lemma_file = open(lemma_pathname)
