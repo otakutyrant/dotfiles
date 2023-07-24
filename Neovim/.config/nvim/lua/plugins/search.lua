@@ -57,7 +57,12 @@ local fFHighlight = {
     end,
 }
 
+local rg = {
+    "duane9/nvim-rg",
+}
+
 return {
     telescope,
     fFHighlight,
+    rg,
 }
