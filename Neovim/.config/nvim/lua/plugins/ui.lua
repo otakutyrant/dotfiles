@@ -39,7 +39,7 @@ local lualine = {
         require("lualine").setup({
             sections = {
                 lualine_x = {
-                    "%{get(g:, 'colors_name', 'default')}", -- colorscheme
+                    "%{get(g:, 'real_colors_name')}", -- colorscheme
                     "encoding",
                     "fileformat",
                     "filetype",

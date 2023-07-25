@@ -118,6 +118,7 @@ local function enable_colorscheme(theme_name)
     local wrapped_function = function()
         vim.cmd.colorscheme(theme_name)
     end
+    vim.g.real_colors_name = theme_name
     return wrapped_function
 end
 
