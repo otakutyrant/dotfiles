@@ -87,11 +87,31 @@ local catppuccin = {
     },
 }
 
-local function get_random_element(list)
-    math.randomseed(os.time())
-    -- Generate a random index within the range of the list size.
-    local index = math.random(#list)
-    return list[index]
+local function get_random_element(list, weighted)
+    --[[
+    --If weighted set to true, the element of the list is a list presumably.
+    --Then the length of elements is taken into account.
+    --]]
+    weighted = weighted or false
+    if weighted then
+        local total_weights = 0
+        for _, sub_list in pairs(list) do
+            total_weights = total_weights + #sub_list
+        end
+        local flattened_index = math.random(total_weights)
+        local weight = 0
+        for index, sub_list in pairs(list) do
+            weight = weight + #sub_list
+            if weight >= flattened_index then
+                return list[index]
+            end
+        end
+    else
+        math.randomseed(os.time())
+        -- Generate a random index within the range of the list size.
+        local index = math.random(#list)
+        return list[index]
+    end
 end
 
 local function enable_colorscheme(theme_name)
