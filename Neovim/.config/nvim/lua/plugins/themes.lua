@@ -139,7 +139,7 @@ for _, theme in pairs(themes) do
     theme.priority = 1000
 end
 
-local theme = get_random_element(themes)
+local theme = get_random_element(themes, true)
 local theme_name = get_random_element(theme.names)
 theme.config = enable_colorscheme(theme_name)
 
