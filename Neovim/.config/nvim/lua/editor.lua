@@ -59,7 +59,7 @@ vim.opt.wildmode = { "longest", "list" }
 -- the longest common string.
 vim.opt.completeopt = { "menu", "menuone", "longest", "preview" }
 -- Set the global statusline.
-vim.opt.laststatus = 3
+vim.opt.laststatus = 2
 -- Enable spell checker in some filetypes.
 vim.opt.spell = true
 -- Adopt American English spell and avoid regarding cjk chars as spell error.

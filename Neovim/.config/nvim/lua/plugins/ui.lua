@@ -38,11 +38,24 @@ local lualine = {
     config = function()
         require("lualine").setup({
             sections = {
-                lualine_x = {
+                lualine_a = {
+                    "filename",
+                },
+                lualine_b = {
+                    "branch",
+                    "diff",
+                    "diagnostics",
+                },
+                lualine_c = {},
+                lualine_x = {},
+                lualine_y = {
                     "%{get(g:, 'real_colors_name')}", -- colorscheme
                     "encoding",
                     "fileformat",
                     "filetype",
+                },
+                lualine_z = {
+                    "location",
                 },
             },
         })
