@@ -14283,3 +14283,32 @@ aha 8
 sheepskin 8
 councilor 8
 flagstone 8
+DNA 24% 6
+whine 40% 2
+defensively 16% 3
+homicide 11% 4
+feat 43% 1
+LED 14% 3
+sterile 38% 1
+eater 21% 2
+greasy 19% 2
+permanence 13% 3
+pee 13% 3
+bark 54% 2
+diver 17% 14
+whim 43% 5
+squeal 32% 14
+creak 33% 11
+nimbly 13% 15
+wither 38% 4
+stinking 19% 8
+downwards 13% 12
+armour 10% 16
+onion 25% 6
+horseman 8% 15
+beheading 2% 1
+beekeeper 2% 1
+colourfully 2% 1
+crumbly 2% 1
+shard 24% 14
+curly 29% 8
