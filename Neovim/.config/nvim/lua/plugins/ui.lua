@@ -14,16 +14,15 @@ local nvim_tree = {
             view = { signcolumn = "auto", number = true, relativenumber = true },
             git = { ignore = false },
         })
+        -- Map F1 as mandate file manager.
+        vim.keymap.set(
+            "n",
+            "<F1>",
+            ":NvimTreeToggle<CR>",
+            { desc = "Toggle filetree." }
+        )
     end,
 }
-
--- Map F1 as mandate file manager.
-vim.keymap.set(
-    "n",
-    "<F1>",
-    ":NvimTreeToggle<CR>",
-    { desc = "Toggle filetree." }
-)
 
 -- Render color of a color code.
 local colorizer = {
