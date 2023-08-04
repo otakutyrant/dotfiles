@@ -27,6 +27,7 @@ local nvim_tree = {
 -- Render color of a color code.
 local colorizer = {
     "NvChad/nvim-colorizer.lua",
+    event = "VeryLazy",
 }
 
 -- Enhance statusline.
