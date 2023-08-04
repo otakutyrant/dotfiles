@@ -12,7 +12,6 @@ local nvim_tree = {
             -- Show LSP and COC diagnostics in the signcolumn.
             diagnostics = { enable = true },
             view = { signcolumn = "auto", number = true, relativenumber = true },
-            git = { ignore = false },
         })
         -- Map F1 as mandate file manager.
         vim.keymap.set(
