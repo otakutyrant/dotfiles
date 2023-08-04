@@ -1,3 +1,7 @@
+-- This file contains multople colorschemes and a random mechanism to pick
+-- one of them every time starting Neovim. The random mechanism is adapted
+-- to Lazy.nvim.
+
 local tokyonight = {
     "folke/tokyonight.nvim",
     names = {
