@@ -94,14 +94,15 @@ local function get_random_element(list, weighted)
     --]]
     weighted = weighted or false
     if weighted then
+        math.randomseed(os.time())
         local total_weights = 0
         for _, sub_list in pairs(list) do
-            total_weights = total_weights + #sub_list
+            total_weights = total_weights + #sub_list.names
         end
         local flattened_index = math.random(total_weights)
         local weight = 0
         for index, sub_list in pairs(list) do
-            weight = weight + #sub_list
+            weight = weight + #sub_list.names
             if weight >= flattened_index then
                 return list[index]
             end
