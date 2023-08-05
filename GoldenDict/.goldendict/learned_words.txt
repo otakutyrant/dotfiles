@@ -14317,4 +14317,153 @@ moss
 gorgeous
 sweetheart
 dismount
-seethe
+associate
+rejoice
+upheaval
+trill
+transpiring
+transpire
+compromised
+ruefully
+stroke
+mutilate
+stench
+ammonia
+affinity
+topless
+arrogance
+authoritative 23% 2
+theorist 15% 3
+hub 21% 1
+anonymity 20% 1
+quo 10% 2
+markedly 18% 1
+covet 16% 1
+supremacy 15% 1
+geologist 15% 1
+geographic 15% 1
+theological 13% 1
+instructive 13% 1
+illuminating 13% 1
+unveil 11% 1
+unsuited 11% 1
+indisputable 11% 1
+refined 10% 1
+formative 10% 1
+diversify 10% 1
+tradesman 8% 1
+skeptic 8% 1
+connoisseurs 7% 1
+sociability 3% 2
+utopian 5% 1
+imperialism 5% 1
+monopolistic 3% 1
+illiteracy 3% 1
+commercialism 3% 1
+beneficence 3% 1
+zoology 2% 1
+unprejudiced 2% 1
+secularization 2% 1
+rationalistic 2% 1
+reductive 2% 1
+polytheism 2% 1
+monad 2% 1
+liberalism 2% 1
+freethinker 2% 1
+advancement 26% 1
+rationally 13% 2
+amenable 20% 1
+heartening 8% 2
+novelist 11% 1
+enlightening 11% 1
+naturalist 8% 1
+authorship 7% 1
+scandalous 5% 1
+innately 5% 1
+landless 3% 1
+adversely 5% 1
+intolerant 3% 1
+spiritualist 2% 1
+controversially 2% 1
+Europe 49% 24
+God 82% 24
+John 85% 10
+England 51% 14
+Smith 34% 20
+France 43% 13
+War 67% 7
+Church 30% 15
+History 49% 8
+Enlightenment 3% 116
+Age 46% 6
+University 64% 4
+Christian 31% 8
+Adam 30% 8
+David 52% 4
+Bible 30% 7
+Thomas 41% 5
+Earth 66% 3
+de 49% 4
+Revolution 18% 9
+Germany 31% 5
+Empire 49% 3
+Hume 11% 12
+Locke 10% 14
+William 44% 3
+King 57% 2
+Mary 51% 2
+Britain 33% 3
+Word 25% 4
+Newton 23% 4
+Francis 20% 5
+Christianity 18% 5
+Press 44% 2
+Isaac 44% 2
+State 79% 1
+Christ 25% 3
+America 72% 1
+Year 36% 2
+Voltaire 7% 10
+Hobbes 7% 10
+Chapter 62% 1
+Sun 59% 1
+Book 59% 1
+Descarte 7% 9
+Science 56% 1
+German 26% 2
+Edward 26% 2
+West 46% 1
+London 46% 1
+China 43% 1
+Italy 21% 2
+Sunday 39% 1
+Renaissance 10% 4
+Martin 38% 1
+Art 36% 1
+Trade 18% 2
+Queen 38% 1
+Society 33% 1
+Russia 33% 1
+Black 33% 1
+Culture 16% 2
+Oxford 15% 2
+Leibniz 5% 6
+Spain 28% 1
+Jesus 26% 1
+Right 25% 1
+Latin 25% 1
+Academy 25% 1
+Nature 23% 1
+Laws 23% 1
+Education 23% 1
+Duke 23% 1
+Amazon 23% 1
+Madame 11% 2
+Jew 21% 1
+Ireland 21% 1
+Act 21% 1
+Theory 20% 1
+Lawrence 20% 1
+European 20% 1
+Nation 28% 4
+civilize 2% 1
