@@ -72,18 +72,9 @@ local indentline = {
     end,
 }
 
--- Show signs for added, removed, and changed lines.
-local gitsigns = {
-    "lewis6991/gitsigns.nvim",
-    config = function()
-        require("gitsigns").setup({})
-    end,
-}
-
 return {
     nvim_tree,
     colorizer,
     lualine,
     indentline,
-    gitsigns,
 }
