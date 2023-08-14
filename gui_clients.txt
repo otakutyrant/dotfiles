@@ -1,6 +1,6 @@
 # To install all packages from this file, execute `pacman -S $(sed "/#/D" gui_clients.txt)`.
 
-google-chrome-stable # Web Browser
+google-chrome # Web Browser
 
 steam # Game
 
@@ -26,7 +26,7 @@ wps-office # Office suites
 
 dmenu synapse # Application launchers
 
-nutstore nautilus-nutstore # Cloud backup
+nutstore # Cloud backup
 
 goldendict-ng-git # Dictionary
 
@@ -42,7 +42,7 @@ variety # Wallpaper Manager
 
 anki # Flashcards
 
-clash-for-windows-electron-bin clash-meta # Proxy
+clash-for-windows-bin # Proxy
 
 # X11
 arandr
