@@ -15012,3 +15012,12 @@ rearmost 3% 1
 replenishment 2% 1
 cuteness 2% 1
 fanatic 30% 2
+imagery 15% 19
+figurative 4% 19
+mythic 11% 21
+wasteland 22% 9
+symbolism 13% 12
+biblical 7% 23
+cliché 17% 6
+communion 7% 19
+mantle 22% 2
