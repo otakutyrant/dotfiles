@@ -11,7 +11,15 @@ local gitsigns = {
     end,
 }
 
+local foldsigns = {
+    "lewis6991/foldsigns.nvim",
+    config = function()
+        require("foldsigns").setup()
+    end,
+}
+
 return {
     fugitive,
     gitsigns,
+    foldsigns,
 }
