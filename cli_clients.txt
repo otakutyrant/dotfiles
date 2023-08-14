@@ -88,3 +88,6 @@ noto-fonts-emoji
 # Media
 ffmpeg
 mediainfo # Viewing information about media files
+
+# Others
+words # A collection of International 'words' files for /usr/share/dict.
