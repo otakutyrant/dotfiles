@@ -43,9 +43,6 @@ source $HOME/.zshenv
 # within the ZSH_CUSTOM folder.
 # For a full list of active aliases, run `alias`.
 
-# Dotenvs could be modularized also. It is .zshrc's responsiblity
-# to iterates over all subdirectories in $XDG_CONFIG_HOME and
-# sources any dotenv files found within them.
 # To avoid unknown-unknown duplicate alias, use alias_or_warning.
 
 function alias_or_warning() {
@@ -63,7 +60,9 @@ function alias_or_warning() {
   fi
 }
 
-# Iterate over all subdirectories in XDG_CONFIG_HOME.
+# Dotenvs could be modularized also. It is .zshrc's responsiblity
+# to iterates over all subdirectories in $XDG_CONFIG_HOME and
+# sources any dotenv files found within them.
 for dir in "$XDG_CONFIG_HOME"/*/; do
   # Check if the directory contains a file named "dotenv".
   if [[ -f "${dir}/dotenv" ]]; then
