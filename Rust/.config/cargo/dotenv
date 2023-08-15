@@ -1,0 +1,3 @@
+# Enforce cargo to obey XDG.
+# Note that the cargo config is in this CARGO_HOME too.
+export CARGO_HOME="$XDG_DATA_HOME"/cargo
