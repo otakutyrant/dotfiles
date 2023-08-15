@@ -63,7 +63,23 @@ function alias_or_warning() {
 # Dotenvs could be modularized also. It is .zshrc's responsiblity
 # to iterates over all subdirectories in $XDG_CONFIG_HOME and
 # sources any dotenv files found within them.
-for dir in "$XDG_CONFIG_HOME"/*/; do
+
+# In order to obey XDG, it is necessary to export relative environment
+# variables at first.
+dir_list=("$XDG_CONFIG_HOME"/*)
+# Move the "$XDG_CONFIG_HOME/XDG" directory to the first position in the list
+for ((i=0; i<${#dir_list[@]}; i++)); do
+  if [[ "${dir_list[$i]}" == "$XDG_CONFIG_HOME/XDG" ]]; then
+    # Swap the elements at positions 0 and $i
+    tmp="${dir_list[0]}"
+    dir_list[0]="${dir_list[$i]}"
+    dir_list[$i]="$tmp"
+    break
+  fi
+done
+
+# Iterate over the directories in the updated list
+for dir in "${dir_list[@]}"; do
   # Check if the directory contains a file named "dotenv".
   if [[ -f "${dir}/dotenv" ]]; then
     # If it does, source it.
