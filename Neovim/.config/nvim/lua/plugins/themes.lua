@@ -91,6 +91,26 @@ local catppuccin = {
     },
 }
 
+local zenbones = {
+    "mcchrish/zenbones.nvim",
+    dependencies = {
+        "rktjmp/lush.nvim"
+    },
+    names = {
+        "zenwritten",
+        "neobones",
+        "vimbones",
+        "rosebones",
+        "forestbones",
+        "nordbones",
+        "tokyobones",
+        "seoulbones",
+        "duckbones",
+        "zenburned",
+        "kanagawabones",
+    },
+}
+
 local function get_random_element(list, weighted)
     --[[
     --If weighted set to true, the element of the list is a list presumably.
@@ -137,6 +157,7 @@ local themes = {
     sonokai,
     rose_pine,
     catppuccin,
+    zenbones,
 }
 
 -- Make all theme plugins loaded early to set colorscheme thereafter.
