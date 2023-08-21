@@ -176,5 +176,5 @@ bar {
 # assignment here exactly.
 bindsym $mod+asciitilde scratchpad show
 bindsym $mod+Shift+asciitilde move scratchpad
-exec --no-startup-id gedit "~/Nutstore File/Nutstore/scratchpad"
+exec --no-startup-id gedit $HOME/Nutstore/scratchpad
 for_window [class = "Gedit" title = "scratchpad"] move scratchpad
