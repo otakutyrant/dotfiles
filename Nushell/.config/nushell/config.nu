@@ -20,24 +20,12 @@ alias aure = pikaur -R'
 alias aursyy = pikaur -Syy
 
 # Systemd aliases.
-
-let user_commands = [
-  list-units is-active status show help list-unit-files
-  is-enabled list-jobs show-environment cat list-timers
+def sysctl_actions [] { ["status", "start", "stop", "enable", "disable"] }
+export extern systemctl [
+    action: string@"sysctl_actions"
+    service: string
 ]
-
-let sudo_commands = [
-  start stop reload restart try-restart isolate kill
-  reset-failed enable disable reenable preset mask unmask
-  link load cancel set-environment unset-environment edit
-]
-
-$user_commands | each { |e| alias $"sc-($e)" = systemctl $e }
-$sudo_commands | each { |e| alias $"sc-($e)" = sudo systemctl $e }
-
-alias sc-enable-now = "sc-enable --now"
-alias sc-disable-now = "sc-disable --now"
-alias sc-mask-now = "sc-mask --now"
+alias sc = systemctl
 
 # A simple command just to show directory contents, like traditional shells.
 def l [] { ls | sort-by type name -i | grid -c | str trim }
@@ -60,6 +48,9 @@ alias rg = rg -p
 # yt-dlp: Solve China network issue via proxy, and download Chinese subtitles
 # automatically.
 alias yt-dlp = yt-dlp --proxy 127.0.0.1:2340 --write-subs --sub-langs zh-CN
+
+# Neovim, tmp.
+alias vi = nvim
 
 # Setup zoxide on config.nu.
 # TODO: a bug
