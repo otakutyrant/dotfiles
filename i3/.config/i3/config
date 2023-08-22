@@ -149,9 +149,7 @@ bindsym $mod+Return exec kitty --session session -1
 # Start a browser with mod+c.
 bindsym $mod+c exec google-chrome-stable
 # Start dmenu (a program launcher) with dmenu.
-bindsym $mod+d exec dmenu_run -fn "JetBrainsMono-13"
-# If it need root privilege, just run this instead:
-bindsym $mod+Shift+d exec gksu dmenu_run
+bindsym $mod+d exec rofi -show run
 
 # # Startups
 
