@@ -53,5 +53,6 @@ alias yt-dlp = yt-dlp --proxy 127.0.0.1:2340 --write-subs --sub-langs zh-CN
 alias vi = nvim
 
 # Setup zoxide on config.nu.
-# TODO: a bug
-# source $"($env.XDG_CONFIG_HOME)/nushell/zoxide.nu"
+# Unfortunately, it is impossible to use env with source statement because
+# Nushell do not support dynamic evaluation. So I have to hard-coded this.
+source /home/otakutyrant/.config/nushell/zoxide.nu
