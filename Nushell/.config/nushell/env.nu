@@ -7,7 +7,10 @@ $env.XDG_STATE_HOME = $env.HOME + "/.local/state/"
 $env.XDG_BIN_DIR = $env.HOME + "/.local/bin/"
 
 # PATH
+$env.PATH = ( $env.PATH | split row (char esep) )
 $env.PATH = ( $env.PATH | prepend $env.XDG_BIN_DIR )
+let CARGO_BIN_DIR = ( $env.XDG_DATA_HOME | path join cargo bin )
+$env.PATH = ( $env.PATH | prepend $CARGO_BIN_DIR )
 
 # ArchWiki: Environment Viriables
 # https://wiki.archlinux.org/index.php/Environment_variables#Examples
@@ -41,6 +44,8 @@ $env.no_proxy = /var/run/docker.sock
 # Avoid SDL games regarding multiple screens as one big screen.
 # https://wiki.archlinux.org/index.php/NVIDIA#Gaming_using_TwinView
 $env.SDL_VIDEO_FULLSCREEN_HEAD = 1
+
+$env.CARGO_HOME = ( $env.XDG_DATA_HOME | path join cargo )
 
 # Setup zoxide on env.nu.
 zoxide init nushell | save -f $"($env.XDG_CONFIG_HOME)/nushell/zoxide.nu"
