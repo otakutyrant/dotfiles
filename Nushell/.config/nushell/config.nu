@@ -410,7 +410,7 @@ def git_right_prompt [gs os] {
         (char -u e0b2)     # 
         (ansi { fg: $TERM_FG bg: $TIME_BG})
         (char space)
-        (date now | date format '%Y/%m/%d %I:%M:%S%.3f')
+        (date now | format date '%Y/%m/%d %I:%M:%S%.3f')
         (char space)
         ($R)
     ] | str join)
@@ -420,7 +420,7 @@ def git_right_prompt [gs os] {
         (char -u e0b2)     # 
         (ansi { fg: $TERM_FG bg: $TIME_BG})
         (char space)
-        (date now | date format '%I:%M:%S %p')
+        (date now | format date '%I:%M:%S %p')
         (char space)
         ($R)
     ] | str join)
@@ -554,17 +554,17 @@ $env.config = {
 
 # Arch Linux aliases for package managements.
 
-alias pacupg = pacman -Syu
-alias pacin = pacman -S
-alias pacins = pacman -U
-alias pace = pacman -R'
-alias pacsyy = pacman -Syy
+alias pacupg = sudo pacman -Syu
+alias pacin = sudo pacman -S
+alias pacins = sudo pacman -U
+alias pace = sudo pacman -R'
+alias pacsyy = sudo pacman -Syy
 
-alias aurupg = pikaur -Syu
-alias aurin = pikaur -S
-alias aurins = pikaur -U
-alias aure = pikaur -R'
-alias aursyy = pikaur -Syy
+alias aurupg = sudo pikaur -Syu
+alias aurin = sudo pikaur -S
+alias aurins = sudo pikaur -U
+alias aure = sudo pikaur -R'
+alias aursyy = sudo pikaur -Syy
 
 # Systemd aliases.
 def sysctl_actions [] { ["status", "start", "stop", "enable", "disable"] }
