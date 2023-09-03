@@ -47,5 +47,9 @@ $env.SDL_VIDEO_FULLSCREEN_HEAD = 1
 
 $env.CARGO_HOME = ( $env.XDG_DATA_HOME | path join cargo )
 
+$env.NU_LIB_DIRS = [
+    ( $nu.default-config-dir | path join "completions" )
+]
+
 # Setup zoxide on env.nu.
 zoxide init nushell | save -f $"($env.XDG_CONFIG_HOME)/nushell/zoxide.nu"

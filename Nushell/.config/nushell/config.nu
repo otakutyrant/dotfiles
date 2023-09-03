@@ -13,6 +13,7 @@
 # inspired by https://github.com/IlanCosman/tide
 # inspired by https://github.com/JanDeDobbeleer/oh-my-posh
 
+use git.nu *
 
 # Abbreviate home path
 def home_abbrev [os_name] {
