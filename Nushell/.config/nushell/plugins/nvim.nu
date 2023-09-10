@@ -1,5 +1,5 @@
-alias_or_warning vi "nvim"
-alias_or_warning cvi 'nvim -p -c "tabdo lcd %:p:h"'
+alias vi = nvim
+alias cvi = nvim -p -c "tabdo lcd %:p:h"
 # A workaround to an issue #267 of ChatGPT.nvim
 # https://github.com/jackMort/ChatGPT.nvim/issues/267#issuecomment-1676609465
-export OPENAI_API_HOST="api.openai.com"
+$env.OPENAI_API_HOST = "api.openai.com"
