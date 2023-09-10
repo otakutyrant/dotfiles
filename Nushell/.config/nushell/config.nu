@@ -599,9 +599,6 @@ alias rg = rg -p
 # automatically.
 alias yt-dlp = yt-dlp --proxy 127.0.0.1:2340 --write-subs --sub-langs zh-CN
 
-# Neovim, tmp.
-alias vi = nvim
-
 # Setup zoxide on config.nu.
 # Unfortunately, it is impossible to use env with source statement because
 # Nushell do not support dynamic evaluation. So I have to hard-coded this.
