@@ -1,4 +1,4 @@
-# To install all packages from this file, execute `pacman -S $(sed "/#/D" gui_clients.txt)`.
+# To install all packages from this file, execute `pikaur -S --needed (sed 's/\s*#.*$//' gui_clients.txt | tr '\n' ' ' | str trim | split row " " | filter {|it| $it != ""})`
 
 google-chrome # Web Browser
 
@@ -42,11 +42,11 @@ variety # Wallpaper Manager
 
 anki # Flashcards
 
-clash-for-windows-bin # Proxy
+clash-for-windows-electron-zh # Proxy
 
 # X11
 arandr
-i3 i3status-rust
+i3-wm i3status-rust
 xorg xorg-xinit
 xsel # Copy from CLI clients to system clipboard
 xfce4-notifyd

@@ -1,4 +1,4 @@
-# To install all packages from this file, execute `pacman -S $(sed "/#/D" cli_clients.txt)`.
+# To install all packages from this file, execute `pikaur -S --needed (sed 's/\s*#.*$//' cli_clients.txt | tr '\n' ' ' | str trim | split row " " | filter {|it| $it != ""})`
 
 htop # Interactive Process Viewer
 
@@ -75,7 +75,6 @@ archlinux-keyring # Trust chain
 bzip2 gzip p7zip tar unrar unzip xz zip
 
 # AI
-python-pytorch
 python-pytorch-opt-cuda
 tensorboard
 whisper-git # Transcribe
@@ -91,4 +90,4 @@ mediainfo # Viewing information about media files
 
 # Others
 words # A collection of International 'words' files for /usr/share/dict.
-xdg-users-dirs # Generate common user directories.
+xdg-user-dirs # Generate common user directories.
