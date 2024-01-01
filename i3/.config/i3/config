@@ -158,7 +158,7 @@ bindsym $mod+d exec rofi -show drun
 exec --no-startup-id dex --autostart --environment i3
 
 # https://faq.i3wm.org/question/2332/flexible-monitor-setup.1.html
-exec --no-startup-id xrandr --output DVI-D-0 --off --output HDMI-0 --primary --mode 1920x1080 --pos 0x0 --rotate normal --output DP-0 --off --output DP-1 --off --output DP-2 --mode 1920x1080 --pos 1920x0 --rotate normal --output DP-3 --off --output DP-4 --off --output DP-5 --off --output None-1-1 --off
+exec --no-startup-id xrandr --output DVI-D-0 --primary --mode 1920x1080 --pos 1920x0 --rotate normal --output HDMI-0 --mode 1920x1080 --pos 0x0 --rotate normal --output DP-0 --off --output DP-1 --off --output DP-2 --off --output DP-3 --off --output DP-4 --off --output DP-5 --off --output None-1-1 --off
 
 # # Bar
 
