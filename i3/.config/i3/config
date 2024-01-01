@@ -131,10 +131,10 @@ assign [class="org.gnome.Nautilus"] $ws4
 assign [class="goldendict"] $ws4
 
 # Automatically putting workspaces on specific screens.
-workspace $ws1 output DVI-D-0
-workspace $ws2 output HDMI-0
-workspace $ws3 output HDMI-0
-workspace $ws4 output DVI-D-0
+workspace $ws1 output HDMI-0
+workspace $ws2 output DVI-D-0
+workspace $ws3 output DVI-D-0
+workspace $ws4 output HDMI-0
 
 # Automatically back-and-forth when switching to the current workspace
 # For instance: Assume you are on workspace "1: www" and switch to "2: IM"
