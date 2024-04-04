@@ -1,0 +1,50 @@
+#!/bin/env python
+# Use faster whisper to get aligned-well subtitles with word_timestamps
+import sys
+from pathlib import Path
+
+from faster_whisper import WhisperModel
+model_size = "small.en"
+model = WhisperModel(model_size, device="cuda", compute_type="float32")
+
+def format_time(seconds):
+    # Convert seconds to hours, minutes, seconds, and remainder
+    hours = int(seconds // 3600)
+    minutes = int((seconds % 3600) // 60)
+    seconds = int(seconds % 60)
+    remainder = (seconds - int(seconds)) * 1000
+
+    # Format the time in srt format
+    return "{:02d}:{:02d}:{:02d},{:03d}".format(hours, minutes, seconds, remainder)
+
+def convert_to_srt(subtitles, output_file):
+    with open(output_file, "w") as file_:
+        for index, subtitle in enumerate(subtitles, start=1):
+            start_time, end_time, line = subtitle
+
+            start_time_str = format_time(start_time)
+            end_time_str = format_time(end_time)
+
+            file_.write(str(index) + "\n")
+            file_.write(start_time_str + " --> " + end_time_str + "\n")
+            file_.write(line + "\n")
+            file_.write("\n")
+
+
+if __name__ == "__main__":
+    video_pathnames = [Path(argv) for argv in sys.argv[1:]]
+    for video_pathname in video_pathnames:
+        segments, info = model.transcribe(str(video_pathname), beam_size=5, word_timestamps=True)
+        subtitles = []
+        line = ""
+        start = None
+        for segment in segments:
+            for word in segment.words:
+                if line == "":
+                    start = word.start
+                line = line + word.word
+                if word.word[-1] in (".", "!", "?"):
+                    subtitles.append((start, word.end, line.strip()))
+                    line = ""
+        srt_pathname = video_pathname.with_suffix(".srt")
+        convert_to_srt(subtitles, str(srt_pathname))
