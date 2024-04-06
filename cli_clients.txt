@@ -88,6 +88,11 @@ noto-fonts-emoji
 ffmpeg
 mediainfo # Viewing information about media files
 
+# Audio
+alsa # Advanced Linux Sound Architecture. Providing kernel driven sound card drivers
+alsa-utils # Containing alsamixer, an interface for audio device configuration.
+pipewire # Sound server, better than pulseaudio and jack.
+
 # Others
 words # A collection of International 'words' files for /usr/share/dict.
 xdg-user-dirs # Generate common user directories.
