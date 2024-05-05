@@ -124,7 +124,7 @@ bindsym $mod+Shift+0 move container to workspace number $ws10
 # Automatically putting clients on specific workspaces.
 assign [class="kitty"] $ws1
 assign [class="google-chrome"] $ws2
-assign [class="mpv"] $ws3
+assign [class="mpv"] $ws4
 assign [class="steam"] $ws3
 assign [class="Zotero"] $ws4
 assign [class="org.gnome.Nautilus"] $ws4
@@ -156,6 +156,7 @@ bindsym $mod+d exec rofi -show drun
 # Autostart desktop files according to XDG.
 # https://wiki.archlinux.org/index.php/XDG_Autostart
 exec --no-startup-id dex --autostart --environment i3
+exec --no-startup-id qbittorrent
 
 # https://faq.i3wm.org/question/2332/flexible-monitor-setup.1.html
 exec --no-startup-id xrandr --output DVI-D-0 --primary --mode 1920x1080 --pos 1920x0 --rotate normal --output HDMI-0 --mode 1920x1080 --pos 0x0 --rotate normal --output DP-0 --off --output DP-1 --off --output DP-2 --off --output DP-3 --off --output DP-4 --off --output DP-5 --off --output None-1-1 --off
