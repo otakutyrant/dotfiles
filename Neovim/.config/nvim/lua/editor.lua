@@ -17,7 +17,7 @@ vim.opt.list = true
 vim.opt.listchars = { tab = "␉·", trail = "␠", nbsp = "¬" }
 vim.opt.showbreak = "↪"
 -- Enable 24-bit RGB color in the TUI, which is better than
--- the tranditional 256 term colors.
+-- the traditional 256 term colors.
 vim.opt.termguicolors = true
 -- Highlight briefly on yank.
 vim.api.nvim_create_autocmd("TextYankPost", {
@@ -28,7 +28,7 @@ vim.api.nvim_create_autocmd("TextYankPost", {
     desc = "Highlight briefly on yank",
 })
 -- ## Tabline, defines how tabpages title looks like
--- For convenience of cross-probjects development, show project names directly.
+-- For convenience of cross-projects development, show project names directly.
 function MyTabLine()
     local tabline = ""
     for index = 1, vim.fn.tabpagenr("$") do
@@ -75,13 +75,13 @@ vim.opt.modeline = false
 vim.opt.confirm = true
 -- Ignore case in search patterns.
 vim.opt.ignorecase = true
--- Briefly jump to the matched one when a bracket is interted.
+-- Briefly jump to the matched one when a bracket is inserted.
 vim.opt.showmatch = true
--- Show the matching peron for 0.1 seconds.
+-- Show the matching results for 0.1 seconds.
 vim.opt.matchtime = 1
 -- Override the ignorecase option if the search pattern contains upper case characters
 vim.opt.smartcase = true
--- Substitue with g flag. Use \c when necessary.
+-- Substitute with g flag. Use \c when necessary.
 vim.opt.gdefault = true
 -- Fold by indent.
 vim.opt.foldmethod = "indent"
@@ -181,37 +181,37 @@ vim.keymap.set(
     "n",
     "<leader>5",
     "5gt<cr>",
-    { desc = "Jump to the fourth tabpage." }
+    { desc = "Jump to the fifth tabpage." }
 )
 vim.keymap.set(
     "n",
     "<leader>6",
     "6gt<cr>",
-    { desc = "Jump to the fourth tabpage." }
+    { desc = "Jump to the sixth tabpage." }
 )
 vim.keymap.set(
     "n",
     "<leader>7",
     "7gt<cr>",
-    { desc = "Jump to the fourth tabpage." }
+    { desc = "Jump to the seventh tabpage." }
 )
 vim.keymap.set(
     "n",
     "<leader>8",
     "8gt<cr>",
-    { desc = "Jump to the fourth tabpage." }
+    { desc = "Jump to the eighth tabpage." }
 )
 vim.keymap.set(
     "n",
     "<leader>9",
     "9gt<cr>",
-    { desc = "Jump to the fourth tabpage." }
+    { desc = "Jump to the ninth tabpage." }
 )
 vim.keymap.set(
     "n",
     "<leader>0",
     "10gt<cr>",
-    { desc = "Jump to the fourth tabpage." }
+    { desc = "Jump to the tenth tabpage." }
 )
 
 -- Do not jump when hitting `*`.
@@ -226,7 +226,7 @@ local function map_star()
 end
 vim.keymap.set("n", "*", map_star)
 
--- ## Aditional commands
+-- ## Additional commands
 
 vim.api.nvim_create_user_command("RemoveTrailingWhitespaces", function()
     vim.cmd([[silent %s/\s\+$//e]])
