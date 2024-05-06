@@ -1,0 +1,79 @@
+" # Appearance setting
+" Show line numbers on the leftmost side.
+set number
+" Make the line number relative to the line with the cursor in front of each line.
+set relativenumber
+" Highlight the current line.
+set cursorline
+" Highlight the current column.
+set cursorcolumn
+" Reveal and distinguish tab, trail space, nbsp, and break more legibly.
+set list
+set listchars=tab:␉·,trail:␠,nbsp:¬
+" Set the showbreak character.
+set showbreak=↪
+" Enable 24-bit RGB color in the TUI.
+set termguicolors
+" Highlight briefly on yank.
+augroup YankHighlight
+    autocmd!
+    autocmd TextYankPost * call vim.highlight.on_yank()
+augroup END
+
+" # Behavior setting
+" Set minimal number of screen lines to keep above and below the cursor.
+set scrolloff=3
+" Avoid relying on mode lines because they are code-irrelevant.
+set modeline
+" Raise a dialog asking whether to save the current file(s) when you quit.
+set confirm
+" Ignore case in search patterns.
+set ignorecase
+" Briefly jump to the matched one when a bracket is inserted.
+set showmatch
+" Show the matching paren for 0.1 seconds.
+set matchtime=1
+" Override the ignorecase option if the search pattern contains upper case characters
+set smartcase
+" Substitute with g flag. Use \c when necessary.
+set gdefault
+" Fold by indent.
+set foldmethod=indent
+" Keep undofile so that you still can undo even after you close and open a file again.
+set undofile
+" Make split behavior always consistent.
+set splitright
+set splitbelow
+
+" Indentation
+" Use spaces instead of tab characters in Insert mode.
+set expandtab
+" Set the number of spaces that a <Tab> in the file counts for.
+set tabstop=4
+set softtabstop=4
+set shiftwidth=4
+" Enables the experimental Lua module loader, maybe faster.
+lua vim.loader.enable()
+
+" Keymap enhancement
+
+" Modified keymaps
+" Set mapleader as space rather than comma, the latter is used for search jump.
+let g:mapleader = " "
+
+" Additional keymaps
+" Write forcibly as root in Command-line mode.
+command! -nargs=0 W!! execute 'silent! write !sudo tee % > /dev/null' | edit!
+" Quick save.
+nnoremap <leader>w :w<CR>
+" Quick quit.
+nnoremap <leader>q :q<CR>
+" Quick no highlight.
+nnoremap <leader><space> :nohlsearch<CR>
+" Copy to system clipboard.
+vnoremap <leader>y "+y
+" Paste from system clipboard.
+nnoremap <leader>p "+p
+
+" Do not jump when hitting `*`.
+nnoremap * *``
