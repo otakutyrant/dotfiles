@@ -34,6 +34,7 @@ def convert_to_srt(subtitles, output_file):
 if __name__ == "__main__":
     video_pathnames = [Path(argv) for argv in sys.argv[1:]]
     for video_pathname in video_pathnames:
+        print(f"Start processing {video_pathname}.")
         segments, info = model.transcribe(str(video_pathname), beam_size=5, word_timestamps=True)
         subtitles = []
         line = ""
@@ -48,3 +49,4 @@ if __name__ == "__main__":
                     line = ""
         srt_pathname = video_pathname.with_suffix(".srt")
         convert_to_srt(subtitles, str(srt_pathname))
+        print(f"Processing {video_pathname} is done.")
