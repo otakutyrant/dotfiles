@@ -1,11 +1,9 @@
 #!/bin/env python
 # Use faster whisper to get aligned-well subtitles with word_timestamps
-import sys
+import argparse
 from pathlib import Path
 
 from faster_whisper import WhisperModel
-model_size = "small.en"
-model = WhisperModel(model_size, device="cuda", compute_type="float32")
 
 def format_time(seconds):
     # Convert seconds to hours, minutes, seconds, and remainder
@@ -32,8 +30,13 @@ def convert_to_srt(subtitles, output_file):
 
 
 if __name__ == "__main__":
-    video_pathnames = [Path(argv) for argv in sys.argv[1:]]
-    for video_pathname in video_pathnames:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--model_size", nargs="?", default="medium.en", help="Available models: tiny, tiny.en, base, base.en, small, small.en, medium, medium.en, large-v1, large-v2, large-v3, or large")
+    parser.add_argument("video_pathnames", type=Path, nargs="+")
+    args = parser.parse_args()
+    model = WhisperModel(args.model_size, device="cuda", compute_type="float32")
+
+    for video_pathname in args.video_pathnames:
         print(f"Start processing {video_pathname}.")
         segments, info = model.transcribe(str(video_pathname), beam_size=5, word_timestamps=True)
         subtitles = []
