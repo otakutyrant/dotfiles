@@ -52,4 +52,4 @@ if __name__ == "__main__":
                     line = ""
         srt_pathname = video_pathname.with_suffix(".srt")
         convert_to_srt(subtitles, str(srt_pathname))
-        print(f"Processing {video_pathname} is done.")
+        print(f"Processing {video_pathname} is done, {len(subtitles)} lines generated.")
