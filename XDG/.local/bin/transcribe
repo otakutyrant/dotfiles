@@ -33,6 +33,8 @@ if __name__ == "__main__":
         sh.whisper(
             "--output_format",
             "srt",
+            "--initial_prompt",
+            "Please do not forget the punctuations!",
             str(video_pathname),
             _out=sys.stdout,
             _err=sys.stderr,
