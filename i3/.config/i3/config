@@ -81,6 +81,7 @@ floating_maximum_size -1 x -1
 for_window [class="calibre"] floating disable
 for_window [window_role="pop-up"] floating enable
 for_window [window_role="task_dialog"] floating enable
+for_window [class="MetroExodus"] floating enable
 
 # # Workspace management
 
