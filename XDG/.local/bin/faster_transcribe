@@ -5,12 +5,12 @@ from pathlib import Path
 
 from faster_whisper import WhisperModel
 
-def format_time(seconds):
-    # Convert seconds to hours, minutes, seconds, and remainder
-    hours = int(seconds // 3600)
-    minutes = int((seconds % 3600) // 60)
-    seconds = int(seconds % 60)
-    remainder = (seconds - int(seconds)) * 1000
+def format_time(origin_seconds):
+    # Convert origin_seconds to hours, minutes, seconds, and remainder
+    hours = int(origin_seconds // 3600)
+    minutes = int((origin_seconds % 3600) // 60)
+    seconds = int(origin_seconds % 60)
+    remainder = int((origin_seconds % 60 - seconds) * 1000)
 
     # Format the time in srt format
     return "{:02d}:{:02d}:{:02d},{:03d}".format(hours, minutes, seconds, remainder)
@@ -32,6 +32,7 @@ def convert_to_srt(subtitles, output_file):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--model_size", nargs="?", default="medium.en", help="Available models: tiny, tiny.en, base, base.en, small, small.en, medium, medium.en, large-v1, large-v2, large-v3, or large")
+    parser.add_argument("--word-timestamps", action="store_true", help="When this argument is set, transcribe to words instead of sentences.")
     parser.add_argument("video_pathnames", type=Path, nargs="+")
     args = parser.parse_args()
     model = WhisperModel(args.model_size, device="cuda", compute_type="float32")
@@ -44,12 +45,15 @@ if __name__ == "__main__":
         start = None
         for segment in segments:
             for word in segment.words:
-                if line == "":
-                    start = word.start
-                line = line + word.word
-                if word.word[-1] in (".", "!", "?"):
-                    subtitles.append((start, word.end, line.strip()))
-                    line = ""
+                if args.word_timestamps:
+                    subtitles.append((word.start, word.end, word.word.strip()))
+                else:
+                    if line == "":
+                        start = word.start
+                    line = line + word.word
+                    if word.word[-1] in (".", "!", "?"):
+                        subtitles.append((start, word.end, line.strip()))
+                        line = ""
         srt_pathname = video_pathname.with_suffix(".srt")
         convert_to_srt(subtitles, str(srt_pathname))
         print(f"Processing {video_pathname} is done, {len(subtitles)} lines generated.")
