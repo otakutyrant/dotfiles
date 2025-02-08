@@ -29,5 +29,6 @@ source stow.nu
 source systemd.nu
 source yt-dlp.nu
 source zoxide.nu
+source npm.nu
 
 hide-env nu-plugins-dir
