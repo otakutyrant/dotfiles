@@ -5,10 +5,10 @@ $env.PATH = ( $env.PATH | split row (char esep) )
 # https://wiki.archlinux.org/index.php/Environment_variables#Examples
 # Note that some variables may be full pathnames.
 # https://github.com/mobile-shell/mosh/issues/722#issuecomment-176266421
-$env.SHELL = /usr/bin/nu
-$env.PAGER = page
-$env.EDITOR = nvim
-$env.VISUAL = nvim
+$env.SHELL = "/usr/bin/nu"
+$env.PAGER = "page"
+$env.EDITOR = "nvim"
+$env.VISUAL = "nvim"
 
 # Due to Nushell cannot "source" modules dymmatically, I maintain modules 
 # in $env.NU_PLUGIN_DIR. To avoid polluting namespaces,
