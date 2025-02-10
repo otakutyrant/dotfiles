@@ -4,8 +4,8 @@ alias pacins = sudo pacman -U
 alias pace = sudo pacman -R
 alias pacsyy = sudo pacman -Syy
 
-alias aurupg = sudo pikaur -Syu
-alias aurin = sudo pikaur -S
-alias aurins = sudo pikaur -U
-alias aure = sudo pikaur -R
-alias aursyy = sudo pikaur -Syy
+alias aurupg = pikaur -Syu
+alias aurin = pikaur -S
+alias aurins = pikaur -U
+alias aure = pikaur -R
+alias aursyy = pikaur -Syy
