@@ -2,7 +2,7 @@
 
 google-chrome # Web Browser
 
-steam # Game
+steam # Game, available in multiple repo
 
 network-manager-applet # Tray for Network Manager
 
@@ -24,7 +24,7 @@ fcitx5-im fcitx5-rime # Input method editor
 
 wps-office # Office suites
 
-dmenu synapse # Application launchers
+rofi # Application launchers
 
 nutstore # Cloud backup
 
@@ -42,7 +42,9 @@ variety # Wallpaper Manager
 
 anki # Flashcards
 
-clash-for-windows-electron-zh # Proxy
+clash-verge-rev # Proxy
+
+mpv # video/audio player
 
 # X11
 arandr
