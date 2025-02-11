@@ -6,7 +6,7 @@ steam # Game, available in multiple repo
 
 network-manager-applet # Tray for Network Manager
 
-motrix # BitTorrent clients
+qbittorrent # BitTorrent clients
 
 feh # Image viewer
 
