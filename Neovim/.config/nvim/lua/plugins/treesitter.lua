@@ -35,6 +35,10 @@ local nvim_treesitter_context = {
     dependencies = { "nvim-treesitter/nvim-treesitter" },
 }
 
+local rainbow_delimiters = {
+    "HiPhish/rainbow-delimiters.nvim",
+}
+
 --- TODO: understand and refine it, then decide whether to add it in the disable of highlight of nvim-treesitter.
 local nvim_treesitter_textobjects = {
     "nvim-treesitter/nvim-treesitter-textobjects",
@@ -93,4 +97,5 @@ local nvim_treesitter_textobjects = {
 return {
     nvim_treesitter,
     nvim_treesitter_context,
+    rainbow_delimiters,
 }
