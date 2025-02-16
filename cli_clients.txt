@@ -93,6 +93,7 @@ mediainfo # Viewing information about media files
 alsa # Advanced Linux Sound Architecture. Providing kernel driven sound card drivers
 alsa-utils # Containing alsamixer, an interface for audio device configuration.
 pipewire # Sound server, better than pulseaudio and jack.
+python-sounddevice # Importing this in Python can suppress unnecessary ALSA errors, see https://github.com/Uberi/speech_recognition/issues/182#issuecomment-2625391270
 
 # Others
 words # A collection of International 'words' files for /usr/share/dict.
