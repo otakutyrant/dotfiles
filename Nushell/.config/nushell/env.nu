@@ -1,5 +1,6 @@
-# PATH
-$env.PATH = ( $env.PATH | split row (char esep) )
+# convert PATH from separated-by-char string to rows,
+# and use uniq to avoid duplicate elements
+$env.PATH = ( $env.PATH | split row (char esep) | uniq )
 
 # ArchWiki: Environment Viriables
 # https://wiki.archlinux.org/index.php/Environment_variables#Examples
