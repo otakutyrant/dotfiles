@@ -3,6 +3,8 @@
 $env.config = {
     # Disable welcome banner at startup.
     show_banner: false
+    # Choose nvim as the default editor for editing the config
+    buffer_editor: "nvim"
 }
 
 # A simple command just to show directory contents, like traditional shells.
