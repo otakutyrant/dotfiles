@@ -1,12 +1,9 @@
 -- A file manager.
 local nvim_tree = {
     "nvim-tree/nvim-tree.lua",
-    lazy = false, -- Replace netrw exactly when opening a directory.
     dependencies = "nvim-tree/nvim-web-devicons", -- For file icons.
     config = function()
         require("nvim-tree").setup({
-            -- Use nvim_tree instead of netrw.
-            hijack_netrw = true,
             -- Changes the tree root directory on `DirChanged` and refreshes the tree.
             sync_root_with_cwd = true,
             -- Show LSP and COC diagnostics in the signcolumn.
@@ -18,7 +15,7 @@ local nvim_tree = {
             "n",
             "<F1>",
             ":NvimTreeToggle<CR>",
-            { desc = "Toggle filetree." }
+            { desc = "Toggle nvim-tree." }
         )
     end,
 }
@@ -64,6 +61,7 @@ local lualine = {
 -- Make indents more obvious with vertical lines.
 local indentline = {
     "lukas-reineke/indent-blankline.nvim",
+    -- This is the official instruction, and I do not know what their point are.
     main = "ibl",
     opts = {},
 }
