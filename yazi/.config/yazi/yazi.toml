@@ -4,30 +4,30 @@ sort_reverse   = false
 
 [opener]
 folder = [
-    { exec = 'open -R "$@"', display_name = "Reveal in Finder" },
-    { exec = 'vim "$@"' },
+    { run = 'open -R "$@"', display_name = "Reveal in Finder" },
+    { run = 'vim "$@"' },
 ]
 archive = [
-    { exec = 'unar "$1"', display_name = "Extract here" },
+    { run = 'unar "$1"', display_name = "Extract here" },
 ]
 text = [
-    { exec = 'nvim "$@"', block = true },
+    { run = 'nvim "$@"', block = true },
 ]
 image = [
-    { exec = 'open "$@"', display_name = "Open" },
-    { exec = '''exiftool "$1"; echo "Press enter to exit"; read''', block = true, display_name = "Show EXIF" },
+    { run = 'open "$@"', display_name = "Open" },
+    { run = '''exiftool "$1"; echo "Press enter to exit"; read''', block = true, display_name = "Show EXIF" },
 ]
 video = [
-    { exec = 'mpv "$@"' },
-    { exec = '''mediainfo "$1"; echo "Press enter to exit"; read''', block = true, display_name = "Show media info" },
+    { run = 'mpv "$@"' },
+    { run = '''mediainfo "$1"; echo "Press enter to exit"; read''', block = true, display_name = "Show media info" },
 ]
 audio = [
-    { exec = 'mpv "$@"' },
-    { exec = '''mediainfo "$1"; echo "Press enter to exit"; read''', block = true, display_name = "Show media info" },
+    { run = 'mpv "$@"' },
+    { run = '''mediainfo "$1"; echo "Press enter to exit"; read''', block = true, display_name = "Show media info" },
 ]
 fallback = [
-    { exec = 'open "$@"', display_name = "Open" },
-    { exec = 'open -R "$@"', display_name = "Reveal in Finder" },
+    { run = 'open "$@"', display_name = "Open" },
+    { run = 'open -R "$@"', display_name = "Reveal in Finder" },
 ]
 
 [open]
