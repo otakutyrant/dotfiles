@@ -66,9 +66,14 @@ local indentline = {
     opts = {},
 }
 
+local rainbow_delimiters = {
+    "HiPhish/rainbow-delimiters.nvim",
+}
+
 return {
     nvim_tree,
     colorizer,
     lualine,
     indentline,
+    rainbow_delimiters,
 }
