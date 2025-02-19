@@ -1,8 +1,9 @@
 # This file is copied from nu_scripts/custom-completions/git/git-completions.nu
-# in 2023-09-29.
+# in 2025.02.19.
+
 
 def "nu-complete git available upstream" [] {
-  ^git branch -a | lines | each { |line| $line | str replace '\* ' "" | str trim }
+  ^git branch --no-color -a | lines | each { |line| $line | str replace '* ' "" | str trim }
 }
 
 def "nu-complete git remotes" [] {
@@ -26,12 +27,12 @@ def "nu-complete git commits current branch" [] {
 
 # Yield local branches like `main`, `feature/typo_fix`
 def "nu-complete git local branches" [] {
-  ^git branch | lines | each { |line| $line | str replace '* ' "" | str trim }
+  ^git branch --no-color | lines | each { |line| $line | str replace '* ' "" | str replace '+ ' ""  | str trim }
 }
 
 # Yield remote branches like `origin/main`, `upstream/feature-a`
 def "nu-complete git remote branches with prefix" [] {
-  ^git branch -r | lines | parse -r '^\*?(\s*|\s*\S* -> )(?P<branch>\S*$)' | get branch | uniq
+  ^git branch --no-color -r | lines | parse -r '^\*?(\s*|\s*\S* -> )(?P<branch>\S*$)' | get branch | uniq
 }
 
 # Yield remote branches *without* prefix which do not have a local counterpart.
@@ -42,7 +43,17 @@ def "nu-complete git remote branches nonlocal without prefix" [] {
   # for the two remotes `origin` and `upstream`.
   let remotes_regex = (["(", ((nu-complete git remotes | each {|r| [$r, '/'] | str join}) | str join "|"), ")"] | str join)
   let local_branches = (nu-complete git local branches)
-  ^git branch -r | lines | parse -r (['^[\* ]+', $remotes_regex, '?(?P<branch>\S+)'] | flatten | str join) | get branch | uniq | where {|branch| $branch != "HEAD"} | where {|branch| $branch not-in $local_branches }
+  ^git branch --no-color -r | lines | parse -r (['^[\* ]+', $remotes_regex, '?(?P<branch>\S+)'] | flatten | str join) | get branch | uniq | where {|branch| $branch != "HEAD"} | where {|branch| $branch not-in $local_branches }
+}
+
+# Yield local and remote branch names which can be passed to `git merge`
+def "nu-complete git mergable sources" [] {
+  let current = (^git branch --show-current)
+  let long_current = $'origin/($current)'
+  let git_table = ^git branch -a --format '%(refname:lstrip=2)%09%(upstream:lstrip=2)' | lines | str trim | where { ($in != $long_current) and not ($in starts-with $"($current)\t") and not ($in ends-with 'HEAD') } | each {|v| if "\t" in $v { $v | split row "\t" -n 2 | {'n': $in.0, 'u': $in.1 } } else {'n': $v, 'u': null } }
+  let siblings = $git_table | where u == null and n starts-with 'origin/' | get n | str substring 7..
+  let remote_branches = $git_table | filter {|r| $r.u == null and not ($r.n starts-with 'origin/') } | get n
+  [...($siblings | wrap value | insert description Local), ...($remote_branches | wrap value | insert description Remote)]
 }
 
 def "nu-complete git switch" [] {
@@ -55,7 +66,7 @@ def "nu-complete git switch" [] {
 }
 
 def "nu-complete git checkout" [] {
-  (nu-complete git local branches)
+  let table_of_checkouts = (nu-complete git local branches)
   | parse "{value}"
   | insert description "local branch"
   | append (nu-complete git remote branches nonlocal without prefix
@@ -64,8 +75,17 @@ def "nu-complete git checkout" [] {
   | append (nu-complete git remote branches with prefix
             | parse "{value}"
             | insert description "remote branch")
+  | append (nu-complete git files | where description != "Untracked" | select value | insert description "git file")
   | append (nu-complete git commits all)
-  | append (nu-complete git files | where description != "Untracked" | select value)
+
+  return {
+    options: {
+        case_sensitive: false,
+        completion_algorithm: prefix,
+        sort: false,
+    },
+    completions: $table_of_checkouts
+  }
 }
 
 # Arguments to `git rebase --onto <arg1> <arg2>`
@@ -84,37 +104,51 @@ def "nu-complete git stash-list" [] {
 }
 
 def "nu-complete git tags" [] {
-  ^git tag | lines
+  ^git tag --no-color | lines
 }
 
 # See `man git-status` under "Short Format"
 # This is incomplete, but should cover the most common cases.
 const short_status_descriptions = {
-  " D": "Deleted"
-  " M": "Modified"
-  "!!": "Ignored"
-  "??": "Untracked"
+  ".D": "Deleted"
+  ".M": "Modified"
+  "!" : "Ignored"
+  "?" : "Untracked"
   "AU": "Staged, not merged"
   "MD": "Some modifications staged, file deleted in work tree"
   "MM": "Some modifications staged, some modifications untracked"
-  "R ": "Renamed"
+  "R.": "Renamed"
+  "UU": "Both modified (in merge conflict)"
 }
 
 def "nu-complete git files" [] {
-  let relevant_statuses = ["??"," M", "MM", "MD", " D"]
-  ^git status --porcelain 
-    | lines 
-      | parse --regex "(?P<short_status>.{2}) (?P<value>.+)" 
-      | where $it.short_status in $relevant_statuses 
-      | insert "description" { |e| $short_status_descriptions | get $e.short_status}
+  let relevant_statuses = ["?",".M", "MM", "MD", ".D", "UU"]
+  ^git status -uall --porcelain=2
+  | lines
+  | each { |$it|
+    if $it starts-with "1 " {
+      $it | parse --regex "1 (?P<short_status>\\S+) (?:\\S+\\s?){6} (?P<value>\\S+)"
+    } else if $it starts-with "2 " {
+      $it | parse --regex "2 (?P<short_status>\\S+) (?:\\S+\\s?){6} (?P<value>\\S+)"
+    } else if $it starts-with "u " {
+      $it | parse --regex "u (?P<short_status>\\S+) (?:\\S+\\s?){8} (?P<value>\\S+)"
+    } else if $it starts-with "? " {
+      $it | parse --regex "(?P<short_status>.{1}) (?P<value>.+)"
+    } else {
+      { short_status: 'unknown', value: $it }
+    }
+  }
+  | flatten
+  | where $it.short_status in $relevant_statuses
+  | insert "description" { |e| $short_status_descriptions | get $e.short_status}
 }
 
 def "nu-complete git built-in-refs" [] {
   [HEAD FETCH_HEAD ORIG_HEAD]
 }
-
+ 
 def "nu-complete git refs" [] {
-  nu-complete git switchable branches
+  nu-complete git local branches
   | parse "{value}"
   | insert description Branch
   | append (nu-complete git tags | parse "{value}" | insert description Tag)
@@ -122,7 +156,7 @@ def "nu-complete git refs" [] {
 }
 
 def "nu-complete git files-or-refs" [] {
-  nu-complete git switchable branches
+  nu-complete git local branches
   | parse "{value}"
   | insert description Branch
   | append (nu-complete git files | where description == "Modified" | select value)
@@ -137,6 +171,19 @@ def "nu-complete git subcommands" [] {
 def "nu-complete git add" [] {
   nu-complete git files
 }
+
+def "nu-complete git pull rebase" [] {
+  ["false","true","merges","interactive"]
+}
+
+def "nu-complete git merge strategies" [] {
+  ['ort', 'octopus']
+}
+
+def "nu-complete git merge strategy options" [] {
+  ['ours', 'theirs']
+}
+
 
 # Check out git branches and files
 export extern "git checkout" [
@@ -156,12 +203,28 @@ export extern "git checkout" [
   --pathspec-from-file: string                    # read pathspec from file
   --progress                                      # force progress reporting
   --quiet(-q)                                     # suppress progress reporting
-  --recurse-submodules: string                    # control recursive updating of submodules
+  --recurse-submodules                            # control recursive updating of submodules
   --theirs(-3)                                    # checkout their version for unmerged files
   --track(-t)                                     # set upstream info for new branch
-  -b: string                                      # create and checkout a new branch
+  -b                                              # create and checkout a new branch
   -B: string                                      # create/reset and checkout a branch
   -l                                              # create reflog for new branch
+]
+
+export extern "git reset" [
+  ...targets: string@"nu-complete git checkout"      # name of commit, branch, or files to reset to
+  --hard                                          # reset HEAD, index and working tree
+  --keep                                          # reset HEAD but keep local changes
+  --merge                                         # reset HEAD, index and working tree
+  --mixed                                         # reset HEAD and index
+  --patch(-p)                                     # select hunks interactively
+  --quiet(-q)                                     # be quiet, only report errors
+  --soft                                          # reset only HEAD
+  --pathspec-from-file: string                    # read pathspec from file
+  --pathspec-file-nul                             # with --pathspec-from-file, pathspec elements are separated with NUL character
+  --no-refresh                                    # skip refreshing the index after reset
+  --recurse-submodules: string                    # control recursive updating of submodules
+  --no-recurse-submodules                         # don't recurse into submodules
 ]
 
 # Download objects and refs from another repository
@@ -182,7 +245,7 @@ export extern "git fetch" [
   --write-fetch-head                            # Write fetched refs in FETCH_HEAD (default)
   --no-write-fetch-head                         # Do not write FETCH_HEAD
   --force(-f)                                   # Always update the local branch
-  --keep(-k)                                    # Keep dowloaded pack
+  --keep(-k)                                    # Keep downloaded pack
   --multiple                                    # Allow several arguments to be specified
   --auto-maintenance                            # Run 'git maintenance run --auto' at the end (default)
   --no-auto-maintenance                         # Don't run 'git maintenance' at the end
@@ -246,15 +309,61 @@ export extern "git push" [
 # Pull changes
 export extern "git pull" [
   remote?: string@"nu-complete git remotes",         # the name of the remote
-  ...refs: string@"nu-complete git local branches"   # the branch / refspec
-  --rebase                                           # rebase current branch on top of upstream after fetching
+  ...refs: string@"nu-complete git local branches",  # the branch / refspec
+  --rebase(-r): string@"nu-complete git pull rebase",    # rebase current branch on top of upstream after fetching
+  --quiet(-q)                                        # suppress output during transfer and merge
+  --verbose(-v)                                      # be more verbose
+  --commit                                           # perform the merge and commit the result
+  --no-commit                                        # perform the merge but do not commit the result
+  --edit(-e)                                         # edit the merge commit message
+  --no-edit                                          # use the auto-generated merge commit message
+  --cleanup: string                                  # specify how to clean up the merge commit message
+  --ff                                               # fast-forward if possible
+  --no-ff                                            # create a merge commit in all cases
+  --gpg-sign(-S)                                     # GPG-sign the resulting merge commit
+  --no-gpg-sign                                      # do not GPG-sign the resulting merge commit
+  --log: int                                         # include log messages from merged commits
+  --no-log                                           # do not include log messages from merged commits
+  --signoff                                          # add Signed-off-by trailer
+  --no-signoff                                       # do not add Signed-off-by trailer
+  --stat(-n)                                         # show a diffstat at the end of the merge
+  --no-stat                                          # do not show a diffstat at the end of the merge
+  --squash                                           # produce working tree and index state as if a merge happened
+  --no-squash                                        # perform the merge and commit the result
+  --verify                                           # run pre-merge and commit-msg hooks
+  --no-verify                                        # do not run pre-merge and commit-msg hooks
+  --strategy(-s): string                             # use the given merge strategy
+  --strategy-option(-X): string                      # pass merge strategy-specific option
+  --verify-signatures                                # verify the tip commit of the side branch being merged
+  --no-verify-signatures                             # do not verify the tip commit of the side branch being merged
+  --summary                                          # show a summary of the merge
+  --no-summary                                       # do not show a summary of the merge
+  --autostash                                        # create a temporary stash entry before the operation
+  --no-autostash                                     # do not create a temporary stash entry before the operation
+  --allow-unrelated-histories                        # allow merging histories without a common ancestor
+  --no-rebase                                        # do not rebase the current branch on top of the upstream branch
+  --all                                              # fetch all remotes
+  --append(-a)                                       # append fetched refs to existing contents of FETCH_HEAD
+  --atomic                                           # use an atomic transaction to update local refs
+  --depth: int                                       # limit fetching to the specified number of commits
+  --deepen: int                                      # deepen the history by the specified number of commits
+  --shallow-since: string                            # deepen or shorten the history since a specified date
+  --shallow-exclude: string                          # exclude commits reachable from a specified branch or tag
+  --unshallow                                        # convert a shallow repository to a complete one
+  --update-shallow                                   # update .git/shallow with new refs
+  --tags(-t)                                         # fetch all tags from the remote
+  --jobs(-j): int                                    # number of parallel children for fetching
+  --set-upstream                                     # add upstream (tracking) reference
+  --upload-pack: string                              # specify non-default path for upload-pack on the remote
+  --progress                                         # force progress status even if stderr is not a terminal
+  --server-option(-o): string                        # transmit the given string to the server
 ]
 
 # Switch between branches and commits
 export extern "git switch" [
   switch?: string@"nu-complete git switch"        # name of branch to switch to
-  --create(-c): string                            # create a new branch
-  --detach(-d): string@"nu-complete git log"      # switch to a commit in a detatched state
+  --create(-c)                                    # create a new branch
+  --detach(-d): string@"nu-complete git log"      # switch to a commit in a detached state
   --force-create(-C): string                      # forces creation of new branch, if it exists then the existing branch will be reset to starting point
   --force(-f)                                     # alias for --discard-changes
   --guess                                         # if there is no local branch which matches then name but there is a remote one then this is checked out
@@ -293,6 +402,24 @@ export extern "git rebase" [
   --interactive(-i)                           # rebase interactively with list of commits in editor
   --onto?: string@"nu-complete git rebase"    # starting point at which to create the new commits
   --root                                      # start rebase from root commit
+]
+
+# Merge from a branch
+export extern "git merge" [
+  # For now, to make it simple, we only complete branches (not commits) and support single-parent case.
+  branch?: string@"nu-complete git mergable sources"         # The source branch
+  --edit(-e)                                                 # Edit the commit message prior to committing
+  --no-edit                                                  # Do not edit commit message
+  --no-commit(-n)                                            # Apply changes without making any commit
+  --signoff                                                  # Add Signed-off-by line to the commit message
+  --ff                                                       # Fast-forward if possible
+  --continue                                                 # Continue after resolving a conflict
+  --abort                                                    # Abort resolving conflict and go back to original state
+  --quit                                                     # Forget about the current merge in progress
+  --strategy(-s): string@"nu-complete git merge strategies"  # Merge strategy
+  -X: string@"nu-complete git merge strategy options"        # Option for merge strategy
+  --verbose(-v)
+  --help
 ]
 
 # List or change branches
@@ -366,7 +493,43 @@ export extern "git commit" [
   --all(-a)                                           # automatically stage all modified and deleted files
   --amend                                             # amend the previous commit rather than adding a new one
   --message(-m): string                               # specify the commit message rather than opening an editor
-  --no-edit                                           # don't edit the commit message (useful with --amend)
+  --reuse-message(-C): string                         # reuse the message from a previous commit
+  --reedit-message(-c): string                        # reuse and edit message from a commit
+  --fixup: string                                     # create a fixup/amend commit
+  --squash: string                                    # squash commit for autosquash rebase
+  --reset-author                                      # reset author information
+  --short                                             # short-format output for dry-run
+  --branch                                            # show branch info in short-format
+  --porcelain                                         # porcelain-ready format for dry-run
+  --long                                              # long-format output for dry-run
+  --null(-z)                                          # use NUL instead of LF in output
+  --file(-F): string                                  # read commit message from file
+  --author: string                                    # override commit author
+  --date: string                                      # override author date
+  --template(-t): string                              # use commit message template file
+  --signoff(-s)                                       # add Signed-off-by trailer
+  --no-signoff                                        # do not add Signed-off-by trailer
+  --trailer: string                                   # add trailer to commit message
+  --no-verify(-n)                                     # bypass pre-commit and commit-msg hooks
+  --verify                                            # do not bypass pre-commit and commit-msg hooks
+  --allow-empty                                       # allow commit with no changes
+  --allow-empty-message                               # allow commit with empty message
+  --cleanup: string                                   # cleanup commit message
+  --edit(-e)                                          # edit commit message
+  --no-edit                                           # do not edit commit message
+  --include(-i)                                       # include given paths in commit
+  --only(-o)                                          # commit only specified paths
+  --pathspec-from-file: string                        # read pathspec from file
+  --pathspec-file-nul                                 # use NUL character for pathspec file
+  --untracked-files(-u): string                       # show untracked files
+  --verbose(-v)                                       # show diff in commit message template
+  --quiet(-q)                                         # suppress commit summary
+  --dry-run                                           # show paths to be committed without committing
+  --status                                            # include git-status output in commit message
+  --no-status                                         # do not include git-status output
+  --gpg-sign(-S)                                      # GPG-sign commit
+  --no-gpg-sign                                       # do not GPG-sign commit
+  ...pathspec: string                                 # commit files matching pathspec
 ]
 
 # List commits
@@ -426,18 +589,18 @@ export extern "git stash list" [
 
 # Show a stashed change
 export extern "git stash show" [
-  stash: string@"nu-complete git stash-list"
+  stash?: string@"nu-complete git stash-list"
   -U                                                  # show diff
 ]
 
 # Drop a stashed change
 export extern "git stash drop" [
-  stash: string@"nu-complete git stash-list"
+  stash?: string@"nu-complete git stash-list"
 ]
 
 # Create a new git repository
 export extern "git init" [
-  --initial-branch(-b)                                # initial branch name
+  --initial-branch(-b): string                         # initial branch name
 ]
 
 # List or manipulate tags
@@ -477,5 +640,204 @@ export extern "git bisect reset" [
 
 # Show help for a git subcommand
 export extern "git help" [
-  command: string@"nu-complete git subcommands"       # subcommand to show help for
+  command?: string@"nu-complete git subcommands"       # subcommand to show help for
+]
+
+# git worktree
+export extern "git worktree" [
+  --help(-h)            # display the help message for this command
+  ...args
+]
+
+# create a new working tree
+export extern "git worktree add" [
+  path: path            # directory to clone the branch
+  branch: string@"nu-complete git available upstream" # Branch to clone
+  --help(-h)            # display the help message for this command
+  --force(-f)           # checkout <branch> even if already checked out in other worktree
+  -b                    # create a new branch
+  -B                    # create or reset a branch
+  --detach(-d)          # detach HEAD at named commit
+  --checkout            # populate the new working tree
+  --lock                # keep the new working tree locked
+  --reason              # reason for locking
+  --quiet(-q)           # suppress progress reporting
+  --track               # set up tracking mode (see git-branch(1))
+  --guess-remote        # try to match the new branch name with a remote-tracking branch
+  ...args
+]
+
+# list details of each worktree
+export extern "git worktree list" [
+  --help(-h)            # display the help message for this command
+  --porcelain           # machine-readable output
+  --verbose(-v)         # show extended annotations and reasons, if available
+  --expire              # add 'prunable' annotation to worktrees older than <time>
+  -z                    # terminate records with a NUL character
+  ...args
+]
+
+def "nu-complete worktree list" [] {
+  ^git worktree list | to text | parse --regex '(?P<value>\S+)\s+(?P<commit>\w+)\s+(?P<description>\S.*)'
+}
+
+# prevent a working tree from being pruned
+export extern "git worktree lock" [
+  worktree: string@"nu-complete worktree list"
+  --reason: string      # reason because the tree is locked
+  --help(-h)            # display the help message for this command
+  --reason              # reason for locking
+  ...args
+]
+
+# move a working tree to a new location
+export extern "git worktree move" [
+  --help(-h)            # display the help message for this command
+  --force(-f)           # force move even if worktree is dirty or locked
+  ...args
+]
+
+# prune working tree information
+export extern "git worktree prune" [
+  --help(-h)            # display the help message for this command
+  --dry-run(-n)         # do not remove, show only
+  --verbose(-v)         # report pruned working trees
+  --expire              # expire working trees older than <time>
+  ...args
+]
+
+# remove a working tree
+export extern "git worktree remove" [
+  worktree: string@"nu-complete worktree list"
+  --help(-h)            # display the help message for this command
+  --force(-f)           # force removal even if worktree is dirty or locked
+]
+
+# allow working tree to be pruned, moved or deleted
+export extern "git worktree unlock" [
+  worktree: string@"nu-complete worktree list"
+  ...args
+]
+
+# clones a repo
+export extern "git clone" [
+  --help(-h)                    # display the help message for this command
+  --local(-l)                   # cloning from the local machine
+  --no-local                    # use the git transport mechanism even if cloning from a local path
+  --no-hardlinks                # force git to copy files when cloning from the local machine
+  --shared(-s)                  # setup .git/objects/info/alternates to share objects with the source local repo
+  --reference: string           # setup .git/objects/info/alternates to share objects with the =<reference> local repo
+  --reference-if-able: string   # same as --reference, but skips empty folders
+  --dissociate                  # borrow objects from the referenced repo (--reference)
+  --quiet(-q)                   # suppress progress reporting
+  --verbose(-v)                 # be verbose
+  --progress                    # report progress unless --quiet
+  --server-option: string       # transmit the =<option> to the server
+  --no-checkout(-n)             # no checkout of HEAD
+  --reject-shallow              # reject shallow repository as source
+  --no-reject-shallow           # do not reject shallow repository as source
+  --bare                        # make a bare git repo
+  --sparse                      # initialize the sparse-checkout file
+  --filter: string              # partial clone using the given =<filter-spec>
+  --mirror                      # mirror the source repo
+  --origin(-o): string          # use <name> as the name for the remote origin
+  --branch(-b): string          # point HEAD to <name> branch
+  --upload-pack(-u): string     # use <upload-pack> as the path in the other end when using ssh
+  --template: string            # use <template-dir> as the templates directory
+  --config(-c): string          # set a <key>=<value> config variable
+  --depth: int                  # shallow clone <depth> commits
+  --shallow-since: string       # shallow clone commits newer than =<date>
+  --shallow-exclude: string     # do not clone commits reachable from <revision> (branch or tag)
+  --single-branch               # clone commit history from a single branch
+  --no-single-Branch            # do not clone only one branch
+  --no-tags                     # do not clone any tags
+  --recurse-submodules          # clone the submodules. Also accepts paths
+  --shallow-submodules          # shallow clone submodules with depth 1
+  --no-shallow-submodules       # do not shallow clone submodules
+  --remote-submodules           # submodules are updating using their remote tracking branch
+  --no-remote-submodules        # do not track submodules remote
+  --separate-git-dir: string    # place the clone at =<git dir> and link it here
+  --jobs(-j): int               # number of simultaneous submodules fetch
+  ...args
+]
+
+# Restores files in working tree or index to previous versions
+export extern "git restore" [
+  --help(-h)                                    # Display the help message for this command
+  --source(-s)                                  # Restore the working tree files with the content from the given tree
+  --patch(-p)                                   # Interactively choose hunks to restore
+  --worktree(-W)                                # Restore working tree (default if neither --worktree or --staged is used)
+  --staged(-S)                                  # Restore index
+  --quiet(-q)                                   # Quiet, suppress feedback messages
+  --progress                                    # Force progress reporting
+  --no-progress                                 # Suppress progress reporting
+  --ours                                        # Restore from index using our version for unmerged files
+  --theirs                                      # Restore from index using their version for unmerged files
+  --merge(-m)                                   # Restore from index and recreate the conflicted merge in unmerged files
+  --conflict: string                            # Like --merge but changes the conflict presentation with =<style>
+  --ignore-unmerged                             # Restore from index and ignore unmerged entries (unmerged files are left as is)
+  --ignore-skip-worktree-bits                   # Ignore sparse checkout patterns and unconditionally restores any files in <pathspec>
+  --recurse-submodules                          # Restore the contents of sub-modules in working tree
+  --no-recurse-submodules                       # Do not restore the contents of sub-modules in working tree (default)
+  --overlay                                     # Do not remove files that don't exist when restoring from tree with --source
+  --no-overlay                                  # Remove files that don't exist when restoring from tree with --source (default)
+  --pathspec-from-file: string                  # Read pathspec from file
+  --pathspec-file-nul                           # Separate pathspec elements with NUL character when reading from file
+  ...pathspecs: string@"nu-complete git files"  # Target pathspecs to restore
+]
+
+# Print lines matching a pattern
+export extern "git grep" [
+  --help(-h)                            # Display the help message for this command
+  --cached                              # Search blobs registered in the index file instead of worktree
+  --untracked                           # Include untracked files in search
+  --no-index                            # Similar to `grep -r`, but with additional benefits, such as using pathspec patterns to limit paths; Cannot be used together with --cached or --untracked
+  --no-exclude-standard                 # Include ignored files in search (only useful with --untracked)
+  --exclude-standard                    # No not include ignored files in search (only useful with --no-index)
+  --recurse-submodules                  # Recursively search in each submodule that is active and checked out
+  --text(-a)                            # Process binary files as if they were text
+  --textconv                            # Honor textconv filter settings
+  --no-textconv                         # Do not honor textconv filter settings (default)
+  --ignore-case(-i)                     # Ignore case differences between patterns and files
+  -I                                    # Don’t match the pattern in binary files
+  --max-depth: int                      # Max <depth> to descend down directories for each pathspec. A value of -1 means no limit.
+  --recursive(-r)                       # Same as --max-depth=-1
+  --no-recursive                        # Same as --max-depth=0
+  --word-regexp(-w)                     # Match the pattern only at word boundary
+  --invert-match(-v)                    # Select non-matching lines
+  -H                                    # Suppress filename in output of matched lines
+  --full-name                           # Force relative path to filename from top directory
+  --extended-regexp(-E)                 # Use POSIX extended regexp for patterns
+  --basic-regexp(-G)                    # Use POSIX basic regexp for patterns (default)
+  --perl-regexp(-P)                     # Use Perl-compatible regular expressions for patterns
+  --line-number(-n)                     # Prefix the line number to matching lines
+  --column                              # Prefix the 1-indexed byte-offset of the first match from the start of the matching line
+  --files-with-matches(-l)              # Print filenames of files that contains matches
+  --name-only                           # Same as --files-with-matches
+  --files-without-match(-L)             # Print filenames of files that do not contain matches
+  --null(-z)                            # Use \0 as the delimiter for pathnames in the output, and print them verbatim
+  --only-matching(-o)                   # Print only the matched (non-empty) parts of a matching line, with each such part on a separate output line
+  --count(-c)                           # Instead of showing every matched line, show the number of lines that match
+  --no-color                            # Same as --color=never
+  --break                               # Print an empty line between matches from different files.
+  --heading                             # Show the filename above the matches in that file instead of at the start of each shown line.
+  --show-function(-p)                   # Show the preceding line that contains the function name of the match, unless the matching line is a function name itself.
+  --context(-C): int                    # Show <num> leading and trailing lines, and place a line containing -- between contiguous groups of matches.
+  --after-context(-A): int              # Show <num> trailing lines, and place a line containing -- between contiguous groups of matches.
+  --before-context(-B): int             # Show <num> leading lines, and place a line containing -- between contiguous groups of matches.
+  --function-context(-W)                # Show the surrounding text from the previous line containing a function name up to the one before the next function name
+  --max-count(-m): int                  # Limit the amount of matches per file. When using the -v or --invert-match option, the search stops after the specified number of non-matches.
+  --threads: int                        # Number of grep worker threads to use. Use --help for more information on grep threads.
+  -f: string                            # Read patterns from <file>, one per line.
+  -e: string                            # Next parameter is the pattern. Multiple patterns are combined by --or.
+  --and                                 # Search for lines that match multiple patterns.
+  --or                                  # Search for lines that match at least one of multiple patterns. --or is implied between patterns without --and or --not.
+  --not                                 # Search for lines that does not match pattern.
+  --all-match                           # When giving multiple pattern expressions combined with --or, this flag is specified to limit the match to files that have lines to match all of them.
+  --quiet(-q)                           # Do not output matched lines; instead, exit with status 0 when there is a match and with non-zero status when there isn’t.
+  ...pathspecs: string                  # Target pathspecs to limit the scope of the search.
+]
+
+export extern "git" [
+  command?: string@"nu-complete git subcommands"       # subcommands
 ]
