@@ -46,6 +46,8 @@ clash-verge-rev # Proxy
 
 mpv # video/audio player
 
+baidunetdisk-bin # Baidu Netdisk client
+
 # X11
 arandr
 i3-wm i3status-rust

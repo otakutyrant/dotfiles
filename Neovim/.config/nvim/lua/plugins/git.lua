@@ -5,10 +5,7 @@ local fugitive = {
 
 -- Show signs for added, removed, and changed lines.
 local gitsigns = {
-    "lewis6991/gitsigns.nvim",
-    config = function()
-        require("gitsigns").setup({})
-    end,
+    "lewis6991/gitsigns.nvim", config = true,
 }
 
 return {

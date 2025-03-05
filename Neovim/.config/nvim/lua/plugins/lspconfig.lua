@@ -65,9 +65,8 @@ lspconfig.cssls.setup({ capabilities = capabilities })
 -- TypeScript & JavaScript
 -- Actually this is not a language server.
 local typescript_tools = {
-  "pmizio/typescript-tools.nvim",
+  "pmizio/typescript-tools.nvim", config = true,
   dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
-  opts = {},
 }
 
 -- TODO: To exploit lsp fully, like vim.lsp.buf.declaration and vim.lsp.buf.definition
