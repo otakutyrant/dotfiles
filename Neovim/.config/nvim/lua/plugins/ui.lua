@@ -22,7 +22,7 @@ local nvim_tree = {
 
 -- Render color of a color code.
 local colorizer = {
-    "NvChad/nvim-colorizer.lua",
+    "NvChad/nvim-colorizer.lua", config = true,
     event = "VeryLazy",
 }
 
@@ -60,10 +60,9 @@ local lualine = {
 
 -- Make indents more obvious with vertical lines.
 local indentline = {
-    "lukas-reineke/indent-blankline.nvim",
+    "lukas-reineke/indent-blankline.nvim", config = true,
     -- This is the official instruction, and I do not know what their point are.
     main = "ibl",
-    opts = {},
 }
 
 local rainbow_delimiters = {
