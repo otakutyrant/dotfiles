@@ -6,6 +6,8 @@ def --env envproxy [] {
   "http proxy on"
 }
 
+envproxy
+
 def --env noproxy [] {
   hide-env http_proxy
   hide-env https_proxy
