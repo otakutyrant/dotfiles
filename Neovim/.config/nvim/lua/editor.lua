@@ -58,8 +58,8 @@ vim.opt.wildmode = { "longest", "list" }
 -- When complete in the insert mode, it always show menu and info, and match
 -- the longest common string.
 vim.opt.completeopt = { "menu", "menuone", "longest", "preview" }
--- Set the global statusline.
-vim.opt.laststatus = 2
+-- Only the last window show a status line.
+vim.opt.laststatus = 3
 -- Enable spell checker in some filetypes.
 vim.opt.spell = true
 -- Adopt American English spell and avoid regarding cjk chars as spell error.
