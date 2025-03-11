@@ -60,6 +60,12 @@ python-isort
 # Python Library
 python-sh
 python-srt
+# Web
+vscode-html-languageserver
+vscode-css-languageserver
+vscode-js-languageserver
+eslint
+eslint-eslint-language-server
 
 # Nvidia GPU
 nvidia
