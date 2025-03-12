@@ -80,6 +80,8 @@ floating_maximum_size -1 x -1
 # Set some arbitrary commands for specific windows.
 for_window [class="calibre"] floating disable
 for_window [window_role="pop-up"] floating enable
+# Make Google Chrome DevTools do not float again.
+for_window [title="^DevTools"] floating disable
 for_window [window_role="task_dialog"] floating enable
 for_window [class="MetroExodus"] floating enable
 
