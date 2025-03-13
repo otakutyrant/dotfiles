@@ -8,7 +8,8 @@ local nvim_tree = {
             sync_root_with_cwd = true,
             -- Show LSP and COC diagnostics in the signcolumn.
             diagnostics = { enable = true },
-            view = { signcolumn = "auto", number = true, relativenumber = true },
+            view = { signcolumn = "auto", number = true, relativenumber = true, },
+            renderer = { icons = { show = { folder_arrow = false, }, }, },
         })
         -- Map F1 as mandate file manager.
         vim.keymap.set(
