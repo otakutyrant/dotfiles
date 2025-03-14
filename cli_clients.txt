@@ -60,6 +60,7 @@ python-isort
 # Python Library
 python-sh
 python-srt
+prettier # formatter for front-end development
 # Web
 vscode-html-languageserver
 vscode-css-languageserver
