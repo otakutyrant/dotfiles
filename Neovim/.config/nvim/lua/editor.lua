@@ -119,6 +119,17 @@ vim.opt.shiftwidth = 4
 -- Enables the experimental Lua module loader, maybe faster.
 vim.loader.enable()
 
+-- Set two spaces for some filetypes, especially web development.
+vim.api.nvim_create_autocmd("FileType", {
+    pattern = {"javascript", "javascriptreact", "typescript", "typescriptreact", "html", "css", "json"},
+    callback = function()
+        vim.bo.shiftwidth = 2
+        vim.bo.tabstop = 2
+        vim.bo.softtabstop = 2
+        vim.bo.expandtab = true
+    end,
+})
+
 -- # Keymap enhancement
 
 -- ## Modified keymaps
