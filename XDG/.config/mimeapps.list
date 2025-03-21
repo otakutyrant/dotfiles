@@ -31,3 +31,10 @@ inode/directory=org.gnome.Nautilus.desktop
 x-scheme-handler/trash=org.gnome.Nautilus.desktop
 
 application/epub+zip=calibre-ebook-viewer.desktop
+text/html=google-chrome.desktop
+x-scheme-handler/about=google-chrome.desktop
+x-scheme-handler/unknown=google-chrome.desktop
+clash=clash-verge-handler.desktop
+clash-verge=clash-verge-handler.desktop
+x-scheme-handler/clash=clash-verge.desktop
+x-scheme-handler/baiduyunguanjia=baidunetdisk.desktop
