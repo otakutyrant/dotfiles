@@ -50,6 +50,7 @@ function MyTabLine()
 
     return tabline
 end
+
 vim.go.tabline = "%!v:lua.MyTabLine()"
 -- The default option of wildmenu is full. It won't stop at the common string.
 -- So use longest instead. `list` show all candidates after the common string.
@@ -61,7 +62,20 @@ vim.opt.completeopt = { "menu", "menuone", "longest", "preview" }
 -- Only the last window show a status line.
 vim.opt.laststatus = 3
 -- Enable spell checker in some filetypes.
-vim.opt.spell = true
+vim.api.nvim_create_autocmd("FileType", {
+    pattern = {
+        "markdown",  -- Markdown files (.md), commonly used for writing and note-taking
+        "text",      -- Plain text files (.txt), general writing
+        "gitcommit", -- Git commit messages (COMMIT_EDITMSG), helps prevent typos
+        "gitrebase", -- Git interactive rebase messages
+        "mail",      -- Email composition
+        "tex",       -- LaTeX documents, academic writing
+        "asciidoc",  -- AsciiDoc format for structured documentation
+        "rst",       -- reStructuredText (.rst), often used for Python documentation
+        "norg"       -- Neorg, a note-taking format specifically for Neovim
+    },
+    command = "setlocal spell",
+})
 -- Adopt American English spell and avoid regarding cjk chars as spell error.
 vim.opt.spelllang = { "en_us", "cjk" }
 
@@ -121,7 +135,7 @@ vim.loader.enable()
 
 -- Set two spaces for some filetypes, especially web development.
 vim.api.nvim_create_autocmd("FileType", {
-    pattern = {"javascript", "javascriptreact", "typescript", "typescriptreact", "html", "css", "json"},
+    pattern = { "javascript", "javascriptreact", "typescript", "typescriptreact", "html", "css", "json" },
     callback = function()
         vim.bo.shiftwidth = 2
         vim.bo.tabstop = 2
