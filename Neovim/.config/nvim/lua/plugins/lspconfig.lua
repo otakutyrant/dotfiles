@@ -51,7 +51,8 @@ lspconfig.lua_ls.setup({
 })
 
 -- Python
-lspconfig.pyright.setup({})
+lspconfig.pyright.setup({})  -- for type checking
+lspconfig.ruff.setup({}) -- for linting and formatting
 
 -- HTML & CSS
 -- Neovim does not currently include built-in snippets.
