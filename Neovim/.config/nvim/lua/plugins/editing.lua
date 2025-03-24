@@ -30,7 +30,8 @@ local conform = {
                 typescript = { 'prettier' },
                 -- ocaml = { 'ocamlformat' },
                 -- nix = { 'nixpkgs-fmt' },
-                -- python = { 'ruff_format', 'ruff_organaize_imports', 'ruff_fix' },
+                python = { 'ruff_organize_imports' },
+                -- python = { 'ruff_format', 'ruff_fix' },
             },
             format_on_save = {
                 -- These options will be passed to conform.format()
