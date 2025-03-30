@@ -252,12 +252,6 @@ local function map_star()
 end
 vim.keymap.set("n", "*", map_star)
 
--- ## Additional commands
-
-vim.api.nvim_create_user_command("RemoveTrailingWhitespaces", function()
-    vim.cmd([[silent %s/\s\+$//e]])
-end, {})
-
 -- ## Windows management
 
 vim.keymap.set(

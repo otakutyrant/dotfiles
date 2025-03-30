@@ -39,6 +39,9 @@ local conform = {
                 lsp_format = "fallback",
             },
         })
+        vim.keymap.set("n", "<leader>tw", function()
+            require("conform").format({ formatters = { "trim_whitespace" } })
+        end, { desc = "Trim trailing whitespace" })
     end,
 }
 
