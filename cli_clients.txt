@@ -25,6 +25,8 @@ bash zsh nushell # Shell
 
 neovim python-pynvim # Editor
 
+vimv # Rename multiple files
+
 # Network
 curl
 wget
