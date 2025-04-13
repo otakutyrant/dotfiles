@@ -72,6 +72,8 @@ def llmp3 [directory: path = "."] {
     let total_durations = $file_list | get duration | math sum
     # Compute average duration in seconds
     let average_duration = $file_list | get duration | math avg
+        | format duration sec | split row " " | get 0 | into int | into string
+        | append "sec" | str join | into duration
     # Compute total chars
     let total_chars = $file_list | get chars | math sum
     # Compute average chars
