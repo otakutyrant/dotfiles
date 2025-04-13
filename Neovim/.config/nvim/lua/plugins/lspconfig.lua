@@ -75,6 +75,9 @@ local typescript_tools = {
 -- TODO: To exploit lsp fully, like vim.lsp.buf.declaration and vim.lsp.buf.definition
 -- Use LspAttach autocommand to map some lsp-buf functions.
 
+-- Nushell
+lspconfig.nushell.setup({})
+
 -- # Final
 
 return {
