@@ -38,11 +38,16 @@ def lmp3 [filename: string] {
     let count = $lines
         | reduce -f 0 { |line, acc| $acc + ($line | str length -g) }
 
+    # Calculate cps
+    let seconds = ($duration | into int) // 1_000_000_000
+    let cps = $count / $seconds
+
     # Finally, return a record with filename and duration
     {
         name: $filename
         duration: $duration
         chars: $count
+        cps: $cps
     }
 }
 
@@ -71,6 +76,9 @@ def llmp3 [directory: path = "."] {
     let total_chars = $file_list | get chars | math sum
     # Compute average chars
     let average_chars = $file_list | get chars | math avg | into int
+    # Compute average cps
+    let total_seconds = ($total_durations | into int) // 1_000_000_000
+    let avarage_cps = $total_chars / $total_seconds
 
     # Output the files along with the total and average in duration and chars
     $file_list
@@ -79,6 +87,7 @@ def llmp3 [directory: path = "."] {
         }
         | append {
             name: "AVERAGE", duration: $average_duration chars: $average_chars
+            cps: $avarage_cps
         }
 }
 
