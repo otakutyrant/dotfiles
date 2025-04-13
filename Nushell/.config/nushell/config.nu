@@ -63,50 +63,22 @@ def llmp3 [directory: path = "."] {
             | each { |it| lmp3 $it.name }
     )
 
-    let file_count = ($file_list | length)
-
     # Compute total duration in seconds
-    let total_durations = if $file_count == 0 {
-        0
-    } else {
-        $file_list | get duration | math sum
-    }
-    | into duration --unit sec
-
+    let total_durations = $file_list | get duration | math sum
     # Compute average duration in seconds
-    let average_duration = if $file_count == 0 {
-        0
-    } else {
-        let nanoseconds = $total_durations | into int
-        $nanoseconds / 1_000_000_000 / $file_count
-    }
-    | into int | into duration --unit sec
-
+    let average_duration = $file_list | get duration | math avg
     # Compute total chars
-    let total_chars = if $file_count == 0 {
-        0
-    } else {
-        $file_list | get chars | math sum
-    }
-
+    let total_chars = $file_list | get chars | math sum
     # Compute average chars
-    let average_chars = if $file_count == 0 {
-        0
-    } else {
-        $total_chars // $file_count
-    }
+    let average_chars = $file_list | get chars | math avg | into int
 
     # Output the files along with the total and average in duration and chars
     $file_list
         | append {
-            name: "TOTAL",
-            duration: $total_durations,
-            chars: $total_chars
+            name: "TOTAL", duration: $total_durations, chars: $total_chars
         }
         | append {
-            name: "AVERAGE",
-            duration: $average_duration
-            chars: $average_chars
+            name: "AVERAGE", duration: $average_duration chars: $average_chars
         }
 }
 
