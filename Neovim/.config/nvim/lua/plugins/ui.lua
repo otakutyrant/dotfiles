@@ -14,7 +14,7 @@ local neo_tree = {
     opts = {
         vim.keymap.set(
             "n",
-            "<F2>",
+            "<F1>", -- this will overwrite its origin feature: neovim-help, but the later is useless anyway
             ":Neotree toggle<CR>",
             { desc = "Toggle neo-tree." }
         ),
