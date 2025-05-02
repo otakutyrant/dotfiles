@@ -46,8 +46,10 @@ lspconfig.lua_ls.setup({
         })
     end,
     settings = {
-        Lua = {}
-    }
+        Lua = {
+            format = { enable = false },
+        },
+    },
 })
 
 -- Python
