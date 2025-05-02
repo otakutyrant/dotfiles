@@ -69,6 +69,8 @@ vscode-css-languageserver
 vscode-js-languageserver
 eslint
 eslint-eslint-language-server
+# TOML
+taplo
 
 # Nvidia GPU
 nvidia
