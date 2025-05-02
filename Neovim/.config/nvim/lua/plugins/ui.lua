@@ -8,8 +8,12 @@ local nvim_tree = {
             sync_root_with_cwd = true,
             -- Show LSP and COC diagnostics in the signcolumn.
             diagnostics = { enable = true },
-            view = { signcolumn = "auto", number = true, relativenumber = true, },
-            renderer = { icons = { show = { folder_arrow = false, }, }, },
+            view = {
+                signcolumn = "auto",
+                number = true,
+                relativenumber = true,
+            },
+            renderer = { icons = { show = { folder_arrow = false } } },
         })
         -- Map F1 as mandate file manager.
         vim.keymap.set(
@@ -23,7 +27,8 @@ local nvim_tree = {
 
 -- Render color of a color code.
 local colorizer = {
-    "NvChad/nvim-colorizer.lua", config = true,
+    "NvChad/nvim-colorizer.lua",
+    config = true,
     event = "VeryLazy",
 }
 
@@ -61,7 +66,8 @@ local lualine = {
 
 -- Make indents more obvious with vertical lines.
 local indentline = {
-    "lukas-reineke/indent-blankline.nvim", config = true,
+    "lukas-reineke/indent-blankline.nvim",
+    config = true,
     -- This is the official instruction, and I do not know what their point are.
     main = "ibl",
 }

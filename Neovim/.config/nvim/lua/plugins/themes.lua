@@ -94,7 +94,7 @@ local catppuccin = {
 local zenbones = {
     "mcchrish/zenbones.nvim",
     dependencies = {
-        "rktjmp/lush.nvim"
+        "rktjmp/lush.nvim",
     },
     names = {
         "zenwritten",

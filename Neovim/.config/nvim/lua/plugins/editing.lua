@@ -12,28 +12,29 @@ local surround = {
 }
 
 local autotag = {
-    "windwp/nvim-ts-autotag", config = true,
+    "windwp/nvim-ts-autotag",
+    config = true,
 }
 
 -- formatter
 local conform = {
-    'stevearc/conform.nvim',
+    "stevearc/conform.nvim",
     config = function()
         require("conform").setup({
             formatters_by_ft = {
-                html = { 'prettier' },
-                css = { 'prettier' },
-                json = { 'prettier' },
+                html = { "prettier" },
+                css = { "prettier" },
+                json = { "prettier" },
                 -- deno = { 'prettier' },
-                yaml = { 'prettier' },
-                markdown = { 'prettier' },
-                typescript = { 'prettier' },
+                yaml = { "prettier" },
+                markdown = { "prettier" },
+                typescript = { "prettier" },
                 -- ocaml = { 'ocamlformat' },
                 -- nix = { 'nixpkgs-fmt' },
-                python = { 'ruff_organize_imports' },
+                python = { "ruff_organize_imports" },
                 -- python = { 'ruff_format', 'ruff_fix' },
-                toml = { 'taplo' },
-                lua = { 'stylua' },
+                toml = { "taplo" },
+                lua = { "stylua" },
             },
             format_on_save = {
                 -- These options will be passed to conform.format()

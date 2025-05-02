@@ -64,15 +64,15 @@ vim.opt.laststatus = 3
 -- Enable spell checker in some filetypes.
 vim.api.nvim_create_autocmd("FileType", {
     pattern = {
-        "markdown",  -- Markdown files (.md), commonly used for writing and note-taking
-        "text",      -- Plain text files (.txt), general writing
+        "markdown", -- Markdown files (.md), commonly used for writing and note-taking
+        "text", -- Plain text files (.txt), general writing
         "gitcommit", -- Git commit messages (COMMIT_EDITMSG), helps prevent typos
         "gitrebase", -- Git interactive rebase messages
-        "mail",      -- Email composition
-        "tex",       -- LaTeX documents, academic writing
-        "asciidoc",  -- AsciiDoc format for structured documentation
-        "rst",       -- reStructuredText (.rst), often used for Python documentation
-        "norg"       -- Neorg, a note-taking format specifically for Neovim
+        "mail", -- Email composition
+        "tex", -- LaTeX documents, academic writing
+        "asciidoc", -- AsciiDoc format for structured documentation
+        "rst", -- reStructuredText (.rst), often used for Python documentation
+        "norg", -- Neorg, a note-taking format specifically for Neovim
     },
     command = "setlocal spell",
 })
@@ -136,7 +136,15 @@ vim.loader.enable()
 
 -- Set two spaces for some filetypes, especially web development.
 vim.api.nvim_create_autocmd("FileType", {
-    pattern = { "javascript", "javascriptreact", "typescript", "typescriptreact", "html", "css", "json" },
+    pattern = {
+        "javascript",
+        "javascriptreact",
+        "typescript",
+        "typescriptreact",
+        "html",
+        "css",
+        "json",
+    },
     callback = function()
         vim.bo.shiftwidth = 2
         vim.bo.tabstop = 2
