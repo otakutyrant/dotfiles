@@ -32,6 +32,8 @@ local conform = {
                 -- nix = { 'nixpkgs-fmt' },
                 python = { 'ruff_organize_imports' },
                 -- python = { 'ruff_format', 'ruff_fix' },
+                toml = { 'taplo' },
+                lua = { 'stylua' },
             },
             format_on_save = {
                 -- These options will be passed to conform.format()
