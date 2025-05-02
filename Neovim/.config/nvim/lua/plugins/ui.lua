@@ -1,28 +1,24 @@
 -- A file manager.
-local nvim_tree = {
-    "nvim-tree/nvim-tree.lua",
-    dependencies = "nvim-tree/nvim-web-devicons", -- For file icons.
-    config = function()
-        require("nvim-tree").setup({
-            -- Changes the tree root directory on `DirChanged` and refreshes the tree.
-            sync_root_with_cwd = true,
-            -- Show LSP and COC diagnostics in the signcolumn.
-            diagnostics = { enable = true },
-            view = {
-                signcolumn = "auto",
-                number = true,
-                relativenumber = true,
-            },
-            renderer = { icons = { show = { folder_arrow = false } } },
-        })
-        -- Map F1 as mandate file manager.
+local neo_tree = {
+    "nvim-neo-tree/neo-tree.nvim",
+    branch = "v3.x",
+    dependencies = {
+        "nvim-lua/plenary.nvim",
+        "nvim-tree/nvim-web-devicons", -- not strictly required, but recommended
+        "MunifTanjim/nui.nvim",
+        { "3rd/image.nvim", opts = {} }, -- Optional image support in preview window: See `# Preview Mode` for more information
+    },
+    lazy = false, -- neo-tree will lazily load itself
+    ---@module "neo-tree"
+    ---@type neotree.Config?
+    opts = {
         vim.keymap.set(
             "n",
-            "<F1>",
-            ":NvimTreeToggle<CR>",
-            { desc = "Toggle nvim-tree." }
-        )
-    end,
+            "<F2>",
+            ":Neotree toggle<CR>",
+            { desc = "Toggle neo-tree." }
+        ),
+    },
 }
 
 -- Render color of a color code.
@@ -77,7 +73,7 @@ local rainbow_delimiters = {
 }
 
 return {
-    nvim_tree,
+    neo_tree,
     colorizer,
     lualine,
     indentline,
