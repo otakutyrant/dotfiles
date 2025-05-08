@@ -157,8 +157,9 @@ vim.api.nvim_create_autocmd("FileType", {
 
 -- ## Modified keymaps
 
--- Set mapleader as space rather than comma, the later is used for search jump.
+-- Set mapleader and maplocalleader as space rather than comma, the later is used for search jump.
 vim.g.mapleader = " "
+vim.g.maplocalleader = " " -- <\> as the local leader key, may be userd by some plugins
 
 -- ## Additional keymaps
 --
