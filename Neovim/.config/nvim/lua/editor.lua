@@ -249,17 +249,63 @@ vim.keymap.set(
     { desc = "Jump to the tenth tabpage." }
 )
 
--- Do not jump when hitting `*`.
--- https://github.com/neovim/neovim/discussions/24285#discussioncomment-6420615
-local function map_star()
-    vim.fn.setreg(
-        "/",
-        [[\V\<]] .. vim.fn.escape(vim.fn.expand("<cword>"), [[/\]]) .. [[\>]]
-    )
+-- Enhance `*` so that it can show the matched results outside the current file.
+-- https://github.com/MagicDuck/grug-far.nvim TODO: maybe this is better
+local function map_star_with_rg()
+    local word = vim.fn.expand("<cword>")
+    local _ = vim.fn.escape(word, [[\/.*$^~[]]) -- escape for ripgrep
+
+    -- Do not jump when hitting `*`.
+    -- https://github.com/neovim/neovim/discussions/24285#discussioncomment-6420615
+    local pattern = [[\V\<]] .. vim.fn.escape(word, [[/\]]) .. [[\>]]
+    vim.fn.setreg("/", pattern)
     vim.fn.histadd("/", vim.fn.getreg("/"))
     vim.opt.hlsearch = true
+
+    -- Save the current cursor position before running rg
+    local cursor_pos = vim.fn.getcurpos()
+
+    -- run rg with vimgrep output
+    local current_file = vim.fn.expand("%:p")
+    local rg_cmd = { "rg", "--vimgrep", "--smart-case", word }
+    local output = vim.fn.systemlist(rg_cmd)
+
+    if vim.v.shell_error ~= 0 or #output == 0 then
+        return
+    end
+
+    -- filter out matches from current file
+    local other_files = {}
+    for _, line in ipairs(output) do
+        if not vim.startswith(line, current_file .. ":") then
+            table.insert(other_files, line)
+        end
+    end
+
+    if #other_files > 0 then
+        local winid = vim.fn.win_getid()
+        local view = vim.fn.winsaveview()
+
+        vim.fn.setqflist({}, " ", {
+            title = "rg results for: " .. word,
+            lines = other_files,
+        })
+        vim.cmd("copen")
+
+        -- Restore cursor position in the original window
+        vim.fn.win_gotoid(winid)
+        vim.fn.winrestview(view)
+
+        -- Move the cursor back to the word's first character
+        vim.fn.cursor(cursor_pos[2], cursor_pos[3]) -- Move to line, column
+    end
 end
-vim.keymap.set("n", "*", map_star)
+vim.keymap.set(
+    "n",
+    "*",
+    map_star_with_rg,
+    { desc = "Search word with rg and show QuickFix if used elsewhere" }
+)
 
 -- ## Windows management
 
