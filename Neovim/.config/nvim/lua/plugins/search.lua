@@ -9,14 +9,6 @@ local telescope = {
     config = function()
         -- Get fzf loaded and working with telescope.
         require("telescope").load_extension("fzf")
-        -- The official recommended keymaps for telescope.
-        local builtin = require("telescope.builtin")
-        vim.keymap.set("n", "<leader>ff", builtin.find_files, {})
-        vim.keymap.set("n", "<leader>fg", builtin.live_grep, {})
-        vim.keymap.set("n", "<leader>fw", builtin.grep_string, {})
-        vim.keymap.set("n", "<leader>fb", builtin.buffers, {})
-        vim.keymap.set("n", "<leader>fh", builtin.help_tags, {})
-        vim.keymap.set("n", "<leader>fr", builtin.registers, {})
         -- File and text search in hidden files and directories
         --https://github.com/nvim-telescope/telescope.nvim/wiki/Configuration-Recipes#file-and-text-search-in-hidden-files-and-directories
         local telescope = require("telescope")
@@ -48,8 +40,15 @@ local telescope = {
             },
         })
     end,
+    -- The official recommended keymaps for telescope.
+    keys = {
+        { "<leader>ff", require("telescope.builtin").find_files, { desc = "Telescope find files"} },
+        { "<leader>fg", require("telescope.builtin").live_grep, { desc = "Telescope live grep"} },
+        { "<leader>fb", require("telescope.builtin").buffers, { desc = "Telescope buffers"} },
+        { "<leader>fh", require("telescope.builtin").help_tags, { desc = "Telescope find help tags"}},
+        { "<leader>fr", require("telescope.builtin").registers, { desc = "Telescope registers"} },
+    },
 }
-
 -- Highlight and number the result when you use f or F to search a char.
 local fFHighlight = {
     "kevinhwang91/nvim-fFHighlight",
