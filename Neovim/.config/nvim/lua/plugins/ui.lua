@@ -45,6 +45,7 @@ local indentline = {
     main = "ibl", -- This is the official instruction.
 }
 
+-- Show rainbow parentheses.
 local rainbow_delimiters = {
     "HiPhish/rainbow-delimiters.nvim",
 }
