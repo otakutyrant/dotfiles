@@ -60,8 +60,20 @@ lspconfig.lua_ls.setup({
 })
 
 -- Python
-lspconfig.pyright.setup({}) -- for type checking
 lspconfig.ruff.setup({}) -- for linting and formatting
+-- Use pyright only for type checking and other ls features.
+lspconfig.pyright.setup({
+    settings = {
+        pyright = {
+            disableOrganizeImports = true, -- Using Ruff's import organizer instead
+        },
+        python = {
+            analysis = {
+                ignore = { "*" }, -- Ignore all files for analysis to exclusively use Ruff for linting
+            },
+        },
+    },
+})
 
 -- HTML & CSS
 -- Neovim does not currently include built-in snippets.

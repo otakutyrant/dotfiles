@@ -31,8 +31,7 @@ local conform = {
                 typescript = { "prettier" },
                 -- ocaml = { 'ocamlformat' },
                 -- nix = { 'nixpkgs-fmt' },
-                python = { "ruff_organize_imports" },
-                -- python = { 'ruff_format', 'ruff_fix' },
+                python = {}, -- Python formatter is provided by ruff ls.
                 toml = { "taplo" },
                 lua = { "stylua" },
             },
