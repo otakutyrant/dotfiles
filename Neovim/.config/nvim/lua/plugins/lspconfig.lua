@@ -54,7 +54,7 @@ lspconfig.lua_ls.setup({
     end,
     settings = {
         Lua = {
-            format = { enable = false },
+            format = { enable = false }, -- disable formatter in favor of stylua
         },
     },
 })

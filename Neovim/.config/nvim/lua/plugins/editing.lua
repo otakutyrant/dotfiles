@@ -33,7 +33,7 @@ local conform = {
                 -- nix = { 'nixpkgs-fmt' },
                 python = {}, -- Python formatter is provided by ruff ls.
                 toml = { "taplo" },
-                lua = { "stylua" },
+                lua = { "stylua" }, -- and lua_ls's formatter is disabled elsewhere
             },
             format_on_save = {
                 -- These options will be passed to conform.format()
