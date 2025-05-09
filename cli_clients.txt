@@ -1,14 +1,6 @@
 # To install all packages from this file, execute `pikaur -S --needed (sed 's/\s*#.*$//' cli_clients.txt | tr '\n' ' ' | str trim | split row " " | filter {|it| $it != ""})`
 
-htop # Interactive Process Viewer
-
-page-git # Pager
-
-# Linux Manual
-man-db
-tldr
-
-# File Manager
+# File Navigator
 yazi
 tree
 gvfs-mtp # Virtual filesystem implementation for GIO (Android, media player).
@@ -16,16 +8,6 @@ gvfs-smb # For SMB protocol.
 ntfs-3g # Microsoft Windows filesystem NTFS.
 fd # Simple, fast and user-friendly alternative to find.
 zoxide # jump tool
-
-stow # Dofiles mamanger
-
-tmux # Terminal Multiplexer
-
-bash zsh nushell # Shell
-
-neovim python-pynvim # Editor
-
-vimv # Rename multiple files
 
 # Network
 curl
@@ -38,39 +20,33 @@ whois
 yt-dlp # Youtube Downloader
 
 # Development
-make cmake # Building
-python-pre-commit # pre-commit
-lua stylua lua-language-server # Lua
-bash-language-server # Bash
-yamlfmt # YAML
-rust cargo # Rust
-cloc # Code analysis
-docker # Container
-opencv python-opencv # Image Processing
-gdb # Debug
-ripgrep # Grep
-fzf # Fuzzy search tool
-git # Version Control Tool
-# Python
+## General
+neovim python-pynvim # editor
+prettier # formatter for html, css, json, yaml, markdown, typescript
+cloc # code analysis
+ripgrep # grep
+fzf # fuzzy search
+git # version control
+page-git # pager powered by neovim
+tldr # document reader
+vimv # rename multiple files, written in Rust
+## Python
 python
-python-pip
-ruff python-ruff ruff-lsp
-pyright # LSP
-ipython
-flake8
-python-isort
-# Python Library
-python-sh
-python-srt
-prettier # formatter for front-end development
-# Web
-vscode-html-languageserver
-vscode-css-languageserver
-vscode-js-languageserver
-eslint
-eslint-eslint-language-server
-# TOML
-taplo
+ipython # better repl
+python-pip # package manager
+uv # supreme package manager
+ruff # linter and formatter. I am not sure what ruff-python is for.
+pyright # ls and type checker
+## Rust
+rust
+cargo # package manager
+## Lua
+lua
+stylua # formatter
+lua-language-server
+## Others
+yamlfmt # yaml formatter
+taplo # toml formatter
 
 # Nvidia GPU
 nvidia
@@ -109,3 +85,6 @@ python-sounddevice # Importing this in Python can suppress unnecessary ALSA erro
 # Others
 words # A collection of International 'words' files for /usr/share/dict.
 xdg-user-dirs # Generate common user directories.
+stow # Dofiles mamanger
+tmux # Terminal Multiplexer
+bash zsh nushell # Shell
