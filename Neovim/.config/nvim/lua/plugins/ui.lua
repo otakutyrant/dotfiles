@@ -4,6 +4,18 @@ local neo_tree = {
     branch = "v3.x",
     lazy = false, -- neo-tree will lazily load itself
     ---@module "neo-tree"
+    opts = {
+        event_handlers = {
+            {
+                -- show numbers in neo-tree
+                event = "neo_tree_buffer_enter", 
+                handler = function(_)
+                    vim.cmd([[ setlocal number ]])
+                    vim.cmd([[ setlocal relativenumber ]])
+                end,
+            },
+        },
+    },
     keys = {
         {
             "<F1>", -- this will overwrite its origin feature: neovim-help, but the later is useless anyway
