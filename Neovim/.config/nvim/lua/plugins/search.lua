@@ -16,6 +16,7 @@ local telescope = {
         vim.keymap.set("n", "<leader>fw", builtin.grep_string, {})
         vim.keymap.set("n", "<leader>fb", builtin.buffers, {})
         vim.keymap.set("n", "<leader>fh", builtin.help_tags, {})
+        vim.keymap.set("n", "<leader>fr", builtin.registers, {})
         -- File and text search in hidden files and directories
         --https://github.com/nvim-telescope/telescope.nvim/wiki/Configuration-Recipes#file-and-text-search-in-hidden-files-and-directories
         local telescope = require("telescope")
