@@ -1,7 +1,7 @@
 local comment = {
     "numToStr/Comment.nvim",
     opts = {},
-    event = { "BufReadPre", "BufNewFile" },
+    event = "VeryLazy",
 }
 
 local surround = {
@@ -12,7 +12,7 @@ local surround = {
 }
 
 local autotag = {
-    "windwp/nvim-ts-autotag",
+    "windwp/nvim-ts-autotag", -- It is lazy enough.
     opts = {},
 }
 

@@ -54,6 +54,7 @@ local telescope = {
 local fFHighlight = {
     "kevinhwang91/nvim-fFHighlight",
     opts = {},
+    event = "VeryLazy",
 }
 
 local rg = {
