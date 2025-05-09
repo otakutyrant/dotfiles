@@ -19,6 +19,7 @@ local autotag = {
 -- formatter
 local conform = {
     "stevearc/conform.nvim",
+    event = "BufWritePost",
     opts = {
         formatters_by_ft = {
             html = { "prettier" },
