@@ -73,6 +73,11 @@ local whichkey = {
     },
 }
 
+local gitsigns = {
+    "lewis6991/gitsigns.nvim",
+    opts = {},
+}
+
 return {
     neo_tree,
     lualine,
@@ -80,4 +85,5 @@ return {
     rainbow_delimiters,
     nvim_web_devicons,
     whichkey,
+    gitsigns,
 }
