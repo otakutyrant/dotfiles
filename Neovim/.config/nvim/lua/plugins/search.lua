@@ -1,7 +1,6 @@
 -- A highly extendable fuzzy finder over lists.
 local telescope = {
     "nvim-telescope/telescope.nvim",
-    event = "VeryLazy",
     dependencies = {
         -- An fzf extension for telescope, writen in C.
         { "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
