@@ -53,7 +53,7 @@ local telescope = {
 -- Highlight and number the result when you use f or F to search a char.
 local fFHighlight = {
     "kevinhwang91/nvim-fFHighlight",
-    config = true,
+    opts = {},
 }
 
 local rg = {

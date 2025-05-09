@@ -24,7 +24,7 @@ local neo_tree = {
 -- Render color of a color code.
 local colorizer = {
     "NvChad/nvim-colorizer.lua",
-    config = true,
+    opts = {},
     event = "VeryLazy",
 }
 
@@ -33,37 +33,35 @@ local lualine = {
     "nvim-lualine/lualine.nvim",
     lazy = false,
     dependencies = "nvim-tree/nvim-web-devicons", -- For file icons.
-    config = function()
-        require("lualine").setup({
-            sections = {
-                lualine_a = {
-                    "filename",
-                },
-                lualine_b = {
-                    "branch",
-                    "diff",
-                    "diagnostics",
-                },
-                lualine_c = {},
-                lualine_x = {},
-                lualine_y = {
-                    "%{get(g:, 'real_colors_name')}", -- colorscheme
-                    "encoding",
-                    "fileformat",
-                    "filetype",
-                },
-                lualine_z = {
-                    "location",
-                },
+    opts = {
+        sections = {
+            lualine_a = {
+                "filename",
             },
-        })
-    end,
+            lualine_b = {
+                "branch",
+                "diff",
+                "diagnostics",
+            },
+            lualine_c = {},
+            lualine_x = {},
+            lualine_y = {
+                "%{get(g:, 'real_colors_name')}", -- colorscheme
+                "encoding",
+                "fileformat",
+                "filetype",
+            },
+            lualine_z = {
+                "location",
+            },
+        },
+    },
 }
 
 -- Make indents more obvious with vertical lines.
 local indentline = {
     "lukas-reineke/indent-blankline.nvim",
-    config = true,
+    opts = {},
     -- This is the official instruction, and I do not know what their point are.
     main = "ibl",
 }

@@ -6,13 +6,11 @@ local nvim_treesitter = {
     event = { "BufReadPost", "BufNewFile" },
     -- Automatically update all parsers when the plugin is installed or updated.
     build = ":TSUpdate",
-    config = function()
-        require("nvim-treesitter.configs").setup({
-            -- Install all parsers.
-            ensure_installed = "all",
-            highlight = { enable = true },
-        })
-    end,
+    opts = {
+        -- Install all parsers.
+        ensure_installed = "all",
+        highlight = { enable = true },
+    },
 }
 
 -- Show the context of the currently visible buffer contents when you scroll.
@@ -20,6 +18,7 @@ local nvim_treesitter_context = {
     "nvim-treesitter/nvim-treesitter-context",
     event = { "BufReadPost", "BufNewFile" },
     dependencies = { "nvim-treesitter/nvim-treesitter" },
+    opts = {},
 }
 
 -- TODO: find out what is the point of nvim-treesitter-textobjects and whether to use it.

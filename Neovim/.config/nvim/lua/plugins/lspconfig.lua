@@ -89,7 +89,7 @@ lspconfig.eslint.setup({})
 -- Actually this is not a language server.
 local typescript_tools = {
     "pmizio/typescript-tools.nvim",
-    config = true,
+    opts = {},
     dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
 }
 
