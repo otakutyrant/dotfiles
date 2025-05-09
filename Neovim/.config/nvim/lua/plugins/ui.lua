@@ -11,13 +11,12 @@ local neo_tree = {
     lazy = false, -- neo-tree will lazily load itself
     ---@module "neo-tree"
     ---@type neotree.Config?
-    opts = {
-        vim.keymap.set(
-            "n",
+    keys = {
+        {
             "<F1>", -- this will overwrite its origin feature: neovim-help, but the later is useless anyway
             ":Neotree toggle<CR>",
-            { desc = "Toggle neo-tree." }
-        ),
+            { desc = "Toggle neo-tree." },
+        },
     },
 }
 

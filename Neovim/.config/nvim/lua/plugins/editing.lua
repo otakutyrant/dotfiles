@@ -40,12 +40,15 @@ local conform = {
             lsp_format = "fallback",
         },
     },
-    config = function(_, opts)
-        require("conform").setup(opts)
-        vim.keymap.set("n", "<leader>tw", function()
-            require("conform").format({ formatters = { "trim_whitespace" } })
-        end, { desc = "Trim trailing whitespace" })
-    end,
+    keys = {
+        {
+            "<leader>tw",
+            function()
+                require("conform").format({ formatters = { "trim_whitespace" } })
+            end,
+            desc = "Trim trailing whitespace",
+        },
+    },
 }
 
 return {
