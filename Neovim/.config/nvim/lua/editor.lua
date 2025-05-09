@@ -277,8 +277,12 @@ local function map_star_with_rg()
     -- filter out matches from current file
     local other_files = {}
     for _, line in ipairs(output) do
-        if not vim.startswith(line, current_file .. ":") then
-            table.insert(other_files, line)
+        local file_path = line:match("^(.-):%d+:%d+:")
+        if file_path then
+            local abs_path = vim.fn.fnamemodify(file_path, ":p")
+            if abs_path ~= current_file then
+                table.insert(other_files, line)
+            end
         end
     end
 
