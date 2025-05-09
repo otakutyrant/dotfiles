@@ -1,6 +1,0 @@
-# As for line length, follow black style:
-# https://black.readthedocs.io/en/stable/the_black_code_style/current_style.html#line-length
-# Note that Ruff doesn't support C and B950 directly: https://github.com/charliermarsh/ruff/issues/389
-line-length = 88
-# As for rules, see: https://beta.ruff.rs/docs/rules/
-select = ["E", "F", "W", "B"]
