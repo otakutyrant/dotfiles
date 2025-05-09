@@ -8,7 +8,7 @@ local neo_tree = {
         event_handlers = {
             {
                 -- show numbers in neo-tree
-                event = "neo_tree_buffer_enter", 
+                event = "neo_tree_buffer_enter",
                 handler = function(_)
                     vim.cmd([[ setlocal number ]])
                     vim.cmd([[ setlocal relativenumber ]])
@@ -23,13 +23,6 @@ local neo_tree = {
             { desc = "Toggle neo-tree." },
         },
     },
-}
-
--- Render color of a color code.
-local colorizer = {
-    "NvChad/nvim-colorizer.lua",
-    opts = {},
-    event = "VeryLazy",
 }
 
 -- Enhance statusline.
@@ -98,7 +91,6 @@ local whichkey = {
 
 return {
     neo_tree,
-    colorizer,
     lualine,
     indentline,
     rainbow_delimiters,
