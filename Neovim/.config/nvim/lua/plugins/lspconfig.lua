@@ -85,25 +85,6 @@ vim.lsp.config("pyright", {
     },
 })
 
--- HTML & CSS
--- Neovim does not currently include built-in snippets.
--- These two language servers only provides completions when snippet support is enabled.
--- So enable (broadcasting) snippet capability for completion
-local capabilities = vim.lsp.protocol.make_client_capabilities()
-capabilities.textDocument.completion.completionItem.snippetSupport = true
-vim.lsp.enable("html")
-vim.lsp.config("html", { capabilities = capabilities })
-vim.lsp.enable("cssls")
-vim.lsp.config("cssls", { capabilities = capabilities })
-vim.lsp.enable("eslint")
-
--- TypeScript & JavaScript
--- Actually this is not a language server.
-local typescript_tools = {
-    "pmizio/typescript-tools.nvim",
-    opts = {},
-}
-
 -- TODO: To exploit lsp fully, like vim.lsp.buf.declaration and vim.lsp.buf.definition
 -- Use LspAttach autocommand to map some lsp-buf functions.
 
@@ -113,6 +94,5 @@ vim.lsp.enable("nushell")
 -- # Final
 
 return {
-    typescript_tools,
     nvim_lspconfig,
 }
