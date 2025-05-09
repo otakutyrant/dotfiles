@@ -1,19 +1,16 @@
+-- Advanded comment support
 local comment = {
     "numToStr/Comment.nvim",
     opts = {},
     event = "VeryLazy",
 }
 
+-- Enhance pairs editing.
 local surround = {
     "kylechui/nvim-surround",
     opts = {},
     version = "*", -- Use for stability; omit to use `main` branch for the latest features.
     event = "VeryLazy",
-}
-
-local autotag = {
-    "windwp/nvim-ts-autotag", -- It is lazy enough.
-    opts = {},
 }
 
 -- formatter
