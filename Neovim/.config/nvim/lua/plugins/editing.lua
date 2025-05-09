@@ -42,7 +42,7 @@ local conform = {
     },
     keys = {
         {
-            "<leader>tw",
+            "<leader>rtw",
             function()
                 require("conform").format({ formatters = { "trim_whitespace" } })
             end,
