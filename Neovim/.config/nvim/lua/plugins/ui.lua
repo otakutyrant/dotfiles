@@ -68,6 +68,22 @@ local nvim_web_devicons = {
     lazy = true,
 }
 
+-- Show available keybindings in a popup as you type.
+local whichkey = {
+    "folke/which-key.nvim",
+    event = "VeryLazy",
+    opts = {},
+    keys = {
+        {
+            "<leader>?",
+            function()
+                require("which-key").show({ global = false })
+            end,
+            desc = "Buffer Local Keymaps (which-key)",
+        },
+    },
+}
+
 return {
     neo_tree,
     colorizer,
@@ -75,4 +91,5 @@ return {
     indentline,
     rainbow_delimiters,
     nvim_web_devicons,
+    whichkey,
 }
