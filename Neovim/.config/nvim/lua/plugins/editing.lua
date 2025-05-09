@@ -52,6 +52,5 @@ local conform = {
 return {
     comment,
     surround,
-    autotag,
     conform,
 }
