@@ -90,7 +90,6 @@ lspconfig.eslint.setup({})
 local typescript_tools = {
     "pmizio/typescript-tools.nvim",
     opts = {},
-    dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
 }
 
 -- TODO: To exploit lsp fully, like vim.lsp.buf.declaration and vim.lsp.buf.definition

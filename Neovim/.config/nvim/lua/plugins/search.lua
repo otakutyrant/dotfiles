@@ -3,7 +3,6 @@ local telescope = {
     "nvim-telescope/telescope.nvim",
     event = "VeryLazy",
     dependencies = {
-        { "nvim-lua/plenary.nvim" }, -- Library API.
         -- An fzf extension for telescope, writen in C.
         { "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
     },
