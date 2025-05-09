@@ -1,43 +1,57 @@
 local nvim_cmp = {
     "hrsh7th/nvim-cmp",
-    event = "InsertEnter",
     dependencies = {
-        "hrsh7th/cmp-nvim-lsp",
-        "hrsh7th/cmp-buffer",
-        "hrsh7th/cmp-path",
-        "hrsh7th/cmp-cmdline",
-        -- For Luasnip users.
-        "L3MON4D3/LuaSnip",
-        "saadparwaiz1/cmp_luasnip",
+        "hrsh7th/cmp-nvim-lsp", -- LSP source for nvim-cmp
+        "hrsh7th/cmp-buffer", -- Buffer source
+        "hrsh7th/cmp-path", -- File path completions
+        "hrsh7th/cmp-cmdline", -- Command line completions
+        -- LuaSnip and its cmp source
+        "L3MON4D3/LuaSnip", -- Snippet engine
+        "saadparwaiz1/cmp_luasnip", -- Completion source for LuaSnip
     },
-    opts = function(_, opts)
+    config = function()
         local cmp = require("cmp")
-        local luasnip = require("luasnip")
 
-        opts.snippet = {
-            expand = function(args)
-                luasnip.lsp_expand(args.body)
-            end,
-        }
-
-        opts.mapping = vim.tbl_extend("force", opts.mapping or {}, {
-            ["<C-n>"] = cmp.mapping.select_next_item(),
-            ["<C-p>"] = cmp.mapping.select_prev_item(),
-            ["<C-b>"] = cmp.mapping.scroll_docs(-4),
-            ["<C-f>"] = cmp.mapping.scroll_docs(4),
-            ["<C-e>"] = cmp.mapping.abort(),
-            ["<CR>"] = cmp.mapping.confirm({ select = true }),
+        cmp.setup({
+            snippet = {
+                -- REQUIRED: define how snippets are expanded
+                expand = function(args)
+                    require("luasnip").lsp_expand(args.body) -- For LuaSnip users
+                end,
+            },
+            mapping = cmp.mapping.preset.insert({
+                ["<C-b>"] = cmp.mapping.scroll_docs(-4),
+                ["<C-f>"] = cmp.mapping.scroll_docs(4),
+                ["<C-Space>"] = cmp.mapping.complete(),
+                ["<C-e>"] = cmp.mapping.abort(),
+                ["<CR>"] = cmp.mapping.confirm({ select = true }), -- Accept selected item or first item
+            }),
+            sources = cmp.config.sources({
+                { name = "nvim_lsp" },
+                { name = "luasnip" }, -- For LuaSnip users
+            }, {
+                { name = "buffer" },
+            }),
         })
 
-        opts.sources = cmp.config.sources({
-            { name = "nvim_lsp" },
-            { name = "luasnip" },
-        }, {
-            { name = "path" },
-            { name = "buffer" },
+        -- Cmdline completions for `/` and `?`
+        cmp.setup.cmdline({ "/", "?" }, {
+            mapping = cmp.mapping.preset.cmdline(),
+            sources = {
+                { name = "buffer" },
+            },
         })
 
-        return opts
+        -- Cmdline completions for ':'
+        cmp.setup.cmdline(":", {
+            mapping = cmp.mapping.preset.cmdline(),
+            sources = cmp.config.sources({
+                { name = "path" },
+            }, {
+                { name = "cmdline" },
+            }),
+            matching = { disallow_symbol_nonprefix_matching = false },
+        })
     end,
 }
 
