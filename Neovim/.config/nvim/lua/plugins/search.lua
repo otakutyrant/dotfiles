@@ -57,12 +57,7 @@ local fFHighlight = {
     event = "VeryLazy",
 }
 
-local rg = {
-    "duane9/nvim-rg",
-}
-
 return {
     telescope,
     fFHighlight,
-    rg,
 }
