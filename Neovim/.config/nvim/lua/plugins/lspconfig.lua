@@ -8,49 +8,54 @@ local nvim_lspconfig = {
 -- # Language Server setups
 -- Here are setups for some language servers, and all of them are used in lspconfig.
 
--- Firstly, fetch lspconfig to add setups.
-local lspconfig = require("lspconfig")
-
 -- Lua
 -- This setup make lua-language-server handles Neovim lua-related config and even plugins code.
 -- It is copied from https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md#lua_ls,
 -- without me understanding it fully. Note that I replaced `vim.loop` with `vim.uv` since the former is deprecated in Neovim 0.10
-lspconfig.lua_ls.setup({
+vim.lsp.enable("lua_ls")
+vim.lsp.config("lua_ls", {
     on_init = function(client)
         if client.workspace_folders then
             local path = client.workspace_folders[1].name
             if
                 path ~= vim.fn.stdpath("config")
-                and (
-                    vim.uv.fs_stat(path .. "/.luarc.json")
-                    or vim.uv.fs_stat(path .. "/.luarc.jsonc")
-                )
+                and (vim.uv.fs_stat(path .. "/.luarc.json") or vim.uv.fs_stat(path .. "/.luarc.jsonc"))
             then
                 return
             end
         end
 
-        client.config.settings.Lua =
-            vim.tbl_deep_extend("force", client.config.settings.Lua, {
-                runtime = {
-                    -- Tell the language server which version of Lua you"re using
-                    -- (most likely LuaJIT in the case of Neovim)
-                    version = "LuaJIT",
+        client.config.settings.Lua = vim.tbl_deep_extend("force", client.config.settings.Lua, {
+            runtime = {
+                -- Tell the language server which version of Lua you're using (most
+                -- likely LuaJIT in the case of Neovim)
+                version = "LuaJIT",
+                -- Tell the language server how to find Lua modules same way as Neovim
+                -- (see `:h lua-module-load`)
+                path = {
+                    "lua/?.lua",
+                    "lua/?/init.lua",
                 },
-                -- Make the server aware of Neovim runtime files
-                workspace = {
-                    checkThirdParty = false,
-                    library = {
-                        vim.env.VIMRUNTIME,
-                        -- Solve the issue about undefined `vim.uv.fs_stat`
-                        -- See https://github.com/folke/lazy.nvim/discussions/1349#discussioncomment-9122673
-                        "${3rd}/luv/library",
-                        -- "${3rd}/busted/library",
-                    },
-                    -- or pull in all of "runtimepath". NOTE: this is a lot slower and will cause issues when working on your own configuration (see https://github.com/neovim/nvim-lspconfig/issues/3189)
-                    -- library = vim.api.nvim_get_runtime_file("", true)
+            },
+            -- Make the server aware of Neovim runtime files
+            workspace = {
+                checkThirdParty = false,
+                library = {
+                    vim.env.VIMRUNTIME,
+                    -- Depending on the usage, you might want to add additional paths
+                    -- here.
+                    -- '${3rd}/luv/library'
+                    -- '${3rd}/busted/library'
                 },
-            })
+                -- Or pull in all of 'runtimepath'.
+                -- NOTE: this is a lot slower and will cause issues when working on
+                -- your own configuration.
+                -- See https://github.com/neovim/nvim-lspconfig/issues/3189
+                -- library = {
+                --   vim.api.nvim_get_runtime_file('', true),
+                -- }
+            },
+        })
     end,
     settings = {
         Lua = {
@@ -60,9 +65,10 @@ lspconfig.lua_ls.setup({
 })
 
 -- Python
-lspconfig.ruff.setup({}) -- for linting and formatting
+vim.lsp.enable("ruff")
 -- Use pyright only for type checking and other ls features.
-lspconfig.pyright.setup({
+vim.lsp.enable("pyright")
+vim.lsp.config("pyright", {
     settings = {
         pyright = {
             disableOrganizeImports = true, -- Using Ruff's import organizer instead
@@ -81,9 +87,11 @@ lspconfig.pyright.setup({
 -- So enable (broadcasting) snippet capability for completion
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities.textDocument.completion.completionItem.snippetSupport = true
-lspconfig.html.setup({ capabilities = capabilities })
-lspconfig.cssls.setup({ capabilities = capabilities })
-lspconfig.eslint.setup({})
+vim.lsp.enable("html")
+vim.lsp.config("html", { capabilities = capabilities })
+vim.lsp.enable("cssls")
+vim.lsp.config("cssls", { capabilities = capabilities })
+vim.lsp.enable("eslint")
 
 -- TypeScript & JavaScript
 -- Actually this is not a language server.
@@ -96,7 +104,7 @@ local typescript_tools = {
 -- Use LspAttach autocommand to map some lsp-buf functions.
 
 -- Nushell
-lspconfig.nushell.setup({})
+vim.lsp.enable("nushell")
 
 -- # Final
 
