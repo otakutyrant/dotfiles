@@ -73,6 +73,7 @@ local whichkey = {
     },
 }
 
+-- Adds signs to the sign column to indicate added, changed, and deleted lines.
 local gitsigns = {
     "lewis6991/gitsigns.nvim",
     opts = {},
