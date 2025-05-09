@@ -42,8 +42,7 @@ local lualine = {
 local indentline = {
     "lukas-reineke/indent-blankline.nvim",
     opts = {},
-    -- This is the official instruction, and I do not know what their point are.
-    main = "ibl",
+    main = "ibl", -- This is the official instruction.
 }
 
 local rainbow_delimiters = {
