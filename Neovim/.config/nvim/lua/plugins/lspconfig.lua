@@ -69,6 +69,11 @@ vim.lsp.config("pyright", {
             },
         },
     },
+    -- These capabilities and on_init is used to fix wrong positionEncoding
+    capabilities = vim.lsp.protocol.make_client_capabilities(),
+    on_init = function(client)
+        client.offset_encoding = "utf-8"
+    end,
 })
 
 -- TODO: To exploit lsp fully, like vim.lsp.buf.declaration and vim.lsp.buf.definition
