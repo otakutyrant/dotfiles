@@ -56,6 +56,7 @@ vim.lsp.config("lua_ls", {
 
 -- Python
 vim.lsp.enable("ruff")
+vim.lsp.config("ruff", {})
 -- Use pyright only for type checking and other ls features.
 vim.lsp.enable("pyright")
 vim.lsp.config("pyright", {
@@ -81,6 +82,7 @@ vim.lsp.config("pyright", {
 
 -- Nushell
 vim.lsp.enable("nushell")
+vim.lsp.config("nushell", {})
 
 -- # Final
 
