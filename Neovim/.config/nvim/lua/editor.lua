@@ -361,3 +361,8 @@ vim.keymap.set(
 -- Disable useless netrw.
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
+
+-- Disable useless providers.
+vim.g.loaded_node_provider = 0
+vim.g.loaded_perl_provider = 0
+vim.g.loaded_ruby_provider = 0
