@@ -44,7 +44,7 @@ local conform = {
             function()
                 require("conform").format({ formatters = { "trim_whitespace" } })
             end,
-            desc = "Trim trailing whitespace",
+            desc = "🛠️ Trim trailing whitespace",
         },
     },
 }

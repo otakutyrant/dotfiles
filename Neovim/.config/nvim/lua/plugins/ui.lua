@@ -20,7 +20,7 @@ local neo_tree = {
         {
             "<F1>", -- this will overwrite its origin feature: neovim-help, but the later is useless anyway
             ":Neotree toggle<CR>",
-            { desc = "Toggle neo-tree." },
+            { desc = "🛠️ Toggle neo-tree." },
         },
     },
 }
@@ -68,7 +68,7 @@ local whichkey = {
             function()
                 require("which-key").show({ global = false })
             end,
-            desc = "Buffer Local Keymaps (which-key)",
+            desc = "🛠️ Buffer Local Keymaps (which-key)",
         },
     },
 }

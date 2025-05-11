@@ -169,84 +169,89 @@ vim.keymap.set(
     "c",
     "w!!",
     "w !sudo tee %",
-    { desc = "Save with sudo privileges." }
+    { desc = "🛠️ Save with sudo privileges." }
 )
 
-vim.keymap.set("n", "<leader>w", ":w<cr>", { desc = "Quick save." })
-vim.keymap.set("n", "<leader>q", ":q<cr>", { desc = "Quick quit." })
+vim.keymap.set("n", "<leader>w", ":w<cr>", { desc = "🛠️ Quick save." })
+vim.keymap.set("n", "<leader>q", ":q<cr>", { desc = "🛠️ Quick quit." })
 vim.keymap.set(
     "n",
     "<leader> ",
     ":nohlsearch<cr>",
-    { desc = "Quick no highlight." }
+    { desc = "🛠️ Quick no highlight." }
 )
-vim.keymap.set("v", "<leader>y", '"+y', { desc = "Copy to system clipboard" })
+vim.keymap.set(
+    "v",
+    "<leader>y",
+    '"+y',
+    { desc = "🛠️ Copy to system clipboard" }
+)
 vim.keymap.set(
     "n",
     "<leader>p",
     '"+p',
-    { desc = "Paste from system clipboard" }
+    { desc = "🛠️ Paste from system clipboard" }
 )
 
 vim.keymap.set(
     "n",
     "<leader>1",
     "1gt<cr>",
-    { desc = "Jump to the first tabpage." }
+    { desc = "🛠️ Jump to the first tabpage." }
 )
 vim.keymap.set(
     "n",
     "<leader>2",
     "2gt<cr>",
-    { desc = "Jump to the second tabpage." }
+    { desc = "🛠️ Jump to the second tabpage." }
 )
 vim.keymap.set(
     "n",
     "<leader>3",
     "3gt<cr>",
-    { desc = "Jump to the third tabpage." }
+    { desc = "🛠️ Jump to the third tabpage." }
 )
 vim.keymap.set(
     "n",
     "<leader>4",
     "4gt<cr>",
-    { desc = "Jump to the fourth tabpage." }
+    { desc = "🛠️ Jump to the fourth tabpage." }
 )
 vim.keymap.set(
     "n",
     "<leader>5",
     "5gt<cr>",
-    { desc = "Jump to the fifth tabpage." }
+    { desc = "🛠️ Jump to the fifth tabpage." }
 )
 vim.keymap.set(
     "n",
     "<leader>6",
     "6gt<cr>",
-    { desc = "Jump to the sixth tabpage." }
+    { desc = "🛠️ Jump to the sixth tabpage." }
 )
 vim.keymap.set(
     "n",
     "<leader>7",
     "7gt<cr>",
-    { desc = "Jump to the seventh tabpage." }
+    { desc = "🛠️ Jump to the seventh tabpage." }
 )
 vim.keymap.set(
     "n",
     "<leader>8",
     "8gt<cr>",
-    { desc = "Jump to the eighth tabpage." }
+    { desc = "🛠️ Jump to the eighth tabpage." }
 )
 vim.keymap.set(
     "n",
     "<leader>9",
     "9gt<cr>",
-    { desc = "Jump to the ninth tabpage." }
+    { desc = "🛠️ Jump to the ninth tabpage." }
 )
 vim.keymap.set(
     "n",
     "<leader>0",
     "10gt<cr>",
-    { desc = "Jump to the tenth tabpage." }
+    { desc = "🛠️ Jump to the tenth tabpage." }
 )
 
 -- Enhance `*` so that it can show the matched results outside the current file.
@@ -308,7 +313,7 @@ vim.keymap.set(
     "n",
     "*",
     map_star_with_rg,
-    { desc = "Search word with rg and show QuickFix if used elsewhere" }
+    { desc = "🛠️ Search word with rg and show QuickFix if used elsewhere" }
 )
 
 -- ## Windows management
@@ -317,38 +322,38 @@ vim.keymap.set(
     "n",
     "<leader>h",
     "<C-W>h",
-    { desc = "Quick move from right to left between windows." }
+    { desc = "🛠️ Quick move from right to left between windows." }
 )
 vim.keymap.set(
     "n",
     "<leader>j",
     "<C-W>j",
-    { desc = "Quick move from up to down between windows." }
+    { desc = "🛠️ Quick move from up to down between windows." }
 )
 vim.keymap.set(
     "n",
     "<leader>k",
     "<C-W>k",
-    { desc = "Quick move from down to up between windows." }
+    { desc = "🛠️ Quick move from down to up between windows." }
 )
 vim.keymap.set(
     "n",
     "<leader>l",
     "<C-W>l",
-    { desc = "Quick move from left to right between windows." }
+    { desc = "🛠️ Quick move from left to right between windows." }
 )
 
 vim.keymap.set(
     "n",
     "<leader>v",
     ":vsplit<cr>",
-    { desc = "Quick split vertically." }
+    { desc = "🛠️ Quick split vertically." }
 )
 vim.keymap.set(
     "n",
     "<leader>s",
     ":split<cr>",
-    { desc = "Quick split horizontally." }
+    { desc = "🛠️ Quick split horizontally." }
 )
 
 -- # Others
