@@ -107,19 +107,15 @@ vim.opt.splitright = true
 vim.opt.splitbelow = true
 -- To avoid failing to find NeoVim module in virtual environment, figure out the system Python for NeoVim.
 -- https://github.com/neovim/neovim/issues/1887#issuecomment-280653872
+local which_command -- This command is used for Nushell!
 if vim.fn.exists("$VIRTUAL_ENV") == 1 then
-    local python_path = vim.fn.substitute(
-        vim.fn.system("which -a python3 | head -n2 | tail -n1"),
-        "\n",
-        "",
-        "g"
-    )
-    vim.g.python3_host_prog = python_path
+    which_command = "which -a python | get 1.path"
 else
-    local python_path =
-        vim.fn.substitute(vim.fn.system("which python3"), "\n", "", "g")
-    vim.g.python3_host_prog = python_path
+    which_command = "which python | get 0.path"
 end
+local python_path =
+    vim.fn.substitute(vim.fn.system(which_command), "\n", "", "g")
+vim.g.python3_host_prog = python_path
 
 -- ## Indentation
 
