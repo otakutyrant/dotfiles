@@ -60,6 +60,15 @@ vim.lsp.config("ruff", {})
 -- Use pyright only for type checking and other ls features.
 vim.lsp.enable("pyright")
 vim.lsp.config("pyright", {
+    root_marker = {
+        "pyproject.toml",
+        -- "setup.py", -- Sometimes misleading.
+        "setup.cfg",
+        "requirements.txt",
+        "Pipfile",
+        "pyrightconfig.json",
+        ".git",
+    },
     settings = {
         pyright = {
             disableOrganizeImports = true, -- Using Ruff's import organizer instead
