@@ -19,4 +19,4 @@ $env.nu-plugins-dir = ( $nu.default-config-dir | path join plugins )
 $env.NU_LIB_DIRS = [ $env.nu-plugins-dir ]
 
 # Export some environment variables about api keys, such as OpenAI.
-source /home/otakutyrant/api_keys.nu
+source ~/api_keys.nu
