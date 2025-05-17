@@ -153,6 +153,8 @@ bindsym $mod+Return exec kitty --session session -1
 bindsym $mod+c exec google-chrome-stable
 # Start dmenu (a program launcher) with dmenu.
 bindsym $mod+d exec rofi -show drun
+# Start cherry studio
+bindsym $mod+a exec cherry-studio
 
 # # Startups
 
