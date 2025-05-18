@@ -25,7 +25,17 @@ local neo_tree = {
     },
 }
 
--- Enhance statusline.
+-- Enhance statusline and inlay hint status.
+vim.api.nvim_set_hl(0, "LualineInlayOn", { fg = "#00ff00", bold = true }) -- Green and bold for "On"
+vim.api.nvim_set_hl(0, "LualineInlayOff", { fg = "#ff0000", bold = true }) -- Red and bold for "Off"
+local function inlay_hint_status()
+    local status = vim.lsp.inlay_hint.is_enabled() and " Inlay"
+        or " Inlay"
+    local highlight = vim.lsp.inlay_hint.is_enabled() and "%#LualineInlayOn#"
+        or "%#LualineInlayOff#"
+    return highlight .. status
+end
+
 local lualine = {
     "nvim-lualine/lualine.nvim",
     lazy = false,
@@ -33,6 +43,7 @@ local lualine = {
         sections = {
             lualine_y = {
                 "%{get(g:, 'real_colors_name')}", -- show colorscheme
+                inlay_hint_status,
             },
         },
     },
