@@ -312,6 +312,18 @@ vim.keymap.set(
     { desc = "🛠️ Search word with rg and show QuickFix if used elsewhere" }
 )
 
+vim.keymap.set(
+    "n",
+    "<F2>",
+    ":echo expand('%:p')<CR>",
+    { desc = "🛠️ Show the current file's absolute path" }
+)
+
+vim.keymap.set("n", "<F3>", function()
+    vim.cmd("cclose") -- Close Quickfix List
+    vim.cmd("lclose") -- Close Location List
+end, { desc = "Close Quickfix/Location List" })
+
 -- ## Windows management
 
 vim.keymap.set(
