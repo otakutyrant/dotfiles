@@ -90,6 +90,13 @@ local gitsigns = {
     opts = {},
 }
 
+local hardtime = {
+   "m4xshen/hardtime.nvim",
+   lazy = false,
+   dependencies = { "MunifTanjim/nui.nvim" },
+   opts = {},
+}
+
 return {
     neo_tree,
     lualine,
@@ -98,4 +105,5 @@ return {
     nvim_web_devicons,
     whichkey,
     gitsigns,
+    hardtime,
 }
