@@ -1,11 +1,9 @@
-# version = 0.83.1
+# version = 0.104.0
 
-$env.config = {
-    # Disable welcome banner at startup.
-    show_banner: false
-    # Choose nvim as the default editor for editing the config
-    buffer_editor: "nvim"
-}
+# Disable welcome banner at startup.
+$env.config.show_banner = false
+# Choose nvim as the default editor for editing the config
+$env.config.buffer_editor = "nvim"
 
 # A simple command just to show directory contents, like traditional shells.
 def l [] { ls | sort-by type name -i | grid -c | str trim }
