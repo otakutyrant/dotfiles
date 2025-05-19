@@ -95,25 +95,3 @@ def llmp3 [directory: path = "."] {
 
 # Show directory contents fully, alias `ls -al`.
 alias ll = ls -al
-
-source prompt.nu
-
-source xdg.nu
-
-source archlinux.nu
-source cargo.nu
-source docker.nu
-source git.nu
-source ipython.nu
-source nvim.nu
-source proxy.nu
-source ripgrep.nu
-source sdl.nu
-source ssh.nu
-source stow.nu
-source systemd.nu
-source yt-dlp.nu
-source zoxide.nu
-source npm.nu
-
-hide-env nu-plugins-dir

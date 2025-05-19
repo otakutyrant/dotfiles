@@ -11,12 +11,5 @@ $env.PAGER = "page"
 $env.EDITOR = "nvim"
 $env.VISUAL = "nvim"
 
-# Due to Nushell cannot "source" modules dymmatically, I maintain modules 
-# in $env.NU_PLUGIN_DIR. To avoid polluting namespaces,
-# after sourcing modules, I hide $env.nu-plugins-dir from $env.NU_LIB_DIRS
-# in config.nu.
-$env.nu-plugins-dir = ( $nu.default-config-dir | path join plugins )
-$env.NU_LIB_DIRS = [ $env.nu-plugins-dir ]
-
 # Export some environment variables about api keys, such as OpenAI.
 source ~/api_keys.nu
