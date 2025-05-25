@@ -38,15 +38,6 @@ local conform = {
             lsp_format = "fallback",
         },
     },
-    keys = {
-        {
-            "<leader>rtw",
-            function()
-                require("conform").format({ formatters = { "trim_whitespace" } })
-            end,
-            desc = "🛠️ Trim trailing whitespace",
-        },
-    },
 }
 
 return {

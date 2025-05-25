@@ -332,6 +332,11 @@ vim.keymap.set("n", "]e", function()
     vim.diagnostic.jump({ count = 1, severity = vim.diagnostic.severity.ERROR })
 end, { desc = "Go to next error" })
 
+-- Trim trailing whitespaces
+vim.keymap.set("n", "<leader>rtw", ":%s/\\s\\+$//e<CR>", {
+    desc = "🛠️ Remove trailing whitespace (current file)",
+})
+
 -- ## Windows management
 
 vim.keymap.set(
