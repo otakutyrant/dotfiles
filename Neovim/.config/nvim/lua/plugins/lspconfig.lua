@@ -115,6 +115,10 @@ vim.lsp.config("basedpyright", {
 vim.lsp.enable("nushell")
 vim.lsp.config("nushell", {})
 
+-- TOML
+vim.lsp.enable("taplo")
+vim.lsp.config("taplo", {})
+
 -- # Final
 
 return {

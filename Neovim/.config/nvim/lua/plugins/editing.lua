@@ -19,18 +19,18 @@ local conform = {
     event = "BufWritePost",
     opts = {
         formatters_by_ft = {
+            -- TODO: replace them with language servers if the later is better.
             html = { "prettier" },
             css = { "prettier" },
+            javascript = { "prettier" },
+            typescript = { "prettier" },
             json = { "prettier" },
-            -- deno = { 'prettier' },
             yaml = { "prettier" },
             markdown = { "prettier" },
-            typescript = { "prettier" },
-            -- ocaml = { 'ocamlformat' },
-            -- nix = { 'nixpkgs-fmt' },
+
             python = {}, -- Python formatter is provided by ruff ls.
-            toml = { "taplo" },
-            lua = { "stylua" }, -- and lua_ls's formatter is disabled elsewhere
+            toml = {}, -- TOMP formatter is provided by taplo ls.
+            lua = { "stylua" }, -- lua_ls' primitive formatter is disabled
         },
         format_on_save = {
             -- These options will be passed to conform.format()
