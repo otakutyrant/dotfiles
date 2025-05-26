@@ -27,8 +27,11 @@ local conform = {
             json = { "prettier" },
             yaml = { "prettier" },
             markdown = { "prettier" },
-
-            python = {}, -- Python formatter is provided by ruff ls.
+            python = {
+                "ruff_fix", -- To fix auto-fixable lint errors.
+                "ruff_format", -- To run the Ruff formatter.
+                "ruff_organize_imports", -- To organize the imports.
+            }, -- Although ruff is a ls, the official suggests using these formatters
             toml = {}, -- TOMP formatter is provided by taplo ls.
             lua = { "stylua" }, -- lua_ls' primitive formatter is disabled
         },
