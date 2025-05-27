@@ -15,6 +15,15 @@ local neo_tree = {
                 end,
             },
         },
+        window = {
+            -- Use telescope style mappings to split/vsplit
+            mappings = {
+                ["<C-v>"] = "open_vsplit",
+                ["<C-s>"] = "open_split",
+                ["s"] = "noop",
+                ["S"] = "noop",
+            },
+        },
     },
     keys = {
         {
