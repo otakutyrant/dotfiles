@@ -317,7 +317,6 @@ vim.keymap.set("n", "<F3>", function()
     vim.cmd("lclose") -- Close Location List
 end, { desc = "Close Quickfix/Location List" })
 
-vim.lsp.inlay_hint.enable()
 vim.keymap.set("n", "<F4>", function()
     vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
 end, { desc = "🛠️ Toggle inlay hints" })
