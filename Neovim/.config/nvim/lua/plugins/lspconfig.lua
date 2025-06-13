@@ -129,8 +129,22 @@ vim.lsp.config("html", {
 })
 vim.lsp.enable("html")
 
+-- TypeScript
+-- Pure Lua and better replacement of the origin ts_ls.
+local ts_ls = {
+    "pmizio/typescript-tools.nvim",
+    opts = {
+        settings = {
+            tsserver_file_preferences = {
+                -- Enforce ts_ls use absolute path import.
+                importModuleSpecifierPreference = "non-relative",
+            },
+        },
+    },
+}
 -- # Final
 
 return {
     nvim_lspconfig,
+    ts_ls,
 }
