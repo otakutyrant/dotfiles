@@ -18,7 +18,7 @@ def lmp3 [filename: string] {
     let lines = $content
         | lines
         | each { |line| $line | str trim } # Improved filter: trim lines first, then check conditions
-        | filter { |line|
+        | where { |line|
             not ($line =~ '^\d+$'
             or $line =~ '^\d\d:\d\d:\d\d,\d{3} --> '
             or $line == '')
