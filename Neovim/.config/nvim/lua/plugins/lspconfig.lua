@@ -57,34 +57,7 @@ vim.lsp.config("lua_ls", {
 -- Python
 vim.lsp.enable("ruff")
 vim.lsp.config("ruff", {})
--- Use pyright only for type checking and other ls features. But it is replaced by basedpyright now.
--- vim.lsp.enable("pyright")
--- vim.lsp.config("pyright", {
---     root_marker = {
---         "pyproject.toml",
---         -- "setup.py", -- Sometimes misleading.
---         "setup.cfg",
---         "requirements.txt",
---         "Pipfile",
---         "pyrightconfig.json",
---         ".git",
---     },
---     settings = {
---         pyright = {
---             disableOrganizeImports = true, -- Using Ruff's import organizer instead
---         },
---         python = {
---             analysis = {
---                 ignore = { "*" }, -- Ignore all files for analysis to exclusively use Ruff for linting
---             },
---         },
---     },
---     -- These capabilities and on_init is used to fix wrong positionEncoding
---     capabilities = vim.lsp.protocol.make_client_capabilities(),
---     on_init = function(client)
---         client.offset_encoding = "utf-8"
---     end,
--- })
+-- basedpyright is better than pyright since it supports more features.
 vim.lsp.enable("basedpyright")
 vim.lsp.config("basedpyright", {
     root_marker = {
