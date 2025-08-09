@@ -102,6 +102,19 @@ vim.lsp.config("html", {
 })
 vim.lsp.enable("html")
 
+-- CSS
+-- cssls from vscode cannot handle @theme from tailwindcss well.
+-- There is stylelint, but I have no time to try it.
+
+-- TailwindCSS
+-- ESLint also support CSS, but I do not use it so far.
+vim.lsp.config("tailwindcss", {})
+vim.lsp.enable("tailwindcss")
+
+-- JavaScript
+vim.lsp.config("eslint", {})
+vim.lsp.enable("eslint")
+
 -- TypeScript
 -- Pure Lua and better replacement of the origin ts_ls.
 local ts_ls = {
@@ -115,6 +128,7 @@ local ts_ls = {
         },
     },
 }
+
 -- # Final
 
 return {
