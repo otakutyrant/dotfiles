@@ -27,6 +27,7 @@ local conform = {
             typescript = { "prettier" },
             typescriptreact = { "prettier" },
             json = { "prettier" },
+            jsonc = { "prettier" },
             yaml = { "prettier" },
             markdown = { "prettier" },
             python = {
