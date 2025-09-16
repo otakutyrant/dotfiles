@@ -321,6 +321,10 @@ vim.keymap.set("n", "<F4>", function()
     vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
 end, { desc = "🛠️ Toggle inlay hints" })
 
+vim.keymap.set("n", "<F5>", function()
+    vim.diagnostic.enable(not vim.diagnostic.is_enabled())
+end, { desc = "🛠️ Toggle diagnostics" })
+
 -- Jump to previous diagnostic error
 vim.keymap.set("n", "[e", function()
     vim.diagnostic.jump({ count = -1, severity = vim.diagnostic.severity.ERROR })
