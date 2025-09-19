@@ -11,6 +11,12 @@ def l [] { ls | sort-by type name -i | grid -c | str trim }
 # Show directory contents fully, alias `ls -al`.
 alias ll = ls -al
 
+# Search and replace.
+def replace [from: string, to: string] {
+    rg -l --color=never $from | lines | each { |f| sd $from $to $f }
+    null
+}
+
 # convert PATH from separated-by-char string to rows,
 # and use uniq to avoid duplicate elements
 $env.PATH = ( $env.PATH | split row (char esep) | uniq )
