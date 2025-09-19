@@ -325,6 +325,14 @@ vim.keymap.set("n", "<F5>", function()
     vim.diagnostic.enable(not vim.diagnostic.is_enabled())
 end, { desc = "🛠️ Toggle diagnostics" })
 
+-- Press F6 to open quickfix entry in a vertical split
+vim.keymap.set(
+    "n",
+    "<F6>",
+    "<C-w><CR><C-w>L",
+    { noremap = true, silent = true }
+)
+
 -- Jump to previous diagnostic error
 vim.keymap.set("n", "[e", function()
     vim.diagnostic.jump({ count = -1, severity = vim.diagnostic.severity.ERROR })
