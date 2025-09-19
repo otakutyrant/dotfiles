@@ -129,6 +129,10 @@ local ts_ls = {
     },
 }
 
+-- Prisma
+vim.lsp.config("prismals", {})
+vim.lsp.enable("prismals")
+
 -- # Final
 
 return {
