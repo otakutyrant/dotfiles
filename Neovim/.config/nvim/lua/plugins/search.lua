@@ -13,27 +13,27 @@ local telescope = {
     keys = {
         {
             "<leader>ff",
-            require("telescope.builtin").find_files,
+            function() require("telescope.builtin").find_files() end,
             { desc = "🛠️ Telescope find files" },
         },
         {
             "<leader>fg",
-            require("telescope.builtin").live_grep,
+            function() require("telescope.builtin").live_grep() end,
             { desc = "🛠️ Telescope live grep" },
         },
         {
             "<leader>fb",
-            require("telescope.builtin").buffers,
+            function() require("telescope.builtin").buffers() end,
             { desc = "🛠️ Telescope buffers" },
         },
         {
             "<leader>fh",
-            require("telescope.builtin").help_tags,
+            function() require("telescope.builtin").help_tags() end,
             { desc = "🛠️ Telescope find help tags" },
         },
         {
             "<leader>fr",
-            require("telescope.builtin").registers,
+            function() require("telescope.builtin").registers() end,
             { desc = "🛠️ Telescope registers" },
         },
     },
