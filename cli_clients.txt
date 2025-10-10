@@ -37,6 +37,8 @@ python-pip # package manager
 uv # supreme package manager
 ruff # linter and formatter. I am not sure what ruff-python is for.
 pyright # ls and type checker
+## Front End
+eslint-language-server
 ## Rust
 rust
 cargo # package manager
