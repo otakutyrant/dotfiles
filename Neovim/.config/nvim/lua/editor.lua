@@ -98,8 +98,10 @@ vim.opt.matchtime = 1
 vim.opt.smartcase = true
 -- Substitute with g flag. Use \c when necessary.
 vim.opt.gdefault = true
--- Fold by indent.
-vim.opt.foldmethod = "indent"
+-- Fold by expr.
+vim.opt.foldmethod = "expr"
+-- When use foldmethod = "expr", this is required to apply treesitter.
+vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
 -- Keep undofile so that you still can undo even after you close and open a file again.
 vim.opt.undofile = true
 -- Make split behaviour always consistent.
