@@ -5,6 +5,8 @@ local nvim_lspconfig = {
     event = { "BufReadPre", "BufNewFile" },
 }
 
+vim.diagnostic.config({ float = { source = true } })
+
 -- # Language Server setups
 -- Here are setups for some language servers, and all of them are used in lspconfig.
 
