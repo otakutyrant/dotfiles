@@ -17,3 +17,8 @@
 [status]
   # ShowStash only work for 2.14.0 and later.
   showStash = true
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
