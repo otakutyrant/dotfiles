@@ -37,6 +37,7 @@ local conform = {
             }, -- Although ruff is a ls, the official suggests using these formatters
             toml = {}, -- TOMP formatter is provided by taplo ls.
             lua = { "stylua" }, -- lua_ls' primitive formatter is disabled
+            nix = { "nixfmt" },
         },
         format_on_save = {
             -- These options will be passed to conform.format()

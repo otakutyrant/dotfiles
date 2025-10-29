@@ -20,6 +20,8 @@ def replace [from: string, to: string] {
 # convert PATH from separated-by-char string to rows,
 # and use uniq to avoid duplicate elements
 $env.PATH = ( $env.PATH | split row (char esep) | uniq )
+use std/util "path add"
+path add "~/.nix-profile/bin"
 
 # ArchWiki: Environment Viriables
 # https://wiki.archlinux.org/index.php/Environment_variables#Examples

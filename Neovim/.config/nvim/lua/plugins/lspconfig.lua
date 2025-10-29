@@ -135,6 +135,10 @@ local ts_ls = {
 vim.lsp.config("prismals", {})
 vim.lsp.enable("prismals")
 
+-- Nix
+vim.lsp.config("nixd", {})
+vim.lsp.enable("nixd")
+
 -- # Final
 
 return {

@@ -142,6 +142,7 @@ vim.api.nvim_create_autocmd("FileType", {
         "html",
         "css",
         "json",
+        "nix",
     },
     callback = function()
         vim.bo.shiftwidth = 2
