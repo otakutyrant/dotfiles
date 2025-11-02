@@ -178,11 +178,8 @@ local theme = get_random_element(themes, true)
 local theme_name = get_random_element(theme.names)
 theme.config = enable_colorscheme(theme_name)
 
--- Alabaster non-essential overlay (place this alongside your theme selection)
--- This overlay copies "non-essential" highlight colors from Alabaster
--- and reapplies them on top of any other colorscheme.
-
-local NON_ESSENTIAL = {
+-- Alabaster non-essential overlay: highlight groups to be overridden by Alabaster's foreground colors.
+local NON_ESSENTIAL_ALABASTER_OVERLAY = {
     -- Vim syntax groups
     "Keyword",
     "Statement",
@@ -231,21 +228,23 @@ local function apply_group_foreground_colors(map)
     end
 end
 
+-- Set up an autocmd to run after the theme is loaded to apply our overlays.
 vim.api.nvim_create_autocmd("VimEnter", {
     callback = function()
         local current_theme = vim.g.colors_name or ""
 
-        -- Capture Alabaster's non-essential highlights
+        -- 1. Capture Alabaster's non-essential highlights
         local alabaster_map = {}
         do
             local ok = pcall(function()
                 vim.cmd("colorscheme alabaster")
             end)
             if not ok then
+                -- Return if alabaster failed to load
                 return
             end
 
-            for _, group in ipairs(NON_ESSENTIAL) do
+            for _, group in ipairs(NON_ESSENTIAL_ALABASTER_OVERLAY) do
                 local highlight = get_highlight(group)
                 if highlight and highlight.foreground_color then
                     alabaster_map[group] = highlight.foreground_color
@@ -253,15 +252,28 @@ vim.api.nvim_create_autocmd("VimEnter", {
             end
         end
 
-        -- Reload the user's chosen theme
+        -- 2. Reload the user's chosen theme (from the random selection)
         local ok2 = pcall(function()
             vim.cmd("colorscheme " .. current_theme)
         end)
         if not ok2 then
+            -- Return if the randomly chosen theme failed to load
             return
         end
 
-        -- Apply Alabaster's colors over it
+        -- 3. Override Comment color with the current theme's String color,
+        -- because sometimes comment color is not explicit as string color.
+        local string_highlight = get_highlight("String")
+        if string_highlight.foreground_color then
+            pcall(
+                vim.api.nvim_set_hl,
+                0,
+                "Comment",
+                { fg = string_highlight.foreground_color }
+            )
+        end
+
+        -- 4. Apply Alabaster's colors over it (Alabaster overlay)
         apply_group_foreground_colors(alabaster_map)
     end,
 })
