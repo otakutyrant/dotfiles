@@ -64,13 +64,6 @@ local gruvbox = {
     },
 }
 
-local sonokai = {
-    "sainnhe/sonokai",
-    names = {
-        "sonokai",
-    },
-}
-
 local rose_pine = {
     "rose-pine/neovim",
     names = {
@@ -104,7 +97,6 @@ local zenbones = {
         "forestbones",
         "nordbones",
         "tokyobones",
-        "seoulbones",
         "duckbones",
         "zenburned",
         "kanagawabones",
@@ -155,16 +147,6 @@ local function enable_colorscheme(theme_name)
 end
 
 local themes = {
-    tokyonight,
-    monokai,
-    nord,
-    everforest,
-    onedark,
-    gruvbox,
-    sonokai,
-    rose_pine,
-    catppuccin,
-    zenbones,
     alabaster,
 }
 
