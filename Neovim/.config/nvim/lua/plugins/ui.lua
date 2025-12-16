@@ -50,6 +50,9 @@ local lualine = {
     lazy = false,
     opts = {
         sections = {
+            lualine_a = {
+                "lsp_status",
+            },
             lualine_c = {
                 {
                     "filename",
