@@ -50,6 +50,12 @@ local lualine = {
     lazy = false,
     opts = {
         sections = {
+            lualine_c = {
+                {
+                    "filename",
+                    color = { fg = "black", bg = "#95cb82", gui = "bold" },
+                },
+            },
             lualine_y = {
                 "%{get(g:, 'real_colors_name')}", -- show colorscheme
                 inlay_hint_status,
