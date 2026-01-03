@@ -105,7 +105,30 @@ local whichkey = {
 -- Adds signs to the sign column to indicate added, changed, and deleted lines.
 local gitsigns = {
     "lewis6991/gitsigns.nvim",
-    opts = {},
+    opts = {
+        -- Keymaps for jumping between git hunks
+        on_attach = function(bufnr)
+            local gs = require("gitsigns")
+
+            -- Jump to next hunk
+            -- ]c in normal mode will jump to the next Git hunk
+            vim.keymap.set(
+                "n",
+                "]c",
+                gs.next_hunk,
+                { buffer = bufnr, desc = "Next git hunk" }
+            )
+
+            -- Jump to previous hunk
+            -- [c in normal mode will jump to the previous Git hunk
+            vim.keymap.set(
+                "n",
+                "[c",
+                gs.prev_hunk,
+                { buffer = bufnr, desc = "Previous git hunk" }
+            )
+        end,
+    },
 }
 
 return {
