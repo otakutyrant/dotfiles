@@ -1,0 +1,30 @@
+{
+  "security": {
+    "auth": {
+      "selectedType": "gemini-api-key"
+    },
+    "enablePermanentToolApproval": true,
+    "folderTrust": {
+      "enabled": true
+    }
+  },
+  "ui": {
+    "theme": "Dracula",
+    "footer": {
+      "hideContextPercentage": false,
+      "hideModelInfo": false
+    }
+  },
+  "general": {
+    "previewFeatures": true,
+    "enableAutoUpdate": false,
+    "enablePromptCompletion": true
+  },
+  "tools": {
+    "core": ["run_shell_command"],
+    "exclude": ["run_shell_command(git push -f)", "run_shell_command(rm -rf)"]
+  },
+  "context": {
+    "fileName": ["AGENTS.md"]
+  }
+}
