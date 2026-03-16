@@ -7,3 +7,5 @@
 - When generating code, you should add comments properly.
 - Do not manage exceptions in low-level function. You could add try-except block in the higher levels if it is meaningful and suitable.
 - If you think a function is prone to errors, you can add error handling. Depending on whether suppressing the error affects the core user experience or not, you should either suppress it (with comments explaining why) or throw the error explicitly.
+- You can mock something in unit tests if necessary, but do not mock anything in integration tests.
+- Normally, tests' LOG_LEVEL is warn, you can use different `LOG_LEVEL` environment variable to debug in tests if necessary.
