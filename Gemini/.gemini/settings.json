@@ -21,7 +21,6 @@
     "enablePromptCompletion": true
   },
   "tools": {
-    "core": ["run_shell_command"],
     "exclude": ["run_shell_command(git push -f)", "run_shell_command(rm -rf)"]
   },
   "context": {
