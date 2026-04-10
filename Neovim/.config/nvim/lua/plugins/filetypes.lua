@@ -1,6 +1,6 @@
 local prisma = {
     "prisma/vim-prisma",
-    filetype = "prisma",
+    ft = "prisma",
 }
 
 return {
