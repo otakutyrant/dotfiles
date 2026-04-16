@@ -127,6 +127,16 @@ local gitsigns = {
                 gs.prev_hunk,
                 { buffer = bufnr, desc = "Previous git hunk" }
             )
+
+            -- Stage the entire buffer
+            vim.keymap.set("n", "<leader>gb", function()
+                gs.stage_buffer()
+            end, { desc = "Git: Stage Buffer" })
+
+            -- Stage the current hunk
+            vim.keymap.set("n", "<leader>gh", function()
+                gs.stage_hunk()
+            end, { desc = "Git: Stage Hunk" })
         end,
     },
 }
