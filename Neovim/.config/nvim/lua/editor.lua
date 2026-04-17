@@ -100,8 +100,11 @@ vim.opt.smartcase = true
 vim.opt.gdefault = true
 -- Fold by expr.
 vim.wo.foldmethod = "expr"
--- When use foldmethod = "expr", this is required to apply treesitter.
+-- When use foldmethod = "expr", this applies built-in Tree-sitter folds.
 vim.wo.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+-- Map React filetypes to the parser names used by built-in Tree-sitter.
+vim.treesitter.language.register("jsx", "javascriptreact")
+vim.treesitter.language.register("tsx", "typescriptreact")
 -- Keep undofile so that you still can undo even after you close and open a file again.
 vim.opt.undofile = true
 -- Make split behaviour always consistent.
