@@ -1,21 +1,21 @@
 -- # Appearance setting
 
 -- Show line numbers on the leftmost side.
-vim.opt.number = true
+vim.wo.number = true
 -- Make the line number relative to the line with the cursor in front of each line.
-vim.opt.relativenumber = true
+vim.wo.relativenumber = true
 -- Highlight the text line of the cursor.
-vim.opt.cursorline = true
+vim.wo.cursorline = true
 -- Highlight the screen column of the cursor.
-vim.opt.cursorcolumn = true
+vim.wo.cursorcolumn = true
 -- Highlight the screen column 80 for conventional code styles.
-vim.opt.colorcolumn = "80"
+vim.wo.colorcolumn = "80"
 -- Reveal and distinguish tab, trail space, nbsp, and break more legibly.
 -- http://vi.stackexchange.com/a/430/5663
 -- Because trail space is enough, I discard the eol marker.
-vim.opt.list = true
-vim.opt.listchars = { tab = "␉·", trail = "␠", nbsp = "¬" }
-vim.opt.showbreak = "↪"
+vim.wo.list = true
+vim.wo.listchars = "tab:␉·,trail:␠,nbsp:¬"
+vim.wo.showbreak = "↪"
 -- Enable 24-bit RGB color in the TUI, which is better than
 -- the traditional 256 term colors.
 vim.opt.termguicolors = true
@@ -83,7 +83,7 @@ vim.opt.spellfile = vim.fn.expand("~/.config/nvim/spell/en.utf-8.add")
 -- # Behavior setting
 
 -- Set minimal number of screen lines to keep above and below the cursor.
-vim.opt.scrolloff = 3
+vim.wo.scrolloff = 3
 -- Avoid relying on mode lines because they are code-irrelevant.
 vim.opt.modeline = false
 -- Raise a dialog asking whether to save the current file(s) when you quit.
@@ -99,9 +99,9 @@ vim.opt.smartcase = true
 -- Substitute with g flag. Use \c when necessary.
 vim.opt.gdefault = true
 -- Fold by expr.
-vim.opt.foldmethod = "expr"
+vim.wo.foldmethod = "expr"
 -- When use foldmethod = "expr", this is required to apply treesitter.
-vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+vim.wo.foldexpr = "v:lua.vim.treesitter.foldexpr()"
 -- Keep undofile so that you still can undo even after you close and open a file again.
 vim.opt.undofile = true
 -- Make split behaviour always consistent.
