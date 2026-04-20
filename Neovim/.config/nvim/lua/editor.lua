@@ -98,10 +98,15 @@ vim.opt.matchtime = 1
 vim.opt.smartcase = true
 -- Substitute with g flag. Use \c when necessary.
 vim.opt.gdefault = true
--- Fold by expr.
-vim.wo.foldmethod = "expr"
--- When use foldmethod = "expr", this applies built-in Tree-sitter folds.
-vim.wo.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+-- Apply Tree-sitter folding to every filetype window.
+vim.api.nvim_create_autocmd("FileType", {
+    pattern = "*",
+    callback = function()
+        vim.wo[0][0].foldexpr = "v:lua.vim.treesitter.foldexpr()"
+        vim.wo[0][0].foldmethod = "expr"
+    end,
+    desc = "Enable Tree-sitter folding for all filetypes",
+})
 -- Map React filetypes to the parser names used by built-in Tree-sitter.
 vim.treesitter.language.register("jsx", "javascriptreact")
 vim.treesitter.language.register("tsx", "typescriptreact")
