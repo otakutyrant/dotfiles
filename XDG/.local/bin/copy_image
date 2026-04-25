@@ -1,0 +1,19 @@
+#!/usr/bin/env nu
+
+def main [image_path: path] {
+    let resolved_path = ($image_path | path expand)
+
+    if not ($resolved_path | path exists) {
+        error make {
+            msg: $"Image does not exist: ($resolved_path)"
+        }
+    }
+
+    if (($resolved_path | path type) != file) {
+        error make {
+            msg: $"Path is not a file: ($resolved_path)"
+        }
+    }
+
+    $resolved_path | into string | ^xsel -b
+}
