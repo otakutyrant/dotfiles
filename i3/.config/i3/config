@@ -182,6 +182,8 @@ bindsym $mod+c exec google-chrome-stable
 bindsym $mod+d exec rofi -show drun
 # Start cherry studio
 bindsym $mod+a exec cherry-studio
+# Lock
+bindsym $mod+shift+l exec i3lock
 
 # # Startups
 
