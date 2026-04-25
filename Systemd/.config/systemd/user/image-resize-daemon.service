@@ -1,0 +1,12 @@
+[Unit]
+Description=Upscale small images under /home/otakutyrant
+After=default.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/env python3 /home/otakutyrant/.local/bin/image_resize_daemon.py --root /home/otakutyrant --target-short-side 800 --interval 5
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=default.target
