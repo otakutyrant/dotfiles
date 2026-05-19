@@ -20,7 +20,7 @@ format = "$1m.eng(w:4) $5m.eng(w:4) $15m.eng(w:4)"
 
 [[block]]
 block = "memory"
-format = " $icon $mem_total_used_percents.eng(w:2) "
+format = " $icon $mem_used_percents.eng(w:2) "
 
 [[block]]
 block = "nvidia_gpu"
