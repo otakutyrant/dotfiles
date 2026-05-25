@@ -1,0 +1,53 @@
+#!/usr/bin/env nu
+
+let primary_output = "DP-4"
+let secondary_output = "DP-2"
+
+# Restore the normal dual-monitor layout from the current i3/xrandr setup.
+def enable_secondary [] {
+    ^xrandr
+        --output DVI-D-0 --off
+        --output HDMI-0 --off
+        --output DP-0 --off
+        --output DP-1 --off
+        --output $secondary_output --mode 1920x1080 --pos 2560x360 --rotate normal
+        --output DP-3 --off
+        --output $primary_output --primary --mode 2560x1440 --pos 0x0 --rotate normal --rate 100
+        --output DP-5 --off
+}
+
+# Switch into single-monitor mode to avoid the 60Hz secondary monitor capping
+# synced rendering on the 100Hz primary display.
+def disable_secondary [] {
+    ^xrandr
+        --output $secondary_output --off
+        --output $primary_output --primary --mode 2560x1440 --pos 0x0 --rotate normal --rate 100
+}
+
+# Treat DP-2 as enabled only when it is part of the active desktop geometry.
+def secondary_is_enabled [] {
+    (^xrandr --query | lines | any {|line| $line =~ $'^\($secondary_output) connected [0-9]'})
+}
+
+def main [action: string = "toggle"] {
+    match $action {
+        "toggle" => {
+            if (secondary_is_enabled) {
+                disable_secondary
+            } else {
+                enable_secondary
+            }
+        }
+        "on" => {
+            enable_secondary
+        }
+        "off" => {
+            disable_secondary
+        }
+        _ => {
+            error make {
+                msg: $"Usage: ($env.CURRENT_FILE) [toggle|on|off]"
+            }
+        }
+    }
+}
