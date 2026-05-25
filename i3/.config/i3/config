@@ -161,10 +161,10 @@ assign [class="org.gnome.Nautilus"] $ws4
 assign [class="goldendict"] $ws4
 
 # Automatically putting workspaces on specific screens.
-workspace $ws1 output HDMI-0
-workspace $ws2 output DVI-D-0
-workspace $ws3 output DVI-D-0
-workspace $ws4 output HDMI-0
+workspace $ws1 output DP-4
+workspace $ws2 output DP-2
+workspace $ws3 output DP-4
+workspace $ws4 output DP-2
 
 # Automatically back-and-forth when switching to the current workspace
 # For instance: Assume you are on workspace "1: www" and switch to "2: IM"
@@ -190,16 +190,17 @@ bindsym $mod+shift+l exec i3lock
 # Autostart desktop files according to XDG.
 # https://wiki.archlinux.org/index.php/XDG_Autostart
 exec --no-startup-id dex --autostart --environment i3
+exec_always --no-startup-id sh -c 'killall picom 2>/dev/null; exec picom --config "$HOME/.config/picom/picom.conf"'
 exec --no-startup-id qbittorrent
 
 # https://faq.i3wm.org/question/2332/flexible-monitor-setup.1.html
-exec --no-startup-id xrandr --output DVI-D-0 --primary --mode 1920x1080 --pos 1920x0 --rotate normal --output HDMI-0 --off --output DP-0 --off --output DP-1 --off --output DP-2 --mode 1920x1080 --pos 0x0 --rotate normal --output DP-3 --off --output DP-4 --off --output DP-5 --off
+exec --no-startup-id xrandr --output DVI-D-0 --off --output HDMI-0 --off --output DP-0 --off --output DP-1 --off --output DP-2 --mode 1920x1080 --pos 2560x360 --rotate normal --output DP-3 --off --output DP-4 --primary --mode 2560x1440 --pos 0x0 --rotate normal --rate 100 --output DP-5 --off
 
-# Disable mysterious blackscreen
-exec --no-startup-id xset s off
-exec --no-startup-id xset s noblank
-exec --no-startup-id xset s nocycle
-exec --no-startup-id xset -dpms
+
+# Sleep displays after 5 minutes of inactivity.
+exec --no-startup-id xset s 300
+exec --no-startup-id xset +dpms
+exec --no-startup-id xset dpms 0 0 300
 
 # # Bar
 
