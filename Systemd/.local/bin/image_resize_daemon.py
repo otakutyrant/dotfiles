@@ -94,7 +94,6 @@ class ResizeDaemon:
     def _is_supported_image(self, path: Path) -> bool:
         return (
             path.is_file()
-            and path.name.startswith("202")
             and path.suffix.lower() in SUPPORTED_EXTENSIONS
         )
 

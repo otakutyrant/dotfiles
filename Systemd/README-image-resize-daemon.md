@@ -16,7 +16,6 @@ Notes:
 - Images whose shortest side is already greater than or equal to `800px` are left untouched.
 - Animated images are skipped.
 - Subdirectories are ignored completely; the scan is not recursive.
-- Only files whose names start with `202` are considered.
 
 Run one scan:
 
