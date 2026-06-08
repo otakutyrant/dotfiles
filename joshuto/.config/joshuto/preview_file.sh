@@ -94,7 +94,7 @@ handle_mime() {
   case "$1" in
     ## Text
     text/* | */xml)
-      if [[ "$(stat -f '%z' -- "$FILE_PATH}")" -le "$HIGHLIGHT_SIZE_MAX" ]]; then
+      if [[ "$(stat --printf='%s' -- "$FILE_PATH")" -le "$HIGHLIGHT_SIZE_MAX" ]]; then
         bat --color=always --paging=never --style=plain --terminal-width="$PREVIEW_WIDTH" "$FILE_PATH" && exit 0
       fi
       exit 1 ;;
