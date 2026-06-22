@@ -183,6 +183,8 @@ in
     "zip"
     "zoxide"
     "zsh"
+  ] ++ [
+    (pkgs.callPackage ./pkgs/nfcloud.nix {})
   ];
 
   system.stateVersion = "26.05";
