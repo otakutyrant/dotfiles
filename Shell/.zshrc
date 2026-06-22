@@ -27,15 +27,21 @@ ZSH_CUSTOM=$HOME/.zsh-custom
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(systemd pacman pikaur github) # TODO: refine
+if [[ -e /etc/NIXOS ]]; then
+  plugins=(systemd github)
+else
+  plugins=(systemd pacman pikaur github) # TODO: refine
+fi
 
 # Deploy oh-my-zsh.
-source $ZSH/oh-my-zsh.sh
+if [[ -r "$ZSH/oh-my-zsh.sh" ]]; then
+  source "$ZSH/oh-my-zsh.sh"
+fi
 
 # # User customization
 
 # Set all your custom environment variables in .zshenv.
-source $HOME/.zshenv
+[[ -r "$HOME/.zshenv" ]] && source "$HOME/.zshenv"
 
 # Set personal aliases, overriding those provided by oh-my-zsh libs,
 # plugins, and themes. Aliases can be placed here,
@@ -134,14 +140,20 @@ alias_or_warning unstow "stow -D --target=$HOME"
 # pkgfile: Embed pkgfile hint that when command not found, hint the relative
 # package name as far as it can.
 # https://wiki.archlinux.org/title/Zsh#pkgfile_%22command_not_found%22_handler
-source /usr/share/doc/pkgfile/command-not-found.zsh
+if [[ -r /usr/share/doc/pkgfile/command-not-found.zsh ]]; then
+  source /usr/share/doc/pkgfile/command-not-found.zsh
+fi
 
 # ripgrep: Pretty output so it can pipe into pagers.
 alias_or_warning rg "rg -p"
 
 # fzf: Enhance shell wish fzf.
-source /usr/share/fzf/completion.zsh
-source /usr/share/fzf/key-bindings.zsh
+if [[ -r /usr/share/fzf/completion.zsh ]]; then
+  source /usr/share/fzf/completion.zsh
+fi
+if [[ -r /usr/share/fzf/key-bindings.zsh ]]; then
+  source /usr/share/fzf/key-bindings.zsh
+fi
 export FZF_DEFAULT_COMMAND="fd --type f --strip-cwd-prefix --hidden --follow --exclude .git"
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
@@ -151,4 +163,6 @@ export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 alias_or_warning "yt-dlp" "yt-dlp --proxy 127.0.0.1:2340 --write-subs --sub-langs zh-CN"
 
 # Use zoxide as z.
-eval "$(zoxide init zsh)"
+if command -v zoxide >/dev/null 2>&1; then
+  eval "$(zoxide init zsh)"
+fi

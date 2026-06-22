@@ -7,8 +7,16 @@ export HISTSIZE=1000000
 # https://wiki.archlinux.org/index.php/Environment_variables#Examples
 # Note that some variables may be full pathnames.
 # https://github.com/mobile-shell/mosh/issues/722#issuecomment-176266421
-export SHELL="/usr/bin/zsh"
-export PAGER="page"
+if command -v zsh >/dev/null 2>&1; then
+  export SHELL="$(command -v zsh)"
+else
+  export SHELL="/usr/bin/zsh"
+fi
+if command -v page >/dev/null 2>&1; then
+  export PAGER="page"
+else
+  export PAGER="less"
+fi
 export EDITOR="nvim"
 export VISUAL="nvim"
 export XDG_CONFIG_HOME="$HOME/.config"
@@ -41,7 +49,7 @@ export no_proxy="/var/run/docker.sock"
 export SDL_VIDEO_FULLSCREEN_HEAD=1
 
 # https://github.com/lilydjwg/search-and-view
-export AGV_EDITOR="/bin/gvim"
+export AGV_EDITOR="gvim"
 
 # gperftools result position.
 # See https://github.com/gperftools/gperftools/blob/master/README
