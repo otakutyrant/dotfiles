@@ -28,7 +28,7 @@
 , libxcb
 , libxkbcommon
 , wayland
-, epoxy
+, libepoxy
 , at-spi2-core
 , fontconfig
 , freetype
@@ -55,6 +55,8 @@
 , libseccomp
 , util-linux
 , systemd
+, dmidecode
+, makeWrapper
 }:
 
 stdenv.mkDerivation rec {
@@ -64,8 +66,7 @@ stdenv.mkDerivation rec {
   # 1. Fetching the remote archive
   src = fetchurl {
     url = "https://backendoss.trafficmanager.net/api/v1/app/get/nfcloud/linux";
-    # Nix enforces strict reproducibility with cryptographic hashes.
-    # Replace this placeholder with the actual SHA-256 hash printed during your first build.
+    name = "nfcloud-linux-1.4.9.tar.gz";
     hash = "sha256-Q+XHbL0k6NsiUkxvpQPQ959QFAPqHiuxrZ4LOI3rweQ=";
   };
 
@@ -77,13 +78,14 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoPatchelfHook   # Automatically patches ELF binaries' RPATH to point into the Nix store
     wrapGAppsHook3     # Ensures GTK3 schemas, icons, themes, and GIO modules load properly at runtime
+    makeWrapper
   ];
 
   # 3. Runtime dynamic library dependencies
   buildInputs = [
     gtk3 glib cairo pango atk gdk-pixbuf libnotify ayatana-ido libayatana-appindicator libdbusmenu-gtk3
     libX11 libXext libXi libXfixes libXcursor libXdamage libXcomposite libXrandr libXinerama libXrender
-    libxcb libxkbcommon wayland epoxy at-spi2-core fontconfig freetype harfbuzz fribidi libthai graphite2
+    libxcb libxkbcommon wayland libepoxy at-spi2-core fontconfig freetype harfbuzz fribidi libthai graphite2
     libpng pixman lcms2 libglycin json-glib libxml2 sqlite tinysparql libcloudproviders icu
     zlib bzip2 brotli pcre2 libffi dbus libseccomp util-linux systemd
     stdenv.cc.cc.lib   # Provides libstdc++.so.6 and libgcc_s.so.1
@@ -121,6 +123,11 @@ stdenv.mkDerivation rec {
     ln -s $out/libexec/nfcloud/relayway $out/bin/nfcloud
 
     runHook postInstall
+  '';
+
+  postFixup = ''
+  wrapProgram $out/bin/nfcloud \
+      --prefix PATH : ${lib.makeBinPath [ dmidecode ]}
   '';
 
   meta = with lib; {

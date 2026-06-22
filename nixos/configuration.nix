@@ -14,7 +14,9 @@ let
     );
 in
 {
-  imports = lib.optional (builtins.pathExists /etc/nixos/hardware-configuration.nix) /etc/nixos/hardware-configuration.nix;
+  imports = [
+    ./hardware-configuration.nix
+  ];
 
   networking.hostName = hostname;
   networking.networkmanager.enable = true;
@@ -92,7 +94,7 @@ in
     "jetbrains-mono"
     "noto-fonts"
     "noto-fonts-cjk-sans"
-    "noto-fonts-emoji"
+    "noto-fonts-color-emoji"
     "nerd-fonts.jetbrains-mono"
   ];
 
@@ -100,6 +102,8 @@ in
   hardware.nvidia = {
     modesetting.enable = true;
     open = false;
+    nvidiaSettings = true;
+    powerManagement.enable = true;
   };
   services.xserver.videoDrivers = [ "nvidia" ];
 
@@ -139,10 +143,10 @@ in
     "networkmanagerapplet"
     "neovim"
     "nil"
-    "nixfmt-rfc-style"
-    "nodePackages.bash-language-server"
-    "nodePackages.prettier"
-    "nodePackages.typescript-language-server"
+    "pkgs.nixfmt"
+    "bash-language-server"
+    "prettier"
+    "typescript-language-server"
     "nushell"
     "obs-studio"
     "openssh"
@@ -188,4 +192,9 @@ in
   ];
 
   system.stateVersion = "26.05";
+
+  boot.loader.systemd-boot.enable = true;
+  boot.loader.efi.canTouchEfiVariables = true;
+  boot.initrd.availableKernelModules = [ "nvidia" "nvidia_modeset" "nvidia-uvm" "nvidia-drm" ];
+  boot.kernelModules = [ "nvidia" "nvidia_modeset" "nvidia_uvm" "nvidia_drm" ];
 }
