@@ -51,7 +51,6 @@ in
     ".config/gtk-3.0" = link ../X11/.config/gtk-3.0;
     ".config/i3" = link ../i3/.config/i3;
     ".config/i3status-rust" = link ../i3/.config/i3status-rust;
-    ".config/ideavim" = link ../IdeaVim/.config/ideavim;
     ".config/joshuto" = link ../joshuto/.config/joshuto;
     ".config/kitty" = link ../Kitty/.config/kitty;
     ".config/mpv" = link ../mpv/.config/mpv;
@@ -61,7 +60,6 @@ in
     ".config/picom" = link ../XDG/.config/picom;
     ".config/ruff" = link ../Python/.config/ruff;
     ".config/tmux" = link ../Tmux/.config/tmux;
-    ".config/yazi" = link ../yazi/.config/yazi;
     ".gemini" = link ../Gemini/.gemini;
     ".local/bin" = link ../XDG/.local/bin;
     ".local/bin/forward" = {
