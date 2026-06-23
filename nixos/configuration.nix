@@ -1,4 +1,5 @@
 {
+  config,
   hostname,
   lib,
   pkgs,
@@ -101,9 +102,10 @@ in
   hardware.graphics.enable = true;
   hardware.nvidia = {
     modesetting.enable = true;
-    open = false;
+    open = true;
     nvidiaSettings = true;
     powerManagement.enable = true;
+    package = config.boot.kernelPackages.nvidiaPackages.latest;
   };
   services.xserver.videoDrivers = [ "nvidia" ];
 
@@ -195,6 +197,6 @@ in
 
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
-  boot.initrd.availableKernelModules = [ "nvidia" "nvidia_modeset" "nvidia-uvm" "nvidia-drm" ];
+  boot.initrd.availableKernelModules = [ "nvidia" "nvidia_modeset" "nvidia_uvm" "nvidia_drm" ];
   boot.kernelModules = [ "nvidia" "nvidia_modeset" "nvidia_uvm" "nvidia_drm" ];
 }
