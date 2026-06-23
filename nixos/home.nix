@@ -7,6 +7,7 @@
 }:
 
 let
+  extraPackages = import ./extra-packages.nix { inherit lib pkgs; };
   home = config.home.homeDirectory;
   link = source: {
     inherit source;
@@ -39,11 +40,7 @@ in
     WLR_NO_HARDWARE_CURSORS = "1";
   };
 
-  home.packages = with pkgs; [
-    sd
-    pkgs.codex
-    page
-  ];
+  home.packages = extraPackages;
 
   home.file = {
     ".config/codex" = link ../Codex/.config/codex;

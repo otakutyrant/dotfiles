@@ -15,7 +15,10 @@
       system = "x86_64-linux";
       username = "otakutyrant";
       hostname = "nixos";
-      pkgs = import nixpkgs { inherit system; };
+      pkgs = import nixpkgs {
+        inherit system;
+        config.allowUnfree = true;
+      };
     in
     {
       nixosConfigurations.${hostname} = nixpkgs.lib.nixosSystem {

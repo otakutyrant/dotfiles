@@ -8,6 +8,7 @@
 }:
 
 let
+  corePackages = import ./core-packages.nix { inherit lib pkgs; };
   pick =
     names:
     builtins.filter (pkg: pkg != null) (
@@ -110,91 +111,22 @@ in
 
   nixpkgs.config.allowUnfree = true;
 
-  environment.systemPackages = pick [
-    "alsa-utils"
-    "arandr"
-    "baobab"
-    "btop"
-    "bzip2"
-    "calibre"
-    "cloc"
-    "curl"
-    "dex"
-    "fd"
-    "feh"
-    "ffmpeg"
-    "file"
-    "fzf"
-    "gimp"
-    "git"
-    "git-lfs"
-    "gnome-system-monitor"
-    "google-chrome"
-    "gvfs"
-    "i3"
-    "i3lock"
-    "i3status-rust"
-    "iputils"
-    "kitty"
-    "lua"
-    "lua-language-server"
-    "mediainfo"
-    "mpv"
-    "nautilus"
-    "networkmanagerapplet"
-    "neovim"
-    "nil"
-    "pkgs.nixfmt"
-    "bash-language-server"
-    "prettier"
-    "typescript-language-server"
-    "nushell"
-    "obs-studio"
-    "openssh"
-    "p7zip"
-    "picom"
-    "python3"
-    "python3Packages.ipython"
-    "python3Packages.pynvim"
-    "qbittorrent"
-    "ripgrep"
-    "rofi"
-    "rsync"
-    "ruff"
-    "scrot"
-    "shellcheck"
-    "steam"
-    "stow"
-    "stylua"
-    "taplo"
-    "tldr"
-    "tmux"
-    "tree"
-    "unrar"
-    "unzip"
-    "uv"
-    "wget"
-    "whois"
-    "xclip"
-    "xdg-user-dirs"
-    "xorg.xinit"
-    "xorg.xrandr"
-    "xsel"
-    "xz"
-    "yaml-language-server"
-    "yamlfmt"
-    "yazi"
-    "yt-dlp"
-    "zip"
-    "zoxide"
-  ] ++ [
-    (pkgs.callPackage ./pkgs/nfcloud.nix {})
-  ];
+  environment.systemPackages = corePackages;
 
   system.stateVersion = "26.05";
 
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
-  boot.initrd.availableKernelModules = [ "nvidia" "nvidia_modeset" "nvidia_uvm" "nvidia_drm" ];
-  boot.kernelModules = [ "nvidia" "nvidia_modeset" "nvidia_uvm" "nvidia_drm" ];
+  boot.initrd.availableKernelModules = [
+    "nvidia"
+    "nvidia_modeset"
+    "nvidia_uvm"
+    "nvidia_drm"
+  ];
+  boot.kernelModules = [
+    "nvidia"
+    "nvidia_modeset"
+    "nvidia_uvm"
+    "nvidia_drm"
+  ];
 }
