@@ -41,6 +41,7 @@ in
 
   home.packages = with pkgs; [
     sd
+    pkgs.codex
   ];
 
   home.file = {
