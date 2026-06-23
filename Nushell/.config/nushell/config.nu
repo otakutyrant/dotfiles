@@ -23,6 +23,8 @@ $env.PATH = ( $env.PATH | split row (char esep) | uniq )
 use std/util "path add"
 path add "~/.nix-profile/bin"
 
+path add $env.XDG_BIN_DIR
+
 # ArchWiki: Environment Viriables
 # https://wiki.archlinux.org/index.php/Environment_variables#Examples
 # Note that some variables may be full pathnames.
@@ -31,20 +33,3 @@ $env.SHELL = (which nu | first | get path)
 $env.PAGER = "page"
 $env.EDITOR = "nvim"
 $env.VISUAL = "nvim"
-
-# Export some environment variables about api keys, such as OpenAI.
-source ~/api_keys.nu
-
-# XDG
-# Do not encapsulate this section as a plugin because other plugins require these environment variables resolved at first. It can't be helped.
-use std/util "path add"
-
-# https://wiki.archlinux.org/title/XDG_Base_Directory
-$env.XDG_CONFIG_HOME = ( $env.HOME | path join .config )
-$env.XDG_CACHE_HOME = ( $env.HOME | path join .cache )
-$env.XDG_DATA_HOME = ( $env.HOME | path join .local share )
-$env.XDG_STATE_HOME = ( $env.HOME | path join .local state )
-# XDG_BIN_DIR is not standardized formally yet.
-$env.XDG_BIN_DIR = ( $env.HOME | path join .local bin )
-
-path add $env.XDG_BIN_DIR
