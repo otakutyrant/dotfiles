@@ -2,7 +2,6 @@
 , stdenv
 , fetchurl
 , autoPatchelfHook
-, wrapGAppsHook3
 , makeDesktopItem
 # Required library dependencies
 , gtk3
@@ -27,7 +26,6 @@
 , libXrender
 , libxcb
 , libxkbcommon
-, wayland
 , libepoxy
 , at-spi2-core
 , fontconfig
@@ -65,9 +63,9 @@ stdenv.mkDerivation rec {
 
   # 1. Fetching the remote archive
   src = fetchurl {
-    url = "https://backendoss.trafficmanager.net/api/v1/app/get/nfcloud/linux";
-    name = "nfcloud-linux-1.4.9.tar.gz";
-    hash = "sha256-Q+XHbL0k6NsiUkxvpQPQ959QFAPqHiuxrZ4LOI3rweQ=";
+    url = "https://backendoss.trafficmanager.net/builds/b1254a39cd5ecd349eca8c04/NFCLOUD-linux-1.4.10.tar.gz";
+    name = "nfcloud-linux-1.4.10.tar.gz";
+    hash = "sha256-FClC+cT7CyWzyzVS0iRgct5BWCH6MSlP3jXglOGcqyU=";
   };
 
   # Upstream archive lacks a top-level wrapper directory.
@@ -77,15 +75,17 @@ stdenv.mkDerivation rec {
   # 2. Build-time tools and hooks
   nativeBuildInputs = [
     autoPatchelfHook   # Automatically patches ELF binaries' RPATH to point into the Nix store
-    wrapGAppsHook3     # Ensures GTK3 schemas, icons, themes, and GIO modules load properly at runtime
     makeWrapper
   ];
 
   # 3. Runtime dynamic library dependencies
+  # wayland is intentionally excluded to force Flutter to use the X11 backend.
+  # The upstream binary is built against GTK3 but runs via Flutter's Linux embedder,
+  # which probes for wayland-egl and fails if WAYLAND_DISPLAY is unavailable.
   buildInputs = [
     gtk3 glib cairo pango atk gdk-pixbuf libnotify ayatana-ido libayatana-appindicator libdbusmenu-gtk3
     libX11 libXext libXi libXfixes libXcursor libXdamage libXcomposite libXrandr libXinerama libXrender
-    libxcb libxkbcommon wayland libepoxy at-spi2-core fontconfig freetype harfbuzz fribidi libthai graphite2
+    libxcb libxkbcommon libepoxy at-spi2-core fontconfig freetype harfbuzz fribidi libthai graphite2
     libpng pixman lcms2 libglycin json-glib libxml2 sqlite tinysparql libcloudproviders icu
     zlib bzip2 brotli pcre2 libffi dbus libseccomp util-linux systemd
     stdenv.cc.cc.lib   # Provides libstdc++.so.6 and libgcc_s.so.1
@@ -126,8 +126,10 @@ stdenv.mkDerivation rec {
   '';
 
   postFixup = ''
-  wrapProgram $out/bin/nfcloud \
-      --prefix PATH : ${lib.makeBinPath [ dmidecode ]}
+    wrapProgram $out/bin/nfcloud \
+        --set GDK_BACKEND x11 \
+        --unset WAYLAND_DISPLAY \
+        --prefix PATH : ${lib.makeBinPath [ dmidecode ]}
   '';
 
   meta = with lib; {
