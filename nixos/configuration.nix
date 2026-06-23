@@ -38,12 +38,11 @@ in
       "networkmanager"
       "wheel"
     ];
-    shell = pkgs.zsh;
+    shell = pkgs.nushell;
   };
 
   security.sudo.wheelNeedsPassword = true;
 
-  programs.zsh.enable = true;
   programs.git.enable = true;
   programs.nix-ld.enable = true;
 
@@ -188,7 +187,6 @@ in
     "yt-dlp"
     "zip"
     "zoxide"
-    "zsh"
   ] ++ [
     (pkgs.callPackage ./pkgs/nfcloud.nix {})
   ];
