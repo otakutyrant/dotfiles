@@ -19,6 +19,10 @@ in
   home.stateVersion = "26.05";
 
   programs.home-manager.enable = true;
+  programs.nushell = {
+    enable = true;
+    plugins = [ pkgs.nushellPlugins.gstat ];
+  };
 
   home.sessionVariables = {
     EDITOR = "nvim";
