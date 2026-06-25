@@ -79,18 +79,12 @@ pick [
   "yamlfmt" # yaml formatter
   "taplo" # toml formatter
 
-  # Nvidia GPU
-  "cuda"
-  "cudnn"
-
   # Arch Linux
   "pkgfile" # List what package a file belong to.
   "arch-install-scripts" # Scripts to aid in installing Arch Linux
   "archlinux-keyring" # Trust chain
 
   # AI
-  "python-pytorch-opt-cuda"
-  "tensorboard"
   "whisper-git" # Transcribe
 
   # Font
@@ -122,7 +116,7 @@ pick [
 
   # GUI
   "google-chrome" # Web Browser
-  "steam" # Game, available in multiple repo
+  "pkgs.steam" # Game, available in multiple repo
   "network-manager-applet" # Tray for Network Manager
   "qbittorrent" # BitTorrent clients
   "feh" # Image viewer
@@ -131,8 +125,6 @@ pick [
   "baobab" # Disk usage display
   "gnome-system-monitor" # System monitoring
   "xsel" # Clipboard manager
-  "fcitx5-im" # Input method editor
-  "fcitx5-rime" # Input method editor
   "wps-office" # Office suites
   "rofi" # Application launchers
   "nutstore" # Cloud backup
@@ -146,6 +138,7 @@ pick [
   "clash-verge-rev" # Proxy
   "mpv" # video/audio player
   "baidunetdisk-bin" # Baidu Netdisk client
+  "wechat"
 
   # X11
   "arandr"

@@ -23,6 +23,21 @@ in
   networking.hostName = hostname;
   networking.networkmanager.enable = true;
 
+  nix.settings = {
+    max-jobs = 4;
+    cores = 8;
+
+    substituters = [
+      "https://mirror.sjtu.edu.cn/nix-channels/store"
+      "https://cache.nixos-cuda.org"
+      "https://cache.nixos.org/"
+    ];
+    trusted-public-keys = [
+      "cache.nixos-cuda.org:74DUi4Ye579gUqzH4ziL9IyiJBlDpMRn9MBN8oNan9M="
+      "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
+    ];
+  };
+
   nix.settings.experimental-features = [
     "nix-command"
     "flakes"
@@ -46,6 +61,7 @@ in
 
   programs.git.enable = true;
   programs.nix-ld.enable = true;
+  programs.steam.enable = true;
 
   virtualisation.docker.enable = true;
 
@@ -61,6 +77,8 @@ in
       ];
     };
   };
+
+  services.earlyoom.enable = true;
 
   services.displayManager.defaultSession = "none+i3";
   services.xserver.displayManager.lightdm.enable = true;
@@ -78,8 +96,10 @@ in
     enable = true;
     alsa.enable = true;
     alsa.support32Bit = true;
+    jack.enable = true;
     pulse.enable = true;
   };
+  security.rtkit.enable = true;
 
   i18n.inputMethod = {
     enable = true;
@@ -99,7 +119,10 @@ in
     "nerd-fonts.jetbrains-mono"
   ];
 
-  hardware.graphics.enable = true;
+  hardware.graphics = {
+    enable = true;
+    enable32Bit = true;
+  };
   hardware.nvidia = {
     modesetting.enable = true;
     open = true;
@@ -111,7 +134,11 @@ in
 
   nixpkgs.config.allowUnfree = true;
 
-  environment.systemPackages = corePackages;
+  environment.systemPackages = corePackages ++ [
+    pkgs.pavucontrol
+    pkgs.pulseaudio
+    pkgs.qt6Packages.fcitx5-configtool
+  ];
 
   system.stateVersion = "26.05";
 
