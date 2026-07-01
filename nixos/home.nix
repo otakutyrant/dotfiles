@@ -9,6 +9,9 @@
 let
   extraPackages = import ./extra-packages.nix { inherit lib pkgs; };
   home = config.home.homeDirectory;
+  imageResizePython = pkgs.python3.withPackages (pythonPackages: [
+    pythonPackages.pillow
+  ]);
   link = source: {
     inherit source;
     recursive = true;
@@ -84,10 +87,12 @@ in
     Unit = {
       Description = "Upscale small images under ${home}";
       After = [ "default.target" ];
+      StartLimitBurst = 3;
+      StartLimitIntervalSec = 60;
     };
     Service = {
       Type = "simple";
-      ExecStart = "${pkgs.python3}/bin/python3 ${home}/.local/bin/image_resize_daemon.py --root ${home} --target-short-side 800 --interval 5";
+      ExecStart = "${imageResizePython}/bin/python3 ${home}/.local/bin/image_resize_daemon.py --root ${home} --target-short-side 800 --interval 5";
       Restart = "always";
       RestartSec = 5;
     };
