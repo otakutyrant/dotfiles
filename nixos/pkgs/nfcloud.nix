@@ -59,13 +59,13 @@
 
 stdenv.mkDerivation rec {
   pname = "nfcloud";
-  version = "latest"; # Upstream provides a fixed static URL for Linux binary updates
+  version = "1.4.12";
 
   # 1. Fetching the remote archive
   src = fetchurl {
-    url = "https://backendoss.trafficmanager.net/builds/b1254a39cd5ecd349eca8c04/NFCLOUD-linux-1.4.10.tar.gz";
-    name = "nfcloud-linux-1.4.10.tar.gz";
-    hash = "sha256-FClC+cT7CyWzyzVS0iRgct5BWCH6MSlP3jXglOGcqyU=";
+    url = "https://backendoss.trafficmanager.net/api/v1/app/get/nfcloud/linux";
+    name = "nfcloud-linux-${version}.tar.gz";
+    hash = "sha256-XncjB68V2ULA3806fwqYIir29MnGaBfjQx3RfietH48=";
   };
 
   # Upstream archive lacks a top-level wrapper directory.
