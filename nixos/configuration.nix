@@ -91,6 +91,8 @@ in
   services.libinput.enable = true;
   services.gvfs.enable = true;
   services.tumbler.enable = true;
+  # GUI Bluetooth manager for pairing devices from i3.
+  services.blueman.enable = true;
 
   services.pipewire = {
     enable = true;
@@ -123,6 +125,14 @@ in
     enable = true;
     enable32Bit = true;
   };
+  # Include vendor firmware that Bluetooth/Wi-Fi adapters may need.
+  hardware.enableAllFirmware = true;
+  hardware.bluetooth = {
+    enable = true;
+    powerOnBoot = true;
+  };
+  # Better Bluetooth support for Xbox-compatible controllers, including 8BitDo XInput mode.
+  hardware.xpadneo.enable = true;
   hardware.nvidia = {
     modesetting.enable = true;
     open = true;
@@ -135,9 +145,15 @@ in
   nixpkgs.config.allowUnfree = true;
 
   environment.systemPackages = corePackages ++ [
+    # Provides bluetoothctl for fallback CLI pairing/debugging.
+    pkgs.bluez
     pkgs.pavucontrol
     pkgs.pulseaudio
     pkgs.qt6Packages.fcitx5-configtool
+  ];
+  # Udev rules for non-root access to common game controllers.
+  services.udev.packages = [
+    pkgs.game-devices-udev-rules
   ];
 
   system.stateVersion = "26.05";
