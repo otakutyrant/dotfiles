@@ -26,7 +26,17 @@ let
     "i3-wm" = "i3";
     "xorg" = "xorg-server";
     "xorg-xinit" = "xinit";
+    "nutstore" = pkgs.callPackage ./pkgs/nutstore.nix { };
   };
+  resolvePackage =
+    name:
+    let
+      resolved = packageAliases.${name} or name;
+    in
+    if builtins.isString resolved then
+      lib.attrByPath (lib.splitString "." resolved) null pkgs
+    else
+      resolved;
   pick =
     names:
     # Use the Nixpkgs attribute name when an alias exists; otherwise try
@@ -35,8 +45,7 @@ let
       map (
         name:
         let
-          resolvedName = packageAliases.${name} or name;
-          pkg = builtins.tryEval (lib.attrByPath (lib.splitString "." resolvedName) null pkgs);
+          pkg = builtins.tryEval (resolvePackage name);
         in
         if pkg.success then pkg.value else null
       ) names
@@ -107,6 +116,7 @@ pick [
   "btop"
   "file"
   "git-lfs"
+  "home-manager"
   "nil"
   "nixfmt"
   "bash-language-server"
@@ -116,7 +126,7 @@ pick [
 
   # GUI
   "google-chrome" # Web Browser
-  "pkgs.steam" # Game, available in multiple repo
+  "steam" # Game, available in multiple repo
   "network-manager-applet" # Tray for Network Manager
   "qbittorrent" # BitTorrent clients
   "feh" # Image viewer
@@ -125,6 +135,7 @@ pick [
   "baobab" # Disk usage display
   "gnome-system-monitor" # System monitoring
   "xsel" # Clipboard manager
+  "fcitx5-rime" # Input method editor
   "wps-office" # Office suites
   "rofi" # Application launchers
   "nutstore" # Cloud backup

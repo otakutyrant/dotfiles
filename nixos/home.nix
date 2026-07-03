@@ -22,7 +22,7 @@ in
   home.homeDirectory = "/home/${username}";
   home.stateVersion = "26.05";
 
-  programs.home-manager.enable = true;
+  programs.home-manager.enable = false;
   programs.nushell = {
     enable = true;
     plugins = [ pkgs.nushellPlugins.gstat ];
