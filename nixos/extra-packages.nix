@@ -138,6 +138,7 @@ pick [
   "fcitx5-rime" # Input method editor
   "wps-office" # Office suites
   "rofi" # Application launchers
+  "pkgs.onboard" # On-screen keyboard
   "nutstore" # Cloud backup
   "goldendict-ng-git" # Dictionary
   "obs-studio" # Screen Recording
