@@ -4,7 +4,9 @@
   fetchurl,
   autoPatchelfHook,
   makeWrapper,
+  unzip,
   python3,
+  gobject-introspection,
   zlib,
   libX11,
   libXext,
@@ -16,13 +18,21 @@
   libXdamage,
   libXfixes,
   libXcomposite,
+  libGLU,
   fontconfig,
   freetype,
   glib,
+  gdk-pixbuf,
   gtk3,
+  webkitgtk_4_1,
+  glib-networking,
+  pango,
+  harfbuzz,
+  at-spi2-core,
   libnotify,
   libayatana-appindicator,
   alsa-lib,
+  gst_all_1,
   xdg-utils,
   procps,
   nautilus,
@@ -32,6 +42,24 @@ let
   pythonEnv = python3.withPackages (pythonPackages: [
     pythonPackages.pygobject3
   ]);
+  typelibPath = lib.makeSearchPath "lib/girepository-1.0" (
+    map lib.getLib [
+      glib
+      gdk-pixbuf
+      gtk3
+      webkitgtk_4_1
+      pango
+      harfbuzz
+      at-spi2-core
+      libnotify
+      libayatana-appindicator
+      gobject-introspection
+    ]
+  );
+  gstPluginPath = lib.makeSearchPath "lib/gstreamer-1.0" [
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
+  ];
 in
 stdenv.mkDerivation rec {
   pname = "nutstore";
@@ -47,6 +75,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoPatchelfHook
     makeWrapper
+    unzip
   ];
 
   buildInputs = [
@@ -61,13 +90,23 @@ stdenv.mkDerivation rec {
     libXdamage
     libXfixes
     libXcomposite
+    libGLU
     fontconfig
     freetype
     glib
+    gdk-pixbuf
     gtk3
+    webkitgtk_4_1
+    glib-networking
+    pango
+    harfbuzz
+    at-spi2-core
     libnotify
     libayatana-appindicator
     alsa-lib
+    gst_all_1.gstreamer
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
     stdenv.cc.cc.lib
   ];
 
@@ -76,6 +115,7 @@ stdenv.mkDerivation rec {
 
     mkdir -p $out/bin $out/share/nutstore $out/share/applications $out/share/pixmaps
     cp -r . $out/share/nutstore/
+    unzip -j $out/share/nutstore/lib/nutstore_client-${version}.jar '*.so' -d $out/share/nutstore/lib/native
 
     cp $out/share/nutstore/app-icon/nutstore.png $out/share/pixmaps/nutstore.png
     substitute $out/share/nutstore/gnome-config/menu/nutstore-menu.desktop \
@@ -91,7 +131,14 @@ stdenv.mkDerivation rec {
           nautilus
         ]
       } \
-      --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH"
+      --prefix LD_LIBRARY_PATH : "${
+        lib.makeLibraryPath [
+          webkitgtk_4_1
+        ]
+      }" \
+      --prefix GIO_EXTRA_MODULES : "${glib-networking}/lib/gio/modules" \
+      --prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "${gstPluginPath}" \
+      --prefix GI_TYPELIB_PATH : "${typelibPath}"
 
     runHook postInstall
   '';
