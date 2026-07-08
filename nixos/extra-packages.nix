@@ -132,6 +132,7 @@ pick [
   "feh" # Image viewer
   "scrot" # Screenshot
   "nautilus" # File Manager
+  "file-roller" # Archive Manager
   "baobab" # Disk usage display
   "gnome-system-monitor" # System monitoring
   "xsel" # Clipboard manager
@@ -151,6 +152,7 @@ pick [
   "mpv" # video/audio player
   "baidunetdisk-bin" # Baidu Netdisk client
   "wechat"
+  "pkgs.papers" # GNOME next-generation PDF Viewer
 
   # X11
   "arandr"

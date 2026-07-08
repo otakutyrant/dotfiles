@@ -162,10 +162,10 @@ assign [class="org.gnome.Nautilus"] $ws4
 assign [class="goldendict"] $ws4
 
 # Automatically putting workspaces on specific screens.
-workspace $ws1 output DP-2
-workspace $ws2 output DP-4
-workspace $ws3 output DP-2
-workspace $ws4 output DP-4
+workspace $ws1 output DP-4
+workspace $ws2 output DP-2
+workspace $ws3 output DP-4
+workspace $ws4 output DP-2
 
 # Automatically back-and-forth when switching to the current workspace
 # For instance: Assume you are on workspace "1: www" and switch to "2: IM"
@@ -194,7 +194,7 @@ exec --no-startup-id dex --autostart --environment i3
 exec_always --no-startup-id sh -c 'killall picom 2>/dev/null; exec picom --config "$HOME/.config/picom/picom.conf"'
 
 # https://faq.i3wm.org/question/2332/flexible-monitor-setup.1.html
-exec --no-startup-id xrandr --output HDMI-0 --off --output DP-0 --off --output DP-1 --off --output DP-2 --primary --mode 2560x1440 --pos 1080x480 --rotate normal --output DP-3 --off --output DP-4 --mode 1920x1080 --pos 0x0 --rotate left --output DP-5 --off
+exec --no-startup-id xrandr --output HDMI-0 --off --output DP-0 --off --output DP-1 --off --output DP-2 --mode 1920x1080 --pos 0x0 --rotate left --output DP-3 --off --output DP-4 --mode 2560x1440 --pos 1080x480 --rotate normal --output DP-5 --off
 
 
 # Sleep displays after 5 minutes of inactivity.

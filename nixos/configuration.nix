@@ -28,7 +28,8 @@ in
     cores = 8;
 
     substituters = [
-      "https://mirror.sjtu.edu.cn/nix-channels/store"
+      "https://mirrors.tuna.tsinghua.edu.cn/nix-channels/store"
+      "https://mirrors.ustc.edu.cn/nix-channels/store"
       "https://cache.nixos-cuda.org"
       "https://cache.nixos.org/"
     ];
@@ -93,6 +94,17 @@ in
   services.tumbler.enable = true;
   # GUI Bluetooth manager for pairing devices from i3.
   services.blueman.enable = true;
+
+  fileSystems."/mnt/shared" = {
+    device = "/dev/disk/by-uuid/6FB7-A952";
+    fsType = "exfat";
+    options = [
+      "nofail"
+      "uid=1000"
+      "gid=100"
+      "umask=022"
+    ];
+  };
 
   services.pipewire = {
     enable = true;
@@ -159,7 +171,7 @@ in
   system.stateVersion = "26.05";
 
   boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
+  boot.loader.efi.canTouchEfiVariables = false;
   boot.initrd.availableKernelModules = [
     "nvidia"
     "nvidia_modeset"
