@@ -171,6 +171,8 @@ in
   system.stateVersion = "26.05";
 
   boot.loader.systemd-boot.enable = true;
+  # Windows shares the ESP with NixOS, so systemd-boot detects it automatically.
+  boot.loader.systemd-boot.windows = { };
   boot.loader.efi.canTouchEfiVariables = false;
   boot.initrd.availableKernelModules = [
     "nvidia"
