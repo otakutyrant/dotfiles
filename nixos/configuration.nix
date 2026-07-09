@@ -59,6 +59,7 @@ in
   };
 
   security.sudo.wheelNeedsPassword = true;
+  security.polkit.enable = true;
 
   programs.git.enable = true;
   programs.nix-ld.enable = true;
@@ -91,20 +92,10 @@ in
 
   services.libinput.enable = true;
   services.gvfs.enable = true;
+  services.udisks2.enable = true;
   services.tumbler.enable = true;
   # GUI Bluetooth manager for pairing devices from i3.
   services.blueman.enable = true;
-
-  fileSystems."/mnt/shared" = {
-    device = "/dev/disk/by-uuid/6FB7-A952";
-    fsType = "exfat";
-    options = [
-      "nofail"
-      "uid=1000"
-      "gid=100"
-      "umask=022"
-    ];
-  };
 
   services.pipewire = {
     enable = true;

@@ -191,6 +191,7 @@ bindsym $mod+shift+l exec i3lock
 # Autostart desktop files according to XDG.
 # https://wiki.archlinux.org/index.php/XDG_Autostart
 exec --no-startup-id dex --autostart --environment i3
+exec --no-startup-id "$HOME/.nix-profile/libexec/polkit-gnome-authentication-agent-1"
 exec_always --no-startup-id sh -c 'killall picom 2>/dev/null; exec picom --config "$HOME/.config/picom/picom.conf"'
 
 # https://faq.i3wm.org/question/2332/flexible-monitor-setup.1.html

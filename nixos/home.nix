@@ -28,6 +28,11 @@ in
     plugins = [ pkgs.nushellPlugins.gstat ];
   };
 
+  services.udiskie = {
+    enable = true;
+    tray = "auto";
+  };
+
   home.sessionVariables = {
     EDITOR = "nvim";
     VISUAL = "nvim";

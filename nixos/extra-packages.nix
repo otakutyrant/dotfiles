@@ -126,6 +126,7 @@ pick [
 
   # GUI
   "google-chrome" # Web Browser
+  "polkit_gnome" # Authentication agent for privileged desktop actions.
   "steam" # Game, available in multiple repo
   "network-manager-applet" # Tray for Network Manager
   "qbittorrent" # BitTorrent clients
