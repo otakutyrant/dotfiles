@@ -22,10 +22,12 @@ let
     "words" = "scowl";
     "network-manager-applet" = "networkmanagerapplet";
     "fcitx5-im" = "fcitx5";
+    "wps-office" = "wpsoffice-cn";
     "goldendict-ng-git" = "goldendict-ng";
     "i3-wm" = "i3";
     "xorg" = "xorg-server";
     "xorg-xinit" = "xinit";
+    "pkgfile" = "nix-index";
     "nutstore" = pkgs.callPackage ./pkgs/nutstore.nix { };
   };
   resolvePackage =
@@ -40,16 +42,17 @@ let
   pick =
     names:
     # Use the Nixpkgs attribute name when an alias exists; otherwise try
-    # the original package name. Missing/removed packages are filtered out.
-    builtins.filter (pkg: pkg != null) (
-      map (
-        name:
-        let
-          pkg = builtins.tryEval (resolvePackage name);
-        in
-        if pkg.success then pkg.value else null
-      ) names
-    );
+    # the original package name.
+    map (
+      name:
+      let
+        pkg = builtins.tryEval (resolvePackage name);
+      in
+      if pkg.success && pkg.value != null then
+        pkg.value
+      else
+        throw "Package `${name}` could not be resolved in nixpkgs"
+    ) names;
 in
 pick [
   # Network
@@ -91,7 +94,6 @@ pick [
   # Arch Linux
   "pkgfile" # List what package a file belong to.
   "arch-install-scripts" # Scripts to aid in installing Arch Linux
-  "archlinux-keyring" # Trust chain
 
   # AI
   "whisper-git" # Transcribe
@@ -138,22 +140,20 @@ pick [
   "gnome-system-monitor" # System monitoring
   "xsel" # Clipboard manager
   "fcitx5-rime" # Input method editor
-  "wps-office" # Office suites
+  "wpsoffice-cn" # Office suites
   "rofi" # Application launchers
-  "pkgs.onboard" # On-screen keyboard
+  "onboard" # On-screen keyboard
   "nutstore" # Cloud backup
   "goldendict-ng-git" # Dictionary
   "obs-studio" # Screen Recording
   "gedit" # Editor
   "calibre" # E-Book Manager
-  "archlinux-wallpaper" # Arch Linux Official Wallpapers
   "variety" # Wallpaper Manager
   "anki" # Flashcards
   "clash-verge-rev" # Proxy
   "mpv" # video/audio player
-  "baidunetdisk-bin" # Baidu Netdisk client
   "wechat"
-  "pkgs.papers" # GNOME next-generation PDF Viewer
+  "papers" # GNOME next-generation PDF Viewer
 
   # X11
   "arandr"
@@ -163,8 +163,6 @@ pick [
   "xorg-xinit"
   "xsel" # Copy from CLI clients to system clipboard
   "xfce4-notifyd"
-  "deepin-gtk-theme"
-  "deepin-icon-theme"
   "dex" # Autostart XDG desktop files
   "kitty"
   "i3lock"

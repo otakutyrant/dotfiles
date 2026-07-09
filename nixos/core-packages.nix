@@ -16,17 +16,18 @@ let
   pick =
     names:
     # Use the Nixpkgs attribute name when an alias exists; otherwise try
-    # the original package name. Missing/removed packages are filtered out.
-    builtins.filter (pkg: pkg != null) (
-      map (
-        name:
-        let
-          resolvedName = packageAliases.${name} or name;
-          pkg = builtins.tryEval (lib.attrByPath (lib.splitString "." resolvedName) null pkgs);
-        in
-        if pkg.success then pkg.value else null
-      ) names
-    );
+    # the original package name.
+    map (
+      name:
+      let
+        resolvedName = packageAliases.${name} or name;
+        pkg = builtins.tryEval (lib.attrByPath (lib.splitString "." resolvedName) null pkgs);
+      in
+      if pkg.success && pkg.value != null then
+        pkg.value
+      else
+        throw "Package `${name}` could not be resolved in nixpkgs"
+    ) names;
 in
 pick [
   # File Navigator
