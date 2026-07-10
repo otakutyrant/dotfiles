@@ -195,7 +195,7 @@ exec --no-startup-id "$HOME/.nix-profile/libexec/polkit-gnome-authentication-age
 exec_always --no-startup-id sh -c 'killall picom 2>/dev/null; exec picom --config "$HOME/.config/picom/picom.conf"'
 
 # https://faq.i3wm.org/question/2332/flexible-monitor-setup.1.html
-exec --no-startup-id xrandr --output HDMI-0 --off --output DP-0 --off --output DP-1 --off --output DP-2 --mode 1920x1080 --pos 0x0 --rotate left --output DP-3 --off --output DP-4 --mode 2560x1440 --pos 1080x480 --rotate normal --output DP-5 --off
+exec --no-startup-id xrandr --output HDMI-0 --off --output DP-0 --off --output DP-1 --off --output DP-2 --mode 1920x1080 --pos 0x0 --rotate left --output DP-3 --off --output DP-4 --primary --mode 2560x1440 --pos 1080x480 --rotate normal --output DP-5 --off
 
 
 # Sleep displays after 5 minutes of inactivity.
