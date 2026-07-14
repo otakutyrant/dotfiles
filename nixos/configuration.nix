@@ -154,6 +154,20 @@ in
     pkgs.pulseaudio
     pkgs.qt6Packages.fcitx5-configtool
   ];
+
+  fileSystems."/run/media/${username}/Shared" = {
+    device = "/dev/disk/by-uuid/6FB7-A952";
+    fsType = "exfat";
+    options = [
+      "nofail"
+      "rw"
+      "uid=1000"
+      "gid=100"
+      "umask=0002"
+      "x-gvfs-show"
+    ];
+  };
+
   # Udev rules for non-root access to common game controllers.
   services.udev.packages = [
     pkgs.game-devices-udev-rules
