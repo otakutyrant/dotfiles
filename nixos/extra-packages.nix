@@ -154,6 +154,7 @@ pick [
   "mpv" # video/audio player
   "wechat"
   "papers" # GNOME next-generation PDF Viewer
+  "ticktick" # To-do list
 
   # X11
   "arandr"
