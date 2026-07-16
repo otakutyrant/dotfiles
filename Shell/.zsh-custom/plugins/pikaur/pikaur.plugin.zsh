@@ -1,7 +1,0 @@
-alias aurupg='pikaur -Syu'
-alias aurin='pikaur -S'
-alias aurins='pikaur -U'
-alias aure='pikaur -R'
-alias aursyy='pikaur -Syy'
-alias aurloc='pikaur -Qi'
-alias aurlocs='pikaur -Qs'

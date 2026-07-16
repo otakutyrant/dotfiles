@@ -18,7 +18,7 @@ Find a client which has highly refined default configuration so you do not overr
 
 As for Neovim. If you can use third-part tool to handle files, use them rather than install an corresponding plugin, like useless Black plugin because you can execute external commands in Ex command as `:!black %`. Tinkering Neovim is ceaseless.
 
-I use `.gitmodules` to git clone a submodule `oh-my-zsh`.
+Home Manager manages Oh My Zsh, while local theme customizations live under `nixos/zsh-custom`.
 
 `.pre-commit-config.yaml`, `pyproject.toml`, `stylua.toml` assure the unified coding style of dotfiles.
 

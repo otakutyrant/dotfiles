@@ -1,7 +1,0 @@
-alias aurupg='aurman -Syu'
-alias aurin='aurman -S'
-alias aurins='aurman -U'
-alias aure='aurman -R'
-alias aursyy='aurman -Syy'
-alias aurloc='aurman -Qi'
-alias aurlocs='aurman -Qs'
