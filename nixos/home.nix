@@ -12,10 +12,27 @@ let
   imageResizePython = pkgs.python3.withPackages (pythonPackages: [
     pythonPackages.pillow
   ]);
-  link = source: {
-    inherit source;
-    recursive = true;
-  };
+  stow =
+    dir:
+    let
+      collect =
+        prefix: path:
+        lib.concatMapAttrs (
+          name: type:
+          let
+            relativePath = if prefix == "" then name else "${prefix}/${name}";
+            sourcePath = path + "/${name}";
+          in
+          if type == "directory" then
+            collect relativePath sourcePath
+          else
+            {
+              ${relativePath}.source = sourcePath;
+            }
+        ) (builtins.readDir path);
+    in
+    collect "" dir;
+  stowAll = dirs: lib.foldl' (files: dir: files // stow dir) { } dirs;
 in
 {
   home.username = username;
@@ -33,7 +50,10 @@ in
   programs.ripgrep.enable = true; # Grep alternative.
   programs.rofi.enable = true; # Application launcher.
   programs.yt-dlp.enable = true; # YouTube downloader.
-  programs.zoxide.enable = true; # Jump tool.
+  programs.zoxide = {
+    enable = true; # Jump tool.
+    enableNushellIntegration = false;
+  };
 
   services.network-manager-applet.enable = true; # Tray for NetworkManager.
   services.udiskie = {
@@ -56,46 +76,31 @@ in
 
   home.packages = extraPackages;
 
-  home.file = {
-    ".config/autostart" = link ../XDG/.config/autostart;
-    ".config/codex" = link ../Codex/.config/codex;
-    ".config/git" = link ../Git/.config/git;
-    ".config/gtk-3.0" = link ../X11/.config/gtk-3.0;
-    ".config/i3" = link ../i3/.config/i3;
-    ".config/i3status-rust" = link ../i3/.config/i3status-rust;
-    ".config/joshuto" = link ../joshuto/.config/joshuto;
-    ".config/kitty" = link ../Kitty/.config/kitty;
-    ".config/mpv" = link ../mpv/.config/mpv;
-    ".config/npm" = link ../npm/.config/npm;
-    ".config/nushell" = link ../Nushell/.config/nushell;
-    ".config/nvim" = link ../Neovim/.config/nvim;
-    ".config/picom" = link ../XDG/.config/picom;
-    ".config/ruff" = link ../Python/.config/ruff;
-    ".config/tmux" = link ../Tmux/.config/tmux;
-    ".gemini" = link ../Gemini/.gemini;
-    ".local/bin" = link ../XDG/.local/bin;
-    ".local/bin/forward" = {
-      source = ../SSH/.local/bin/forward;
-      executable = true;
+  home.file =
+    stowAll [
+      ../Codex
+      ../Gemini
+      ../Git
+      ../Kitty
+      ../mpv
+      ../Neovim
+      ../npm
+      ../Nushell
+      ../Python
+      ../Shell
+      ../SSH
+      ../Tmux
+      ../X11
+      ../XDG
+      ../i3
+      ../joshuto
+    ]
+    // {
+      ".local/bin/image_resize_daemon.py" = {
+        source = ../Systemd/.local/bin/image_resize_daemon.py;
+        executable = true;
+      };
     };
-    ".local/bin/image_resize_daemon.py" = {
-      source = ../Systemd/.local/bin/image_resize_daemon.py;
-      executable = true;
-    };
-    ".local/bin/tmuxen.sh" = {
-      source = ../Tmux/.local/bin/tmuxen.sh;
-      executable = true;
-    };
-    ".ssh/config".source = ../SSH/.ssh/config;
-    ".xinitrc".source = ../X11/.xinitrc;
-    ".xprofile".source = ../X11/.xprofile;
-    ".zsh-custom" = link ../Shell/.zsh-custom;
-    ".zshenv".source = ../Shell/.zshenv;
-    ".zshrc".source = ../Shell/.zshrc;
-  }
-  // lib.optionalAttrs (builtins.pathExists ../Shell/.oh-my-zsh/oh-my-zsh.sh) {
-    ".oh-my-zsh" = link ../Shell/.oh-my-zsh;
-  };
 
   systemd.user.services.image-resize-daemon = {
     Unit = {
