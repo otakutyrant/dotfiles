@@ -155,6 +155,7 @@ pick [
   "wechat"
   "papers" # GNOME next-generation PDF Viewer
   "ticktick" # To-do list
+  "nitrogen" # Wallpapers mamanger
 
   # X11
   "arandr"

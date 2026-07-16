@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=NFCLOUD
+Comment=NFCLOUD Client
+Exec=sh -c "sleep 5; exec nfcloud"
+Icon=nfcloud
+Terminal=false
+Categories=Network;
+X-GNOME-Autostart-enabled=true

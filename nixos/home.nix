@@ -49,6 +49,7 @@ in
   home.packages = extraPackages;
 
   home.file = {
+    ".config/autostart" = link ../XDG/.config/autostart;
     ".config/codex" = link ../Codex/.config/codex;
     ".config/git" = link ../Git/.config/git;
     ".config/gtk-3.0" = link ../X11/.config/gtk-3.0;
