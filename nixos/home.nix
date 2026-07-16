@@ -23,11 +23,19 @@ in
   home.stateVersion = "26.05";
 
   programs.home-manager.enable = false;
+  programs.btop.enable = true; # System monitor.
+  programs.fd.enable = true; # Simple, fast and user-friendly alternative to find.
+  programs.fzf.enable = true; # Fuzzy search.
   programs.nushell = {
     enable = true;
     plugins = [ pkgs.nushellPlugins.gstat ];
   };
+  programs.ripgrep.enable = true; # Grep alternative.
+  programs.rofi.enable = true; # Application launcher.
+  programs.yt-dlp.enable = true; # YouTube downloader.
+  programs.zoxide.enable = true; # Jump tool.
 
+  services.network-manager-applet.enable = true; # Tray for NetworkManager.
   services.udiskie = {
     enable = true;
     tray = "auto";

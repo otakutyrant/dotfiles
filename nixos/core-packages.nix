@@ -8,8 +8,6 @@ let
     "gvfs-smb" = "gvfs";
     "ntfs-3g" = "ntfs3g";
     "python-pynvim" = "python3Packages.pynvim";
-    "nvidia" = "linuxPackages_latest.nvidia_x11";
-    "nvidia-utils" = "linuxPackages_latest.nvidia_x11";
     "tar" = "gnutar";
     "alsa" = "alsa-lib";
   };
@@ -35,14 +33,11 @@ pick [
   "gvfs-mtp" # Virtual filesystem implementation for GIO (Android, media player).
   "gvfs-smb" # For SMB protocol.
   "ntfs-3g" # Microsoft Windows filesystem NTFS.
-  "fd" # Simple, fast and user-friendly alternative to find.
-  "zoxide" # jump tool
 
   # Network
   "curl"
   "wget"
   "iputils"
-  "networkmanager"
   "openssh"
   "rsync"
   "whois"
@@ -51,13 +46,6 @@ pick [
   # General
   "neovim" # editor
   "python-pynvim" # editor
-  "ripgrep" # grep
-  "fzf" # fuzzy search
-  "git" # version control
-
-  # Nvidia GPU
-  "nvidia"
-  "nvidia-utils" # It includes nvidia-smi.
 
   # Operation System
   "lsb-release" # Show what the linux distribution is.

@@ -15,17 +15,11 @@ let
     "python-pytorch-opt-cuda" = "python3Packages.torchWithCuda";
     "tensorboard" = "python3Packages.tensorboard";
     "whisper-git" = "whisper-cpp";
-    "ttf-sarasa-gothic" = "sarasa-gothic";
-    "ttf-jetbrains-mono-nerd" = "nerd-fonts.jetbrains-mono";
-    "noto-fonts-emoji" = "noto-fonts-color-emoji";
     "python-sounddevice" = "python3Packages.sounddevice";
     "words" = "scowl";
-    "network-manager-applet" = "networkmanagerapplet";
     "fcitx5-im" = "fcitx5";
     "wps-office" = "wpsoffice-cn";
     "goldendict-ng-git" = "goldendict-ng";
-    "i3-wm" = "i3";
-    "xorg" = "xorg-server";
     "xorg-xinit" = "xinit";
     "pkgfile" = "nix-index";
     "nutstore" = pkgs.callPackage ./pkgs/nutstore.nix { };
@@ -55,9 +49,6 @@ let
     ) names;
 in
 pick [
-  # Network
-  "yt-dlp" # Youtube Downloader
-
   # Development
   # General
   "prettier" # formatter for html, css, json, yaml, markdown, typescript
@@ -98,24 +89,17 @@ pick [
   # AI
   "whisper-git" # Transcribe
 
-  # Font
-  "ttf-sarasa-gothic" # CJK
-  "ttf-jetbrains-mono-nerd"
-  "noto-fonts-emoji"
-
   # Media
   "ffmpeg"
   "mediainfo" # Viewing information about media files
 
   # Audio
-  "pipewire" # Sound server, better than pulseaudio and jack.
   "python-sounddevice" # Importing this in Python can suppress unnecessary ALSA errors, see https://github.com/Uberi/speech_recognition/issues/182#issuecomment-2625391270
 
   # Others
   "words" # A collection of International 'words' files for /usr/share/dict.
   "sd" # Search and replace.
   "codex"
-  "btop"
   "file"
   "git-lfs"
   "home-manager"
@@ -129,8 +113,6 @@ pick [
   # GUI
   "google-chrome" # Web Browser
   "polkit_gnome" # Authentication agent for privileged desktop actions.
-  "steam" # Game, available in multiple repo
-  "network-manager-applet" # Tray for Network Manager
   "qbittorrent" # BitTorrent clients
   "feh" # Image viewer
   "scrot" # Screenshot
@@ -138,10 +120,7 @@ pick [
   "file-roller" # Archive Manager
   "baobab" # Disk usage display
   "gnome-system-monitor" # System monitoring
-  "xsel" # Clipboard manager
-  "fcitx5-rime" # Input method editor
   "wpsoffice-cn" # Office suites
-  "rofi" # Application launchers
   "onboard" # On-screen keyboard
   "nutstore" # Cloud backup
   "goldendict-ng-git" # Dictionary
@@ -159,15 +138,10 @@ pick [
 
   # X11
   "arandr"
-  "i3-wm"
-  "i3status-rust"
-  "xorg"
   "xorg-xinit"
-  "xsel" # Copy from CLI clients to system clipboard
   "xfce4-notifyd"
   "dex" # Autostart XDG desktop files
   "kitty"
-  "i3lock"
   "picom"
   "gimp"
 ]
