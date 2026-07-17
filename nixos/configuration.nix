@@ -62,7 +62,15 @@ in
   security.polkit.enable = true;
 
   programs.git.enable = true;
+  programs.neovim = {
+    enable = true;
+    defaultEditor = true;
+    withNodeJs = true;
+    withPython3 = true;
+    withRuby = false;
+  };
   programs.nix-ld.enable = true;
+  programs.npm.enable = true;
   programs.steam.enable = true;
 
   virtualisation.docker.enable = true;

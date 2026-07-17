@@ -52,6 +52,7 @@ pick [
   # Development
   # General
   "prettier" # formatter for html, css, json, yaml, markdown, typescript
+  "tree-sitter" # CLI used by nvim-treesitter to build/update parsers.
   "cloc" # code analysis
   "page-git" # pager powered by neovim
   "tldr" # document reader
@@ -64,10 +65,16 @@ pick [
   "uv" # supreme package manager
   "ruff" # linter and formatter. I am not sure what ruff-python is for.
   "pyright" # ls and type checker
+  "basedpyright" # Python ls used by Neovim.
 
   # Front End
+  "eslint" # ESLint library used by vscode-eslint-language-server.
   "eslint-language-server"
+  "pnpm" # Package manager for Node projects and their local LSP dependencies.
+  "typescript" # Provides tsserver for typescript-tools.nvim.
   "typescript-language-server"
+  "tailwindcss-language-server"
+  "prisma-language-server"
 
   # Rust
   "rust"

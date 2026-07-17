@@ -44,7 +44,6 @@ pick [
 
   # Development
   # General
-  "neovim" # editor
   "python-pynvim" # editor
 
   # Operation System
