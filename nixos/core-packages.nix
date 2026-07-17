@@ -1,26 +1,12 @@
 { lib, pkgs }:
 
 let
-  # When an Arch package name differs from the Nixpkgs attribute, translate it
-  # here before lookup.
-  packageAliases = {
-    "gvfs-mtp" = "gvfs";
-    "gvfs-smb" = "gvfs";
-    "ntfs-3g" = "ntfs3g";
-    "python-pynvim" = "python3Packages.pynvim";
-    "tar" = "gnutar";
-    "alsa" = "alsa-lib";
-    "pulseaudio" = "pulseaudioFull";
-  };
   pick =
     names:
-    # Use the Nixpkgs attribute name when an alias exists; otherwise try
-    # the original package name.
     map (
       name:
       let
-        resolvedName = packageAliases.${name} or name;
-        pkg = builtins.tryEval (lib.attrByPath (lib.splitString "." resolvedName) null pkgs);
+        pkg = builtins.tryEval (lib.attrByPath (lib.splitString "." name) null pkgs);
       in
       if pkg.success && pkg.value != null then
         pkg.value
@@ -31,9 +17,8 @@ in
 pick [
   # File Navigator
   "tree"
-  "gvfs-mtp" # Virtual filesystem implementation for GIO (Android, media player).
-  "gvfs-smb" # For SMB protocol.
-  "ntfs-3g" # Microsoft Windows filesystem NTFS.
+  "gvfs" # Virtual filesystem implementation for GIO, including MTP and SMB.
+  "ntfs3g" # Microsoft Windows filesystem NTFS.
 
   # Network
   "curl"
@@ -45,7 +30,7 @@ pick [
 
   # Development
   # General
-  "python-pynvim" # editor
+  "python3Packages.pynvim" # editor
 
   # Operation System
   "lsb-release" # Show what the linux distribution is.
@@ -54,17 +39,17 @@ pick [
   "bzip2"
   "gzip"
   "p7zip"
-  "tar"
+  "gnutar"
   "unrar"
   "unzip"
   "xz"
   "zip"
 
   # Audio
-  "alsa" # Advanced Linux Sound Architecture. Providing kernel driven sound card drivers
+  "alsa-lib" # Advanced Linux Sound Architecture. Providing kernel driven sound card drivers
   "alsa-utils" # Containing alsamixer, an interface for audio device configuration.
   "pavucontrol" # PulseAudio volume control.
-  "pulseaudio" # Provides PulseAudio CLI tools.
+  "pulseaudioFull" # Provides PulseAudio CLI tools.
 
   # Bluetooth
   "bluez" # Provides bluetoothctl for fallback CLI pairing/debugging.

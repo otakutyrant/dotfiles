@@ -81,7 +81,7 @@ Haplessly, kitty cannot handle remote sessions so far. So though I dislike tmux,
 
 # XDG
 
-I use [mineapps.list](https://wiki.archlinux.org/title/XDG_MIME_Applications) to set [Default applications](https://wiki.archlinux.org/index.php/Default_applications).
+I use `mimeapps.list` to set default applications.
 
 All configuration in this dotfiles are put in `$XDG_CONFIG_HOME` as possible as they can.
 
@@ -95,9 +95,9 @@ Some packages have `dotenv` to export their environment variables. `.zshrc` will
 
 I tried to migrate to Wayland but terminated, because Nvidia support is not good enough yet. Blame Nvidia!
 
-# Two lists to install in Arch Linux
+# Packages
 
-By the way, I use Arch Linux. So I maintained two lists for [CLI clients](cli_clients.txt) and [GUI clients](gui_clients.txt), highly commented. After installing Arch Linux in a new machine, I install all packages from the files via this way like `pacman -S $(sed "/#/D" gui_clients.txt)`.
+This repository now targets NixOS with Home Manager. System-level packages live in `nixos/core-packages.nix`, while user-facing development and GUI packages live in `nixos/extra-packages.nix`. Package names there are Nixpkgs attribute names, not names from another distribution.
 
 I noticed a trend that traditional GNU CLI clients are replaced by high-performance Rust alternatives, like `find` is replaced by `fd`, `grep` by `ripgrep` or `fzf`, `less` by `page` and so on.
 
