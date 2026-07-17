@@ -148,6 +148,11 @@ in
   nixpkgs.config.allowUnfree = true;
 
   environment.systemPackages = corePackages ++ [
+    # Build tools for compiling local/native software, including Neovim plugins.
+    pkgs.cmake
+    pkgs.gcc
+    pkgs.gnumake
+    pkgs.pkg-config
     # Provides bluetoothctl for fallback CLI pairing/debugging.
     pkgs.bluez
     pkgs.pavucontrol
