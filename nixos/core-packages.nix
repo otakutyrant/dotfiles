@@ -10,6 +10,7 @@ let
     "python-pynvim" = "python3Packages.pynvim";
     "tar" = "gnutar";
     "alsa" = "alsa-lib";
+    "pulseaudio" = "pulseaudioFull";
   };
   pick =
     names:
@@ -62,6 +63,11 @@ pick [
   # Audio
   "alsa" # Advanced Linux Sound Architecture. Providing kernel driven sound card drivers
   "alsa-utils" # Containing alsamixer, an interface for audio device configuration.
+  "pavucontrol" # PulseAudio volume control.
+  "pulseaudio" # Provides PulseAudio CLI tools.
+
+  # Bluetooth
+  "bluez" # Provides bluetoothctl for fallback CLI pairing/debugging.
 
   # Others
   "xdg-user-dirs" # Generate common user directories.

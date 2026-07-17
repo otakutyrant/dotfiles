@@ -155,18 +155,7 @@ in
 
   nixpkgs.config.allowUnfree = true;
 
-  environment.systemPackages = corePackages ++ [
-    # Build tools for compiling local/native software, including Neovim plugins.
-    pkgs.cmake
-    pkgs.gcc
-    pkgs.gnumake
-    pkgs.pkg-config
-    # Provides bluetoothctl for fallback CLI pairing/debugging.
-    pkgs.bluez
-    pkgs.pavucontrol
-    pkgs.pulseaudio
-    pkgs.qt6Packages.fcitx5-configtool
-  ];
+  environment.systemPackages = corePackages;
 
   fileSystems."/run/media/${username}/Shared" = {
     device = "/dev/disk/by-uuid/6FB7-A952";

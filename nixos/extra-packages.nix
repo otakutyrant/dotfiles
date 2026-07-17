@@ -22,6 +22,7 @@ let
     "goldendict-ng-git" = "goldendict-ng";
     "xorg-xinit" = "xinit";
     "pkgfile" = "nix-index";
+    "fcitx5-configtool" = "qt6Packages.fcitx5-configtool";
     "nutstore" = pkgs.callPackage ./pkgs/nutstore.nix { };
   };
   resolvePackage =
@@ -51,6 +52,10 @@ in
 pick [
   # Development
   # General
+  "cmake" # build system used by native tools and plugins
+  "gcc" # compiler used by native tools and plugins
+  "gnumake" # make implementation used by native tools and plugins
+  "pkg-config" # library discovery helper used by native builds
   "prettier" # formatter for html, css, json, yaml, markdown, typescript
   "tree-sitter" # CLI used by nvim-treesitter to build/update parsers.
   "cloc" # code analysis
@@ -146,6 +151,7 @@ pick [
   # X11
   "arandr"
   "xorg-xinit"
+  "fcitx5-configtool" # GUI configuration tool for Fcitx5.
   "xfce4-notifyd"
   "dex" # Autostart XDG desktop files
   "kitty"
