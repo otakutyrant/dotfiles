@@ -16,20 +16,3 @@ def replace [from: string, to: string] {
     rg -l --color=never $from | lines | each { |f| sd $from $to $f }
     null
 }
-
-# convert PATH from separated-by-char string to rows,
-# and use uniq to avoid duplicate elements
-$env.PATH = ( $env.PATH | split row (char esep) | uniq )
-use std/util "path add"
-path add "~/.nix-profile/bin"
-
-path add $env.XDG_BIN_DIR
-
-# ArchWiki: Environment Viriables
-# https://wiki.archlinux.org/index.php/Environment_variables#Examples
-# Note that some variables may be full pathnames.
-# https://github.com/mobile-shell/mosh/issues/722#issuecomment-176266421
-$env.SHELL = (which nu | first | get path)
-$env.PAGER = "page"
-$env.EDITOR = "nvim"
-$env.VISUAL = "nvim"

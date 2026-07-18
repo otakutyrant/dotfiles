@@ -16,6 +16,9 @@ fi
 export EDITOR="nvim"
 export VISUAL="nvim"
 export XDG_CONFIG_HOME="$HOME/.config"
+if command -v schema-engine >/dev/null 2>&1; then
+  export PRISMA_SCHEMA_ENGINE_BINARY="$(command -v schema-engine)"
+fi
 proxy () {
   export http_proxy="http://127.0.0.1:2340"
   export https_proxy="http://127.0.0.1:2340"

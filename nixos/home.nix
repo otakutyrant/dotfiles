@@ -135,22 +135,6 @@ in
     tray = "auto";
   };
 
-  home.sessionVariables = {
-    EDITOR = "nvim";
-    VISUAL = "nvim";
-    PAGER = "less";
-    XDG_CONFIG_HOME = "${home}/.config";
-    GTK_IM_MODULE = "fcitx";
-    QT_IM_MODULE = "fcitx";
-    XMODIFIERS = "@im=fcitx";
-    SDL_IM_MODULE = "fcitx";
-    GLFW_IM_MODULE = "ibus";
-    WLR_NO_HARDWARE_CURSORS = "1";
-    # Prisma's downloaded schema engine is not reliable on NixOS.
-    # NixOS wiki suggests this solution.
-    PRISMA_SCHEMA_ENGINE_BINARY = "${pkgs.prisma-engines}/bin/schema-engine";
-  };
-
   home.packages = extraPackages;
 
   home.file =
