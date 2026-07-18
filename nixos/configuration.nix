@@ -8,7 +8,7 @@
 }:
 
 let
-  corePackages = import ./core-packages.nix { inherit lib pkgs; };
+  packages = import ./packages.nix { inherit lib pkgs; };
   pick =
     names:
     builtins.filter (pkg: pkg != null) (
@@ -155,7 +155,7 @@ in
 
   nixpkgs.config.allowUnfree = true;
 
-  environment.systemPackages = corePackages;
+  environment.systemPackages = packages.system;
 
   fileSystems."/run/media/${username}/Shared" = {
     device = "/dev/disk/by-uuid/6FB7-A952";

@@ -97,7 +97,7 @@ I tried to migrate to Wayland but terminated, because Nvidia support is not good
 
 # Packages
 
-This repository now targets NixOS with Home Manager. System-level packages live in `nixos/core-packages.nix`, while user-facing development and GUI packages live in `nixos/extra-packages.nix`. Package names there are Nixpkgs attribute names, not names from another distribution.
+This repository now targets NixOS with Home Manager. System-level packages and user-facing development and GUI packages are organized in `nixos/packages.nix`. Package names there are Nixpkgs attribute names, not names from another distribution.
 
 I noticed a trend that traditional GNU CLI clients are replaced by high-performance Rust alternatives, like `find` is replaced by `fd`, `grep` by `ripgrep` or `fzf`, `less` by `page` and so on.
 

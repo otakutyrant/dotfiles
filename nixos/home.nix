@@ -7,7 +7,7 @@
 }:
 
 let
-  extraPackages = import ./extra-packages.nix { inherit lib pkgs; };
+  packages = import ./packages.nix { inherit lib pkgs; };
   home = config.home.homeDirectory;
   imageResizePython = pkgs.python3.withPackages (pythonPackages: [
     pythonPackages.pillow
@@ -135,7 +135,7 @@ in
     tray = "auto";
   };
 
-  home.packages = extraPackages;
+  home.packages = packages.home;
 
   home.file =
     stowAll [
