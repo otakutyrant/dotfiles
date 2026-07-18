@@ -22,11 +22,6 @@ $env.PAGER = if (which page | is-empty) { "less" } else { "page" }
 $env.EDITOR = "nvim"
 $env.VISUAL = "nvim"
 
-# Graphics/session compatibility
-$env.GBM_BACKEND = "nvidia-drm"
-$env.__GLX_VENDOR_LIBRARY_NAME = "nvidia"
-$env.WLR_NO_HARDWARE_CURSORS = "1"
-
 # Prisma's downloaded schema engine is not reliable on NixOS.
 let schema_engine = (which schema-engine | get path)
 if (($schema_engine | length) > 0) {

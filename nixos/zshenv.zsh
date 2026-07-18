@@ -62,7 +62,3 @@ HIST_FORMAT="'%Y-%m-%d %T:'$(echo -e '\t')"
 alias history="fc -t "$HIST_FORMAT" -il 1"
 
 TIMEFMT=$'\n================\nCPU\t%P\nuser\t%*U\nsystem\t%*S\ntotal\t%*E'
-
-export GBM_BACKEND=nvidia-drm
-export __GLX_VENDOR_LIBRARY_NAME=nvidia
-export WLR_NO_HARDWARE_CURSORS=1
