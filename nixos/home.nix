@@ -146,6 +146,9 @@ in
     SDL_IM_MODULE = "fcitx";
     GLFW_IM_MODULE = "ibus";
     WLR_NO_HARDWARE_CURSORS = "1";
+    # Prisma's downloaded schema engine is not reliable on NixOS.
+    # NixOS wiki suggests this solution.
+    PRISMA_SCHEMA_ENGINE_BINARY = "${pkgs.prisma-engines}/bin/schema-engine";
   };
 
   home.packages = extraPackages;

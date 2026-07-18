@@ -80,6 +80,7 @@ pick [
   "typescript" # Provides tsserver for typescript-tools.nvim.
   "typescript-language-server"
   "tailwindcss-language-server"
+  "prisma-engines" # Provides Prisma schema-engine for NixOS.
   "prisma-language-server"
 
   # Rust
