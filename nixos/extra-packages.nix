@@ -56,6 +56,7 @@ pick [
   "gcc" # compiler used by native tools and plugins
   "gnumake" # make implementation used by native tools and plugins
   "pkg-config" # library discovery helper used by native builds
+  "openssl" # TLS/SSL toolkit and libraries used by native builds
   "prettier" # formatter for html, css, json, yaml, markdown, typescript
   "tree-sitter" # CLI used by nvim-treesitter to build/update parsers.
   "cloc" # code analysis
