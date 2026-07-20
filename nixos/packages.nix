@@ -31,7 +31,6 @@ in
     # Filesystems and navigation
     "tree"
     "gvfs" # Virtual filesystem implementation for GIO, including MTP and SMB.
-    "ntfs3g" # Microsoft Windows filesystem NTFS.
 
     # Network
     "curl"
@@ -45,20 +44,14 @@ in
     "lsb-release" # Show what the linux distribution is.
 
     # Archives
-    "bzip2"
-    "gzip"
-    "p7zip"
-    "gnutar"
-    "unrar"
-    "unzip"
-    "xz"
-    "zip"
+    "gnutar" # Standard tar command required by scripts and build tools.
+    "ouch" # Human-friendly archive compress/decompress/list frontend.
 
     # Audio
     "alsa-lib" # Advanced Linux Sound Architecture library.
     "alsa-utils" # Contains alsamixer and other audio device tools.
     "pavucontrol" # PulseAudio volume control.
-    "pulseaudioFull" # Provides PulseAudio CLI tools.
+    "pulseaudio" # Provides PulseAudio CLI tools.
 
     # Bluetooth
     "bluez" # Provides bluetoothctl for fallback CLI pairing/debugging.
@@ -104,7 +97,6 @@ in
     "python3Packages.pip" # Package manager.
     "uv" # Fast Python package manager.
     "ruff" # Linter and formatter.
-    "pyright" # Language server and type checker.
     "basedpyright" # Python language server used by Neovim.
 
     # Frontend
@@ -119,8 +111,7 @@ in
     "prisma-language-server"
 
     # Rust
-    "rustc"
-    "cargo"
+    "rustup"
 
     # Lua
     "lua"
@@ -156,26 +147,24 @@ in
     "baobab"
     "gnome-system-monitor"
     "wpsoffice-cn"
-    "onboard"
+    "onboard" # Virtual keyboard
     "nutstore"
     "nfcloud"
     "fragments"
     "goldendict-ng"
     "obs-studio"
-    "gedit"
+    "gnome-text-editor"
     "calibre"
-    "variety"
+    "variety" # Wallpaper manager
     "anki"
     "clash-verge-rev"
     "mpv"
     "wechat"
     "papers"
     "ticktick"
-    "nitrogen" # Wallpaper manager.
 
     # X11 desktop
     "arandr"
-    "xinit"
     "qt6Packages.fcitx5-configtool" # GUI configuration tool for Fcitx5.
     "xfce4-notifyd"
     "dex" # Autostart XDG desktop files.

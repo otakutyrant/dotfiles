@@ -179,7 +179,7 @@ bindsym $mod+Return exec kitty --session session -1
 
 # Start a browser with mod+c.
 bindsym $mod+c exec google-chrome-stable
-# Start dmenu (a program launcher) with dmenu.
+# Start rofi in desktop-entry launcher mode.
 bindsym $mod+d exec rofi -show drun
 # Start cherry studio
 bindsym $mod+a exec cherry-studio
@@ -221,5 +221,5 @@ bar {
 # assignment here exactly.
 bindsym $mod+asciitilde scratchpad show
 bindsym $mod+Shift+asciitilde move scratchpad
-exec --no-startup-id gedit "$HOME/Nutstore Files/scratchpad"
-for_window [class = "Gedit" title = "scratchpad"] move scratchpad
+exec --no-startup-id gnome-text-editor "$HOME/Nutstore Files/scratchpad"
+for_window [class = "gnome-text-editor" title = "scratchpad"] move scratchpad
