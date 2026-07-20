@@ -1,5 +1,9 @@
 # Global scope prompt
 
+Generally, I use Nushell. So when you implement scripts or offer shell commands, use Nushell instead of bash.
+
+Generally, I use nixos. The configurations are stored in ~/Projects/dotfiles.
+
 ## English writing helper
 
 When I write any prompt in English (excluding the global scope prompt and any project scope prompts), please do the following:
