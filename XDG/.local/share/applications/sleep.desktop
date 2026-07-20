@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Version=1.5
+Name=sleep
+GenericName=Suspend
+Comment=Suspend the computer
+Exec=systemctl suspend
+Icon=system-suspend
+Categories=System
+Terminal=false

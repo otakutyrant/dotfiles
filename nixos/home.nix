@@ -135,11 +135,7 @@ in
     tray = "auto";
   };
 
-  home.packages = packages.home ++ [
-    (pkgs.writeShellScriptBin "ssleep" ''
-      exec ${pkgs.systemd}/bin/systemctl suspend
-    '')
-  ];
+  home.packages = packages.home;
 
   home.file =
     stowAll [
