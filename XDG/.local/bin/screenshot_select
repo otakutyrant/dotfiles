@@ -1,0 +1,19 @@
+#!/usr/bin/env nu
+
+let picture_dir = try {
+  xdg-user-dir PICTURES
+} catch {
+  $env.HOME | path join Pictures
+}
+let dir = $env.XDG_SCREENSHOT_DIR? | default ($picture_dir | path join Screenshots)
+mkdir $dir
+
+let file = $dir | path join $"(date now | format date '%Y-%m-%d_%H-%M-%S').png"
+maim -u -n -s $file
+
+if not ($file | path exists) {
+  exit 0
+}
+
+xclip -selection clipboard -t image/png -i $file
+notify-send -a screenshot_select -i $file "Screenshot saved" $file

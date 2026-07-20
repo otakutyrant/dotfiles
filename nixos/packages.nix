@@ -177,7 +177,9 @@ in
     "polkit_gnome" # Authentication agent for privileged desktop actions.
     "qbittorrent"
     "feh"
-    "scrot"
+    "maim" # X11 screenshot tool.
+    "diodon" # GTK clipboard manager with tray and history menu.
+    "libnotify" # Provides notify-send.
     "nautilus"
     "file-roller"
     "baobab"
