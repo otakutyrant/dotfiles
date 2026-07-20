@@ -84,6 +84,8 @@ for_window [window_role="pop-up"] floating enable
 for_window [title="^DevTools"] floating disable
 for_window [window_role="task_dialog"] floating enable
 for_window [class="MetroExodus"] floating enable
+for_window [class="(?i)^(de\.haeckerfelix\.Fragments|com\.relaywayx\.app|nfcloud|wechat)$"] move scratchpad
+for_window [title="^(Fragments|NFCLOUD|Relay Way|wechat|WeChat|微信)$"] move scratchpad
 
 # # Workspace management
 
