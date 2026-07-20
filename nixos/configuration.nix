@@ -9,19 +9,14 @@
 
 let
   packages = import ./packages.nix { inherit lib pkgs; };
-  pick =
-    names:
-    builtins.filter (pkg: pkg != null) (
-      map (name: lib.attrByPath (lib.splitString "." name) null pkgs) names
-    );
 in
 {
   imports = [
     ./hardware-configuration.nix
+    ./modules.nix
   ];
 
   networking.hostName = hostname;
-  networking.networkmanager.enable = true;
 
   nix.settings = {
     max-jobs = 4;
@@ -57,96 +52,6 @@ in
     ];
     shell = pkgs.nushell;
   };
-
-  security.sudo.wheelNeedsPassword = true;
-  security.polkit.enable = true;
-
-  programs.git.enable = true;
-  programs.neovim = {
-    enable = true;
-    defaultEditor = true;
-    withNodeJs = true;
-    withPython3 = true;
-    withRuby = false;
-  };
-  programs.nix-ld.enable = true;
-  programs.npm.enable = true;
-  programs.steam.enable = true;
-
-  virtualisation.docker.enable = true;
-
-  services.xserver = {
-    enable = true;
-    xkb.layout = "us";
-    windowManager.i3 = {
-      enable = true;
-      extraPackages = with pkgs; [
-        dmenu
-        i3lock
-        i3status-rust
-      ];
-    };
-  };
-
-  services.earlyoom.enable = true;
-
-  services.postgresql = {
-    enable = true;
-    # Local development databases for the Yihui/ci project.
-    ensureDatabases = [
-      "ci_development"
-      "ci_test"
-    ];
-    ensureUsers = [
-      {
-        name = username;
-        # Let Prisma and setup scripts create/reset local development databases.
-        ensureClauses.createdb = true;
-      }
-    ];
-  };
-
-  services.displayManager.defaultSession = "none+i3";
-  services.xserver.displayManager.lightdm.enable = true;
-
-  services.displayManager.autoLogin = {
-    enable = false;
-    user = username;
-  };
-
-  services.libinput.enable = true;
-  services.gvfs.enable = true;
-  services.udisks2.enable = true;
-  services.tumbler.enable = true;
-  # GUI Bluetooth manager for pairing devices from i3.
-  services.blueman.enable = true;
-
-  services.pipewire = {
-    enable = true;
-    alsa.enable = true;
-    alsa.support32Bit = true;
-    jack.enable = true;
-    pulse.enable = true;
-  };
-  security.rtkit.enable = true;
-
-  i18n.inputMethod = {
-    enable = true;
-    type = "fcitx5";
-    fcitx5.addons = with pkgs; [
-      fcitx5-rime
-      fcitx5-gtk
-    ];
-  };
-
-  fonts.packages = pick [
-    "sarasa-gothic"
-    "jetbrains-mono"
-    "noto-fonts"
-    "noto-fonts-cjk-sans"
-    "noto-fonts-color-emoji"
-    "nerd-fonts.jetbrains-mono"
-  ];
 
   hardware.graphics = {
     enable = true;
@@ -185,11 +90,6 @@ in
       "x-gvfs-show"
     ];
   };
-
-  # Udev rules for non-root access to common game controllers.
-  services.udev.packages = [
-    pkgs.game-devices-udev-rules
-  ];
 
   system.stateVersion = "26.05";
 
