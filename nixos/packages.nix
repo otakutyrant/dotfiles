@@ -1,42 +1,17 @@
 { lib, pkgs }:
 
 let
-  # Keep package names aligned with cli_clients.txt and gui_clients.txt where
-  # practical. When an Arch package name differs from the Nixpkgs attribute,
-  # translate it here.
-  packageAliases = {
-    "page-git" = "page";
-    "python" = "python3";
-    "ipython" = "python3Packages.ipython";
-    "python-pip" = "python3Packages.pip";
-    "eslint-language-server" = "vscode-langservers-extracted";
-    "rust" = "rustc";
-    "cuda" = "cudaPackages.cudatoolkit";
-    "cudnn" = "cudaPackages.cudnn";
-    "python-pytorch-opt-cuda" = "python3Packages.torchWithCuda";
-    "tensorboard" = "python3Packages.tensorboard";
-    "whisper-git" = "whisper-cpp";
-    "python-sounddevice" = "python3Packages.sounddevice";
-    "words" = "scowl";
-    "fcitx5-im" = "fcitx5";
-    "wps-office" = "wpsoffice-cn";
-    "goldendict-ng-git" = "goldendict-ng";
-    "xorg-xinit" = "xinit";
-    "pkgfile" = "nix-index";
-    "fcitx5-configtool" = "qt6Packages.fcitx5-configtool";
-    "nutstore" = pkgs.callPackage ./pkgs/nutstore.nix { };
-    "nfcloud" = pkgs.callPackage ./pkgs/nfcloud.nix { };
+  localPackages = {
+    nutstore = pkgs.callPackage ./pkgs/nutstore.nix { };
+    nfcloud = pkgs.callPackage ./pkgs/nfcloud.nix { };
   };
 
   resolvePackage =
     name:
-    let
-      resolved = packageAliases.${name} or name;
-    in
-    if builtins.isString resolved then
-      lib.attrByPath (lib.splitString "." resolved) null pkgs
+    if builtins.hasAttr name localPackages then
+      localPackages.${name}
     else
-      resolved;
+      lib.attrByPath (lib.splitString "." name) null pkgs;
 
   pick =
     names:
@@ -112,7 +87,7 @@ in
     "prettier" # Formatter for html, css, json, yaml, markdown, typescript.
     "tree-sitter" # CLI used by nvim-treesitter to build/update parsers.
     "cloc" # Code analysis.
-    "page-git" # Pager powered by Neovim.
+    "page" # Pager powered by Neovim.
     "tldr" # Document reader.
     "vimv" # Rename multiple files, written in Rust.
     "sd" # Search and replace.
@@ -124,17 +99,17 @@ in
     "codex"
 
     # Python
-    "python"
-    "ipython" # Better REPL.
-    "python-pip" # Package manager.
+    "python3"
+    "python3Packages.ipython" # Better REPL.
+    "python3Packages.pip" # Package manager.
     "uv" # Fast Python package manager.
     "ruff" # Linter and formatter.
     "pyright" # Language server and type checker.
     "basedpyright" # Python language server used by Neovim.
 
     # Frontend
-    "eslint" # ESLint library used by vscode-eslint-language-server.
-    "eslint-language-server"
+    "eslint" # ESLint library used by vscode-langservers-extracted.
+    "vscode-langservers-extracted"
     "pnpm" # Package manager for Node projects and local LSP dependencies.
     "typescript" # Provides tsserver for typescript-tools.nvim.
     "typescript-language-server"
@@ -144,7 +119,7 @@ in
     "prisma-language-server"
 
     # Rust
-    "rust"
+    "rustc"
     "cargo"
 
     # Lua
@@ -159,18 +134,14 @@ in
     "yaml-language-server"
     "taplo"
 
-    # Arch Linux helpers
-    "pkgfile" # List what package a file belongs to.
-    "arch-install-scripts" # Scripts to aid in installing Arch Linux.
-
     # AI and media
-    "whisper-git" # Transcribe.
+    "whisper-cpp" # Transcribe.
     "ffmpeg"
     "mediainfo" # View information about media files.
-    "python-sounddevice" # Suppresses unnecessary ALSA errors in some Python audio tools.
+    "python3Packages.sounddevice" # Suppresses unnecessary ALSA errors in some Python audio tools.
 
     # Reference data
-    "words" # International words files for /usr/share/dict.
+    "scowl" # International words files for /usr/share/dict.
 
     # Desktop applications
     "google-chrome"
@@ -188,7 +159,7 @@ in
     "onboard"
     "nutstore"
     "nfcloud"
-    "goldendict-ng-git"
+    "goldendict-ng"
     "obs-studio"
     "gedit"
     "calibre"
@@ -203,8 +174,8 @@ in
 
     # X11 desktop
     "arandr"
-    "xorg-xinit"
-    "fcitx5-configtool" # GUI configuration tool for Fcitx5.
+    "xinit"
+    "qt6Packages.fcitx5-configtool" # GUI configuration tool for Fcitx5.
     "xfce4-notifyd"
     "dex" # Autostart XDG desktop files.
     "kitty"
