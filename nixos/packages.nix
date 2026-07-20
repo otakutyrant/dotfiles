@@ -139,6 +139,7 @@ in
     "typescript" # Provides tsserver for typescript-tools.nvim.
     "typescript-language-server"
     "tailwindcss-language-server"
+    "postgresql" # Provides psql/createdb for local Prisma PostgreSQL projects.
     "prisma-engines" # Provides Prisma schema-engine for NixOS.
     "prisma-language-server"
 

@@ -90,6 +90,22 @@ in
 
   services.earlyoom.enable = true;
 
+  services.postgresql = {
+    enable = true;
+    # Local development databases for the Yihui/ci project.
+    ensureDatabases = [
+      "ci_development"
+      "ci_test"
+    ];
+    ensureUsers = [
+      {
+        name = username;
+        # Let Prisma and setup scripts create/reset local development databases.
+        ensureClauses.createdb = true;
+      }
+    ];
+  };
+
   services.displayManager.defaultSession = "none+i3";
   services.xserver.displayManager.lightdm.enable = true;
 
