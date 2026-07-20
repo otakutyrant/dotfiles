@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=Fragments
+Comment=BitTorrent client
+Exec=fragments
+Icon=de.haeckerfelix.Fragments
+Terminal=false
+Categories=Network;FileTransfer;P2P;GTK;
+X-GNOME-Autostart-enabled=true

@@ -159,6 +159,7 @@ in
     "onboard"
     "nutstore"
     "nfcloud"
+    "fragments"
     "goldendict-ng"
     "obs-studio"
     "gedit"
