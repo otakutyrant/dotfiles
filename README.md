@@ -81,11 +81,27 @@ Haplessly, kitty cannot handle remote sessions so far. So though I dislike tmux,
 
 # XDG
 
-I use `mimeapps.list` to set default applications.
+I keep files in XDG locations when the application expects them there.
 
-All configuration in this dotfiles are put in `$XDG_CONFIG_HOME` as possible as they can.
+Configuration files should live under `$XDG_CONFIG_HOME` when possible. In this
+repository, that usually means putting them under `XDG/.config`, which Home
+Manager links into `~/.config`.
 
-Personal commands congregate in `$HOME/.local/bin`, although `XDG_BIN_HOME` is not specified so far.
+Default application choices belong in `mimeapps.list`.
+
+Personal commands live in `$HOME/.local/bin`, although `XDG_BIN_HOME` is not
+specified so far.
+
+Desktop files are also XDG data files:
+
+- `XDG/.local/share/applications/*.desktop` defines launcher entries for menus
+  and `rofi -show drun`.
+- `XDG/.config/autostart/*.desktop` defines applications started by `dex` during
+  login.
+
+Use static desktop files here when the command is stable, such as
+`Exec=systemctl suspend`. If a desktop entry needs Nix interpolation, such as a
+specific `${pkgs.foo}/bin/foo` path, define it with Home Manager instead.
 
 # Environment Variables
 
