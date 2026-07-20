@@ -94,6 +94,7 @@ in
   services.gvfs.enable = true;
   services.udisks2.enable = true;
   services.tumbler.enable = true;
+  services.zeitgeist.enable = true; # Clipboard history backend used by Diodon.
 
   # GUI Bluetooth manager for pairing devices from i3.
   services.blueman.enable = true;
