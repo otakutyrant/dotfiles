@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Version=1.5
+Name=poweroff
+GenericName=Power Off
+Comment=Power off the computer
+Exec=poweroff
+Icon=system-shutdown
+Categories=System
+Terminal=false
