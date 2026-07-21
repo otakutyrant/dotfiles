@@ -9,6 +9,15 @@
 
 let
   packages = import ./packages.nix { inherit lib pkgs; };
+  nixDaemonNoProxy = builtins.concatStringsSep "," [
+    "localhost"
+    "127.0.0.1"
+    "::1"
+    "mirrors.tuna.tsinghua.edu.cn"
+    "mirrors.ustc.edu.cn"
+    "mirror.sjtu.edu.cn"
+    "cache.nixos.org"
+  ];
 in
 {
   imports = [
@@ -38,6 +47,17 @@ in
     "nix-command"
     "flakes"
   ];
+
+  systemd.services.nix-daemon.environment = {
+    http_proxy = "http://127.0.0.1:21081";
+    https_proxy = "http://127.0.0.1:21081";
+    all_proxy = "socks5://127.0.0.1:21080";
+    HTTP_PROXY = "http://127.0.0.1:21081";
+    HTTPS_PROXY = "http://127.0.0.1:21081";
+    ALL_PROXY = "socks5://127.0.0.1:21080";
+    no_proxy = nixDaemonNoProxy;
+    NO_PROXY = nixDaemonNoProxy;
+  };
 
   time.timeZone = "Asia/Shanghai";
   i18n.defaultLocale = "en_US.UTF-8";
