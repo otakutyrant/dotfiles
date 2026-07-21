@@ -71,6 +71,23 @@ in
   # unresponsive.
   services.earlyoom.enable = true;
 
+  # Use compressed in-RAM swap as the first cushion for memory spikes.
+  zramSwap = {
+    # Enable the kernel zram swap device.
+    enable = true;
+    # Size zram to 50% of physical RAM; it only consumes RAM as pages are stored.
+    memoryPercent = 50;
+  };
+  # Add a disk-backed swap fallback for CUDA/C++ builds that exceed zram.
+  swapDevices = [
+    {
+      # Store the swap file at the filesystem root.
+      device = "/swapfile";
+      # Create a 32 GiB swap file; the unit is MiB.
+      size = 32768;
+    }
+  ];
+
   # Local PostgreSQL databases for development. The normal user can create and
   # reset databases so project setup scripts and Prisma migrations work without
   # switching to the postgres account.
