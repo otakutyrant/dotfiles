@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=qBittorrent
+Comment=BitTorrent client
+Exec=qbittorrent %U
+Icon=qbittorrent
+Terminal=false
+Categories=Network;FileTransfer;P2P;Qt;
+StartupNotify=true
+X-GNOME-Autostart-enabled=true
