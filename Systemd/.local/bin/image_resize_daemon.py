@@ -1,4 +1,37 @@
-#!/usr/bin/env python3
+#!/usr/bin/env nix-shell
+#!nix-shell -i python3 -p "python3.withPackages (pythonPackages: [ pythonPackages.pillow ])"
+# Image Resize Daemon
+#
+# Watches only the top level of /home/otakutyrant by default and resizes
+# supported image files in place when their shortest side is less than 800px.
+#
+# Supported formats:
+# - JPEG
+# - PNG
+# - WebP
+# - BMP
+# - TIFF
+#
+# Notes:
+# - Aspect ratio is preserved.
+# - Images whose shortest side is already greater than or equal to 800px are
+#   left untouched.
+# - Animated images are skipped.
+# - Subdirectories are ignored completely; the scan is not recursive.
+#
+# Run one scan:
+#   /home/otakutyrant/.local/bin/image_resize_daemon.py --once
+#
+# Run continuously:
+#   /home/otakutyrant/.local/bin/image_resize_daemon.py
+#
+# Install as a user service:
+#   stow Systemd
+#   systemctl --user daemon-reload
+#   systemctl --user restart image-resize-daemon.service
+#
+# Check logs:
+#   journalctl --user -u image-resize-daemon.service -f
 from __future__ import annotations
 
 import argparse

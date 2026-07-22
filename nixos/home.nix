@@ -7,11 +7,10 @@
 }:
 
 let
-  packages = import ./packages.nix { inherit lib pkgs; };
+  homePackages = import ./home-packages.nix { inherit pkgs; };
   home = config.home.homeDirectory;
-  imageResizePython = pkgs.python3.withPackages (pythonPackages: [
-    pythonPackages.pillow
-  ]);
+  # Recursively expose every file under a dotfile directory through Home
+  # Manager, preserving each path relative to that directory.
   stow =
     dir:
     let
@@ -32,6 +31,7 @@ let
         ) (builtins.readDir path);
     in
     collect "" dir;
+  # Merge multiple stowed dotfile directories into one home.file attrset.
   stowAll = dirs: lib.foldl' (files: dir: files // stow dir) { } dirs;
 in
 {
@@ -61,6 +61,8 @@ in
   };
   programs.zsh = {
     enable = true;
+    # Store generated .zshrc/.zshenv files directly in $HOME for compatibility
+    # with existing shell startup expectations.
     dotDir = home;
     oh-my-zsh = {
       enable = true;
@@ -81,100 +83,97 @@ in
     };
     envExtra = builtins.readFile ./zshenv.zsh;
     initContent = ''
-      function alias_or_warning() {
-        local a="$1"
-        local b="$2"
-        if alias "$a" >/dev/null 2>&1; then
-          echo "Warning: Alias '$a' already exists." >&2
-          local line_num file_name
-          read line_num file_name <<< "$funcfiletrace"
-          echo "Conflict position: '$file_name', '$line_num'"
-        else
-          alias "$a"="$b"
+        function alias_or_warning() {
+          local a="$1"
+          local b="$2"
+          if alias "$a" >/dev/null 2>&1; then
+            echo "Warning: Alias '$a' already exists." >&2
+            local line_num file_name
+            read line_num file_name <<< "$funcfiletrace"
+            echo "Conflict position: '$file_name', '$line_num'"
+          else
+            alias "$a"="$b"
+          fi
+        }
+
+        dir_list=("$XDG_CONFIG_HOME"/*)
+        for ((i=0; i<''${#dir_list[@]}; i++)); do
+          # Keep the following Nix syntax line documented.
+          if [[ "''${dir_list[$i]}" == "$XDG_CONFIG_HOME/XDG" ]]; then
+            tmp="''${dir_list[0]}"
+            # Keep the following Nix syntax line documented.
+            dir_list[0]="''${dir_list[$i]}"
+            dir_list[$i]="$tmp"
+            break
+          fi
+        done
+
+        for dir in "''${dir_list[@]}"; do
+          # Keep the following Nix syntax line documented.
+          if [[ -f "''${dir}/dotenv" ]]; then
+            source "''${dir}/dotenv"
+          # Provide a function or module argument named `fi`.
+          fi
+        # Provide a function or module argument named `done`.
+        done
+
+        # Keep the following Nix syntax line documented.
+        eval "$(dircolors -b)"
+        # Keep the following Nix syntax line documented.
+        alias l="ls --color=auto"
+        # Keep the following Nix syntax line documented.
+        alias ll="ls -alFh --color=auto"
+
+        # Keep the following Nix syntax line documented.
+        alias_or_warning rm "rm -Iv --one-file-system"
+        # Keep the following Nix syntax line documented.
+        alias mkdir="nocorrect mkdir -pv"
+
+        # Keep the following Nix syntax line documented.
+        alias_or_warning stow "stow --no-folding --target=$HOME"
+        # Keep the following Nix syntax line documented.
+        alias_or_warning unstow "stow -D --target=$HOME"
+
+        # Keep the following Nix syntax line documented.
+        if [[ -r /usr/share/doc/pkgfile/command-not-found.zsh ]]; then
+          # Keep the following Nix syntax line documented.
+          source /usr/share/doc/pkgfile/command-not-found.zsh
+        # Provide a function or module argument named `fi`.
         fi
-      }
 
-      dir_list=("$XDG_CONFIG_HOME"/*)
-      for ((i=0; i<''${#dir_list[@]}; i++)); do
-        if [[ "''${dir_list[$i]}" == "$XDG_CONFIG_HOME/XDG" ]]; then
-          tmp="''${dir_list[0]}"
-          dir_list[0]="''${dir_list[$i]}"
-          dir_list[$i]="$tmp"
-          break
-        fi
-      done
-
-      for dir in "''${dir_list[@]}"; do
-        if [[ -f "''${dir}/dotenv" ]]; then
-          source "''${dir}/dotenv"
-        fi
-      done
-
-      eval "$(dircolors -b)"
-      alias l="ls --color=auto"
-      alias ll="ls -alFh --color=auto"
-
-      alias_or_warning rm "rm -Iv --one-file-system"
-      alias mkdir="nocorrect mkdir -pv"
-
-      alias_or_warning stow "stow --no-folding --target=$HOME"
-      alias_or_warning unstow "stow -D --target=$HOME"
-
-      if [[ -r /usr/share/doc/pkgfile/command-not-found.zsh ]]; then
-        source /usr/share/doc/pkgfile/command-not-found.zsh
-      fi
-
-      alias_or_warning rg "rg -p"
-      alias_or_warning "yt-dlp" "yt-dlp --proxy 127.0.0.1:2340 --write-subs --sub-langs zh-CN"
+        # Keep the following Nix syntax line documented.
+        alias_or_warning rg "rg -p"
+        # Keep the following Nix syntax line documented.
+        alias_or_warning "yt-dlp" "yt-dlp --proxy 127.0.0.1:2340 --write-subs --sub-langs zh-CN"
+      # Keep the following Nix syntax line documented.
     '';
   };
 
-  services.network-manager-applet.enable = true; # Tray for NetworkManager.
+  services.network-manager-applet.enable = true;
   services.udiskie = {
     enable = true;
     tray = "auto";
   };
 
-  home.packages = packages.home;
+  home.packages = homePackages;
 
-  home.file =
-    stowAll [
-      ../Codex
-      ../Gemini
-      ../Git
-      ../Kitty
-      ../mpv
-      ../Neovim
-      ../npm
-      ../Nushell
-      ../Python
-      ../SSH
-      ../Tmux
-      ../X11
-      ../XDG
-      ../i3
-      ../joshuto
-    ]
-    // {
-      ".local/bin/image_resize_daemon.py" = {
-        source = ../Systemd/.local/bin/image_resize_daemon.py;
-        executable = true;
-      };
-    };
-
-  systemd.user.services.image-resize-daemon = {
-    Unit = {
-      Description = "Upscale small images under ${home}";
-      After = [ "default.target" ];
-      StartLimitBurst = 3;
-      StartLimitIntervalSec = 60;
-    };
-    Service = {
-      Type = "simple";
-      ExecStart = "${imageResizePython}/bin/python3 ${home}/.local/bin/image_resize_daemon.py --root ${home} --target-short-side 800 --interval 5";
-      Restart = "always";
-      RestartSec = 5;
-    };
-    Install.WantedBy = [ "default.target" ];
-  };
+  # Link the checked-in dotfile directories into the user's home directory.
+  home.file = stowAll [
+    ../Codex
+    ../Gemini
+    ../Git
+    ../Kitty
+    ../mpv
+    ../Neovim
+    ../npm
+    ../Nushell
+    ../Python
+    ../SSH
+    ../Systemd
+    ../Tmux
+    ../X11
+    ../XDG
+    ../i3
+    ../joshuto
+  ];
 }
