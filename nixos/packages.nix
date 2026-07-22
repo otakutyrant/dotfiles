@@ -87,7 +87,7 @@ in
     "file"
     "git-lfs"
     "home-manager"
-    "nil"
+    "nixd"
     "nixfmt"
     "codex"
 
