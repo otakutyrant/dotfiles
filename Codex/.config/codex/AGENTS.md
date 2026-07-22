@@ -2,7 +2,7 @@
 
 Generally, I use Nushell. So when you implement scripts or offer shell commands, use Nushell instead of bash.
 
-Generally, I use nixos. The configurations are stored in ~/Projects/dotfiles.
+Generally, I use nixos. The configurations are stored in ~/Projects/dotfiles. You must add comments to explain every line of nix files, since I am not good at Nix and NixOS. YOU MUST ADD COMMENTS TO EXPLAIN EVERY LINE! I am not good at flake, Nix, and NixOS.
 
 ## English writing helper
 
