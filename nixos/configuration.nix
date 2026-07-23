@@ -55,9 +55,6 @@
     NO_PROXY = no_proxy;
   };
 
-  # Base packages installed into the global system profile.
-  environment.systemPackages = import ./system-packages.nix { inherit pkgs; };
-
   # System version
   system.stateVersion = "26.05";
 
@@ -219,18 +216,8 @@
 
   # Miscellanea
   time.timeZone = "Asia/Shanghai";
-  programs.git.enable = true;
-  programs.tmux.enable = true;
   programs.whois.enable = true;
-  programs.neovim = {
-    enable = true;
-    defaultEditor = true;
-    withNodeJs = true;
-    withPython3 = true;
-    withRuby = false;
-  };
   programs.nix-ld.enable = true;
-  programs.npm.enable = true;
   programs.steam.enable = true;
   virtualisation.docker.enable = true;
   services.postgresql = {

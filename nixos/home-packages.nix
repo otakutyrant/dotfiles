@@ -3,13 +3,35 @@
 # Packages installed into the user's Home Manager profile.
 with pkgs; # Bring package names from pkgs into scope for the list below.
 [
+  # Shell
+  bash
+  nushell
+
+  # Audio.
+  alsa-lib
+  alsa-utils # Contains alsamixer and other audio device tools.
+  pavucontrol # PulseAudio volume control.
+  pulseaudio # Provides PulseAudio CLI tools.
+
+  # Archives.
+  gnutar
+  ouch # Human-friendly archive compress/decompress/list frontend.
+
+  # Network
+  curl
+  wget
+  iputils
+  openssh
+  rsync
+
+  # File manager
+  tree
+
   # Building
   cmake
   gcc
   gnumake
   pkg-config
-
-  openssl
 
   # Development utilities.
   prettier
@@ -24,8 +46,10 @@ with pkgs; # Bring package names from pkgs into scope for the list below.
   file
   git-lfs
   codex
+  neovim
+  python3Packages.pynvim
 
-  # Python.
+  # Python
   python3
   python3Packages.ipython
   python3Packages.pip
@@ -33,7 +57,7 @@ with pkgs; # Bring package names from pkgs into scope for the list below.
   ruff
   basedpyright
 
-  # Frontend.
+  # Frontend
   eslint
   vscode-langservers-extracted
   pnpm
@@ -47,14 +71,12 @@ with pkgs; # Bring package names from pkgs into scope for the list below.
   prisma-engines
   prisma-language-server
 
-  # Rust.
+  # Rust
   rustup
 
-  # Lua.
+  # Lua
   lua
-  # Include the package `stylua`.
   stylua
-  # Include the package `lua-language-server`.
   lua-language-server
 
   # Nix
@@ -68,56 +90,43 @@ with pkgs; # Bring package names from pkgs into scope for the list below.
   yaml-language-server
   taplo
 
-  # AI and media.
-  whisper-cpp
-
   # Media
   ffmpeg
   mediainfo
-  # Suppresses unnecessary ALSA errors in some Python audio tools.
-  python3Packages.sounddevice
+  python3Packages.sounddevice # Suppresses unnecessary ALSA errors in some Python audio tools.
 
-  # English words
-  scowl
-
-  # Desktop applications.
+  # Miscellanea
+  openssl
+  scowl # English words
+  tmux
+  lsb-release
   qbittorrent
   feh
-  # X11 screenshot tool.
-  maim
-  # GTK clipboard manager with tray and history menu.
-  diodon
+  maim # X11 screenshot tool.
+  diodon # GTK clipboard manager with tray and history menu.
   libnotify
   nautilus
   file-roller
   baobab
   gnome-system-monitor
   wpsoffice-cn
-  # Virtual keyboard.
-  onboard
-  # Local Nutstore desktop sync client derivation.
-  (callPackage ./pkgs/nutstore.nix { })
-  # Local NFCLOUD desktop client derivation.
-  (callPackage ./pkgs/nfcloud.nix { })
-  # Bittorrent client
-  fragments
+  onboard # Virtual keyboard.
+  (callPackage ./pkgs/nutstore.nix { }) # Local Nutstore desktop sync client derivation.
+  (callPackage ./pkgs/nfcloud.nix { }) # Local NFCLOUD desktop client derivation.
+  fragments # Bittorrent client
   goldendict-ng
   gnome-text-editor
-  # Wallpaper manager.
-  variety
+  variety # Wallpaper manager.
   clash-verge-rev
   wechat
-  # Document viewer
-  papers
+  papers # Document viewer
   ticktick
-
   arandr
   qt6Packages.fcitx5-configtool
   xfce4-notifyd
-  # Autostart XDG desktop files.
-  dex
+  dex # Autostart XDG desktop files.
   kitty
-  # Image editor
-  gimp
+  gimp # Image editor
   xclip
+  whisper-cpp # AI and media.
 ]
