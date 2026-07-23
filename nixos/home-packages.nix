@@ -118,7 +118,6 @@ with pkgs; # Bring package names from pkgs into scope for the list below.
   dex
   kitty
   # Image editor
-  picom
   gimp
   xclip
 ]
