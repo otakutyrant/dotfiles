@@ -49,6 +49,31 @@ in
     defaultCommand = "fd --type f --strip-cwd-prefix --hidden --follow --exclude .git";
     fileWidgetCommand = "fd --type f --strip-cwd-prefix --hidden --follow --exclude .git";
   };
+  programs.git = {
+    enable = true;
+    settings = {
+      alias = {
+        c = "commit";
+        co = "checkout";
+        d = "diff";
+        s = "status";
+        g = "log --name-only --graph --all --date=format-local:'%Y-%m-%d %H:%M:%S' --format='%C(auto)%h%d %cd %s'";
+        l = "log --name-only";
+      };
+      credential.helper = "store";
+      filter.lfs = {
+        clean = "git-lfs clean -- %f";
+        smudge = "git-lfs smudge -- %f";
+        process = "git-lfs filter-process";
+        required = true;
+      };
+      status.showStash = true;
+      user = {
+        name = "otakutyrant";
+        email = "otakutyrant@gmail.com";
+      };
+    };
+  };
   programs.google-chrome.enable = true;
   programs.joshuto.enable = true; # Terminal file manager.
   # Install local mpv package with Unicode-aware subtitle line wrapping through
@@ -61,9 +86,37 @@ in
     enable = true;
     plugins = [ pkgs.nushellPlugins.gstat ];
   };
+  programs.npm = {
+    enable = true;
+    settings.registry = "https://npmreg.proxy.ustclug.org/";
+  };
   programs.obs-studio.enable = true;
   programs.ripgrep.enable = true; # Grep alternative.
   programs.rofi.enable = true; # Application launcher.
+  programs.ssh = {
+    enable = true;
+    enableDefaultConfig = false;
+    settings = {
+      "github.com" = {
+        User = "git";
+        Hostname = "ssh.github.com";
+        Port = 443;
+        IdentityFile = "~/.ssh/id_ed25519";
+      };
+      "*" = {
+        ForwardAgent = false;
+        AddKeysToAgent = "no";
+        Compression = false;
+        ServerAliveInterval = 0;
+        ServerAliveCountMax = 3;
+        HashKnownHosts = false;
+        UserKnownHostsFile = "~/.ssh/known_hosts";
+        ControlMaster = "no";
+        ControlPath = "~/.ssh/master-%r@%n:%p";
+        ControlPersist = "no";
+      };
+    };
+  };
   programs.yt-dlp.enable = true; # YouTube downloader.
   programs.zoxide = {
     enable = true; # Jump tool.
@@ -160,21 +213,52 @@ in
     tray = "auto";
   };
   xdg.userDirs.enable = true;
-
+  gtk = {
+    enable = true;
+    theme.name = "deepin";
+    iconTheme.name = "Sea";
+    font = {
+      name = "Sarasa Gothic SC";
+      size = 13;
+    };
+    cursorTheme = {
+      name = "Adwaita";
+      size = 0;
+    };
+    gtk3 = {
+      bookmarks = [
+        "file://${home}/Pictures/Screenshots"
+        "file://${home}/Documents Documents"
+        "file://${home}/Nutstore%20Files/Nutstore Nutstore"
+        "file://${home}/tmp tmp"
+        "file://${home}/Downloads"
+        "file://${home}/Projects"
+        "file://${home}/Videos"
+      ];
+      extraConfig = {
+        gtk-toolbar-style = "GTK_TOOLBAR_BOTH_HORIZ";
+        gtk-toolbar-icon-size = "GTK_ICON_SIZE_LARGE_TOOLBAR";
+        gtk-button-images = 0;
+        gtk-menu-images = 0;
+        gtk-enable-event-sounds = 1;
+        gtk-enable-input-feedback-sounds = 1;
+        gtk-xft-antialias = 1;
+        gtk-xft-hinting = 1;
+        gtk-xft-hintstyle = "hintmedium";
+      };
+    };
+  };
   home.packages = homePackages;
 
   # Link the checked-in dotfile directories into the user's home directory.
   home.file = stowAll [
     ../Codex
     ../Gemini
-    ../Git
     ../Kitty
     ../mpv
     ../Neovim
-    ../npm
     ../Nushell
     ../Python
-    ../SSH
     ../Systemd
     ../Tmux
     ../X11
