@@ -59,13 +59,13 @@
 
 stdenv.mkDerivation rec {
   pname = "nfcloud";
-  version = "1.4.14";
+  version = "1.4.15";
 
   # 1. Fetching the remote archive
   src = fetchurl {
     url = "https://backendoss.trafficmanager.net/api/v1/app/get/nfcloud/linux";
     name = "nfcloud-linux-${version}.tar.gz";
-    hash = "sha256-tONHjfMxl1D9oPfoX0U7zf3Ybv/I1tqXCm7ChEBqf5g=";
+    hash = "sha256-iK/BXaT6vGC2dY3704oJKjHAVKBp+kSb8Wn5ZomPVL0=";
   };
 
   # Upstream archive lacks a top-level wrapper directory.
