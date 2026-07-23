@@ -3,8 +3,6 @@
 # Packages installed into the user's Home Manager profile.
 with pkgs; # Bring package names from pkgs into scope for the list below.
 [
-  home-manager
-
   # Building
   cmake
   gcc
@@ -83,11 +81,6 @@ with pkgs; # Bring package names from pkgs into scope for the list below.
   scowl
 
   # Desktop applications.
-  google-chrome
-  # Authentication agent for privileged desktop actions.
-  polkit_gnome
-  # Generate common user directories like Downloads, Documents, and Pictures.
-  xdg-user-dirs
   qbittorrent
   feh
   # X11 screenshot tool.
@@ -109,15 +102,10 @@ with pkgs; # Bring package names from pkgs into scope for the list below.
   # Bittorrent client
   fragments
   goldendict-ng
-  obs-studio
   gnome-text-editor
-  calibre
   # Wallpaper manager.
   variety
-  anki
   clash-verge-rev
-  # Local mpv package with Unicode-aware subtitle line wrapping.
-  (callPackage ./pkgs/mpv.nix { })
   wechat
   # Document viewer
   papers

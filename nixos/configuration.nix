@@ -220,6 +220,12 @@
   # Miscellanea
   time.timeZone = "Asia/Shanghai";
   programs.git.enable = true;
+  # Install and register zsh as a system shell.
+  programs.zsh.enable = true;
+  # Install tmux through the NixOS module instead of `environment.systemPackages`.
+  programs.tmux.enable = true;
+  # Install whois through the NixOS module instead of `environment.systemPackages`.
+  programs.whois.enable = true;
   programs.neovim = {
     enable = true;
     defaultEditor = true;

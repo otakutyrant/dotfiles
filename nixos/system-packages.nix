@@ -9,7 +9,6 @@
   iputils
   openssh
   rsync
-  whois
 
   # Miscellanea
   lsb-release
@@ -29,13 +28,11 @@
   pulseaudio
 
   # Bluetooth.
-  bluez
+  # `hardware.bluetooth.enable` installs the BlueZ Bluetooth stack.
 
   # Shell
   bash
-  zsh
   nushell
-  tmux
   stow
 
   # Editor runtime.

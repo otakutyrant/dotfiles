@@ -39,19 +39,36 @@ in
   home.homeDirectory = "/home/${username}";
   home.stateVersion = "26.05";
 
-  programs.home-manager.enable = false;
+  # Install the `home-manager` command through Home Manager's own module.
+  programs.home-manager.enable = true;
+  # Install Anki through its Home Manager module.
+  programs.anki.enable = true;
   programs.btop.enable = true; # System monitor.
+  # Install Calibre through its Home Manager module.
+  programs.calibre.enable = true;
   programs.fd.enable = true; # Simple, fast and user-friendly alternative to find.
   programs.fzf = {
     enable = true; # Fuzzy search.
     defaultCommand = "fd --type f --strip-cwd-prefix --hidden --follow --exclude .git";
     fileWidgetCommand = "fd --type f --strip-cwd-prefix --hidden --follow --exclude .git";
   };
+  # Install Google Chrome through its Home Manager module.
+  programs.google-chrome.enable = true;
   programs.joshuto.enable = true; # Terminal file manager.
+  # Install local mpv package with Unicode-aware subtitle line wrapping through
+  # Home Manager's mpv module.
+  programs.mpv = {
+    # Enable Home Manager's mpv module.
+    enable = true;
+    # Use the local mpv derivation instead of the default upstream package.
+    package = pkgs.callPackage ./pkgs/mpv.nix { };
+  };
   programs.nushell = {
     enable = true;
     plugins = [ pkgs.nushellPlugins.gstat ];
   };
+  # Install OBS Studio through its Home Manager module.
+  programs.obs-studio.enable = true;
   programs.ripgrep.enable = true; # Grep alternative.
   programs.rofi.enable = true; # Application launcher.
   programs.yt-dlp.enable = true; # YouTube downloader.
@@ -150,10 +167,14 @@ in
   };
 
   services.network-manager-applet.enable = true;
+  # Start the GNOME polkit authentication agent for privileged GUI actions.
+  services.polkit-gnome.enable = true;
   services.udiskie = {
     enable = true;
     tray = "auto";
   };
+  # Manage the standard XDG user directories such as Downloads and Documents.
+  xdg.userDirs.enable = true;
 
   home.packages = homePackages;
 
