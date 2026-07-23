@@ -128,5 +128,11 @@ with pkgs; # Bring package names from pkgs into scope for the list below.
   kitty
   gimp # Image editor
   xclip
-  whisper-cpp # AI and media.
+  # `openai-whisper` is accurate, but it brings a heavier Python stack.
+  # `whisper-ctranslate2` can be fast, but its Python/CUDA dependency surface is larger.
+  # `whisperx` is useful for word timestamps and diarization, but it is overkill for normal SRT files.
+  # `whisper-cpp-vulkan` is a useful non-CUDA fallback, but CUDA is better for this NVIDIA machine.
+  (whisper-cpp.override {
+    cudaSupport = true;
+  })
 ]
