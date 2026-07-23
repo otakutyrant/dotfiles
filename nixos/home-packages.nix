@@ -100,7 +100,6 @@ with pkgs; # Bring package names from pkgs into scope for the list below.
   scowl # English words
   tmux
   lsb-release
-  qbittorrent
   feh
   maim # X11 screenshot tool.
   diodon # GTK clipboard manager with tray and history menu.
