@@ -38,6 +38,14 @@ in
   home.username = username;
   home.homeDirectory = "/home/${username}";
   home.stateVersion = "26.05";
+  # These graphical-session variables used to live in X11/.xprofile.
+  home.sessionVariables = {
+    GTK_IM_MODULE = "fcitx";
+    QT_IM_MODULE = "fcitx";
+    XMODIFIERS = "@im=fcitx";
+    SDL_IM_MODULE = "fcitx";
+    GLFW_IM_MODULE = "ibus";
+  };
 
   programs.home-manager.enable = true;
   programs.anki.enable = true;
@@ -262,7 +270,6 @@ in
       ../Nushell
       ../Systemd
       ../Tmux
-      ../X11
       ../XDG
       ../i3
       ../joshuto

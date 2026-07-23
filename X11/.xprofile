@@ -1,6 +1,0 @@
-# https://wiki.archlinux.org/title/Fcitx5#Integration
-export GTK_IM_MODULE=fcitx # For GTK.
-export QT_IM_MODULE=fcitx # For Qt.
-export XMODIFIERS=@im=fcitx # For X Input Method, maybe.
-export SDL_IM_MODULE=fcitx # For same games that use a specific version of SDL2 library.
-export GLFW_IM_MODULE=ibus # To enable support in kitty.
