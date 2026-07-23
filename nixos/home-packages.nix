@@ -1,7 +1,7 @@
 { pkgs }:
 
 # Packages installed into the user's Home Manager profile.
-with pkgs;
+with pkgs; # Bring package names from pkgs into scope for the list below.
 [
   home-manager
 
@@ -116,7 +116,8 @@ with pkgs;
   variety
   anki
   clash-verge-rev
-  mpv
+  # Local mpv package with Unicode-aware subtitle line wrapping.
+  (callPackage ./pkgs/mpv.nix { })
   wechat
   # Document viewer
   papers
