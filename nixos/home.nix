@@ -213,6 +213,7 @@ in
     tray = "auto";
   };
   xdg.userDirs.enable = true;
+  xdg.configFile."user-dirs.dirs".force = true;
   gtk = {
     enable = true;
     theme.name = "deepin";
@@ -251,19 +252,23 @@ in
   home.packages = homePackages;
 
   # Link the checked-in dotfile directories into the user's home directory.
-  home.file = stowAll [
-    ../Codex
-    ../Gemini
-    ../Kitty
-    ../mpv
-    ../Neovim
-    ../Nushell
-    ../Python
-    ../Systemd
-    ../Tmux
-    ../X11
-    ../XDG
-    ../i3
-    ../joshuto
-  ];
+  home.file =
+    (stowAll [
+      ../Codex
+      ../Gemini
+      ../Kitty
+      ../mpv
+      ../Neovim
+      ../Nushell
+      ../Python
+      ../Systemd
+      ../Tmux
+      ../X11
+      ../XDG
+      ../i3
+      ../joshuto
+    ])
+    // {
+      "${home}/.local/share/Anki2/prefs21.db".force = true;
+    };
 }
