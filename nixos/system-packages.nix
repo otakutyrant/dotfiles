@@ -27,9 +27,6 @@
   # Provides PulseAudio CLI tools.
   pulseaudio
 
-  # Bluetooth.
-  # `hardware.bluetooth.enable` installs the BlueZ Bluetooth stack.
-
   # Shell
   bash
   nushell
