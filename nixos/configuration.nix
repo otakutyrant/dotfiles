@@ -220,7 +220,6 @@
   # Miscellanea
   time.timeZone = "Asia/Shanghai";
   programs.git.enable = true;
-  programs.zsh.enable = true;
   programs.tmux.enable = true;
   programs.whois.enable = true;
   programs.neovim = {

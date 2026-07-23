@@ -3,22 +3,18 @@
 I [use GNU Stow to manage my dotfiles](http://brandon.invergo.net/news/2012-05-26-using-gnu-stow-to-manage-your-dotfiles.html).
 
 It is strongly recommended to use the `--no-folding` option when you stow dotfiles in new operating systems, otherwise thereafter some new generated files will appear in dotfiles rather than the corresponding position of the home directory, like [this](https://superuser.com/questions/1632928/gnu-stow-only-symlink-files-not-directories).
-So I `alias_or_warning stow "stow --no-folding --target=$HOME"` in my `.zshrc`.
+So `Nushell/.config/nushell/autoload/stow.nu` defines a `stow` helper with `--no-folding --target $env.HOME`.
 `--target=$HOME` allows you to put the dotfiles wherever you like. I used to put it in `$HOME/Projects` directory.
 
-For convenience, I `alias_or_warning unstow "stow -D --target=$HOME"` too.
+For convenience, it defines an `unstow` helper with `stow -D --target $env.HOME` too.
 
 Unfortunately, stow doesn't supervise installed packages and automatically install new files or remove deleted files. You have to manually stow or unstow the packages after you add/remove some files inside. Any better alternatives advice are welcome.
-
-Note: `alias_or_warning` is a function in `.zshrc`, used to avoid any implicit conflict alias.
 
 # Make dotfiles simple
 
 Find a client which has highly refined default configuration so you do not override them too much (Neovim works well that it changes many vim default options). When overriding them, comment why you do that.
 
 As for Neovim. If you can use third-part tool to handle files, use them rather than install an corresponding plugin, like useless Black plugin because you can execute external commands in Ex command as `:!black %`. Tinkering Neovim is ceaseless.
-
-Home Manager manages Oh My Zsh, while local theme customizations live under `nixos/zsh-custom`.
 
 `.pre-commit-config.yaml`, `pyproject.toml`, `stylua.toml` assure the unified coding style of dotfiles.
 
@@ -105,7 +101,7 @@ specific `${pkgs.foo}/bin/foo` path, define it with Home Manager instead.
 
 # Environment Variables
 
-Some packages have `dotenv` to export their environment variables. `.zshrc` will try to scan them in `XDG_CONFIG_HOME/*/dotenv`. Other environment variables concentrate at `.zshenv`.
+Nushell environment variables live in `Nushell/.config/nushell/env.nu`.
 
 # X11
 
