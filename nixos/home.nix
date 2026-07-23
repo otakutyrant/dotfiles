@@ -260,7 +260,6 @@ in
       ../mpv
       ../Neovim
       ../Nushell
-      ../Python
       ../Systemd
       ../Tmux
       ../X11
