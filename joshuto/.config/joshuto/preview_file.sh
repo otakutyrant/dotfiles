@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 set -o noclobber -o noglob -o nounset -o pipefail
 IFS=$'\n'
@@ -95,7 +95,10 @@ handle_mime() {
     ## Text
     text/* | */xml)
       if [[ "$(stat --printf='%s' -- "$FILE_PATH")" -le "$HIGHLIGHT_SIZE_MAX" ]]; then
-        bat --color=always --paging=never --style=plain --terminal-width="$PREVIEW_WIDTH" "$FILE_PATH" && exit 0
+        if command -v bat >/dev/null 2>&1; then
+          bat --color=always --paging=never --style=plain --terminal-width="$PREVIEW_WIDTH" "$FILE_PATH" && exit 0
+        fi
+        sed -n "1,${PREVIEW_HEIGHT}p" "$FILE_PATH" && exit 0
       fi
       exit 1 ;;
 

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # Use icat to place an image on top of joshuto's preview window.
 
 FILE_PATH="$1" # Full path of the previewed file
