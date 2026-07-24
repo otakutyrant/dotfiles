@@ -47,7 +47,6 @@ in
     GLFW_IM_MODULE = "ibus";
   };
 
-  programs.home-manager.enable = true;
   programs.anki.enable = true;
   programs.btop.enable = true; # System monitor.
   programs.calibre.enable = true;

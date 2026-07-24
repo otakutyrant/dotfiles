@@ -5,6 +5,9 @@ with pkgs; # Bring package names from pkgs into scope for the list below.
 [
   # Shell
   bash
+  # I do not know why `programs.home-manager.enable = true` does not work well,
+  # so I have install it explictly.
+  home-manager
   nushell
 
   # Audio.
