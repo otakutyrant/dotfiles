@@ -222,7 +222,13 @@
   virtualisation.docker.enable = true;
   services.postgresql = {
     enable = true;
+    # The project databases are used by Yihui development and integration
+    # tests. Prisma resets their schemas, so the app database role must own
+    # them instead of only being able to connect.
     ensureDatabases = [
+      # NixOS requires a database with the same name as the user when
+      # `ensureDBOwnership = true` is enabled for that PostgreSQL role.
+      username
       "ci_development"
       "ci_test"
     ];
@@ -230,9 +236,20 @@
       {
         name = username;
         ensureClauses.createdb = true;
+        # This grants ownership of the same-name database above. It does not
+        # cover custom project database names like ci_development or ci_test.
+        ensureDBOwnership = true;
       }
     ];
   };
+  # `ensureDBOwnership` only handles the same-name database required by the
+  # NixOS PostgreSQL module. These two project databases have custom names, so
+  # repair their ownership explicitly each time PostgreSQL starts. The commands
+  # are idempotent: running ALTER DATABASE OWNER repeatedly is harmless.
+  systemd.services.postgresql.postStart = ''
+    psql --dbname postgres --command 'ALTER DATABASE "ci_development" OWNER TO "${username}";'
+    psql --dbname postgres --command 'ALTER DATABASE "ci_test" OWNER TO "${username}";'
+  '';
   # Udev rules for non-root access to common game controllers.
   services.udev.packages = [
     pkgs.game-devices-udev-rules
