@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Version=1.5
+Name=Screenshot Delay
+GenericName=Delayed Screenshot
+Comment=Select a screenshot area after five seconds
+Exec=screenshot_delay
+Icon=applets-screenshooter
+Categories=Graphics;Utility;
+Terminal=false
