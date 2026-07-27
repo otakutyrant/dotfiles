@@ -148,6 +148,9 @@ in
     enable = true;
     tray = "auto";
   };
+  # Diodon ignores copied images by default. Enable image history so screenshot
+  # PNG clipboard entries can appear in its menu.
+  dconf.settings."net/launchpad/diodon/clipboard".add-images = true;
   xdg.userDirs.enable = true;
   xdg.configFile."user-dirs.dirs".force = true;
   gtk = {
