@@ -98,9 +98,11 @@ for_window [class="MetroExodus"] floating enable
 
 # Define names for default workspaces for which we configure key bindings later on.
 # We use variables to avoid repeating the names in multiple places.
-set $ws1 "1: "
-set $ws2 "2: 󰖟"
-set $ws3 "3: "
+# Pad icon-only workspace names so i3bar reserves enough width for Nerd Font
+# glyphs whose rendered shape is wider than their reported text width.
+set $ws1 "1:  "
+set $ws2 "2: 󰖟 "
+set $ws3 "3:  "
 set $ws4 "4: Others"
 set $ws5 "5"
 set $ws6 "6"
