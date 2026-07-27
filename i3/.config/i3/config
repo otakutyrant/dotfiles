@@ -18,6 +18,15 @@ set $mod Mod4
 # is used in the bar {} block below.
 font pango: JetBrainsMono Nerd Font
 
+# Window title colors. The five columns are border, title background, title
+# text, indicator, and child border. High contrast makes tabbed containers much
+# easier to scan when several browser windows share the same workspace.
+client.focused          #1f7a8c #1f7a8c #ffffff #bfdbf7 #1f7a8c
+client.focused_inactive #30343f #30343f #d8dee9 #6b7280 #30343f
+client.unfocused        #15171c #15171c #9ca3af #4b5563 #15171c
+client.urgent           #b00020 #b00020 #ffffff #ffb4ab #b00020
+client.placeholder      #15171c #15171c #9ca3af #4b5563 #15171c
+
 # # Windows management
 
 # Kill focused window with mod+q.
@@ -215,6 +224,16 @@ bar {
   tray_output primary
   font pango: JetBrainsMono Nerd Font 13
   status_command i3status-rs
+  colors {
+    background #15171c
+    statusline #d8dee9
+    separator  #4b5563
+    focused_workspace  #1f7a8c #1f7a8c #ffffff
+    active_workspace   #30343f #30343f #d8dee9
+    inactive_workspace #15171c #15171c #9ca3af
+    urgent_workspace   #b00020 #b00020 #ffffff
+    binding_mode       #b45309 #b45309 #ffffff
+  }
 }
 
 # # Scratchpad

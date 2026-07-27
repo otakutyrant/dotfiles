@@ -3,6 +3,21 @@ icons_format = "{icon} "
 [theme]
 theme = "slick"
 [theme.overrides]
+idle_bg = "#15171c"
+idle_fg = "#d8dee9"
+info_bg = "#1f7a8c"
+info_fg = "#ffffff"
+# i3status-rs uses `good` for normal healthy readings, so keep it in the same
+# teal family as focused i3 title bars instead of turning the bar green.
+good_bg = "#1f7a8c"
+good_fg = "#ffffff"
+warning_bg = "#b45309"
+warning_fg = "#ffffff"
+critical_bg = "#b00020"
+critical_fg = "#ffffff"
+separator = "\ue0b2"
+separator_bg = "auto"
+separator_fg = "auto"
 
 [icons]
 icons = "material-nf"
