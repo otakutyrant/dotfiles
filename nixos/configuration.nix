@@ -28,6 +28,8 @@
       "nix-command" # Enable the new nix ... command family, like `nix shell`.
       "flakes"
     ];
+    # Stop flake commands from warning when tracked files have unstaged edits.
+    warn-dirty = false;
   };
 
   # Apply the proxy settings to the Nix daemon, which does not inherit
