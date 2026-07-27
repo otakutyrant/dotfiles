@@ -25,8 +25,8 @@
 # Run continuously:
 #   /home/otakutyrant/.local/bin/image_resize_daemon.py
 #
-# Install as a user service:
-#   stow Systemd
+# Install as a user service through Home Manager:
+#   home-manager switch --flake .#otakutyrant
 #   systemctl --user daemon-reload
 #   systemctl --user restart image-resize-daemon.service
 #

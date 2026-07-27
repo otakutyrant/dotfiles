@@ -1,7 +1,6 @@
 # NixOS usage
 
-This repository still supports the original GNU Stow workflow, but it now also
-has a Nix flake for NixOS and Home Manager.
+This repository is managed through a Nix flake for NixOS and Home Manager.
 
 ## Fresh NixOS system
 
@@ -33,10 +32,8 @@ home-manager switch --flake .#otakutyrant
 
 ## Notes
 
-Some packages from `cli_clients.txt` and `gui_clients.txt` are Arch/AUR package
-names and do not have direct nixpkgs equivalents. Those are intentionally not
-referenced in `nixos/configuration.nix` yet. Add them one by one after checking
-their current nixpkgs names.
+System options live in `nixos/configuration.nix`. User packages live in
+`nixos/home-packages.nix`, with local package derivations under `nixos/pkgs`.
 
 The Home Manager module links the existing dotfiles instead of translating every
 application config into Nix options. This keeps the current layout usable while

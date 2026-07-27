@@ -11,7 +11,7 @@ let
   home = config.home.homeDirectory;
   # Recursively expose every file under a dotfile directory through Home
   # Manager, preserving each path relative to that directory.
-  stow =
+  linkDotfileDir =
     dir:
     let
       collect =
@@ -31,8 +31,8 @@ let
         ) (builtins.readDir path);
     in
     collect "" dir;
-  # Merge multiple stowed dotfile directories into one home.file attrset.
-  stowAll = dirs: lib.foldl' (files: dir: files // stow dir) { } dirs;
+  # Merge multiple dotfile directories into one Home Manager file attrset.
+  linkDotfileDirs = dirs: lib.foldl' (files: dir: files // linkDotfileDir dir) { } dirs;
 in
 {
   home.username = username;
@@ -192,7 +192,7 @@ in
 
   # Link the checked-in dotfile directories into the user's home directory.
   home.file =
-    (stowAll [
+    (linkDotfileDirs [
       ../Codex
       ../Gemini
       ../Kitty

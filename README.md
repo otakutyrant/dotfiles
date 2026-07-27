@@ -1,14 +1,23 @@
 # How to manage dotfiles
 
-I [use GNU Stow to manage my dotfiles](http://brandon.invergo.net/news/2012-05-26-using-gnu-stow-to-manage-your-dotfiles.html).
+This repository is now managed primarily through a Nix flake for NixOS and
+Home Manager.
 
-It is strongly recommended to use the `--no-folding` option when you stow dotfiles in new operating systems, otherwise thereafter some new generated files will appear in dotfiles rather than the corresponding position of the home directory, like [this](https://superuser.com/questions/1632928/gnu-stow-only-symlink-files-not-directories).
-So `Nushell/.config/nushell/autoload/stow.nu` defines a `stow` helper with `--no-folding --target $env.HOME`.
-`--target=$HOME` allows you to put the dotfiles wherever you like. I used to put it in `$HOME/Projects` directory.
+Apply the full NixOS host configuration:
 
-For convenience, it defines an `unstow` helper with `stow -D --target $env.HOME` too.
+```nu
+sudo nixos-rebuild switch --flake .#nixos
+```
 
-Unfortunately, stow doesn't supervise installed packages and automatically install new files or remove deleted files. You have to manually stow or unstow the packages after you add/remove some files inside. Any better alternatives advice are welcome.
+Apply only the user Home Manager configuration:
+
+```nu
+home-manager switch --flake .#otakutyrant
+```
+
+Home Manager links the checked-in dotfile directories into `$HOME`. The helper
+in `nixos/home.nix` recursively exposes files from directories such as `XDG`,
+`i3`, `Kitty`, `Neovim`, `Nushell`, `Systemd`, and `Tmux`.
 
 # Make dotfiles simple
 
@@ -36,23 +45,23 @@ When you want to kill a windows, hit `master+q`.
 
 Now time to make the windows management hierarchical! In Linux, I use a windows manager, i3, to handles multiple GUI clients, including a virtual terminal, kitty. In turn, I use kitty to handles multiple CLI clients, including shells and an editor, Neovim. Eventually, I use Neovim to handles multiple files. The windows management of such three hierarchies are almost consistent, list as below:
 
-|    Hierarchies   |  name  | What do they manage? | What do master keys call in them? | binded key |
-|:----------------:|:------:|----------------------|:---------------------------------:|:----------:|
-| Windows Manager  | i3     | GUI clients          | $mod                              | super      |
-| Virtual Terminal | kitty  | CLI clients          | N/A                               | alt        |
-| Editor           | Neovim | Files                | learder key                       | space      |
-| Multiplixer      | tmux   | Remote sessions      | the prefix key                    | ctrl-w     |
+|   Hierarchies    |  name  | What do they manage? | What do master keys call in them? | binded key |
+| :--------------: | :----: | -------------------- | :-------------------------------: | :--------: |
+| Windows Manager  |   i3   | GUI clients          |               $mod                |   super    |
+| Virtual Terminal | kitty  | CLI clients          |                N/A                |    alt     |
+|      Editor      | Neovim | Files                |            learder key            |   space    |
+|   Multiplixer    |  tmux  | Remote sessions      |          the prefix key           |   ctrl-w   |
 
 | name   | What do tabs call in them? | How to allocate a new tab? | How to jump to a tab? |
-|--------|----------------------------|----------------------------|-----------------------|
+| ------ | -------------------------- | -------------------------- | --------------------- |
 | i3     | workspace                  | N/A                        | super+num             |
 | kitty  | tab                        | alt+n                      | alt+num               |
 | Neovim | tabpage                    | space+n                    | space+num             |
 | tmux   | window                     | ctrl-w+n                   | ctrl-w+num            |
 
 | name   | What do windows call in them? | How to move focus between windows? | How to split a window horizontally or vertically? | How to distribute windows horizontally or vertically? | How to kill a window? |
-|--------|-------------------------------|------------------------------------|---------------------------------------------------|-------------------------------------------------------|-----------------------|
-| i3     | window                        | super+hjkl                           | super+s or super+v,                               | super+- or super+\|,                                  | super+q               |
+| ------ | ----------------------------- | ---------------------------------- | ------------------------------------------------- | ----------------------------------------------------- | --------------------- |
+| i3     | window                        | super+hjkl                         | super+s or super+v,                               | super+- or super+\|,                                  | super+q               |
 | kitty  | window                        | alt+hjkl                           | alt+s or alt+v                                    | alt+- or alt+\|                                       | alt+q                 |
 | Neovim | window                        | space+hjkl                         | space+s or space+v                                | N/A                                                   | space+q               |
 | tmux   | pane                          | ctrl-w+hjkl                        | ctrl-w+s or ctrl-w+v                              | N/A                                                   | ctrl-w+q              |
@@ -99,6 +108,10 @@ Use static desktop files here when the command is stable, such as
 `Exec=systemctl suspend`. If a desktop entry needs Nix interpolation, such as a
 specific `${pkgs.foo}/bin/foo` path, define it with Home Manager instead.
 
+Personal commands that should appear in rofi can be paired with a desktop file.
+For example, `XDG/.local/bin/screenshot_delay` is exposed through
+`XDG/.local/share/applications/screenshot-delay.desktop`.
+
 # Environment Variables
 
 Nushell environment variables live in `Nushell/.config/nushell/env.nu`.
@@ -109,7 +122,10 @@ I tried to migrate to Wayland but terminated, because Nvidia support is not good
 
 # Packages
 
-This repository now targets NixOS with Home Manager. System-level packages and user-facing development and GUI packages are organized in `nixos/packages.nix`. Package names there are Nixpkgs attribute names, not names from another distribution.
+This repository targets NixOS with Home Manager. System options live in
+`nixos/configuration.nix`, while user-facing development and GUI packages are
+organized in `nixos/home-packages.nix`. Package names there are Nixpkgs
+attribute names, not names from another distribution.
 
 I noticed a trend that traditional GNU CLI clients are replaced by high-performance Rust alternatives, like `find` is replaced by `fd`, `grep` by `ripgrep` or `fzf`, `less` by `page` and so on.
 
