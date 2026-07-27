@@ -3,13 +3,28 @@
 This repository is now managed primarily through a Nix flake for NixOS and
 Home Manager.
 
-Apply the full NixOS host configuration:
+## Fresh NixOS system
+
+Clone the repository with submodules:
+
+```nu
+git clone --recursive https://github.com/otakutyrant/dotfiles.git /etc/nixos/dotfiles
+cd /etc/nixos/dotfiles
+```
+
+Build the bundled host configuration:
 
 ```nu
 sudo nixos-rebuild switch --flake .#nixos
+passwd otakutyrant
 ```
 
-Apply only the user Home Manager configuration:
+The NixOS configuration creates the `otakutyrant` user, enables flakes,
+NetworkManager, Docker, PipeWire, fcitx5, NVIDIA graphics, LightDM, and i3.
+
+## Home Manager only
+
+If the system user already exists and Home Manager is installed:
 
 ```nu
 home-manager switch --flake .#otakutyrant
@@ -18,6 +33,9 @@ home-manager switch --flake .#otakutyrant
 Home Manager links the checked-in dotfile directories into `$HOME`. The helper
 in `nixos/home.nix` recursively exposes files from directories such as `XDG`,
 `i3`, `Kitty`, `Neovim`, `Nushell`, `Systemd`, and `Tmux`.
+
+System options live in `nixos/configuration.nix`. User packages live in
+`nixos/home-packages.nix`, with local package derivations under `nixos/pkgs`.
 
 # Make dotfiles simple
 
