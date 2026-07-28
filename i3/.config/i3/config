@@ -100,16 +100,16 @@ for_window [class="MetroExodus"] floating enable
 # We use variables to avoid repeating the names in multiple places.
 # Pad icon-only workspace names so i3bar reserves enough width for Nerd Font
 # glyphs whose rendered shape is wider than their reported text width.
-set $ws1 "1:  "
-set $ws2 "2: 󰖟 "
-set $ws3 "3:  "
-set $ws4 "4: Others"
-set $ws5 "5"
-set $ws6 "6"
-set $ws7 "7"
-set $ws8 "8"
-set $ws9 "9"
-set $ws10 "10"
+set $ws1 "甲"
+set $ws2 "乙"
+set $ws3 "丙"
+set $ws4 "丁"
+set $ws5 "戊"
+set $ws6 "己"
+set $ws7 "庚"
+set $ws8 "辛"
+set $ws9 "壬"
+set $ws10 "癸"
 
 # Switch to workspace with mod+number.
 bindsym $mod+1 workspace number $ws1
@@ -175,8 +175,13 @@ assign [class="goldendict"] $ws4
 # Automatically putting workspaces on specific screens.
 workspace $ws1 output DP-4
 workspace $ws2 output DP-2
-workspace $ws3 output DP-4
-workspace $ws4 output DP-2
+workspace $ws3 output DP-0
+workspace $ws4 output DP-4
+workspace $ws5 output DP-2
+workspace $ws6 output DP-0
+workspace $ws7 output DP-4
+workspace $ws8 output DP-2
+workspace $ws9 output DP-0
 
 # Automatically back-and-forth when switching to the current workspace
 # For instance: Assume you are on workspace "1: www" and switch to "2: IM"
@@ -212,7 +217,7 @@ exec --no-startup-id "$HOME/.nix-profile/libexec/polkit-gnome-authentication-age
 exec_always --no-startup-id sh -c 'killall picom 2>/dev/null; exec picom --config "$HOME/.config/picom/picom.conf"'
 
 # https://faq.i3wm.org/question/2332/flexible-monitor-setup.1.html
-exec --no-startup-id xrandr --output HDMI-0 --off --output DP-0 --off --output DP-1 --off --output DP-2 --mode 1920x1080 --pos 0x0 --rotate left --output DP-3 --off --output DP-4 --primary --mode 2560x1440 --pos 1080x480 --rotate normal --output DP-5 --off
+exec --no-startup-id xrandr --output HDMI-0 --off --output DP-0 --mode 1920x1080 --pos 3640x0 --rotate left --output DP-1 --off --output DP-2 --mode 1920x1080 --pos 0x0 --rotate left --output DP-3 --off --output DP-4 --primary --mode 2560x1440 --pos 1080x480 --rotate normal --output DP-5 --off
 
 
 # Sleep displays after 5 minutes of inactivity.
