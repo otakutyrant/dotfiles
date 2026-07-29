@@ -8,7 +8,10 @@ with pkgs; # Bring package names from pkgs into scope for the list below.
   # I do not know why `programs.home-manager.enable = true` does not work well,
   # so I have install it explictly.
   home-manager
-  nushell
+  # Nushell is intentionally omitted here. Home Manager's
+  # `programs.nushell.enable` installs the user-facing shell and NixOS also
+  # pulls `pkgs.nushell` into the system closure because it is configured as the
+  # login shell in configuration.nix.
 
   # Audio.
   alsa-lib
