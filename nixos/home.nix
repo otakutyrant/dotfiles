@@ -90,7 +90,23 @@ in
   };
   programs.nushell = {
     enable = true;
-    plugins = [ pkgs.nushellPlugins.gstat ];
+    # `with pkgs.nushellPlugins;` lets the list use plugin package names
+    # directly. These packages are registered by Home Manager so Nushell can
+    # load their commands.
+    plugins = with pkgs.nushellPlugins; [
+      bson # Convert BSON data, useful when working with MongoDB-style binary JSON.
+      desktop_notifications # Send desktop notifications from Nushell scripts.
+      formats # Add extra converters for structured file formats.
+      gstat # Provide Git status data for prompts and shell scripts.
+      hcl # Parse HashiCorp Configuration Language files such as Terraform configs.
+      highlight # Add syntax highlighting for code and text output.
+      polars # Add dataframe commands backed by the Polars data engine.
+      query # Query structured data such as JSON, XML, HTML, and web responses.
+      semver # Parse and compare semantic version strings.
+      skim # Integrate the skim fuzzy finder with Nushell pipelines.
+      # dbus, net, and units are omitted because this nixpkgs revision marks
+      # their Nushell plugin packages as broken.
+    ];
   };
   programs.npm = {
     enable = true;
