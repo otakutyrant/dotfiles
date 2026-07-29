@@ -1,7 +1,0 @@
-[too.pyright]
-# Project-specified type checker
-[tool.uv]
-exclude-newer = "3 days"
-
-[tool.ruff]
-# Project-specified linter and formatter
