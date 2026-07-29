@@ -43,7 +43,10 @@ Find a client which has highly refined default configuration so you do not overr
 
 As for Neovim. If you can use third-part tool to handle files, use them rather than install an corresponding plugin, like useless Black plugin because you can execute external commands in Ex command as `:!black %`. Tinkering Neovim is ceaseless.
 
-`.pre-commit-config.yaml`, `pyproject.toml`, `stylua.toml` assure the unified coding style of dotfiles.
+`nix fmt` formats Nix, Lua, and Nushell files through the formatter declared in
+`flake.nix`. `nix run .#check` runs the same format checks plus Nix evaluation,
+Lua diagnostics, and Nushell parser checks. `.pre-commit-config.yaml` wires
+these commands into pre-commit.
 
 # Introduction to unified, hierarchical windows management
 

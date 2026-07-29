@@ -46,27 +46,123 @@
       username = "otakutyrant";
       hostname = "nixos";
       pkgs = nixpkgs.legacyPackages.${system};
-      # `nix fmt` runs this package's executable without arguments. The wrapper
-      # formats tracked Nix files and skips hardware-configuration.nix because
-      # NixOS generates that file and may overwrite its formatting later.
-      formatter = pkgs.writeTextFile {
-        name = "dotfiles-format";
-        destination = "/bin/dotfiles-format";
-        executable = true;
-        text = ''
-          #!${pkgs.nushell}/bin/nu
-
-          let files = (
-            ^${pkgs.git}/bin/git ls-files
-            | lines
-            | where { |path| ($path | str ends-with ".nix") and $path != "nixos/hardware-configuration.nix" }
-          )
-
-          if ($files | is-not-empty) {
-            ^${pkgs.nixfmt}/bin/nixfmt ...$files
-          }
-        '';
+      # Flake apps need a small wrapper object. Keeping it local avoids
+      # repeating the same `type = "app"` boilerplate for each project command.
+      mkApp = program: {
+        type = "app";
+        program = "${program}/bin/${program.name}";
       };
+      # These wrappers keep code-quality commands reproducible through the
+      # pinned nixpkgs input. The scripts themselves are Nushell because this
+      # repository already uses Nushell for project automation.
+      qualityScripts =
+        let
+          script =
+            name: text:
+            pkgs.writeTextFile {
+              inherit name;
+              destination = "/bin/${name}";
+              executable = true;
+              text = ''
+                #!${pkgs.nushell}/bin/nu
+
+                ${text}
+              '';
+            };
+          # Only checked-in files are constrained. Deleted paths are ignored so
+          # the tools still work during rename-heavy changes.
+          common = ''
+            def tracked-files [extension: string] {
+                ^${pkgs.git}/bin/git ls-files
+                | lines
+                | where { |path| ($path | str ends-with $extension) and ($path | path exists) }
+            }
+
+            def nix-files [] {
+                tracked-files ".nix"
+                | where { |path| $path != "nixos/hardware-configuration.nix" }
+            }
+
+            def lua-files [] {
+                tracked-files ".lua"
+            }
+
+            def nu-files [] {
+                tracked-files ".nu"
+            }
+
+            def formatted-nu-files [] {
+                nu-files
+                | where { |path| $path != "Nushell/.config/nushell/autoload/prompt.nu" }
+            }
+          '';
+        in
+        rec {
+          format = script "dotfiles-format" ''
+            ${common}
+
+            let nix_files = (nix-files)
+            if ($nix_files | is-not-empty) {
+                ^${pkgs.nixfmt}/bin/nixfmt ...$nix_files
+            }
+
+            let lua_files = (lua-files)
+            if ($lua_files | is-not-empty) {
+                ^${pkgs.stylua}/bin/stylua ...$lua_files
+            }
+
+            let nu_files = (formatted-nu-files)
+            if ($nu_files | is-not-empty) {
+                with-env { RUST_LOG: "off" } {
+                    ^${pkgs.nufmt}/bin/nufmt ...$nu_files
+                }
+            }
+          '';
+          lint = script "dotfiles-lint" ''
+            ${common}
+
+            let nix_files = (nix-files)
+            if ($nix_files | is-not-empty) {
+                ^${pkgs.nixfmt}/bin/nixfmt --check ...$nix_files
+            }
+
+            let lua_files = (lua-files)
+            if ($lua_files | is-not-empty) {
+                ^${pkgs.stylua}/bin/stylua --check ...$lua_files
+            }
+
+            let nu_files = (formatted-nu-files)
+            if ($nu_files | is-not-empty) {
+                with-env { RUST_LOG: "off" } {
+                    ^${pkgs.nufmt}/bin/nufmt --dry-run ...$nu_files
+                }
+            }
+          '';
+          typecheck = script "dotfiles-typecheck" ''
+            ${common}
+
+            # Nix does not have a separate type checker. Evaluating these
+            # derivation paths checks that the flake, NixOS modules, and Home
+            # Manager module type-check without building the resulting systems.
+            ^${pkgs.nix}/bin/nix eval --no-update-lock-file --raw .#nixosConfigurations.${hostname}.config.system.build.toplevel.drvPath | ignore
+            ^${pkgs.nix}/bin/nix eval --no-update-lock-file --raw .#homeConfigurations.${username}.activationPackage.drvPath | ignore
+
+            # lua-language-server is the practical Lua checker already used by
+            # editor tooling. Only Error diagnostics fail this command.
+            ^${pkgs.lua-language-server}/bin/lua-language-server --check . --checklevel Error --check_format pretty --logpath /tmp/dotfiles-lua-language-server-log
+
+            # Nushell exposes parser diagnostics through the IDE check mode.
+            # Cursor offset 0 is enough to force parsing without executing the
+            # script, which matters for executable .nu files with side effects.
+            for file in (nu-files) {
+                ^${pkgs.nushell}/bin/nu --ide-check 0 $file | ignore
+            }
+          '';
+          check = script "dotfiles-check" ''
+            ^${lint}/bin/dotfiles-lint
+            ^${typecheck}/bin/dotfiles-typecheck
+          '';
+        };
       # `in` starts the expression that can use the local names defined above.
       # The whole `let ... in ...` expression evaluates to the value after `in`.
     in
@@ -74,7 +170,30 @@
     {
       # Flake output keyword: `formatter` lets `nix fmt` choose the formatter
       # for this system automatically.
-      formatter.${system} = formatter;
+      formatter.${system} = qualityScripts.format;
+
+      # Flake app outputs make the same constraints explicit and scriptable:
+      # `nix run .#format`, `nix run .#lint`, `nix run .#typecheck`, and
+      # `nix run .#check`.
+      apps.${system} = {
+        format = mkApp qualityScripts.format;
+        lint = mkApp qualityScripts.lint;
+        typecheck = mkApp qualityScripts.typecheck;
+        check = mkApp qualityScripts.check;
+      };
+
+      # A dev shell keeps the formatter, linter, and diagnostic tools available
+      # for direct editor or terminal use outside the flake app wrappers.
+      devShells.${system}.default = pkgs.mkShell {
+        packages = with pkgs; [
+          lua-language-server
+          nixfmt
+          nufmt
+          nushell
+          pre-commit
+          stylua
+        ];
+      };
 
       # Flake output keyword: `nixosConfigurations` exposes full NixOS machine
       # configurations used by `nixos-rebuild --flake`.
