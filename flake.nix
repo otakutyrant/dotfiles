@@ -45,11 +45,37 @@
       system = "x86_64-linux";
       username = "otakutyrant";
       hostname = "nixos";
+      pkgs = nixpkgs.legacyPackages.${system};
+      # `nix fmt` runs this package's executable without arguments. The wrapper
+      # formats tracked Nix files and skips hardware-configuration.nix because
+      # NixOS generates that file and may overwrite its formatting later.
+      formatter = pkgs.writeTextFile {
+        name = "dotfiles-format";
+        destination = "/bin/dotfiles-format";
+        executable = true;
+        text = ''
+          #!${pkgs.nushell}/bin/nu
+
+          let files = (
+            ^${pkgs.git}/bin/git ls-files
+            | lines
+            | where { |path| ($path | str ends-with ".nix") and $path != "nixos/hardware-configuration.nix" }
+          )
+
+          if ($files | is-not-empty) {
+            ^${pkgs.nixfmt}/bin/nixfmt ...$files
+          }
+        '';
+      };
       # `in` starts the expression that can use the local names defined above.
       # The whole `let ... in ...` expression evaluates to the value after `in`.
     in
     # This attribute set is the actual value returned by `outputs`.
     {
+      # Flake output keyword: `formatter` lets `nix fmt` choose the formatter
+      # for this system automatically.
+      formatter.${system} = formatter;
+
       # Flake output keyword: `nixosConfigurations` exposes full NixOS machine
       # configurations used by `nixos-rebuild --flake`.
       # nixpkgs.lib.nixosSystem is a function that accepts system, specialArgs,
@@ -75,8 +101,8 @@
       # Flake output keyword used by Home Manager: `homeConfigurations` exposes
       # standalone user profiles for `home-manager switch --flake`.
       homeConfigurations.${username} = home-manager.lib.homeManagerConfiguration {
-        # Standalone Home Manager needs a package set, so import Nixpkgs at the
-        # call site instead of keeping a separate local `pkgs` binding.
+        # Standalone Home Manager needs a package set with unfree packages
+        # enabled, because this user profile installs proprietary software.
         pkgs = import nixpkgs {
           # `inherit system;` is shorthand for `system = system;`.
           inherit system;
