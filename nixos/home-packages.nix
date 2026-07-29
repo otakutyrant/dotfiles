@@ -59,6 +59,7 @@ with pkgs; # Bring package names from pkgs into scope for the list below.
   uv
   ruff
   basedpyright
+  poethepoet # Provides the `poe` task runner command for pyproject.toml tasks.
 
   # Frontend
   eslint
