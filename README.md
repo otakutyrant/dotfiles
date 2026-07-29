@@ -127,7 +127,7 @@ Use static desktop files here when the command is stable, such as
 specific `${pkgs.foo}/bin/foo` path, define it with Home Manager instead.
 
 Personal commands that should appear in rofi can be paired with a desktop file.
-For example, `XDG/.local/bin/screenshot_delay` is exposed through
+For example, `XDG/.local/bin/screenshot_delay.nu` is exposed through
 `XDG/.local/share/applications/screenshot-delay.desktop`.
 
 # Environment Variables

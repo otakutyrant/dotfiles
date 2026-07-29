@@ -31,5 +31,5 @@ def main [
   }
 
   xclip -selection clipboard -t image/png -i $file
-  notify-send -a screenshot_select -i $file "Screenshot saved" $file
+  notify-send -a screenshot_select.nu -i $file "Screenshot saved" $file
 }

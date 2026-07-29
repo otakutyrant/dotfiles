@@ -206,7 +206,7 @@ bindsym $mod+shift+l exec i3lock
 # Show clipboard history.
 bindsym $mod+p exec diodon
 # Select a region, save the screenshot, and copy it to the clipboard.
-bindcode --release 107 exec --no-startup-id "$HOME/.local/bin/screenshot_select"
+bindcode --release 107 exec --no-startup-id "$HOME/.local/bin/screenshot_select.nu"
 
 # # Startups
 
