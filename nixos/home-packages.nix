@@ -95,6 +95,7 @@ with pkgs; # Bring package names from pkgs into scope for the list below.
 
   # Media
   ffmpeg
+  imagemagick # Provides `magick`, which the image resize daemon uses to inspect and resize images.
   mediainfo
   python3Packages.sounddevice # Suppresses unnecessary ALSA errors in some Python audio tools.
 

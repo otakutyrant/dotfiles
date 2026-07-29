@@ -148,6 +148,25 @@ in
     enable = true;
     tray = "auto";
   };
+  # Home Manager manages the user service here so `home-manager switch` also
+  # links it into default.target. The script lives in the XDG dotfile directory,
+  # which is linked into ~/.local/bin/image_resize_daemon.nu below.
+  systemd.user.services.image-resize-daemon = {
+    Unit = {
+      Description = "Upscale small images under /home/otakutyrant";
+      After = [ "default.target" ];
+    };
+
+    Service = {
+      Type = "simple";
+      ExecStart = "${home}/.local/bin/image_resize_daemon.nu --root ${home} --target-short-side 800 --interval 5";
+      Restart = "always";
+      RestartSec = 5;
+    };
+
+    Install.WantedBy = [ "default.target" ];
+  };
+
   # Diodon ignores copied images by default. Enable image history so screenshot
   # PNG clipboard entries can appear in its menu.
   dconf.settings."net/launchpad/diodon/clipboard".add-images = true;
@@ -199,7 +218,6 @@ in
       ../mpv
       ../Neovim
       ../Nushell
-      ../Systemd
       ../Tmux
       ../XDG
       ../i3
