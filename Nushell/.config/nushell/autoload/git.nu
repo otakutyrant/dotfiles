@@ -1,191 +1,239 @@
 # This file is copied from nu_scripts/custom-completions/git/git-completions.nu
 # in 2025.02.19.
+
 # nu-version: 0.102.0
+
 module git-completion-utils {
-    export const GIT_SKIPABLE_FLAGS [
-        '-v'
-        '--version'
-        '-h'
-        '--help'
-        '-p'
-        '--paginate'
-        '-P'
-        '--no-pager'
-        '--no-replace-objects'
-        '--bare'
-    ] [
-        '-v'
-        '--version'
-        '-h'
-        '--help'
-        '-p'
-        '--paginate'
-        '-P'
-        '--no-pager'
-        '--no-replace-objects'
-        '--bare'
-    ]
-    # Helper function to append token if non-empty
-    def append-non-empty [token: string]: list<string> -> list<string> {
-        if ($token | is-empty) { $in } else { $in | append $token }
-    }
-    # Split a string to list of args, taking quotes into account.
-    # Code is copied and modified from https://github.com/nushell/nushell/issues/14582#issuecomment-2542596272
-    export def args-split []: string -> list<string> {
-        # Define our states
-        const STATE_NORMAL = 0
-        const STATE_IN_SINGLE_QUOTE = 1
-        const STATE_IN_DOUBLE_QUOTE = 2
-        const STATE_ESCAPE = 3
-        const WHITESPACES = [" ", "\t", "\n", "\r"]
-        # Initialize variables
-        mut state = $STATE_NORMAL
-        mut current_token = ""
-        mut result: list<string> = []
-        mut prev_state = $STATE_NORMAL
-        # Process each character
-        for char in in | split chars {
-        if $state == $STATE_ESCAPE {
-            # Handle escaped character
-            $current_token = $current_token + $char
-            $state = $prev_state
-        } else if $char == '\' {
-            $prev_state = $state
-            $state = $STATE_ESCAPE
-        } else if $state == $STATE_NORMAL {
-            if $char == "'" {
-                $state = $STATE_IN_SINGLE_QUOTE
-            } else if $char == '"' {
-                $state = $STATE_IN_DOUBLE_QUOTE
-            } else if ($char in $WHITESPACES) {
-                $result = $result | append-non-empty $current_token
-                $current_token = ""
-            } else {
-                $current_token = $current_token + $char
-            }
-        } else if $state == $STATE_IN_SINGLE_QUOTE {
-            if $char == "'" {
-                $state = $STATE_NORMAL
-            } else {
-                $current_token = $current_token + $char
-            }
-        } else if $state == $STATE_IN_DOUBLE_QUOTE {
-            if $char == '"' {
-                $state = $STATE_NORMAL
-            } else {
-                $current_token = $current_token + $char
-            }
+  export const GIT_SKIPABLE_FLAGS = ['-v', '--version', '-h', '--help', '-p', '--paginate', '-P', '--no-pager', '--no-replace-objects', '--bare']
+
+  # Helper function to append token if non-empty
+  def append-non-empty [token: string]: list<string> -> list<string> {
+    if ($token | is-empty) { $in } else { $in | append $token }
+  }
+
+  # Split a string to list of args, taking quotes into account.
+  # Code is copied and modified from https://github.com/nushell/nushell/issues/14582#issuecomment-2542596272
+  export def args-split []: string -> list<string> {
+    # Define our states
+    const STATE_NORMAL = 0
+    const STATE_IN_SINGLE_QUOTE = 1
+    const STATE_IN_DOUBLE_QUOTE = 2
+    const STATE_ESCAPE = 3
+    const WHITESPACES = [" " "\t" "\n" "\r"]
+
+    # Initialize variables
+    mut state = $STATE_NORMAL
+    mut current_token = ""
+    mut result: list<string> = []
+    mut prev_state = $STATE_NORMAL
+
+    # Process each character
+    for char in ($in | split chars) {
+      if $state == $STATE_ESCAPE {
+        # Handle escaped character
+        $current_token = $current_token + $char
+        $state = $prev_state
+      } else if $char == '\' {
+        # Enter escape state
+        $prev_state = $state
+        $state = $STATE_ESCAPE
+      } else if $state == $STATE_NORMAL {
+        if $char == "'" {
+          $state = $STATE_IN_SINGLE_QUOTE
+        } else if $char == '"' {
+          $state = $STATE_IN_DOUBLE_QUOTE
+        } else if ($char in $WHITESPACES) {
+          # Whitespace in normal state means token boundary
+          $result = $result | append-non-empty $current_token
+          $current_token = ""
+        } else {
+          $current_token = $current_token + $char
         }
+      } else if $state == $STATE_IN_SINGLE_QUOTE {
+        if $char == "'" {
+          $state = $STATE_NORMAL
+        } else {
+          $current_token = $current_token + $char
+        }
+      } else if $state == $STATE_IN_DOUBLE_QUOTE {
+        if $char == '"' {
+          $state = $STATE_NORMAL
+        } else {
+          $current_token = $current_token + $char
+        }
+      }
     }
-        $result = $result | append-non-empty $current_token
-        $result
-    }
-    export def get-changed-files []: nothing -> list<string> {
-        ^git status -uno --porcelain=2 | lines | where $it =~ '^1 [.MD]{2}' | each { split row ' ' -n 9 | last }
-    }
-    export def get-checkoutable-files []: nothing -> list<string> {
-        ^git status -uno --porcelain=2 | lines | where $it =~ '^1 ([.MD]{2}|UU)' | each { split row ' ' -n 9 | last }
-    }
-    export def get-all-git-local-refs []: nothing -> list<record<ref: string, obj: string, upstream: string, subject: string>> {
-        ^git for-each-ref --format '%(refname:lstrip=2)%09%(objectname:short)%09%(upstream:remotename)%(upstream:track)%09%(contents:subject)' refs/heads | lines | parse "{ref}\t{obj}\t{upstream}\t{subject}"
-    }
-    export def get-all-git-remote-refs []: nothing -> list<record<ref: string, obj: string, subject: string>> {
-        ^git for-each-ref --format '%(refname:lstrip=2)%09%(objectname:short)%09%(contents:subject)' refs/remotes | lines | parse "{ref}\t{obj}\t{subject}"
-    }
-    export def get-mergable-sources []: nothing -> list<record<value: string, description: string>> {
-        let local = get-all-git-local-refs | each {|x| {value: $x.ref description: $'Branch, Local, ($x.obj) ($x.subject), (if ($x.upstream | is-not-empty) { $x.upstream } else { "no upstream" } )'} } | insert style 'light_blue'
-        let remote = get-all-git-remote-refs | each {|x| {value: $x.ref description: $'Branch, Remote, ($x.obj) ($x.subject)'} } | insert style 'blue_italic'
-        $local | append $remote
-    }
+    # Handle the last token
+    $result = $result | append-non-empty $current_token
+    # Return the result
+    $result
+  }
+
+  # Get changed files which can be restored by `git checkout --`
+  export def get-changed-files []: nothing -> list<string> {
+    ^git status -uno --porcelain=2 | lines
+    | where $it =~ '^1 [.MD]{2}'
+    | each { split row ' ' -n 9 | last }
+  }
+
+  # Get files which can be retrieved from a branch/commit by `git checkout <tree-ish>`
+  export def get-checkoutable-files []: nothing -> list<string> {
+    # Relevant statuses are .M", "MM", "MD", ".D", "UU"
+    ^git status -uno --porcelain=2 | lines
+    | where $it =~ '^1 ([.MD]{2}|UU)'
+    | each { split row ' ' -n 9 | last }
+  }
+
+  export def get-all-git-local-refs []: nothing -> list<record<ref: string, obj: string, upstream: string, subject: string>> {
+    ^git for-each-ref --format '%(refname:lstrip=2)%09%(objectname:short)%09%(upstream:remotename)%(upstream:track)%09%(contents:subject)' refs/heads | lines | parse "{ref}\t{obj}\t{upstream}\t{subject}"
+  }
+
+  export def get-all-git-remote-refs []: nothing -> list<record<ref: string, obj: string, subject: string>> {
+    ^git for-each-ref --format '%(refname:lstrip=2)%09%(objectname:short)%09%(contents:subject)' refs/remotes | lines | parse "{ref}\t{obj}\t{subject}"
+  }
+
+  # Get local branches, remote branches which can be passed to `git merge`
+  export def get-mergable-sources []: nothing -> list<record<value: string, description: string>> {
+    let local = get-all-git-local-refs | each {|x| {value: $x.ref description: $'Branch, Local, ($x.obj) ($x.subject), (if ($x.upstream | is-not-empty) { $x.upstream } else { "no upstream" } )'} } | insert style 'light_blue'
+    let remote = get-all-git-remote-refs | each {|x| {value: $x.ref description: $'Branch, Remote, ($x.obj) ($x.subject)'} } | insert style 'blue_italic'
+    $local | append $remote
+  }
 }
+
 def "nu-complete git available upstream" [] {
-    ^git branch --no-color -a | lines | each { |line| $line | str replace '* ' "" | str trim }
+  ^git branch --no-color -a | lines | each { |line| $line | str replace '* ' "" | str trim }
 }
+
 def "nu-complete git remotes" [] {
-    ^git remote | lines | each { |line| $line | str trim }
+  ^git remote | lines | each { |line| $line | str trim }
 }
+
 def "nu-complete git log" [] {
-    ^git log --pretty=%h | lines | each { |line| $line | str trim }
+  ^git log --pretty=%h | lines | each { |line| $line | str trim }
 }
+
+# Yield all existing commits in descending chronological order.
 def "nu-complete git commits all" [] {
-    ^git rev-list --all --remotes --pretty=oneline | lines | parse "{value} {description}"
+  ^git rev-list --all --remotes --pretty=oneline | lines | parse "{value} {description}"
 }
+
+# Yield commits of current branch only. This is useful for e.g. cut points in
+# `git rebase`.
 def "nu-complete git commits current branch" [] {
-    ^git log --pretty="%h %s" | lines | parse "{value} {description}"
+  ^git log --pretty="%h %s" | lines | parse "{value} {description}"
 }
+
+# Yield local branches like `main`, `feature/typo_fix`
 def "nu-complete git local branches" [] {
-    ^git branch --no-color | lines | each { |line| $line | str replace '* ' "" | str replace '+ ' ""  | str trim }
+  ^git branch --no-color | lines | each { |line| $line | str replace '* ' "" | str replace '+ ' ""  | str trim }
 }
+
+# Yield remote branches like `origin/main`, `upstream/feature-a`
 def "nu-complete git remote branches with prefix" [] {
-    ^git branch --no-color -r | lines | parse -r '^\*?(\s*|\s*\S* -> )(?P<branch>\S*$)' | get branch | uniq
+  ^git branch --no-color -r | lines | parse -r '^\*?(\s*|\s*\S* -> )(?P<branch>\S*$)' | get branch | uniq
 }
+
+# Yield local and remote branch names which can be passed to `git merge`
 def "nu-complete git mergable sources" [] {
-    use git-completion-utils *
-    let branches = get-mergable-sources
-    {
-        options: {case_sensitive: false, completion_algorithm: prefix, sort: false}
-        completions: $branches
-    }
+  use git-completion-utils *
+  let branches = get-mergable-sources
+  {
+    options: {
+        case_sensitive: false,
+        completion_algorithm: prefix,
+        sort: false,
+    },
+    completions: $branches
+  }
 }
+
 def "nu-complete git switch" [] {
-    use git-completion-utils *
-    let branches = get-mergable-sources
-    {
-        options: {case_sensitive: false, completion_algorithm: prefix, sort: false}
-        completions: $branches
-    }
+  use git-completion-utils *
+  let branches = get-mergable-sources
+  {
+    options: {
+        case_sensitive: false,
+        completion_algorithm: prefix,
+        sort: false,
+    },
+    completions: $branches
+  }
 }
-def "nu-complete git checkout" [context: string, position?: int] {
-    use git-completion-utils *
-    let preceding = $context | str substring ..$position
-    let prev_tokens = $preceding | str trim | args-split | where ($it not-in $GIT_SKIPABLE_FLAGS)
-    if $prev_tokens.2? == '--' {
-        return (get-changed-files)
-    }
-    if '--' in $prev_tokens {
-        return (get-checkoutable-files)
-    }
-    if ($prev_tokens | length) > 2 and $preceding ends-with ' ' {
-        return (get-checkoutable-files)
-    }
-    let branches = get-mergable-sources
-    let files = (get-checkoutable-files) | wrap value | insert description 'File' | insert style green
-    let commits = ^git rev-list -n 400 --remotes --oneline | lines | split column -n 2 ' ' value description | upsert description {|x| $'Commit, ($x.value) ($x.description)' } | insert style 'light_cyan_dimmed'
-    {
-        options: {case_sensitive: false, completion_algorithm: prefix, sort: false}
-        completions: [...$branches, ...$files, ...$commits]
-    }
+
+def "nu-complete git checkout" [context: string, position?:int] {
+  use git-completion-utils *
+  let preceding = $context | str substring ..$position
+  # See what user typed before, like 'git checkout a-branch a-path'.
+  # We exclude some flags from previous tokens, to detect if  a branch name has been used as the first argument.
+  # FIXME: This method is still naive, though.
+  let prev_tokens = $preceding | str trim | args-split | where ($it not-in $GIT_SKIPABLE_FLAGS)
+  # In these scenarios, we suggest only file paths, not branch:
+  # - After '--'
+  # - First arg is a branch
+  # If before '--' is just 'git checkout' (or its alias), we suggest "dirty" files only (user is about to reset file).
+  if $prev_tokens.2? == '--' {
+    return (get-changed-files)
+  }
+  if '--' in $prev_tokens {
+    return (get-checkoutable-files)
+  }
+  # Already typed first argument.
+  if ($prev_tokens | length) > 2 and $preceding ends-with ' ' {
+    return (get-checkoutable-files)
+  }
+  # The first argument can be local branches, remote branches, files and commits
+  # Get local and remote branches
+  let branches = get-mergable-sources
+  let files = (get-checkoutable-files) | wrap value | insert description 'File' | insert style green
+  let commits = ^git rev-list -n 400 --remotes --oneline | lines | split column -n 2 ' ' value description | upsert description {|x| $'Commit, ($x.value) ($x.description)' } | insert style 'light_cyan_dimmed'
+  {
+    options: {
+        case_sensitive: false,
+        completion_algorithm: prefix,
+        sort: false,
+    },
+    completions: [...$branches, ...$files, ...$commits]
+  }
 }
+
+# Arguments to `git rebase --onto <arg1> <arg2>`
 def "nu-complete git rebase" [] {
-    (nu-complete git local branches) | parse "{value}" | insert description "local branch" | append (nu-complete git remote branches with prefix | parse "{value}" | insert description "remote branch") | append (nu-complete git commits all)
+  (nu-complete git local branches)
+  | parse "{value}"
+  | insert description "local branch"
+  | append (nu-complete git remote branches with prefix
+            | parse "{value}"
+            | insert description "remote branch")
+  | append (nu-complete git commits all)
 }
+
 def "nu-complete git stash-list" [] {
-    git stash list | lines | parse "{value}: {description}"
+  git stash list | lines | parse "{value}: {description}"
 }
+
 def "nu-complete git tags" [] {
-    ^git tag --no-color | lines
+  ^git tag --no-color | lines
 }
+
+# See `man git-status` under "Short Format"
+# This is incomplete, but should cover the most common cases.
 const short_status_descriptions = {
-    ".D": "Deleted"
-    ".M": "Modified"
-    "!": "Ignored"
-    "?": "Untracked"
-    "AU": "Staged, not merged"
-    "MD": "Some modifications staged, file deleted in work tree"
-    "MM": "Some modifications staged, some modifications untracked"
-    "R.": "Renamed"
-    "UU": "Both modified (in merge conflict)"
+  ".D": "Deleted"
+  ".M": "Modified"
+  "!" : "Ignored"
+  "?" : "Untracked"
+  "AU": "Staged, not merged"
+  "MD": "Some modifications staged, file deleted in work tree"
+  "MM": "Some modifications staged, some modifications untracked"
+  "R.": "Renamed"
+  "UU": "Both modified (in merge conflict)"
 }
+
 def "nu-complete git files" [] {
-    let relevant_statuses = [
-        "?"
-        ".M"
-        "MM"
-        "MD"
-        ".D"
-        "UU"
-    ]
-    ^git status -uall --porcelain=2 | lines | each { |$it|
+  let relevant_statuses = ["?",".M", "MM", "MD", ".D", "UU"]
+  ^git status -uall --porcelain=2
+  | lines
+  | each { |$it|
     if $it starts-with "1 " {
       $it | parse --regex "1 (?P<short_status>\\S+) (?:\\S+\\s?){6} (?P<value>\\S+)"
     } else if $it starts-with "2 " {
@@ -197,22 +245,55 @@ def "nu-complete git files" [] {
     } else {
       { short_status: 'unknown', value: $it }
     }
-  } | flatten | where $it.short_status in $relevant_statuses | insert "description" { |e| $short_status_descriptions | get $e.short_status}
+  }
+  | flatten
+  | where $it.short_status in $relevant_statuses
+  | insert "description" { |e| $short_status_descriptions | get $e.short_status}
 }
-def "nu-complete git built-in-refs" [] { [HEAD, FETCH_HEAD, ORIG_HEAD] }
+
+def "nu-complete git built-in-refs" [] {
+  [HEAD FETCH_HEAD ORIG_HEAD]
+}
+
 def "nu-complete git refs" [] {
-    nu-complete git local branches | parse "{value}" | insert description Branch | append (nu-complete git tags | parse "{value}" | insert description Tag) | append (nu-complete git built-in-refs)
+  nu-complete git local branches
+  | parse "{value}"
+  | insert description Branch
+  | append (nu-complete git tags | parse "{value}" | insert description Tag)
+  | append (nu-complete git built-in-refs)
 }
+
 def "nu-complete git files-or-refs" [] {
-    nu-complete git local branches | parse "{value}" | insert description Branch | append (nu-complete git files | where description == "Modified" | select value) | append (nu-complete git tags | parse "{value}" | insert description Tag) | append (nu-complete git built-in-refs)
+  nu-complete git local branches
+  | parse "{value}"
+  | insert description Branch
+  | append (nu-complete git files | where description == "Modified" | select value)
+  | append (nu-complete git tags | parse "{value}" | insert description Tag)
+  | append (nu-complete git built-in-refs)
 }
+
 def "nu-complete git subcommands" [] {
-    ^git help -a | lines | where $it starts-with "   " | parse -r '\s*(?P<value>[^ ]+) \s*(?P<description>\w.*)'
+  ^git help -a | lines | where $it starts-with "   " | parse -r '\s*(?P<value>[^ ]+) \s*(?P<description>\w.*)'
 }
-def "nu-complete git add" [] { nu-complete git files }
-def "nu-complete git pull rebase" [] { ["false", "true", "merges", "interactive"] }
-def "nu-complete git merge strategies" [] { ['ort', 'octopus'] }
-def "nu-complete git merge strategy options" [] { ['ours', 'theirs'] }
+
+def "nu-complete git add" [] {
+  nu-complete git files
+}
+
+def "nu-complete git pull rebase" [] {
+  ["false","true","merges","interactive"]
+}
+
+def "nu-complete git merge strategies" [] {
+  ['ort', 'octopus']
+}
+
+def "nu-complete git merge strategy options" [] {
+  ['ours', 'theirs']
+}
+
+
+# Check out git branches and files
 export extern "git checkout" [
   ...targets: string@"nu-complete git checkout"   # name of the branch or files to checkout
   --conflict: string                              # conflict style (merge or diff3)
@@ -237,6 +318,7 @@ export extern "git checkout" [
   -B: string                                      # create/reset and checkout a branch
   -l                                              # create reflog for new branch
 ]
+
 export extern "git reset" [
   ...targets: string@"nu-complete git checkout"      # name of commit, branch, or files to reset to
   --hard                                          # reset HEAD, index and working tree
@@ -252,6 +334,7 @@ export extern "git reset" [
   --recurse-submodules: string                    # control recursive updating of submodules
   --no-recurse-submodules                         # don't recurse into submodules
 ]
+
 # Download objects and refs from another repository
 export extern "git fetch" [
   repository?: string@"nu-complete git remotes" # name of the branch to fetch
@@ -299,6 +382,7 @@ export extern "git fetch" [
   -4                                            # Use IPv4 addresses, ignore IPv6 addresses
   -6                                            # Use IPv6 addresses, ignore IPv4 addresses
 ]
+
 # Push changes
 export extern "git push" [
   remote?: string@"nu-complete git remotes",         # the name of the remote
@@ -329,6 +413,7 @@ export extern "git push" [
   --thin                                             # use thin pack
   --verbose(-v)                                      # be more verbose
 ]
+
 # Pull changes
 export extern "git pull" [
   remote?: string@"nu-complete git remotes",         # the name of the remote
@@ -381,6 +466,7 @@ export extern "git pull" [
   --progress                                         # force progress status even if stderr is not a terminal
   --server-option(-o): string                        # transmit the given string to the server
 ]
+
 # Switch between branches and commits
 export extern "git switch" [
   switch?: string@"nu-complete git switch"        # name of branch to switch to
@@ -401,6 +487,7 @@ export extern "git switch" [
   --recurse-submodules                            # update the contents of sub-modules
   --track(-t)                                     # set "upstream" configuration
 ]
+
 # Apply the change introduced by an existing commit
 export extern "git cherry-pick" [
   commit?: string@"nu-complete git commits all" # The commit ID to be cherry-picked
@@ -412,6 +499,7 @@ export extern "git cherry-pick" [
   --abort                                       # Cancel the operation
   --skip                                        # Skip the current commit and continue with the rest of the sequence
 ]
+
 # Rebase the current branch
 export extern "git rebase" [
   branch?: string@"nu-complete git rebase"    # name of the branch to rebase onto
@@ -423,6 +511,7 @@ export extern "git rebase" [
   --onto?: string@"nu-complete git rebase"    # starting point at which to create the new commits
   --root                                      # start rebase from root commit
 ]
+
 # Merge from a branch
 export extern "git merge" [
   # For now, to make it simple, we only complete branches (not commits) and support single-parent case.
@@ -440,6 +529,7 @@ export extern "git merge" [
   --verbose(-v)
   --help
 ]
+
 # List or change branches
 export extern "git branch" [
   branch?: string@"nu-complete git local branches"               # name of branch to operate on
@@ -464,52 +554,66 @@ export extern "git branch" [
   --no-contains                                                  # show only branches that don't contain specified commit
   --track(-t)                                                    # when creating a branch, set upstream
 ]
+
 # List all variables set in config file, along with their values.
 export extern "git config list" [
 ]
+
 # Emits the value of the specified key.
 export extern "git config get" [
 ]
+
 # Set value for one or more config options.
 export extern "git config set" [
 ]
+
 # Unset value for one or more config options.
 export extern "git config unset" [
 ]
+
 # Rename the given section to a new name.
 export extern "git config rename-section" [
 ]
+
 # Remove the given section from the configuration file.
 export extern "git config remove-section" [
 ]
+
 # Opens an editor to modify the specified config file
 export extern "git config edit" [
 ]
+
 # List or change tracked repositories
 export extern "git remote" [
   --verbose(-v)                            # Show URL for remotes
 ]
+
 # Add a new tracked repository
 export extern "git remote add" [
 ]
+
 # Rename a tracked repository
 export extern "git remote rename" [
   remote: string@"nu-complete git remotes"             # remote to rename
   new_name: string                                     # new name for remote
 ]
+
 # Remove a tracked repository
 export extern "git remote remove" [
   remote: string@"nu-complete git remotes"             # remote to remove
 ]
+
 # Get the URL for a tracked repository
 export extern "git remote get-url" [
   remote: string@"nu-complete git remotes"             # remote to get URL for
 ]
+
 # Set the URL for a tracked repository
 export extern "git remote set-url" [
   remote: string@"nu-complete git remotes"             # remote to set URL for
   url: string                                          # new URL for remote
 ]
+
 # Show changes between commits, working tree etc
 export extern "git diff" [
   rev1_or_file?: string@"nu-complete git files-or-refs"
@@ -519,6 +623,7 @@ export extern "git diff" [
   --name-status                                        # show changed files and kind of change
   --no-color                                           # disable color output
 ]
+
 # Commit changes
 export extern "git commit" [
   --all(-a)                                           # automatically stage all modified and deleted files
@@ -562,6 +667,7 @@ export extern "git commit" [
   --no-gpg-sign                                       # do not GPG-sign commit
   ...pathspec: string                                 # commit files matching pathspec
 ]
+
 # List commits
 export extern "git log" [
   # Ideally we'd allow completion of revisions here, but that would make completion of filenames not work.
@@ -569,9 +675,11 @@ export extern "git log" [
   --follow                                            # show history beyond renames (single file only)
   --grep: string                                      # show log entries matching supplied regular expression
 ]
+
 # Show or change the reflog
 export extern "git reflog" [
 ]
+
 # Stage files
 export extern "git add" [
   ...file: string@"nu-complete git add"               # file to add
@@ -583,6 +691,7 @@ export extern "git add" [
   --patch(-p)                                         # interactively choose hunks to stage
   --verbose(-v)                                       # be verbose
 ]
+
 # Delete file from the working tree and the index
 export extern "git rm" [
   -r                                                   # recursive
@@ -590,6 +699,7 @@ export extern "git rm" [
   --dry-run(-n)                                        # Don't actually remove any file(s)
   --cached                                             # unstage and remove paths only from the index
 ]
+
 # Show the working tree status
 export extern "git status" [
   --verbose(-v)                                       # be verbose
@@ -597,35 +707,43 @@ export extern "git status" [
   --branch(-b)                                        # show branch information
   --show-stash                                        # show stash information
 ]
+
 # Stash changes for later
 export extern "git stash push" [
   --patch(-p)                                         # interactively choose hunks to stash
 ]
+
 # Unstash previously stashed changes
 export extern "git stash pop" [
   stash?: string@"nu-complete git stash-list"          # stash to pop
   --index(-i)                                          # try to reinstate not only the working tree's changes, but also the index's ones
 ]
+
 # List stashed changes
 export extern "git stash list" [
 ]
+
 # Show a stashed change
 export extern "git stash show" [
   stash?: string@"nu-complete git stash-list"
   -U                                                  # show diff
 ]
+
 # Drop a stashed change
 export extern "git stash drop" [
   stash?: string@"nu-complete git stash-list"
 ]
+
 # Create a new git repository
 export extern "git init" [
   --initial-branch(-b): string                         # initial branch name
 ]
+
 # List or manipulate tags
 export extern "git tag" [
   --delete(-d): string@"nu-complete git tags"         # delete a tag
 ]
+
 # Prune all unreachable objects
 export extern "git prune" [
   --dry-run(-n)                                       # dry run
@@ -633,32 +751,40 @@ export extern "git prune" [
   --progress                                          # show progress
   --verbose(-v)                                       # report all removed objects
 ]
+
 # Start a binary search to find the commit that introduced a bug
 export extern "git bisect start" [
   bad?: string                 # a commit that has the bug
   good?: string                # a commit that doesn't have the bug
 ]
+
 # Mark the current (or specified) revision as bad
 export extern "git bisect bad" [
 ]
+
 # Mark the current (or specified) revision as good
 export extern "git bisect good" [
 ]
+
 # Skip the current (or specified) revision
 export extern "git bisect skip" [
 ]
+
 # End bisection
 export extern "git bisect reset" [
 ]
+
 # Show help for a git subcommand
 export extern "git help" [
   command?: string@"nu-complete git subcommands"       # subcommand to show help for
 ]
+
 # git worktree
 export extern "git worktree" [
   --help(-h)            # display the help message for this command
   ...args
 ]
+
 # create a new working tree
 export extern "git worktree add" [
   path: path            # directory to clone the branch
@@ -676,6 +802,7 @@ export extern "git worktree add" [
   --guess-remote        # try to match the new branch name with a remote-tracking branch
   ...args
 ]
+
 # list details of each worktree
 export extern "git worktree list" [
   --help(-h)            # display the help message for this command
@@ -685,9 +812,11 @@ export extern "git worktree list" [
   -z                    # terminate records with a NUL character
   ...args
 ]
+
 def "nu-complete worktree list" [] {
-    ^git worktree list | to text | parse --regex '(?P<value>\S+)\s+(?P<commit>\w+)\s+(?P<description>\S.*)'
+  ^git worktree list | to text | parse --regex '(?P<value>\S+)\s+(?P<commit>\w+)\s+(?P<description>\S.*)'
 }
+
 # prevent a working tree from being pruned
 export extern "git worktree lock" [
   worktree: string@"nu-complete worktree list"
@@ -696,12 +825,14 @@ export extern "git worktree lock" [
   --reason              # reason for locking
   ...args
 ]
+
 # move a working tree to a new location
 export extern "git worktree move" [
   --help(-h)            # display the help message for this command
   --force(-f)           # force move even if worktree is dirty or locked
   ...args
 ]
+
 # prune working tree information
 export extern "git worktree prune" [
   --help(-h)            # display the help message for this command
@@ -710,17 +841,20 @@ export extern "git worktree prune" [
   --expire              # expire working trees older than <time>
   ...args
 ]
+
 # remove a working tree
 export extern "git worktree remove" [
   worktree: string@"nu-complete worktree list"
   --help(-h)            # display the help message for this command
   --force(-f)           # force removal even if worktree is dirty or locked
 ]
+
 # allow working tree to be pruned, moved or deleted
 export extern "git worktree unlock" [
   worktree: string@"nu-complete worktree list"
   ...args
 ]
+
 # clones a repo
 export extern "git clone" [
   --help(-h)                    # display the help message for this command
@@ -762,6 +896,7 @@ export extern "git clone" [
   --jobs(-j): int               # number of simultaneous submodules fetch
   ...args
 ]
+
 # Restores files in working tree or index to previous versions
 export extern "git restore" [
   --help(-h)                                    # Display the help message for this command
@@ -786,6 +921,7 @@ export extern "git restore" [
   --pathspec-file-nul                           # Separate pathspec elements with NUL character when reading from file
   ...pathspecs: string@"nu-complete git files"  # Target pathspecs to restore
 ]
+
 # Print lines matching a pattern
 export extern "git grep" [
   --help(-h)                            # Display the help message for this command
@@ -837,6 +973,7 @@ export extern "git grep" [
   --quiet(-q)                           # Do not output matched lines; instead, exit with status 0 when there is a match and with non-zero status when there isn’t.
   ...pathspecs: string                  # Target pathspecs to limit the scope of the search.
 ]
+
 export extern "git" [
   command?: string@"nu-complete git subcommands"   # Subcommands
   --version(-v)                                    # Prints the Git suite version that the git program came from

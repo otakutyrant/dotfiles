@@ -90,11 +90,6 @@
             def nu-files [] {
                 tracked-files ".nu"
             }
-
-            def formatted-nu-files [] {
-                nu-files
-                | where { |path| $path != "Nushell/.config/nushell/autoload/prompt.nu" }
-            }
           '';
         in
         rec {
@@ -110,13 +105,6 @@
             if ($lua_files | is-not-empty) {
                 ^${pkgs.stylua}/bin/stylua ...$lua_files
             }
-
-            let nu_files = (formatted-nu-files)
-            if ($nu_files | is-not-empty) {
-                with-env { RUST_LOG: "off" } {
-                    ^${pkgs.nufmt}/bin/nufmt ...$nu_files
-                }
-            }
           '';
           lint = script "dotfiles-lint" ''
             ${common}
@@ -129,13 +117,6 @@
             let lua_files = (lua-files)
             if ($lua_files | is-not-empty) {
                 ^${pkgs.stylua}/bin/stylua --check ...$lua_files
-            }
-
-            let nu_files = (formatted-nu-files)
-            if ($nu_files | is-not-empty) {
-                with-env { RUST_LOG: "off" } {
-                    ^${pkgs.nufmt}/bin/nufmt --dry-run ...$nu_files
-                }
             }
           '';
           typecheck = script "dotfiles-typecheck" ''
@@ -151,9 +132,14 @@
             # editor tooling. Only Error diagnostics fail this command.
             ^${pkgs.lua-language-server}/bin/lua-language-server --check . --checklevel Error --check_format pretty --logpath /tmp/dotfiles-lua-language-server-log
 
-            # Nushell exposes parser diagnostics through the IDE check mode.
-            # Cursor offset 0 is enough to force parsing without executing the
-            # script, which matters for executable .nu files with side effects.
+            # Nushell autoload files must be sourceable. `nu --ide-check` can
+            # miss errors that only appear when an autoload file is sourced, so
+            # source those files directly and reserve IDE parsing for scripts
+            # that may have side effects when executed.
+            for file in (nu-files | where { |path| $path | str starts-with "Nushell/.config/nushell/autoload/" }) {
+                ^${pkgs.nushell}/bin/nu -n -c $"source ($file)"
+            }
+
             for file in (nu-files) {
                 ^${pkgs.nushell}/bin/nu --ide-check 0 $file | ignore
             }
@@ -188,7 +174,6 @@
         packages = with pkgs; [
           lua-language-server
           nixfmt
-          nufmt
           nushell
           pre-commit
           stylua
