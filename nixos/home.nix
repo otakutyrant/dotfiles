@@ -174,37 +174,17 @@ in
   xdg.configFile."user-dirs.dirs".force = true;
   gtk = {
     enable = true;
-    theme.name = "deepin";
-    iconTheme.name = "Sea";
-    font = {
-      name = "Sarasa Gothic SC";
-      size = 13;
-    };
-    cursorTheme = {
-      name = "Adwaita";
-      size = 0;
-    };
+    # font = {
+    #  name = "Sarasa Gothic SC";
+    # size = 13;
+    # } ;
     gtk3 = {
       bookmarks = [
         "file://${home}/Pictures/Screenshots"
-        "file://${home}/Documents Documents"
-        "file://${home}/Nutstore%20Files/Nutstore Nutstore"
-        "file://${home}/tmp tmp"
+        "file://${home}/Nutstore%20Files/Nutstore"
         "file://${home}/Downloads"
-        "file://${home}/Projects"
         "file://${home}/Videos"
       ];
-      extraConfig = {
-        gtk-toolbar-style = "GTK_TOOLBAR_BOTH_HORIZ";
-        gtk-toolbar-icon-size = "GTK_ICON_SIZE_LARGE_TOOLBAR";
-        gtk-button-images = 0;
-        gtk-menu-images = 0;
-        gtk-enable-event-sounds = 1;
-        gtk-enable-input-feedback-sounds = 1;
-        gtk-xft-antialias = 1;
-        gtk-xft-hinting = 1;
-        gtk-xft-hintstyle = "hintmedium";
-      };
     };
   };
   home.packages = homePackages;
