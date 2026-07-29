@@ -61,7 +61,6 @@ in
     settings = {
       alias = {
         c = "commit";
-        co = "checkout";
         d = "diff";
         s = "status";
         g = "log --name-only --graph --all --date=format-local:'%Y-%m-%d %H:%M:%S' --format='%C(auto)%h%d %cd %s'";
@@ -148,24 +147,6 @@ in
     enable = true;
     tray = "auto";
   };
-  # Home Manager manages the user service here so `home-manager switch` also
-  # links it into default.target. The script lives in the XDG dotfile directory,
-  # which is linked into ~/.local/bin/image_resize_daemon.nu below.
-  systemd.user.services.image-resize-daemon = {
-    Unit = {
-      Description = "Upscale small images under /home/otakutyrant";
-      After = [ "default.target" ];
-    };
-
-    Service = {
-      Type = "simple";
-      ExecStart = "${home}/.local/bin/image_resize_daemon.nu --root ${home} --target-short-side 800 --interval 5";
-      Restart = "always";
-      RestartSec = 5;
-    };
-
-    Install.WantedBy = [ "default.target" ];
-  };
 
   # Diodon ignores copied images by default. Enable image history so screenshot
   # PNG clipboard entries can appear in its menu.
@@ -188,6 +169,23 @@ in
     };
   };
   home.packages = homePackages;
+
+  # User services
+  systemd.user.services.image-resize-daemon = {
+    Unit = {
+      Description = "Upscale small images under /home/otakutyrant";
+      After = [ "default.target" ];
+    };
+
+    Service = {
+      Type = "simple";
+      ExecStart = "${home}/.local/bin/image_resize_daemon.nu --root ${home} --target-short-side 800 --interval 5";
+      Restart = "always";
+      RestartSec = 5;
+    };
+
+    Install.WantedBy = [ "default.target" ];
+  };
 
   # Link the checked-in dotfile directories into the user's home directory.
   home.file =
