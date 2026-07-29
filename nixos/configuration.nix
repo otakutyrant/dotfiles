@@ -267,6 +267,18 @@
   services.libinput.enable = true;
   # Let GTK/GNOME apps access more file systems.
   services.gvfs.enable = true;
+  # Provide the Freedesktop portal DBus service for lightweight i3 sessions.
+  # Toolkits such as GLFW query this service for desktop settings; without an
+  # activatable portal backend, clients like Kitty print startup warnings.
+  xdg.portal = {
+    enable = true;
+    extraPortals = [
+      pkgs.xdg-desktop-portal-gtk
+    ];
+    # i3 is not a full desktop environment, so choose the GTK backend as the
+    # generic implementation for portal interfaces.
+    config.common.default = [ "gtk" ];
+  };
   # Make normal desktop apps mount, unmount, and inspect disks better.
   services.udisks2.enable = true;
   # Thumbnails for file managers.

@@ -169,6 +169,17 @@ in
   dconf.settings."net/launchpad/diodon/clipboard".add-images = true;
   xdg.userDirs.enable = true;
   xdg.configFile."user-dirs.dirs".force = true;
+  # Set an explicit Xcursor theme instead of relying on toolkit fallbacks.
+  # Lightweight i3 sessions do not get a desktop environment to choose one for
+  # them, and GLFW/Kitty expects the active theme to provide standard resize
+  # cursors such as diagonal sizing aliases.
+  home.pointerCursor = {
+    package = pkgs.bibata-cursors;
+    name = "Bibata-Modern-Classic";
+    size = 24;
+    gtk.enable = true;
+    x11.enable = true;
+  };
   gtk = {
     enable = true;
     # font = {
