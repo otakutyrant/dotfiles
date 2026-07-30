@@ -46,6 +46,7 @@ in
     ./options/nushell.nix
     ./options/picom.nix
     ./options/ssh.nix
+    ./options/starship.nix
   ];
 
   home.username = username;
