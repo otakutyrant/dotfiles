@@ -54,7 +54,6 @@ with pkgs; # Bring package names from pkgs into scope for the list below.
   # Install Kimi CLI from MoonshotAI's own flake because it is not provided by
   # the pinned NixOS 26.05 nixpkgs package set.
   inputs.kimi-cli.packages.${pkgs.stdenv.hostPlatform.system}.default
-  codex
   neovim
   python3Packages.pynvim
 

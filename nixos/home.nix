@@ -26,7 +26,6 @@ let
 
     # Keep tool state under XDG locations instead of each tool's default dotdir.
     CARGO_HOME = "${XDG_DATA_HOME}/cargo";
-    CODEX_HOME = "${XDG_CONFIG_HOME}/codex";
     # Enforce IPython to use XDG_CONFIG_HOME rather than ~/.ipython.
     IPYTHONDIR = "${XDG_CONFIG_HOME}/ipython";
 
@@ -102,6 +101,38 @@ in
   programs.anki.enable = true;
   programs.btop.enable = true; # System monitor.
   programs.calibre.enable = true;
+  programs.codex = {
+    enable = true;
+    context = ''
+      # Global scope prompt
+
+      Generally, I use Nushell. So when you implement scripts or offer shell commands, use Nushell instead of bash.
+
+      Generally, I use nixos. The configurations are stored in ~/Projects/dotfiles. You should add comments to explain nix files, since I am not good at Nix and NixOS.
+
+      ## English writing helper
+
+      When I write any prompt in English (excluding the global scope prompt and any project scope prompts), please do the following:
+
+      1. First, give your normal reply / answer to my request as usual.
+
+      2. ONLY IF you clearly notice obvious grammar mistakes, unnatural phrasing, or awkward word choices that would make native speakers feel "off", then (and only then) additionally provide polite English improvement feedback.
+         - Use a short bulleted list to point out ONLY the most noticeable issues (maximum 2-4 items).
+         - For each point:
+           - Quote the problematic part
+           - Briefly explain why it sounds unnatural or incorrect to a native speaker
+           - Give the improved version
+         - After the list (if any), show the full corrected version of my original prompt.
+
+      3. Keep corrections gentle and practical. Do not over-correct subtle style differences, minor personal preferences, or things that are grammatically correct but just "could be better". Only fix what most native speakers would clearly consider wrong or noticeably strange.
+
+      4. If my English is already natural and has no obvious problems or my prompts are not written in English, do NOT add any correction section - just give the normal answer in the language that my prompts uses, and repeat my original English text so that I can experience the natural and correct wording again.
+
+      This way I can improve my English step by step without endless nitpicking. Always follow this rule strictly for all future interactions.
+
+      The global scope prompt ends here.
+    '';
+  };
   programs.fd.enable = true; # Simple, fast and user-friendly alternative to find.
   programs.fzf = {
     enable = true; # Fuzzy search.
@@ -377,7 +408,6 @@ in
   # Link the checked-in dotfile directories into the user's home directory.
   home.file =
     (linkDotfileDirs [
-      ../Codex
       ../mpv
       ../Neovim
       ../Tmux
