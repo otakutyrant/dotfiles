@@ -115,10 +115,6 @@ in
   };
   gtk = {
     enable = true;
-    # font = {
-    #  name = "Sarasa Gothic SC";
-    # size = 13;
-    # } ;
     gtk3 = {
       bookmarks = [
         "file://${home}/Pictures/Screenshots"
