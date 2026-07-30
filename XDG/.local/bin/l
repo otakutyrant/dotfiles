@@ -1,0 +1,6 @@
+#!/usr/bin/env nu
+
+# Show directory contents in a compact grid.
+def main [] {
+    ls | sort-by type name -i | grid -c | str trim
+}

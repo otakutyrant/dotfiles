@@ -136,7 +136,7 @@ For example, `XDG/.local/bin/screenshot_delay.nu` is exposed through
 
 # Environment Variables
 
-Nushell environment variables live in `Nushell/.config/nushell/env.nu`.
+Session environment variables are managed in `nixos/home.nix`.
 
 # X11
 
@@ -160,7 +160,3 @@ There are some related configuration. Ignore them if you do not live in China.
 Don't worry, only infants make choice, while adults want the whole enchilada! Just install all of them and random pick one every time you launch the client. You can consult how I do that in my [Neovim themes](Neovim/.config/nvim/lua/plugins/themes.lua). When fate plays its hand, a captivating theme will gracefully unfurl.
 
 The random theme mechanism of kitty, i3, and so on is working in progress, but no guaranteed.
-
-# Nushell
-
-use `cargo install nu_plugin_gstat` and `plugin add gstat` to update the plugin when Nushell is upgraded.

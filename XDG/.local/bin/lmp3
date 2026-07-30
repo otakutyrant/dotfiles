@@ -1,0 +1,31 @@
+#!/usr/bin/env nu
+
+# Print duration, subtitle character count, and characters-per-second for one
+# mp3 file. The subtitle file is expected beside it with the same basename and
+# an .srt extension.
+def main [filename: string] {
+    let duration = (
+        ffprobe $"($filename)" -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1
+        | str trim
+        | into int
+        | into duration --unit sec
+    )
+
+    let srt_filename = $filename | str replace "mp3" "srt"
+    let content = open $srt_filename
+    let lines = $content | lines | each { |line| $line | str trim } | where { |line|
+            not ($line =~ '^\d+$'
+            or $line =~ '^\d\d:\d\d:\d\d,\d{3} --> '
+            or $line == '')
+        }
+    let count = $lines | reduce -f 0 { |line, acc| $acc + ($line | str length -g) }
+    let seconds = ($duration | into int) // 1_000_000_000
+    let cps = $count / $seconds
+
+    {
+        name: $filename
+        duration: $duration
+        chars: $count
+        cps: $cps
+    }
+}

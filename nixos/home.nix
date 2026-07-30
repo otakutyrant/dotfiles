@@ -10,39 +10,7 @@
 let
   homePackages = import ./home-packages.nix { inherit inputs pkgs; };
   home = config.home.homeDirectory;
-  # Recursively expose every file under a dotfile directory through Home
-  # Manager, preserving each path relative to that directory.
-  linkDotfileDir =
-    dir:
-    let
-      collect =
-        prefix: path:
-        lib.concatMapAttrs (
-          name: type:
-          let
-            relativePath = if prefix == "" then name else "${prefix}/${name}";
-            sourcePath = path + "/${name}";
-          in
-          if type == "directory" then
-            collect relativePath sourcePath
-          else
-            {
-              ${relativePath}.source = sourcePath;
-            }
-        ) (builtins.readDir path);
-    in
-    collect "" dir;
-  # Merge multiple dotfile directories into one Home Manager file attrset.
-  linkDotfileDirs = dirs: lib.foldl' (files: dir: files // linkDotfileDir dir) { } dirs;
-in
-{
-  home.username = username;
-  home.homeDirectory = "/home/${username}";
-  home.stateVersion = "26.05";
-  # These variables belong to the whole user login session, not just Nushell.
-  # Home Manager writes them to the session environment so GUI apps, desktop
-  # entries, terminals, and shells inherit the same baseline.
-  home.sessionVariables = rec {
+  sessionVariables = rec {
     # XDG base directories. Tool-specific variables below reuse these paths so
     # applications store config, cache, data, and state in predictable places.
     XDG_CONFIG_HOME = "${home}/.config";
@@ -54,6 +22,7 @@ in
     EDITOR = "nvim";
     VISUAL = "nvim";
     PAGER = "page";
+    SHELL = "${pkgs.nushell}/bin/nu";
 
     # Keep tool state under XDG locations instead of each tool's default dotdir.
     CARGO_HOME = "${XDG_DATA_HOME}/cargo";
@@ -88,6 +57,39 @@ in
     SDL_IM_MODULE = "fcitx";
     GLFW_IM_MODULE = "ibus";
   };
+  # Recursively expose every file under a dotfile directory through Home
+  # Manager, preserving each path relative to that directory.
+  linkDotfileDir =
+    dir:
+    let
+      collect =
+        prefix: path:
+        lib.concatMapAttrs (
+          name: type:
+          let
+            relativePath = if prefix == "" then name else "${prefix}/${name}";
+            sourcePath = path + "/${name}";
+          in
+          if type == "directory" then
+            collect relativePath sourcePath
+          else
+            {
+              ${relativePath}.source = sourcePath;
+            }
+        ) (builtins.readDir path);
+    in
+    collect "" dir;
+  # Merge multiple dotfile directories into one Home Manager file attrset.
+  linkDotfileDirs = dirs: lib.foldl' (files: dir: files // linkDotfileDir dir) { } dirs;
+in
+{
+  home.username = username;
+  home.homeDirectory = "/home/${username}";
+  home.stateVersion = "26.05";
+  # These variables belong to the whole user login session, not just Nushell.
+  # Home Manager writes them to the session environment so GUI apps, desktop
+  # entries, terminals, and shells inherit the same baseline.
+  home.sessionVariables = sessionVariables;
 
   # Session PATH additions. These used to be added by Nushell startup files, but
   # they are useful to programs launched outside Nushell too.
@@ -181,13 +183,82 @@ in
   };
   programs.nushell = {
     enable = true;
+    environmentVariables = sessionVariables;
+    extraEnv = ''
+      # Prisma's downloaded schema engine is not reliable on NixOS.
+      let schema_engine = (which schema-engine | get path)
+      if (($schema_engine | length) > 0) {
+          $env.PRISMA_SCHEMA_ENGINE_BINARY = ($schema_engine | first)
+      }
+
+      # Export local private API keys when the file exists.
+      const api_keys = if ("~/api_keys.nu" | path expand | path exists) { "~/api_keys.nu" } else { null }
+      source-env $api_keys
+    '';
+    settings = {
+      show_banner = false;
+      buffer_editor = "nvim";
+    };
+    extraConfig = ''
+      # Nushell is case-insensitive in environment variables, and if I set http_proxy and
+      # https_proxy, Nushell will discard HTTP_PROXY and HTTPS_PROXY.
+      def --env envproxy [] {
+          $env.http_proxy = "http://127.0.0.1:21081"
+          $env.https_proxy = "http://127.0.0.1:21081"
+          "http proxy on"
+      }
+      def --env noproxy [] {
+          hide-env HTTP_PROXY
+          hide-env HTTPS_PROXY
+          "http proxy off"
+      }
+      # WSL needs to access the host proxy through the DNS server generated in /etc/resolv.conf.
+      def wsl-host-ip [] {
+          # Match only real nameserver records. `find "nameserver"` can also match
+          # comments, and returns `nothing` when there is no match.
+          open /etc/resolv.conf | lines | where {|line| $line =~ '^\s*nameserver\s+' } | first | default "" | split row --regex '\s+' | get --optional 1 | default "" | str trim
+      }
+      def --env wslproxy [] {
+          let wsl_host_ip = (wsl-host-ip)
+          if ($wsl_host_ip | is-empty) {
+              error make {msg: "could not find a nameserver in /etc/resolv.conf for WSL proxy"}
+          }
+          $env.http_proxy = $"http://($wsl_host_ip):21081"
+          $env.https_proxy = $"http://($wsl_host_ip):21081"
+          "http proxy on"
+      }
+    '';
+    shellAliases = {
+      # Show directory contents fully, alias `ls -al`.
+      ll = "ls -al";
+
+      # Kitty window control.
+      wider = "kitty @ resize-window --self --axis=horizontal --increment=60";
+
+      # Neovim shortcuts.
+      vi = "nvim";
+      cvi = ''nvim -p -c "tabdo lcd %:p:h"'';
+
+      # ripgrep: Pretty output so it can pipe into pagers.
+      rg = "rg -p";
+
+      # Enables ssh trusted X11 forwarding. So you can access the X of remote hosts.
+      ssh = "ssh -Y";
+
+      # systemd shortcut.
+      sc = "systemctl";
+
+      # yt-dlp: Solve China network issue via proxy, and download Chinese
+      # subtitles automatically.
+      "yt-dlp" = "yt-dlp --proxy 127.0.0.1:2340 --write-subs --sub-langs zh-CN";
+
+    };
     # `with pkgs.nushellPlugins;` lets the list use plugin package names
     # directly. These packages are registered by Home Manager so Nushell can
     # load their commands.
     plugins = with pkgs.nushellPlugins; [
       desktop_notifications # Send desktop notifications from Nushell scripts.
       formats # Add extra converters for structured file formats.
-      gstat # Provide Git status data for prompts and shell scripts.
       hcl # Parse HashiCorp Configuration Language files such as Terraform configs.
       polars # Add dataframe commands backed by the Polars data engine.
       query # Query structured data such as JSON, XML, HTML, and web responses.
@@ -231,7 +302,7 @@ in
   programs.yt-dlp.enable = true; # YouTube downloader.
   programs.zoxide = {
     enable = true; # Jump tool.
-    enableNushellIntegration = false;
+    enableNushellIntegration = true;
   };
 
   services.network-manager-applet.enable = true;
@@ -310,7 +381,6 @@ in
       ../Gemini
       ../mpv
       ../Neovim
-      ../Nushell
       ../Tmux
       ../XDG
       ../i3

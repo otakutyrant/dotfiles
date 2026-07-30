@@ -218,6 +218,11 @@
 
   # Miscellanea
   time.timeZone = "Asia/Shanghai";
+  environment.variables = {
+    EDITOR = "nvim";
+    VISUAL = "nvim";
+    PAGER = "page";
+  };
   programs.whois.enable = true;
   programs.nix-ld.enable = true;
   programs.steam.enable = true;

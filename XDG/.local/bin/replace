@@ -1,0 +1,7 @@
+#!/usr/bin/env nu
+
+# Search and replace text across files matched by ripgrep.
+def main [from: string, to: string] {
+    rg -l --color=never $from | lines | each { |file| sd $from $to $file }
+    null
+}
