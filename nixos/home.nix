@@ -378,7 +378,6 @@ in
   home.file =
     (linkDotfileDirs [
       ../Codex
-      ../Gemini
       ../mpv
       ../Neovim
       ../Tmux
