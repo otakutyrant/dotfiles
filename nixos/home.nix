@@ -83,6 +83,47 @@ in
   };
   programs.google-chrome.enable = true;
   programs.joshuto.enable = true; # Terminal file manager.
+  programs.kitty = {
+    enable = true;
+    # Home Manager writes this block to kitty.conf and installs kitty, so the
+    # terminal config can live beside the other program modules.
+    font = {
+      name = "JetBrainsMono Nerd Font";
+      size = 10.0;
+    };
+    keybindings = {
+      "alt+v" = "launch --location=vsplit --cwd=current";
+      "alt+s" = "launch --location=hsplit --cwd=current";
+      "alt+h" = "neighboring_window left";
+      "alt+j" = "neighboring_window down";
+      "alt+k" = "neighboring_window up";
+      "alt+l" = "neighboring_window right";
+      "alt+q" = "close_window";
+      "alt+minus" = "goto_layout vertical";
+      # `alt+bar` does not work here, so keep the literal bar mapping that the
+      # previous kitty.conf used.
+      "alt+|" = "goto_layout horizontal";
+      "alt+1" = "goto_tab 1";
+      "alt+2" = "goto_tab 2";
+      "alt+3" = "goto_tab 3";
+      "alt+4" = "goto_tab 4";
+      "alt+5" = "goto_tab 5";
+      "alt+6" = "goto_tab 6";
+      "alt+7" = "goto_tab 7";
+      "alt+8" = "goto_tab 8";
+      "alt+9" = "goto_tab 9";
+      "alt+0" = "goto_tab 10";
+      "alt+n" = "new_tab";
+    };
+    settings = {
+      enabled_layouts = "splits, horizontal, vertical, grid";
+      scrollback_pager = "page";
+      tab_bar_style = "powerline";
+      tab_title_template = "{index} : {title}";
+      background_opacity = "0.8";
+      allow_remote_control = "yes";
+    };
+  };
   # Install local mpv package with Unicode-aware subtitle line wrapping through
   # Home Manager's mpv module.
   programs.mpv = {
@@ -95,12 +136,10 @@ in
     # directly. These packages are registered by Home Manager so Nushell can
     # load their commands.
     plugins = with pkgs.nushellPlugins; [
-      bson # Convert BSON data, useful when working with MongoDB-style binary JSON.
       desktop_notifications # Send desktop notifications from Nushell scripts.
       formats # Add extra converters for structured file formats.
       gstat # Provide Git status data for prompts and shell scripts.
       hcl # Parse HashiCorp Configuration Language files such as Terraform configs.
-      highlight # Add syntax highlighting for code and text output.
       polars # Add dataframe commands backed by the Polars data engine.
       query # Query structured data such as JSON, XML, HTML, and web responses.
       semver # Parse and compare semantic version strings.
@@ -220,7 +259,6 @@ in
     (linkDotfileDirs [
       ../Codex
       ../Gemini
-      ../Kitty
       ../mpv
       ../Neovim
       ../Nushell

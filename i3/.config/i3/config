@@ -191,7 +191,7 @@ workspace_auto_back_and_forth yes
 
 # # Additional keymaps
 
-bindsym $mod+Return exec kitty --session session -1
+bindsym $mod+Return exec kitty
 
 # Start Nautilus with mod+n.
 bindsym $mod+n exec nautilus

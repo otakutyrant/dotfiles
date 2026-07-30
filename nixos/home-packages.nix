@@ -135,7 +135,6 @@ with pkgs; # Bring package names from pkgs into scope for the list below.
   qt6Packages.fcitx5-configtool
   xfce4-notifyd
   dex # Autostart XDG desktop files.
-  kitty
   gimp # Image editor
   xclip
   # `openai-whisper` is accurate, but it brings a heavier Python stack.
