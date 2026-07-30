@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Version=1.5
+Name=Kitty CI
+GenericName=Kitty CI Session
+Comment=Open a Kitty terminal with the CI session
+Exec=kitty --session /home/otakutyrant/Projects/ci/kitty-ci.session
+Path=/home/otakutyrant/Projects/ci
+Icon=terminal
+Categories=System;TerminalEmulator;
+Terminal=false
