@@ -1,5 +1,6 @@
 {
   config,
+  inputs,
   lib,
   pkgs,
   username,
@@ -7,7 +8,7 @@
 }:
 
 let
-  homePackages = import ./home-packages.nix { inherit pkgs; };
+  homePackages = import ./home-packages.nix { inherit inputs pkgs; };
   home = config.home.homeDirectory;
   # Recursively expose every file under a dotfile directory through Home
   # Manager, preserving each path relative to that directory.
