@@ -1,9 +1,25 @@
-{ config, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+
+let
+  # Home Manager can add shell-expansion fragments to XDG_DATA_DIRS, such as
+  # `${XDG_DATA_DIRS:+:$XDG_DATA_DIRS}`. Those fragments are valid in POSIX
+  # session setup scripts, but Nushell would store them literally and break
+  # programs like Neovim that split XDG_DATA_DIRS.
+  nushellEnvironmentVariables = lib.removeAttrs config.home.sessionVariables [ "XDG_DATA_DIRS" ];
+in
 
 {
   programs.nushell = {
     enable = true;
-    environmentVariables = config.home.sessionVariables;
+    # Do not pass XDG_DATA_DIRS through this option. Home Manager's value may
+    # contain POSIX shell syntax that Nushell would keep literally, which makes
+    # Neovim build a broken runtimepath and print E79 wildcard errors.
+    environmentVariables = nushellEnvironmentVariables;
     extraEnv = ''
       # Prisma's downloaded schema engine is not reliable on NixOS.
       let schema_engine = (which schema-engine | get path)
