@@ -126,7 +126,7 @@ with pkgs; # Bring package names from pkgs into scope for the list below.
   fragments # Bittorrent client
   goldendict-ng
   gnome-text-editor
-  variety # Wallpaper manager.
+  nitrogen # Wallpaper manager
   clash-verge-rev
   wechat
   papers # Document viewer
