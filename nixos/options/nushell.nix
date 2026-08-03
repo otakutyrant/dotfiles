@@ -11,6 +11,23 @@ let
   # session setup scripts, but Nushell would store them literally and break
   # programs like Neovim that split XDG_DATA_DIRS.
   nushellEnvironmentVariables = lib.removeAttrs config.home.sessionVariables [ "XDG_DATA_DIRS" ];
+  # Reuse Home Manager's session path list for Nushell's own environment file.
+  # `config.home.sessionPath` is a Nix list of strings, but below we need to
+  # splice those paths into a Nushell list literal inside `extraEnv`.
+  #
+  # `lib.concatMapStringsSep "\n" f list` means:
+  #   1. run `f` on every item in `list`;
+  #   2. join the generated strings with newline characters.
+  #
+  # The mapping function turns each path into one indented Nushell string item,
+  # for example:
+  #           "/home/otakutyrant/.local/bin"
+  #
+  # Keeping the indentation in the generated string makes the final Nushell
+  # code readable after Nix substitutes `${nushellSessionPath}` into `extraEnv`.
+  # `extraEnv` then prepends these paths to Nushell's inherited PATH instead of
+  # replacing the system paths supplied by the login session.
+  nushellSessionPath = lib.concatMapStringsSep "\n" (path: ''          "${path}"'') config.home.sessionPath;
 in
 
 {
@@ -21,6 +38,14 @@ in
     # Neovim build a broken runtimepath and print E79 wildcard errors.
     environmentVariables = nushellEnvironmentVariables;
     extraEnv = ''
+      # Home Manager's `home.sessionPath` is written for login-session setup,
+      # but Nushell starts from its own generated environment. Keep these user
+      # paths in Nushell too so wrappers in ~/.local/bin can override Nix
+      # profile binaries.
+      $env.PATH = ([
+${nushellSessionPath}
+      ] | append $env.PATH | uniq)
+
       # Prisma's downloaded schema engine is not reliable on NixOS.
       let schema_engine = (which schema-engine | get path)
       if (($schema_engine | length) > 0) {
