@@ -1,0 +1,14 @@
+#!/usr/bin/env nu
+
+# Wrap the real Neovim-backed `page` so piped text is fully collected before
+# `page` starts. This avoids typing search keys while `page` is still appending
+# command output into its buffer.
+def --wrapped main [...args: string] {
+    let real_page = ($env.HOME | path join ".nix-profile/bin/page")
+
+    if ($in == null) {
+        ^$real_page ...$args
+    } else {
+        $in | collect | ^$real_page ...$args
+    }
+}
