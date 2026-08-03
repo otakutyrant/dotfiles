@@ -30,22 +30,6 @@ in
     # https://github.com/jackMort/ChatGPT.nvim/issues/267#issuecomment-1676609465
     OPENAI_API_HOST = "api.openai.com";
 
-    # User-session proxy settings. Keep loopback and Docker's Unix socket out of
-    # the proxy so local dev servers and Docker CLI calls stay direct.
-    http_proxy = "http://127.0.0.1:21081";
-    https_proxy = http_proxy;
-    HTTP_PROXY = http_proxy;
-    HTTPS_PROXY = http_proxy;
-    all_proxy = "socks5://127.0.0.1:21080";
-    ALL_PROXY = all_proxy;
-    no_proxy = builtins.concatStringsSep "," [
-      "localhost"
-      "127.0.0.1"
-      "::1"
-      "/var/run/docker.sock"
-    ];
-    NO_PROXY = no_proxy;
-
     # Input method variables used by graphical applications.
     GTK_IM_MODULE = "fcitx";
     QT_IM_MODULE = "fcitx";
