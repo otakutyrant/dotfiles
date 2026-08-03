@@ -121,7 +121,6 @@ with pkgs; # Bring package names from pkgs into scope for the list below.
   wpsoffice-cn
   onboard # Virtual keyboard.
   (callPackage ./pkgs/nutstore.nix { }) # Local Nutstore desktop sync client derivation.
-  (callPackage ./pkgs/nfcloud.nix { }) # Local NFCLOUD desktop client derivation.
   fragments # Bittorrent client
   goldendict-ng
   gnome-text-editor
@@ -143,4 +142,5 @@ with pkgs; # Bring package names from pkgs into scope for the list below.
   (whisper-cpp.override {
     cudaSupport = true;
   })
+  sparkle # Proxy client
 ]

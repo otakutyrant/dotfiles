@@ -38,11 +38,11 @@
   # reuse earlier variables from the same set, such as `NO_PROXY = no_proxy;`,
   # unless `{ ... }` normal attirbute set does not allow it.
   systemd.services.nix-daemon.environment = rec {
-    http_proxy = "http://127.0.0.1:21081";
+    http_proxy = "http://127.0.0.1:7890";
     https_proxy = http_proxy;
     HTTP_PROXY = http_proxy;
     HTTPS_PROXY = http_proxy;
-    all_proxy = "socks5://127.0.0.1:21080";
+    all_proxy = "socks5://127.0.0.1:7890";
     ALL_PROXY = all_proxy;
     # Nix daemon downloads should use proxies, but local mirrors and cache hosts
     # must stay direct to avoid unnecessary proxy hops.
@@ -290,6 +290,13 @@
   services.tumbler.enable = true;
   # Clipboard history backend used by Diodon.
   services.zeitgeist.enable = true;
+  # Enable mihomo TUN
+  security.wrappers.mihomo = {
+    owner = "root";
+    group = "root";
+    source = "${pkgs.mihomo}/bin/mihomo";
+    setuid = true;
+  };
 
   # User
   users.users.${username} = {
