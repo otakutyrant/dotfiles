@@ -125,7 +125,6 @@ with pkgs; # Bring package names from pkgs into scope for the list below.
   goldendict-ng
   gnome-text-editor
   nitrogen # Wallpaper manager
-  clash-verge-rev
   wechat
   papers # Document viewer
   ticktick
@@ -142,5 +141,4 @@ with pkgs; # Bring package names from pkgs into scope for the list below.
   (whisper-cpp.override {
     cudaSupport = true;
   })
-  sparkle # Proxy client
 ]

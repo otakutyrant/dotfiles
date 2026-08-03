@@ -290,12 +290,14 @@
   services.tumbler.enable = true;
   # Clipboard history backend used by Diodon.
   services.zeitgeist.enable = true;
-  # Enable mihomo TUN
-  security.wrappers.mihomo = {
-    owner = "root";
-    group = "root";
-    source = "${pkgs.mihomo}/bin/mihomo";
-    setuid = true;
+
+  # Install Clash Verge through the NixOS module instead of Home Manager, since
+  # service mode and TUN mode need system-level privileged helper setup.
+  programs.clash-verge = {
+    enable = true;
+    serviceMode = true;
+    tunMode = true;
+    autoStart = true;
   };
 
   # User
