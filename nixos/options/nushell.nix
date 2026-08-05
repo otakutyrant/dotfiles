@@ -27,7 +27,7 @@ let
   # code readable after Nix substitutes `${nushellSessionPath}` into `extraEnv`.
   # `extraEnv` then prepends these paths to Nushell's inherited PATH instead of
   # replacing the system paths supplied by the login session.
-  nushellSessionPath = lib.concatMapStringsSep "\n" (path: ''          "${path}"'') config.home.sessionPath;
+  nushellSessionPath = lib.concatMapStringsSep "\n" (path: ''"${path}"'') config.home.sessionPath;
 in
 
 {
@@ -38,23 +38,23 @@ in
     # Neovim build a broken runtimepath and print E79 wildcard errors.
     environmentVariables = nushellEnvironmentVariables;
     extraEnv = ''
-      # Home Manager's `home.sessionPath` is written for login-session setup,
-      # but Nushell starts from its own generated environment. Keep these user
-      # paths in Nushell too so wrappers in ~/.local/bin can override Nix
-      # profile binaries.
-      $env.PATH = ([
-${nushellSessionPath}
-      ] | append $env.PATH | uniq)
+            # Home Manager's `home.sessionPath` is written for login-session setup,
+            # but Nushell starts from its own generated environment. Keep these user
+            # paths in Nushell too so wrappers in ~/.local/bin can override Nix
+            # profile binaries.
+            $env.PATH = ([
+      ${nushellSessionPath}
+            ] | append $env.PATH | uniq)
 
-      # Prisma's downloaded schema engine is not reliable on NixOS.
-      let schema_engine = (which schema-engine | get path)
-      if (($schema_engine | length) > 0) {
-          $env.PRISMA_SCHEMA_ENGINE_BINARY = ($schema_engine | first)
-      }
+            # Prisma's downloaded schema engine is not reliable on NixOS.
+            let schema_engine = (which schema-engine | get path)
+            if (($schema_engine | length) > 0) {
+                $env.PRISMA_SCHEMA_ENGINE_BINARY = ($schema_engine | first)
+            }
 
-      # Export local private API keys when the file exists.
-      const api_keys = if ("~/api_keys.nu" | path expand | path exists) { "~/api_keys.nu" } else { null }
-      source-env $api_keys
+            # Export local private API keys when the file exists.
+            const api_keys = if ("~/api_keys.nu" | path expand | path exists) { "~/api_keys.nu" } else { null }
+            source-env $api_keys
     '';
     settings = {
       show_banner = false;
