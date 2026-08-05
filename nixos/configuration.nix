@@ -119,8 +119,34 @@
   ];
 
   # Network
-  networking.networkmanager.enable = true;
-  networking.hostName = hostname;
+  networking = {
+    networkmanager = {
+      enable = true;
+      # Keep NetworkManager from replacing /etc/resolv.conf with the router's
+      # DNS server. Clash Verge TUN mode currently makes DNS queries to the
+      # router time out, while public DNS servers are handled by Clash's DNS
+      # hijack correctly.
+      dns = "none";
+    };
+    # Use public DNS servers instead of the DHCP-provided router address.
+    # The router DNS currently times out under Clash Verge TUN mode.
+    nameservers = [
+      # AliDNS, run by Alibaba Cloud. Good default DNS inside mainland China.
+      "223.5.5.5"
+      "223.6.6.6"
+      # DNSPod public DNS, run by Tencent. Good mainland China fallback.
+      "119.29.29.29"
+      # Baidu public DNS. Another China-local fallback.
+      "180.76.76.76"
+      # Google DNS. Keep it after China-local DNS because it may be blocked or
+      # unreliable without Clash/TUN in mainland China.
+      "8.8.8.8"
+      # Cloudflare DNS. Also useful as a fallback, but may be unreliable without
+      # Clash/TUN in mainland China.
+      "1.1.1.1"
+    ];
+    hostName = hostname;
+  };
 
   # Audio
   services.pipewire = {
