@@ -4,7 +4,17 @@
 # `page` starts. This avoids typing search keys while `page` is still appending
 # command output into its buffer.
 def --wrapped main [...args: string] {
-    let real_page = ($env.HOME | path join ".nix-profile/bin/page")
+    let home_profile_page = ($env.HOME | path join ".nix-profile/bin/page")
+    let user_profile_page = ("/etc/profiles/per-user" | path join $env.USER "bin/page")
+
+    # Do not call `^page` here: ~/.local/bin is before the Nix profiles in PATH,
+    # so that would recurse into this wrapper. Home Manager can expose packages
+    # through either profile location, depending on how the system is built.
+    let real_page = if ($home_profile_page | path exists) {
+        $home_profile_page
+    } else {
+        $user_profile_page
+    }
 
     if ($in == null) {
         ^$real_page ...$args
