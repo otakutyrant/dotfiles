@@ -38,6 +38,14 @@
       tab_title_template = "{index} : {title}";
       background_opacity = "0.8";
       allow_remote_control = "yes";
+      # Keep the cursor blinking forever instead of stopping after the default
+      # 15 seconds of inactivity, so the cursor stays obvious at a glance.
+      cursor_stop_blinking_after = "0";
+      # Use a bright cyan cursor so it stands out clearly against dark backgrounds.
+      cursor = "#00ffff";
+      cursor_text_color = "background";
+      # Blink faster than the default 0.5s so the cursor draws more attention.
+      cursor_blink_interval = "0.3";
     };
   };
 }
