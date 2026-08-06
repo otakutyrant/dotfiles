@@ -228,9 +228,28 @@ exec --no-startup-id xset dpms 0 0 300
 # # Bar
 
 bar {
+  output primary
   tray_output primary
   font pango: JetBrainsMono Nerd Font 13
-  status_command i3status-rs
+  status_command i3status-rs ~/.config/i3status-rust/config.toml
+  colors {
+    background #15171c
+    statusline #d8dee9
+    separator  #4b5563
+    focused_workspace  #1f7a8c #1f7a8c #ffffff
+    active_workspace   #30343f #30343f #d8dee9
+    inactive_workspace #15171c #15171c #9ca3af
+    urgent_workspace   #b00020 #b00020 #ffffff
+    binding_mode       #b45309 #b45309 #ffffff
+  }
+}
+
+bar {
+  output DP-0
+  output DP-2
+  tray_output none
+  font pango: JetBrainsMono Nerd Font 13
+  status_command i3status-rs ~/.config/i3status-rust/config-secondary.toml
   colors {
     background #15171c
     statusline #d8dee9
