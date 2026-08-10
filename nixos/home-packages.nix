@@ -31,7 +31,7 @@ with pkgs; # Bring package names from pkgs into scope for the list below.
   rsync
 
   # File manager
-  tree
+  (callPackage ./pkgs/tree.nix { })
 
   # Building
   cmake
