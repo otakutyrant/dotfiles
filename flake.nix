@@ -20,6 +20,9 @@
     # This line defines `nixpkgs` and `url` at them same time. That said, it is
     # equivalent to `nixpkgs = { url = "..." };`.
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-26.05";
+    # Keep an unstable package set available for selected fast-moving tools
+    # without moving the whole system away from the stable NixOS channel.
+    nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
     # Define the `home-manager` flake input.
     home-manager = {
       # Flake input keyword: `url` tells Nix where to fetch Home Manager.

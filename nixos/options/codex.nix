@@ -1,8 +1,23 @@
 {
+  inputs,
+  pkgs,
+  ...
+}:
+
+let
+  # Import unstable nixpkgs only for Codex, because Codex model support changes
+  # faster than the stable NixOS channel.
+  unstable = import inputs.nixpkgs-unstable {
+    system = pkgs.stdenv.hostPlatform.system;
+    config.allowUnfree = true;
+  };
+in
+{
   # Codex reads this context as its global behavior prompt. Keeping it separate
   # avoids making the main Home Manager profile hard to scan.
   programs.codex = {
     enable = true;
+    package = unstable.codex;
     context = ''
       # Global scope prompt
 
