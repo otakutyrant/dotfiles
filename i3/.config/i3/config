@@ -199,8 +199,6 @@ bindsym $mod+n exec nautilus
 bindsym $mod+c exec google-chrome-stable
 # Start rofi in desktop-entry launcher mode.
 bindsym $mod+d exec rofi -show drun
-# Start cherry studio
-bindsym $mod+a exec cherry-studio
 # Lock
 bindsym $mod+shift+l exec i3lock
 # Show clipboard history.
