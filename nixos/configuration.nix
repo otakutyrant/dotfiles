@@ -249,6 +249,12 @@
     VISUAL = "nvim";
     PAGER = "page";
   };
+  environment.sessionVariables = {
+    # Kitty uses GLFW's IBus client protocol for text-input events. Define this
+    # in the NixOS login session so Kitty launched directly by i3 inherits it;
+    # Home Manager's shell setup is too late for applications started by i3.
+    GLFW_IM_MODULE = "ibus";
+  };
   programs.whois.enable = true;
   programs.nix-ld.enable = true;
   programs.steam.enable = true;
