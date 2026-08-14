@@ -5,6 +5,9 @@ local neo_tree = {
     lazy = false, -- neo-tree will lazily load itself
     ---@module "neo-tree"
     opts = {
+        -- Follow package layers declared by @module and @module-group in
+        -- index.* or __init__.py entry-file documentation.
+        sort_function = require("package_layer_sort").sort,
         event_handlers = {
             {
                 -- show numbers in neo-tree
