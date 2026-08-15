@@ -180,7 +180,7 @@ vim.keymap.set(
     { desc = "🛠️ Save with sudo privileges." }
 )
 
-vim.keymap.set("n", "<leader>w", ":w<cr>", { desc = "🛠️ Quick save." })
+vim.keymap.set("n", "<leader>w", ":wall<cr>", { desc = "🛠️ Quick save all." })
 vim.keymap.set("n", "<leader>q", ":q<cr>", { desc = "🛠️ Quick quit." })
 vim.keymap.set(
     "n",
