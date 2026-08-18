@@ -55,6 +55,12 @@ in
             # Export local private API keys when the file exists.
             const api_keys = if ("~/api_keys.nu" | path expand | path exists) { "~/api_keys.nu" } else { null }
             source-env $api_keys
+
+            # Home Manager's ssh-agent user service binds to $XDG_RUNTIME_DIR/ssh-agent
+            # but only sets SSH_AUTH_SOCK for POSIX shells. Point Nushell at the same socket.
+            if (($env.SSH_AUTH_SOCK? | default "") | is-empty) {
+                $env.SSH_AUTH_SOCK = $"($env.XDG_RUNTIME_DIR)/ssh-agent"
+            }
     '';
     settings = {
       show_banner = false;

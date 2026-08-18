@@ -11,7 +11,7 @@
       };
       "*" = {
         ForwardAgent = false;
-        AddKeysToAgent = "no";
+        AddKeysToAgent = "yes";
         Compression = false;
         ServerAliveInterval = 0;
         ServerAliveCountMax = 3;
@@ -23,4 +23,5 @@
       };
     };
   };
+  services.ssh-agent.enable = true;
 }
