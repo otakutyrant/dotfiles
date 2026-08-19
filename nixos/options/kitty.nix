@@ -45,7 +45,7 @@
       cursor = "#00ffff";
       cursor_text_color = "background";
       # Blink faster than the default 0.5s so the cursor draws more attention.
-      cursor_blink_interval = "0.3";
+      cursor_blink_interval = "0.5";
     };
   };
 }
