@@ -7,7 +7,7 @@ local neo_tree = {
     opts = {
         -- Follow package layers declared by @module and @module-group in
         -- index.* or __init__.py entry-file documentation.
-        sort_function = require("package_layer_sort").sort,
+        sort_function = require("neotree_sort").sort,
         event_handlers = {
             {
                 -- show numbers in neo-tree
