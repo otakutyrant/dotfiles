@@ -31,6 +31,14 @@ inode/directory=org.gnome.Nautilus.desktop
 x-scheme-handler/trash=org.gnome.Nautilus.desktop
 
 application/epub+zip=calibre-ebook-viewer.desktop
+
+# Documents (PDF) — open with GNOME Papers (Document Viewer), not Calibre.
+application/pdf=org.gnome.Papers.desktop
+application/x-bzpdf=org.gnome.Papers.desktop
+application/x-gzpdf=org.gnome.Papers.desktop
+application/x-xzpdf=org.gnome.Papers.desktop
+application/x-ext-pdf=org.gnome.Papers.desktop
+
 text/html=google-chrome.desktop
 x-scheme-handler/about=google-chrome.desktop
 x-scheme-handler/unknown=google-chrome.desktop
