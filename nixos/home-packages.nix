@@ -1,4 +1,8 @@
-{ inputs, pkgs }:
+{
+  inputs,
+  pkgs,
+  pkgs-chatgpt,
+}:
 
 # Packages installed into the user's Home Manager profile.
 with pkgs; # Bring package names from pkgs into scope for the list below.
@@ -120,6 +124,8 @@ with pkgs; # Bring package names from pkgs into scope for the list below.
   gnome-system-monitor
   wpsoffice-cn
   onboard # Virtual keyboard.
+  # ChatGPT desktop app is packaged on a dedicated nixpkgs PR branch.
+  pkgs-chatgpt.chatgpt
   (callPackage ./pkgs/nutstore.nix { }) # Local Nutstore desktop sync client derivation.
   fragments # Bittorrent client
   goldendict-ng

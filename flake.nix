@@ -23,6 +23,9 @@
     # Keep an unstable package set available for selected fast-moving tools
     # without moving the whole system away from the stable NixOS channel.
     nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
+    # The ChatGPT desktop app is not yet in a stable nixpkgs channel. Track the
+    # PR branch that packages it for Linux until it lands upstream.
+    nixpkgs-chatgpt.url = "github:Moraxyc/nixpkgs/chatgpt-linux";
     # Define the `home-manager` flake input.
     home-manager = {
       # Flake input keyword: `url` tells Nix where to fetch Home Manager.
@@ -52,6 +55,13 @@
       username = "otakutyrant";
       hostname = "nixos";
       pkgs = nixpkgs.legacyPackages.${system};
+      # The ChatGPT desktop app is unfree and lives on a separate nixpkgs branch
+      # until its Linux packaging lands upstream. Import that branch with unfree
+      # packages allowed so it can be installed alongside the main profile.
+      pkgs-chatgpt = import inputs.nixpkgs-chatgpt {
+        inherit system;
+        config.allowUnfree = true;
+      };
       # Flake apps need a small wrapper object. Keeping it local avoids
       # repeating the same `type = "app"` boilerplate for each project command.
       mkApp = program: {
@@ -194,14 +204,21 @@
       nixosConfigurations.${hostname} = nixpkgs.lib.nixosSystem {
         # It is equivalent to `system = system`.
         inherit system;
-        specialArgs = { inherit inputs username hostname; };
+        specialArgs = {
+          inherit
+            inputs
+            username
+            hostname
+            pkgs-chatgpt
+            ;
+        };
         modules = [
           ./nixos/configuration.nix
           home-manager.nixosModules.home-manager
           {
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
-            home-manager.extraSpecialArgs = { inherit inputs username; };
+            home-manager.extraSpecialArgs = { inherit inputs username pkgs-chatgpt; };
             # nixosConfigurations.${hostname} resues the home.nix here.
             home-manager.users.${username} = import ./nixos/home.nix;
           }
@@ -219,7 +236,7 @@
           # Allow proprietary/unfree packages in this imported package set.
           config.allowUnfree = true;
         };
-        extraSpecialArgs = { inherit inputs username; };
+        extraSpecialArgs = { inherit inputs username pkgs-chatgpt; };
         modules = [ ./nixos/home.nix ];
       };
     };
