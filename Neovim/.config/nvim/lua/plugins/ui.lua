@@ -18,6 +18,11 @@ local neo_tree = {
                 end,
             },
         },
+        filesystem = {
+            -- Refresh automatically when files change on disk (e.g. git
+            -- add/commit from an external terminal).
+            use_libuv_file_watcher = true,
+        },
         window = {
             -- Use telescope style mappings to split/vsplit
             mappings = {
@@ -25,9 +30,29 @@ local neo_tree = {
                 ["<C-s>"] = "open_split",
                 ["s"] = "noop",
                 ["S"] = "noop",
+                -- Stage the current file/directory node (gitsigns keymaps do not
+                -- apply to neo-tree buffers, so use neo-tree's built-in git
+                -- command instead).
+                ["<leader>gb"] = "git_add_file",
             },
         },
     },
+    config = function(_, opts)
+        require("neo-tree").setup(opts)
+
+        -- Refresh neo-tree when focus returns from an external terminal, or
+        -- when leaving an internal terminal, so git operations done outside
+        -- neo-tree are reflected without manual refresh.
+        vim.api.nvim_create_autocmd({ "FocusGained", "TermClose", "TermLeave" }, {
+            group = vim.api.nvim_create_augroup("NeoTreeAutoRefresh", { clear = true }),
+            callback = function()
+                local ok, manager = pcall(require, "neo-tree.sources.manager")
+                if ok then
+                    pcall(manager.refresh, "filesystem")
+                end
+            end,
+        })
+    end,
     keys = {
         {
             "<F1>", -- this will overwrite its origin feature: neovim-help, but the later is useless anyway
