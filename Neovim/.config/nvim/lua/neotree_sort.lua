@@ -1,6 +1,7 @@
--- Sort neo-tree siblings by the package layers declared in their entry file.
--- This mirrors tyrant-rules: TypeScript packages use index.* and Python
--- packages use __init__.py; @module-group members share one layer.
+-- Sort neo-tree siblings by project and package dependencies.
+-- This mirrors tyrant-rules: project dependencies are topologically ordered,
+-- TypeScript packages use index.*, Python packages use __init__.py, and
+-- @module-group members share one layer.
 local M = {}
 
 local entry_names = {
@@ -71,18 +72,119 @@ local function quoted_values(text)
     return values
 end
 
+local function topological_layers(dependencies, declared_layers)
+    local ordered = {}
+    local states = {}
+
+    local function visit(layer)
+        if states[layer] == "visiting" then
+            -- No ordering can put both sides of a cycle before each other.
+            return false
+        end
+        if states[layer] == "visited" then
+            return true
+        end
+
+        states[layer] = "visiting"
+        for _, dependency in ipairs(dependencies[layer] or {}) do
+            if dependencies[dependency] and not visit(dependency) then
+                return false
+            end
+        end
+        states[layer] = "visited"
+        table.insert(ordered, layer)
+        return true
+    end
+
+    for _, layer in ipairs(declared_layers) do
+        if not visit(layer) then
+            return nil
+        end
+    end
+    return ordered
+end
+
+local function graph_layers(graph_body)
+    local dependencies = {}
+    local declared_layers = {}
+    local cursor = 1
+
+    while true do
+        local double_start, double_end, double_name, double_dependencies =
+            graph_body:find('"([^"]+)"%s*:%s*(%b[])', cursor)
+        local single_start, single_end, single_name, single_dependencies =
+            graph_body:find("'([^']+)'%s*:%s*(%b[])", cursor)
+        local bare_start, bare_end, bare_name, bare_dependencies =
+            graph_body:find("([%a_$][%w_$]*)%s*:%s*(%b[])", cursor)
+
+        local candidates = {}
+        local function add_candidate(start_position, end_position, name, array)
+            if start_position then
+                table.insert(candidates, {
+                    array = array,
+                    end_position = end_position,
+                    name = name,
+                    start_position = start_position,
+                })
+            end
+        end
+        add_candidate(
+            double_start,
+            double_end,
+            double_name,
+            double_dependencies
+        )
+        add_candidate(
+            single_start,
+            single_end,
+            single_name,
+            single_dependencies
+        )
+        add_candidate(bare_start, bare_end, bare_name, bare_dependencies)
+
+        if #candidates == 0 then
+            break
+        end
+        table.sort(candidates, function(a, b)
+            return a.start_position < b.start_position
+        end)
+
+        local entry = candidates[1]
+        dependencies[entry.name] = quoted_values(entry.array)
+        table.insert(declared_layers, entry.name)
+        cursor = entry.end_position + 1
+    end
+
+    return topological_layers(dependencies, declared_layers)
+end
+
 local function eslint_project_layers(text)
-    local layer_array = text:match(
-        "enforce%-project%-layer%-dependencies['\"]%s*:%s*"
-            .. "%[%s*['\"][^'\"]+['\"]%s*,%s*(%b[])"
-    )
-    return layer_array and quoted_values(layer_array) or nil
+    local rule_arguments =
+        text:match("enforce%-project%-layer%-dependencies['\"]%s*:%s*(%b[])")
+    if not rule_arguments then
+        return nil
+    end
+
+    local option_prefix = "^%[%s*['\"][^'\"]+['\"]%s*,%s*"
+    local legacy_array = rule_arguments:match(option_prefix .. "(%b[])")
+    if legacy_array then
+        return quoted_values(legacy_array)
+    end
+
+    local graph_body = rule_arguments:match(option_prefix .. "(%b{})")
+    if not graph_body then
+        local graph_name =
+            rule_arguments:match(option_prefix .. "([%a_$][%w_$]*)")
+        if graph_name then
+            graph_body = text:match("const%s+" .. graph_name .. "%s*=%s*(%b{})")
+        end
+    end
+
+    return graph_body and graph_layers(graph_body) or nil
 end
 
 local function pylint_project_layers(text)
-    local layer_array = text:match(
-        "tyrant[-_]layers%s*=%s*(%b[])"
-    )
+    local layer_array = text:match("tyrant[-_]layers%s*=%s*(%b[])")
     return layer_array and quoted_values(layer_array) or nil
 end
 
@@ -122,7 +224,7 @@ local function read_project_sort_keys(directory)
     local present_layers = {}
     for _, name in ipairs(layers or {}) do
         local stat = vim.uv.fs_stat(directory .. "/" .. name)
-        if stat and stat.type == "directory" then
+        if stat then
             table.insert(present_layers, name)
         end
     end
@@ -167,8 +269,7 @@ local function read_spec(directory)
     local ok, lines = pcall(vim.fn.readfile, entry)
     if ok then
         for _, line in ipairs(lines) do
-            local doc_line = line
-                :gsub("^%s*/%*+", "")
+            local doc_line = line:gsub("^%s*/%*+", "")
                 :gsub("^%s*%* ?", "")
                 :gsub("%*/%s*$", "")
                 :match("^%s*(.-)%s*$")
@@ -250,8 +351,7 @@ local function layer_for(name, spec)
             if
                 declared_prefix
                 and separator == declared_separator
-                and prefix:sub(1, #declared_prefix + 1)
-                    == declared_prefix .. separator
+                and prefix:sub(1, #declared_prefix + 1) == declared_prefix .. separator
                 and #declared_prefix > longest_match
             then
                 inherited_layer = declared_layer
