@@ -162,16 +162,6 @@ mode "resize" {
 
 bindcode $mod+27 mode "resize"
 
-# Automatically putting clients on specific workspaces.
-assign [class="kitty"] $ws1
-assign [class="google-chrome"] $ws2
-assign [class="mpv"] $ws4
-assign [class="(?i)^steam$"] $ws3
-no_focus [class="(?i)^steam$"]
-assign [class="Zotero"] $ws4
-assign [class="org.gnome.Nautilus"] $ws4
-assign [class="goldendict"] $ws4
-
 # Automatically putting workspaces on specific screens.
 workspace $ws1 output DP-4
 workspace $ws2 output DP-2
