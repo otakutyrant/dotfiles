@@ -23,6 +23,34 @@ local neo_tree = {
             -- add/commit from an external terminal).
             use_libuv_file_watcher = true,
         },
+        -- Custom command to stage the current node. This mirrors
+        -- neo-tree's built-in `git_add_file` but shows git errors instead of
+        -- failing silently, which helps with untracked-file edge cases.
+        commands = {
+            git_add_node = function(state)
+                local node = state.tree:get_node()
+                if not node or node.type == "message" then
+                    return
+                end
+                local path = node:get_id()
+                local output = vim.fn.system({ "git", "add", "--", path })
+                if vim.v.shell_error ~= 0 then
+                    vim.notify(
+                        "git add failed:\n" .. output,
+                        vim.log.levels.ERROR
+                    )
+                    return
+                end
+                local events = require("neo-tree.events")
+                events.fire_event(events.GIT_EVENT)
+            end,
+            next_modified_file = function(state)
+                require("neotree_git_nav").next_modified(state)
+            end,
+            prev_modified_file = function(state)
+                require("neotree_git_nav").prev_modified(state)
+            end,
+        },
         window = {
             -- Use telescope style mappings to split/vsplit
             mappings = {
@@ -33,7 +61,13 @@ local neo_tree = {
                 -- Stage the current file/directory node (gitsigns keymaps do not
                 -- apply to neo-tree buffers, so use neo-tree's built-in git
                 -- command instead).
-                ["<leader>gb"] = "git_add_file",
+                ["<leader>gb"] = "git_add_node",
+                -- Jump between files reported by `git status`. Folded
+                -- directories are expanded automatically so the target file
+                -- is visible. These shadow gitsigns' ]c/[c, but gitsigns maps
+                -- are buffer-local and not attached to neo-tree buffers.
+                ["]c"] = "next_modified_file",
+                ["[c"] = "prev_modified_file",
             },
         },
     },
@@ -43,15 +77,22 @@ local neo_tree = {
         -- Refresh neo-tree when focus returns from an external terminal, or
         -- when leaving an internal terminal, so git operations done outside
         -- neo-tree are reflected without manual refresh.
-        vim.api.nvim_create_autocmd({ "FocusGained", "TermClose", "TermLeave" }, {
-            group = vim.api.nvim_create_augroup("NeoTreeAutoRefresh", { clear = true }),
-            callback = function()
-                local ok, manager = pcall(require, "neo-tree.sources.manager")
-                if ok then
-                    pcall(manager.refresh, "filesystem")
-                end
-            end,
-        })
+        vim.api.nvim_create_autocmd(
+            { "FocusGained", "TermClose", "TermLeave" },
+            {
+                group = vim.api.nvim_create_augroup(
+                    "NeoTreeAutoRefresh",
+                    { clear = true }
+                ),
+                callback = function()
+                    local ok, manager =
+                        pcall(require, "neo-tree.sources.manager")
+                    if ok then
+                        pcall(manager.refresh, "filesystem")
+                    end
+                end,
+            }
+        )
     end,
     keys = {
         {
