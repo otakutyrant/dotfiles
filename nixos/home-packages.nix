@@ -128,6 +128,7 @@ with pkgs; # Bring package names from pkgs into scope for the list below.
   pkgs-chatgpt.chatgpt
   (callPackage ./pkgs/nutstore.nix { }) # Local Nutstore desktop sync client derivation.
   fragments # Bittorrent client
+  qbittorrent
   goldendict-ng
   gnome-text-editor
   nitrogen # Wallpaper manager
