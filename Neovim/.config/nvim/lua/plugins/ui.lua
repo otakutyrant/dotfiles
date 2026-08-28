@@ -125,6 +125,7 @@ local lualine = {
             lualine_c = {
                 {
                     "filename",
+                    path = 1, -- Show relative path from the current working directory.
                     color = { fg = "black", bg = "#95cb82", gui = "bold" },
                 },
             },
