@@ -331,6 +331,8 @@
     tunMode = true;
     autoStart = true;
   };
+  # Home Manager uses xfconf-query to declaratively configure xfce4-notifyd.
+  programs.xfconf.enable = true;
 
   # User
   users.users.${username} = {

@@ -110,6 +110,9 @@ in
   # Diodon ignores copied images by default. Enable image history so screenshot
   # PNG clipboard entries can appear in its menu.
   dconf.settings."net/launchpad/diodon/clipboard".add-images = true;
+  # xfce4-notifyd 0.9 and newer can create a synchronized notification window
+  # on every monitor while keeping a single D-Bus notification ID.
+  xfconf.settings.xfce4-notifyd."show-notifications-on" = "all-monitors";
   xdg.userDirs.enable = true;
   xdg.configFile."user-dirs.dirs".force = true;
   # Set an explicit Xcursor theme instead of relying on toolkit fallbacks.
