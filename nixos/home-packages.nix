@@ -2,6 +2,7 @@
   inputs,
   pkgs,
   pkgs-chatgpt,
+  pkgs-unstable,
 }:
 
 # Packages installed into the user's Home Manager profile.
@@ -126,6 +127,8 @@ with pkgs; # Bring package names from pkgs into scope for the list below.
   onboard # Virtual keyboard.
   # ChatGPT desktop app is packaged on a dedicated nixpkgs PR branch.
   pkgs-chatgpt.chatgpt
+  # AI coding agent packaged in nixpkgs-unstable.
+  pkgs-unstable.opencode
   (callPackage ./pkgs/nutstore.nix { }) # Local Nutstore desktop sync client derivation.
   fragments # Bittorrent client
   qbittorrent

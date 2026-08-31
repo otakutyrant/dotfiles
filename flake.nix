@@ -55,6 +55,11 @@
       username = "otakutyrant";
       hostname = "nixos";
       pkgs = nixpkgs.legacyPackages.${system};
+      # Selected tools are only available or fresh enough in the unstable channel.
+      pkgs-unstable = import inputs.nixpkgs-unstable {
+        inherit system;
+        config.allowUnfree = true;
+      };
       # The ChatGPT desktop app is unfree and lives on a separate nixpkgs branch
       # until its Linux packaging lands upstream. Import that branch with unfree
       # packages allowed so it can be installed alongside the main profile.
@@ -210,6 +215,7 @@
             username
             hostname
             pkgs-chatgpt
+            pkgs-unstable
             ;
         };
         modules = [
@@ -218,7 +224,14 @@
           {
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
-            home-manager.extraSpecialArgs = { inherit inputs username pkgs-chatgpt; };
+            home-manager.extraSpecialArgs = {
+              inherit
+                inputs
+                username
+                pkgs-chatgpt
+                pkgs-unstable
+                ;
+            };
             # nixosConfigurations.${hostname} resues the home.nix here.
             home-manager.users.${username} = import ./nixos/home.nix;
           }
@@ -236,7 +249,14 @@
           # Allow proprietary/unfree packages in this imported package set.
           config.allowUnfree = true;
         };
-        extraSpecialArgs = { inherit inputs username pkgs-chatgpt; };
+        extraSpecialArgs = {
+          inherit
+            inputs
+            username
+            pkgs-chatgpt
+            pkgs-unstable
+            ;
+        };
         modules = [ ./nixos/home.nix ];
       };
     };

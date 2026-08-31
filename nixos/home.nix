@@ -4,12 +4,20 @@
   lib,
   pkgs,
   pkgs-chatgpt,
+  pkgs-unstable,
   username,
   ...
 }:
 
 let
-  homePackages = import ./home-packages.nix { inherit inputs pkgs pkgs-chatgpt; };
+  homePackages = import ./home-packages.nix {
+    inherit
+      inputs
+      pkgs
+      pkgs-chatgpt
+      pkgs-unstable
+      ;
+  };
   home = config.home.homeDirectory;
   # Recursively expose every file under a dotfile directory through Home
   # Manager, preserving each path relative to that directory.
