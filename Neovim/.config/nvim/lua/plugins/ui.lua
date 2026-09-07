@@ -58,6 +58,18 @@ local neo_tree = {
                 ["<C-s>"] = "open_split",
                 ["s"] = "noop",
                 ["S"] = "noop",
+                -- Scroll the tree without moving the cursor, like in normal
+                -- windows. Must be functions: neo-tree only accepts
+                -- registered command names or functions as mapping values.
+                ["zz"] = function()
+                    vim.cmd("normal! zz")
+                end,
+                ["zt"] = function()
+                    vim.cmd("normal! zt")
+                end,
+                ["zb"] = function()
+                    vim.cmd("normal! zb")
+                end,
                 -- Stage the current file/directory node (gitsigns keymaps do not
                 -- apply to neo-tree buffers, so use neo-tree's built-in git
                 -- command instead).
