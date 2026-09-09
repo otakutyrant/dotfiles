@@ -31,6 +31,10 @@ device = "Mihomo"
 
 [[block]]
 block = "load"
+# Scale load thresholds with the number of logical CPUs. On this 16-core
+# machine, warn at 16 and show critical only once load reaches 24.
+warning = 1.0
+critical = 1.5
 format = "$1m.eng(w:4) $5m.eng(w:4) $15m.eng(w:4)"
 
 [[block]]
