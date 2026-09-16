@@ -1,7 +1,8 @@
 -- Sort neo-tree siblings by project and package dependencies.
--- This mirrors tyrant-rules: project dependencies are topologically ordered,
--- TypeScript packages use index.*, Python packages use __init__.py, and
--- @module-group members share one layer.
+-- Project dependencies come from dependency-cruiser and are topologically
+-- ordered. Package dependencies mirror tyrant-rules: TypeScript packages use
+-- index.*, Python packages use __init__.py, and @module-group members share
+-- one layer.
 local M = {}
 
 local entry_names = {
@@ -16,11 +17,14 @@ local cache = {}
 local project_cache = {}
 
 local project_config_names = {
-    "eslint.config.ts",
-    "eslint.config.js",
-    "eslint.config.mjs",
-    "eslint.config.cjs",
-    "pyproject.toml",
+    "dependency-cruiser.ts",
+    ".dependency-cruiser.ts",
+    "dependency-cruiser.js",
+    ".dependency-cruiser.js",
+    "dependency-cruiser.mjs",
+    ".dependency-cruiser.mjs",
+    "dependency-cruiser.cjs",
+    ".dependency-cruiser.cjs",
 }
 
 local function default_sort(a, b)
@@ -158,34 +162,27 @@ local function graph_layers(graph_body)
     return topological_layers(dependencies, declared_layers)
 end
 
-local function eslint_project_layers(text)
-    local rule_arguments =
-        text:match("enforce%-project%-layer%-dependencies['\"]%s*:%s*(%b[])")
-    if not rule_arguments then
+local function escape_pattern(text)
+    return (text:gsub("([^%w])", "%%%1"))
+end
+
+local function dependency_cruiser_project_layers(text)
+    -- The graph is the object passed to Object.entries when dependency-cruiser
+    -- expands it into its project-layer rules. Keeping this relationship
+    -- explicit avoids mistaking unrelated configuration objects for layers.
+    local graph_name = text:match("Object%.entries%s*%(%s*([%a_$][%w_$]*)%s*%)")
+    if not graph_name then
         return nil
     end
 
-    local option_prefix = "^%[%s*['\"][^'\"]+['\"]%s*,%s*"
-    local legacy_array = rule_arguments:match(option_prefix .. "(%b[])")
-    if legacy_array then
-        return quoted_values(legacy_array)
+    local _, value_start =
+        text:find("const%s+" .. escape_pattern(graph_name) .. "%s*[^=]-%s*=%s*")
+    if not value_start then
+        return nil
     end
 
-    local graph_body = rule_arguments:match(option_prefix .. "(%b{})")
-    if not graph_body then
-        local graph_name =
-            rule_arguments:match(option_prefix .. "([%a_$][%w_$]*)")
-        if graph_name then
-            graph_body = text:match("const%s+" .. graph_name .. "%s*=%s*(%b{})")
-        end
-    end
-
+    local graph_body = text:match("^(%b{})", value_start + 1)
     return graph_body and graph_layers(graph_body) or nil
-end
-
-local function pylint_project_layers(text)
-    local layer_array = text:match("tyrant[-_]layers%s*=%s*(%b[])")
-    return layer_array and quoted_values(layer_array) or nil
 end
 
 local function read_project_sort_keys(directory)
@@ -212,14 +209,7 @@ local function read_project_sort_keys(directory)
     end
 
     local text = read_file(config_path)
-    local layers
-    if text then
-        if vim.fs.basename(config_path) == "pyproject.toml" then
-            layers = pylint_project_layers(text)
-        else
-            layers = eslint_project_layers(text)
-        end
-    end
+    local layers = text and dependency_cruiser_project_layers(text) or nil
 
     local present_layers = {}
     for _, name in ipairs(layers or {}) do
