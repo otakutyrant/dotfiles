@@ -49,6 +49,7 @@ in
   # file stays readable while still evaluating as one merged user profile.
   imports = [
     ./options/codex.nix
+    ./options/direnv.nix
     ./options/env.nix
     ./options/git.nix
     ./options/kitty.nix
