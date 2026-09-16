@@ -208,8 +208,8 @@ exec_always --no-startup-id sh -c 'killall picom 2>/dev/null; exec picom --confi
 exec --no-startup-id xrandr --output HDMI-0 --off --output DP-0 --mode 1920x1080 --pos 3640x0 --rotate left --output DP-1 --off --output DP-2 --mode 1920x1080 --pos 0x0 --rotate left --output DP-3 --off --output DP-4 --primary --mode 2560x1440 --pos 1080x480 --rotate normal --output DP-5 --off
 
 
-# Sleep displays after 5 minutes of inactivity.
-exec --no-startup-id xset s 300
+# Sleep displays after 10 minutes of inactivity.
+exec --no-startup-id xset s 600
 exec --no-startup-id xset +dpms
 exec --no-startup-id xset dpms 0 0 300
 
