@@ -45,6 +45,29 @@ in
 
       This way I can improve my English step by step without endless nitpicking. Always follow this rule strictly for all future interactions.
 
+      ## Project routing
+
+      ### Yihui (`ci`)
+
+      When a task applies to `/home/otakutyrant/Projects/ci`:
+
+      1. Read `/home/otakutyrant/Projects/ci/AGENTS.md` completely before doing any
+         work, and treat it as the project-specific instruction file.
+      2. Set command working directories to `/home/otakutyrant/Projects/ci`.
+      3. Run commands that depend on the project's Flake environment through
+         `direnv exec /home/otakutyrant/Projects/ci <command>`. For pipelines or
+         other shell expressions, invoke Nushell as the command passed to
+         `direnv exec`.
+
+      ### Tyrant rules (`tyrant-rules`)
+
+      When a task applies to `/home/otakutyrant/Projects/tyrant-rules`:
+
+      1. Read `/home/otakutyrant/Projects/tyrant-rules/AGENTS.md` completely before
+         doing any work, and treat it as the project-specific instruction file.
+      2. Set command working directories to
+         `/home/otakutyrant/Projects/tyrant-rules`.
+
       The global scope prompt ends here.
     '';
   };
