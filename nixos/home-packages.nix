@@ -144,6 +144,7 @@ with pkgs; # Bring package names from pkgs into scope for the list below.
   dex # Autostart XDG desktop files.
   gimp # Image editor
   xclip
+  xsel
   # `openai-whisper` is accurate, but it brings a heavier Python stack and does not support GPU.
   # `whisper-ctranslate2` can be fast, but its Python/CUDA dependency surface is larger.
   # `whisperx` is useful for word timestamps and diarization, but it is overkill for normal SRT files.
