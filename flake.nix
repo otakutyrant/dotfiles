@@ -176,6 +176,11 @@
     in
     # This attribute set is the actual value returned by `outputs`.
     {
+      # Export shared development tools for project flakes that follow this
+      # flake's stable nixpkgs input.
+      packages = nixpkgs.lib.genAttrs supportedSystems (system: {
+        nur = nixpkgs.legacyPackages.${system}.callPackage ./nixos/pkgs/nur.nix { };
+      });
       # Flake output keyword: `formatter` lets `nix fmt` choose the formatter
       # for this system automatically.
       formatter.${system} = qualityScripts.format;
