@@ -111,52 +111,43 @@ end
 local function graph_layers(graph_body)
     local dependencies = {}
     local declared_layers = {}
-    local cursor = 1
+    local cursor = 2
 
     while true do
-        local double_start, double_end, double_name, double_dependencies =
-            graph_body:find('"([^"]+)"%s*:%s*(%b[])', cursor)
-        local single_start, single_end, single_name, single_dependencies =
-            graph_body:find("'([^']+)'%s*:%s*(%b[])", cursor)
-        local bare_start, bare_end, bare_name, bare_dependencies =
-            graph_body:find("([%a_$][%w_$]*)%s*:%s*(%b[])", cursor)
-
-        local candidates = {}
-        local function add_candidate(start_position, end_position, name, array)
-            if start_position then
-                table.insert(candidates, {
-                    array = array,
-                    end_position = end_position,
-                    name = name,
-                    start_position = start_position,
-                })
-            end
+        local name, value_start =
+            graph_body:match('^%s*,?%s*"([^"]+)"%s*:%s*()', cursor)
+        if not name then
+            name, value_start =
+                graph_body:match("^%s*,?%s*'([^']+)'%s*:%s*()", cursor)
         end
-        add_candidate(
-            double_start,
-            double_end,
-            double_name,
-            double_dependencies
-        )
-        add_candidate(
-            single_start,
-            single_end,
-            single_name,
-            single_dependencies
-        )
-        add_candidate(bare_start, bare_end, bare_name, bare_dependencies)
-
-        if #candidates == 0 then
+        if not name then
+            name, value_start =
+                graph_body:match("^%s*,?%s*([%a_$][%w_$]*)%s*:%s*()", cursor)
+        end
+        if not name then
             break
         end
-        table.sort(candidates, function(a, b)
-            return a.start_position < b.start_position
-        end)
 
-        local entry = candidates[1]
-        dependencies[entry.name] = quoted_values(entry.array)
-        table.insert(declared_layers, entry.name)
-        cursor = entry.end_position + 1
+        -- Older graphs map layers directly to dependency arrays. Newer graphs
+        -- wrap that array with metadata such as a human-readable description.
+        local value = graph_body:match("^(%b[])", value_start)
+        local dependency_array = value
+        if not value then
+            value = graph_body:match("^(%b{})", value_start)
+            dependency_array = value
+                and (
+                    value:match("dependencies%s*:%s*(%b[])")
+                    or value:match('"dependencies"%s*:%s*(%b[])')
+                    or value:match("'dependencies'%s*:%s*(%b[])")
+                )
+        end
+        if not value or not dependency_array then
+            return nil
+        end
+
+        dependencies[name] = quoted_values(dependency_array)
+        table.insert(declared_layers, name)
+        cursor = value_start + #value
     end
 
     return topological_layers(dependencies, declared_layers)
