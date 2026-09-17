@@ -52,6 +52,7 @@
     # are helpers, not attributes exported by the flake.
     let
       system = "x86_64-linux";
+      supportedSystems = [ "x86_64-linux" ];
       username = "otakutyrant";
       hostname = "nixos";
       pkgs = nixpkgs.legacyPackages.${system};
