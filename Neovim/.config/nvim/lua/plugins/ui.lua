@@ -188,6 +188,8 @@ local whichkey = {
 local gitsigns = {
     "lewis6991/gitsigns.nvim",
     opts = {
+        -- Attach to new files so stage_buffer can add them to the index.
+        attach_to_untracked = true,
         -- Keymaps for jumping between git hunks
         on_attach = function(bufnr)
             local gs = require("gitsigns")
@@ -213,12 +215,12 @@ local gitsigns = {
             -- Stage the entire buffer
             vim.keymap.set("n", "<leader>gb", function()
                 gs.stage_buffer()
-            end, { desc = "Git: Stage Buffer" })
+            end, { buffer = bufnr, desc = "Git: Stage Buffer" })
 
             -- Stage the current hunk
             vim.keymap.set("n", "<leader>gh", function()
                 gs.stage_hunk()
-            end, { desc = "Git: Stage Hunk" })
+            end, { buffer = bufnr, desc = "Git: Stage Hunk" })
         end,
     },
 }
