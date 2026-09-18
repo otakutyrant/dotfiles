@@ -168,6 +168,25 @@ in
       ../joshuto
     ])
     // {
+      # Rime stores static configuration beside generated databases. Force only
+      # these four paths so Home Manager can replace Rime-created regular files
+      # with managed links without touching mutable user dictionaries.
+      ".local/share/fcitx5/rime/default.custom.yaml" = {
+        source = ../XDG/.local/share/fcitx5/rime/default.custom.yaml;
+        force = true;
+      };
+      ".local/share/fcitx5/rime/fcitx5.custom.yaml" = {
+        source = ../XDG/.local/share/fcitx5/rime/fcitx5.custom.yaml;
+        force = true;
+      };
+      ".local/share/fcitx5/rime/terra_pinyin.custom.yaml" = {
+        source = ../XDG/.local/share/fcitx5/rime/terra_pinyin.custom.yaml;
+        force = true;
+      };
+      ".local/share/fcitx5/rime/terra_pinyin.extended.dict.yaml" = {
+        source = ../XDG/.local/share/fcitx5/rime/terra_pinyin.extended.dict.yaml;
+        force = true;
+      };
       "${home}/.local/share/Anki2/prefs21.db".force = true;
     };
 }

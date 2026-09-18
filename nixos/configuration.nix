@@ -213,7 +213,14 @@
     enable = true;
     type = "fcitx5";
     fcitx5.addons = with pkgs; [
-      fcitx5-rime
+      # Add the zhwiki vocabulary used by the synchronized
+      # terra_pinyin.extended.dict.yaml dictionary.
+      (fcitx5-rime.override {
+        rimeDataPkgs = [
+          rime-data
+          rime-zhwiki
+        ];
+      })
       fcitx5-gtk
     ];
   };
