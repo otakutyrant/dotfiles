@@ -1,0 +1,18 @@
+# Rime dictionary
+# encoding: utf-8
+
+---
+name: terra_pinyin.extended
+version: "2025-05-21"
+sort: by_weight
+use_preset_vocabulary: true
+import_tables:
+  - "terra_pinyin"
+  - "zhwiki"
+...
+
+# table begins
+
+# 自定義的詞條
+台州立人医疗器械有限公司	tzlrylqxyxgs	100
+1093652771@qq.com	xqy	100

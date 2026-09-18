@@ -1,0 +1,6 @@
+patch:
+  "menu/page_size": 5
+  schema_list:
+    - schema: terra_pinyin
+  "switcher/hotkeys": # 這個列表裏每項定義一個快捷鍵，使哪個都中
+    - "Control+grave"

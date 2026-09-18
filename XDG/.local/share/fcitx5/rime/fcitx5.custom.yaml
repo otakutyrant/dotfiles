@@ -1,0 +1,7 @@
+# Fcitx5-rime frontend specific options.
+# Make Rime default to ASCII (English) mode in kitty.
+# Program name = WM class (X11) / app id (Wayland), e.g. check with xprop.
+patch:
+  app_options:
+    kitty:
+      ascii_mode: true
