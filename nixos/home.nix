@@ -129,6 +129,13 @@ in
   };
   gtk = {
     enable = true;
+    # Minimal i3 sessions do not provide a desktop-wide icon theme. Nitrogen is
+    # a GTK 2 application and needs the standard `image-loading` icon while it
+    # creates wallpaper thumbnails.
+    iconTheme = {
+      package = pkgs.adwaita-icon-theme;
+      name = "Adwaita";
+    };
     gtk3 = {
       bookmarks = [
         "file://${home}/Pictures/Screenshots"
