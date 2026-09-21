@@ -35,9 +35,10 @@
       # home-manager depends on nixpkgs so we reuse aforementioned nixpkgs.
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    # Kimi CLI is not packaged by this flake's nixpkgs channel, so keep its
-    # upstream flake as a separate pinned input.
-    kimi-cli.url = "github:MoonshotAI/kimi-cli";
+    # Kimi Code CLI is not packaged by this flake's nixpkgs channel, so keep
+    # its upstream flake as a separate pinned input. It replaces the legacy
+    # Python-based kimi-cli.
+    kimi-code.url = "github:MoonshotAI/kimi-code";
   };
 
   # Flake-specific top-level keyword: `outputs` is the function that returns

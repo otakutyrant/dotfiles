@@ -56,9 +56,10 @@ with pkgs; # Bring package names from pkgs into scope for the list below.
   sd
   file
   git-lfs
-  # Install Kimi CLI from MoonshotAI's own flake because it is not provided by
-  # the pinned NixOS 26.05 nixpkgs package set.
-  inputs.kimi-cli.packages.${pkgs.stdenv.hostPlatform.system}.default
+  # Install Kimi Code CLI from MoonshotAI's own flake because it is not
+  # provided by the pinned NixOS 26.05 nixpkgs package set. It provides the
+  # `kimi` command and replaces the legacy Python-based kimi-cli.
+  inputs.kimi-code.packages.${pkgs.stdenv.hostPlatform.system}.default
   neovim
   python3Packages.pynvim
 
