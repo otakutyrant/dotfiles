@@ -114,8 +114,8 @@ vim.lsp.config("tailwindcss", {})
 vim.lsp.enable("tailwindcss")
 
 -- JavaScript
-vim.lsp.config("eslint", {})
-vim.lsp.enable("eslint")
+vim.lsp.config("oxlint", {})
+vim.lsp.enable("oxlint")
 
 -- TypeScript
 -- Pure Lua and better replacement of the origin ts_ls.
