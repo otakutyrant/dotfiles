@@ -1,6 +1,5 @@
 # Function arguments.
 {
-  config,
   hostname,
   pkgs,
   username,
@@ -10,6 +9,9 @@
 {
   imports = [
     ./hardware-configuration.nix
+    # Keep the machine's NVIDIA driver policy separate from the general system
+    # configuration so driver updates are easier to review in isolation.
+    ./options/nvidia.nix
   ];
 
   # Set mirrors.
@@ -158,24 +160,6 @@
   };
   # Required by PipeWire for low-latency scheduling.
   security.rtkit.enable = true;
-
-  # Nvidia
-  hardware.nvidia = {
-    # Enable the DRM kernel modesetting path required by modern compositors,
-    # PRIME/offload setups, and smoother early display handoff.
-    modesetting.enable = true;
-    # Use NVIDIA's open kernel modules. User-space libraries are still
-    # proprietary, but the kernel module portion uses the open variant.
-    open = true;
-    # Install the `nvidia-settings` control panel for inspecting and adjusting
-    # NVIDIA driver options from the desktop.
-    nvidiaSettings = true;
-    # Enable driver-level power management so suspend/resume and GPU power states
-    # are handled by NVIDIA's power management support.
-    powerManagement.enable = true;
-    # Use the newest NVIDIA driver package available for the selected kernel.
-    package = config.boot.kernelPackages.nvidiaPackages.latest;
-  };
 
   # Graphics
   hardware.graphics = {
