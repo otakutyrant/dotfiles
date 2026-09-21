@@ -73,6 +73,8 @@ with pkgs; # Bring package names from pkgs into scope for the list below.
 
   # Frontend
   eslint
+  oxlint
+  tsgolint
   vscode-langservers-extracted
   pnpm
   typescript
