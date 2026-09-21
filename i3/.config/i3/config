@@ -209,9 +209,9 @@ exec --no-startup-id xrandr --output HDMI-0 --off --output DP-0 --mode 1920x1080
 
 
 # Sleep displays after 10 minutes of inactivity.
-exec --no-startup-id xset s 600
+exec --no-startup-id xset s off
 exec --no-startup-id xset +dpms
-exec --no-startup-id xset dpms 0 0 300
+exec --no-startup-id xset dpms 0 0 600
 
 # # Bar
 
