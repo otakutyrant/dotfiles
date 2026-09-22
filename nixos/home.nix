@@ -196,4 +196,16 @@ in
       };
       "${home}/.local/share/Anki2/prefs21.db".force = true;
     };
+
+  # The dotfile directories above are linked into the Nix store, where every
+  # file has the epoch mtime. Neovim's module loader (vim.loader, enabled in
+  # editor.lua) caches compiled bytecode in ~/.cache/nvim/luac, keyed by path
+  # and validated by mtime. When an activation re-points a config symlink to a
+  # new store path, the mtime stays epoch, so the loader keeps serving stale
+  # bytecode from the previous generation (e.g. oxlint silently missing after
+  # switching eslint to oxlint). Clearing the cache after every activation is
+  # cheap and forces recompilation from the new sources.
+  home.activation.clearNvimLuacCache = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    rm -rf ${home}/.cache/nvim/luac
+  '';
 }
