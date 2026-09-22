@@ -19,14 +19,12 @@ def run-preview [command: closure] {
 
 def handle-extension [file_path: string, extension: string] {
     match $extension {
-        "a" | "ace" | "alz" | "arc" | "arj" | "bz" | "bz2" | "cab" | "cpio" | "deb" | "gz" | "jar" | "lha" | "lz" | "lzh" | "lzma" | "lzo" | "rpm" | "rz" | "t7z" | "tar" | "tbz" | "tbz2" | "tgz" | "tlz" | "txz" | "tz" | "tzo" | "war" | "xpi" | "xz" | "z" | "zip" => {
-            run-preview {|| ^bsdtar --list --file $file_path }
-        }
-        "rar" => {
-            run-preview {|| ^unrar lt -p- -- $file_path }
-        }
-        "7z" => {
-            run-preview {|| ^7zz l -p -- $file_path }
+        # Archives and compressed files. ouch covers tar/zip/7z/rar and
+        # friends; --yes accepts formats it infers from the file signature
+        # (e.g. .jar) without prompting. Exotic formats ouch cannot read
+        # fall through to the file type fallback in main.
+        "7z" | "br" | "bz" | "bz2" | "bz3" | "cb7" | "cbz" | "cbr" | "cbt" | "epub" | "gz" | "jar" | "lz" | "lz4" | "lzma" | "rar" | "sz" | "tar" | "tbz" | "tbz2" | "tgz" | "tlz" | "tsz" | "txz" | "tzst" | "war" | "xpi" | "xz" | "zip" | "zst" => {
+            run-preview {|| ^ouch list --yes $file_path }
         }
         "json" | "ipynb" => {
             run-preview {|| ^jq --color-output . $file_path }
