@@ -39,6 +39,13 @@
     # its upstream flake as a separate pinned input. It replaces the legacy
     # Python-based kimi-cli.
     kimi-code.url = "github:MoonshotAI/kimi-code";
+    # Cthulock is a Rust screen locker that uses Wayland's secure
+    # ext-session-lock protocol. Reuse the system package set so it does not
+    # introduce a second nixpkgs revision.
+    cthulock = {
+      url = "github:FriederHannenheim/cthulock";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   # Flake-specific top-level keyword: `outputs` is the function that returns

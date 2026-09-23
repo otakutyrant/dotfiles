@@ -1,0 +1,112 @@
+// Niri's default settings cover most compositor behavior. These bindings keep
+// the familiar Super-key workflow from the former i3 configuration.
+// nwg-displays writes this separate, mutable file. Keeping the include here
+// lets it save display layouts without editing this Home Manager symlink.
+include optional=true "monitor.kdl"
+
+input {
+    keyboard {
+        xkb {
+            layout "us"
+        }
+    }
+}
+
+// Leave physical output layout to niri until the connector names are checked
+// with `niri msg outputs`; see the repository README for the first setup.
+
+// Niri's Rust-native screenshot UI saves images here and also copies them to
+// the clipboard, replacing the former grim and slurp script.
+screenshot-path "~/Pictures/Screenshots/%Y-%m-%d_%H-%M-%S.png"
+
+// Start the wallpaper, notification, bar, clipboard, autostart, and idle services.
+spawn-at-startup "waytrogen" "--restore"
+spawn-at-startup "wired"
+spawn-at-startup "ironbar" "--config" "desktop"
+spawn-at-startup "clipcatd" "--replace"
+spawn-at-startup "dex" "--autostart" "--environment" "niri"
+spawn-at-startup "stasis"
+spawn-at-startup "gnome-text-editor" "/home/otakutyrant/Nutstore Files/Nutstore/scratchpad"
+
+binds {
+    Mod+Return { spawn "kitty"; }
+    Mod+N { spawn "nautilus"; }
+    Mod+C { spawn "google-chrome-stable"; }
+    Mod+D { spawn "rofi" "-show" "drun"; }
+    Mod+Q { close-window; }
+    Mod+F { fullscreen-window; }
+    Mod+Shift+F { maximize-column; }
+    Mod+T { toggle-column-tabbed-display; }
+    // Niri columns replace i3 splits: consume a right-hand window to stack it
+    // vertically, and expel the bottom window into a horizontal column.
+    Mod+S { consume-window-into-column; }
+    Mod+V { expel-window-from-column; }
+    Mod+Shift+Space { toggle-window-floating; }
+    Mod+Shift+E { quit; }
+    Mod+Shift+L { spawn "cthulock"; }
+    Mod+Shift+W { spawn "wkeys"; }
+    Mod+P { spawn-sh "clipcat-menu insert && wdotool key --clearmodifiers ctrl+v"; }
+    Print { screenshot; }
+    Ctrl+Print { screenshot-screen; }
+    Alt+Print { screenshot-window; }
+    Mod+H { focus-column-left; }
+    Mod+J { focus-window-down; }
+    Mod+K { focus-window-up; }
+    Mod+L { focus-column-right; }
+    Mod+Left { focus-column-left; }
+    Mod+Down { focus-window-down; }
+    Mod+Up { focus-window-up; }
+    Mod+Right { focus-column-right; }
+    Mod+Shift+H { move-column-left; }
+    Mod+Shift+J { move-window-down; }
+    Mod+Shift+K { move-window-up; }
+    Mod+Shift+Right { move-column-right; }
+    Mod+1 { focus-workspace "甲"; }
+    Mod+2 { focus-workspace "乙"; }
+    Mod+3 { focus-workspace "丙"; }
+    Mod+4 { focus-workspace "丁"; }
+    Mod+5 { focus-workspace "戊"; }
+    Mod+6 { focus-workspace "己"; }
+    Mod+7 { focus-workspace "庚"; }
+    Mod+8 { focus-workspace "辛"; }
+    Mod+9 { focus-workspace "壬"; }
+    Mod+0 { focus-workspace "癸"; }
+    Mod+Shift+1 { move-column-to-workspace "甲"; }
+    Mod+Shift+2 { move-column-to-workspace "乙"; }
+    Mod+Shift+3 { move-column-to-workspace "丙"; }
+    Mod+Shift+4 { move-column-to-workspace "丁"; }
+    Mod+Shift+5 { move-column-to-workspace "戊"; }
+    Mod+Shift+6 { move-column-to-workspace "己"; }
+    Mod+Shift+7 { move-column-to-workspace "庚"; }
+    Mod+Shift+8 { move-column-to-workspace "辛"; }
+    Mod+Shift+9 { move-column-to-workspace "壬"; }
+    Mod+Shift+0 { move-column-to-workspace "癸"; }
+    Mod+Grave { focus-workspace "特殊"; }
+    Mod+Shift+Grave { move-window-to-workspace "特殊"; }
+}
+
+workspace "甲"
+workspace "乙"
+workspace "丙"
+workspace "丁"
+workspace "戊"
+workspace "己"
+workspace "庚"
+workspace "辛"
+workspace "壬"
+workspace "癸"
+workspace "特殊"
+
+window-rule {
+    match app-id="calibre"
+    open-floating false
+}
+window-rule {
+    match title="^DevTools"
+    open-floating false
+}
+window-rule {
+    match app-id="gnome-text-editor" title="scratchpad"
+    open-floating true
+    open-on-workspace "特殊"
+}

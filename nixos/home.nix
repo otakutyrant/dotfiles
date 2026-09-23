@@ -54,14 +54,17 @@ in
     ./options/git.nix
     ./options/kitty.nix
     ./options/nushell.nix
-    ./options/picom.nix
     ./options/ssh.nix
     ./options/starship.nix
+    # These package modules install the Wayland utilities and keep their
+    # generated configuration beside the corresponding package declaration.
+    ./pkgs/cthulock.nix
+    ./pkgs/stasis.nix
   ];
 
   # Clipcat has separate configuration files for its clipboard daemon and
   # clients. Keep their Unix socket paths in sync so the menu and CLI can talk
-  # to the daemon started by i3.
+  # to the daemon started by niri.
   xdg.configFile."clipcat/clipcatd.toml".text = ''
     daemonize = true
     pid_file = "/run/user/1000/clipcatd.pid"
@@ -191,15 +194,10 @@ in
     tray = "auto";
   };
 
-  # xfce4-notifyd 0.9 and newer can create a synchronized notification window
-  # on every monitor while keeping a single D-Bus notification ID.
-  xfconf.settings.xfce4-notifyd."show-notifications-on" = "all-monitors";
   xdg.userDirs.enable = true;
   xdg.configFile."user-dirs.dirs".force = true;
-  # Set an explicit Xcursor theme instead of relying on toolkit fallbacks.
-  # Lightweight i3 sessions do not get a desktop environment to choose one for
-  # them, and GLFW/Kitty expects the active theme to provide standard resize
-  # cursors such as diagonal sizing aliases.
+  # Set an explicit cursor theme because niri is not a full desktop environment.
+  # Keep the X11 link enabled so Xwayland clients use the same cursor theme.
   home.pointerCursor = {
     package = pkgs.bibata-cursors;
     name = "Bibata-Modern-Classic";
@@ -209,9 +207,7 @@ in
   };
   gtk = {
     enable = true;
-    # Minimal i3 sessions do not provide a desktop-wide icon theme. Nitrogen is
-    # a GTK 2 application and needs the standard `image-loading` icon while it
-    # creates wallpaper thumbnails.
+    # Provide a desktop-wide icon theme for applications launched by niri.
     iconTheme = {
       package = pkgs.adwaita-icon-theme;
       name = "Adwaita";
@@ -251,7 +247,7 @@ in
       ../Neovim
       ../Tmux
       ../XDG
-      ../i3
+      ../niri
       ../joshuto
     ])
     // {
@@ -287,5 +283,15 @@ in
   # cheap and forces recompilation from the new sources.
   home.activation.clearNvimLuacCache = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
     rm -rf ${home}/.cache/nvim/luac
+  '';
+
+  # nwg-displays needs to rewrite this file, so keep it outside Home Manager's
+  # immutable store links. The main niri config includes it and this creates an
+  # empty initial file before nwg-displays has saved the first display layout.
+  home.activation.ensureNiriMonitorConfig = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    mkdir -p ${home}/.config/niri
+    if [ ! -e ${home}/.config/niri/monitor.kdl ]; then
+      touch ${home}/.config/niri/monitor.kdl
+    fi
   '';
 }

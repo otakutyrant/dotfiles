@@ -22,9 +22,11 @@ with pkgs; # Bring package names from pkgs into scope for the list below.
   gh # GitHub client
   git-lfs # a Git extension for large files
   dex # Autostart XDG desktop files.
-  # Send Ctrl+V after choosing a clip from Rofi; replace with wdotool after
-  # migrating this X11 setup to Wayland.
-  xdotool
+  # Rust replacement for xdotool. Niri uses its compositor-independent uinput
+  # backend, enabled by the group and udev rule in configuration.nix.
+  (callPackage ./pkgs/wdotool.nix { })
+  # Wayland compatibility and desktop utilities used by the niri session.
+  xwayland-satellite
 
   ## Rust-powered
 
@@ -36,8 +38,6 @@ with pkgs; # Bring package names from pkgs into scope for the list below.
   vimv # Batch files renamer, using Vim style
   (callPackage ./pkgs/imageflow.nix { }) # Image manipulator, an alternative to imagemagick
   (callPackage ./pkgs/oximedia.nix { }) # Video convertor, an alternative to ffmpeg or mediainfo
-  shotgun # Screen capturer, an alternative to feh or maim
-  (callPackage ./pkgs/hacksaw.nix { }) # Rust X11 region selector for shotgun.
   macchina # System information shower, an alternative to lsb-release
   clipcat # Clipboard manager
 
@@ -54,7 +54,7 @@ with pkgs; # Bring package names from pkgs into scope for the list below.
 
   ## Other GUI Clients
   wpsoffice-cn # Office
-  onboard # Virtual keyboard
+  (callPackage ./pkgs/wkeys.nix { }) # Rust on-screen Wayland keyboard
   qbittorrent # Bittorrent client
   wechat # Chat client
   ticktick # Time management client
@@ -122,8 +122,11 @@ with pkgs; # Bring package names from pkgs into scope for the list below.
 
   ## Others
   scowl # English words
-  arandr
-  xfce4-notifyd # Notification daemon
+  waytrogen # Rust wallpaper chooser for Wayland
+  awww # Rust wallpaper daemon used by Waytrogen.
+  wired # Rust notification daemon (command: wired)
+  ironbar # Rust status bar with native niri workspace support.
+  nwg-displays # ARandR-like GUI with native niri output support.
   # `openai-whisper` is accurate, but it brings a heavier Python stack and does not support GPU.
   # `whisper-ctranslate2` can be fast, but its Python/CUDA dependency surface is larger.
   # `whisperx` is useful for word timestamps and diarization, but it is overkill for normal SRT files.

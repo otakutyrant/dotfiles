@@ -88,6 +88,8 @@
     "nvidia_modeset"
     "nvidia_uvm"
     "nvidia_drm"
+    # wdotool falls back to a virtual kernel input device on niri.
+    "uinput"
   ];
 
   # Partitions
@@ -167,28 +169,47 @@
     # Steam and many games still need this.
     enable32Bit = true;
   };
+  # This option selects the NVIDIA graphics driver even though no X server is
+  # enabled; niri and Xwayland use the same kernel and userspace driver stack.
+  services.xserver.videoDrivers = [ "nvidia" ];
 
-  # X server
-  services.xserver = {
+  # Enable the Wayland compositor and its session entry for the display manager.
+  programs.niri.enable = true;
+  # greetd can start the niri Wayland session directly. tuigreet provides a
+  # small text login screen while keeping the existing explicit-login policy.
+  services.greetd = {
     enable = true;
-    xkb.layout = "us";
-    videoDrivers = [ "nvidia" ];
-    displayManager.lightdm.enable = true;
-    windowManager.i3 = {
-      enable = true;
-      extraPackages = with pkgs; [
-        i3lock
-        i3status-rust
-      ];
+    settings.default_session = {
+      command = "${pkgs.tuigreet}/bin/tuigreet --time --remember --cmd ${pkgs.niri}/bin/niri-session";
+      user = "greeter";
     };
   };
-  # LightDM starts the X11 session. Auto-login stays disabled so the session
-  # requires an explicit login.
-  services.displayManager.defaultSession = "none+i3";
-  services.displayManager.autoLogin = {
-    enable = false;
-    user = username;
-  };
+
+  # NVIDIA's driver can retain freed compositor buffers and report very high
+  # VRAM use. This per-process profile applies niri's documented mitigation.
+  environment.etc."nvidia/nvidia-application-profiles-rc.d/50-limit-free-buffer-pool-in-wayland-compositors.json".text =
+    builtins.toJSON {
+      rules = [
+        {
+          pattern = {
+            feature = "procname";
+            matches = "niri";
+          };
+          profile = "Limit Free Buffer Pool On Wayland Compositors";
+        }
+      ];
+      profiles = [
+        {
+          name = "Limit Free Buffer Pool On Wayland Compositors";
+          settings = [
+            {
+              key = "GLVidHeapReuseRatio";
+              value = 0;
+            }
+          ];
+        }
+      ];
+    };
 
   # i18n
   i18n.defaultLocale = "en_US.UTF-8";
@@ -242,9 +263,11 @@
   };
   environment.sessionVariables = {
     # Kitty uses GLFW's IBus client protocol for text-input events. Define this
-    # in the NixOS login session so Kitty launched directly by i3 inherits it;
-    # Home Manager's shell setup is too late for applications started by i3.
+    # in the login session so compositor-launched Kitty inherits it.
     GLFW_IM_MODULE = "ibus";
+    # Prefer native Wayland rendering in Firefox and Chromium/Electron wrappers.
+    MOZ_ENABLE_WAYLAND = "1";
+    NIXOS_OZONE_WL = "1";
   };
   programs.whois.enable = true;
   programs.nix-ld.enable = true;
@@ -291,22 +314,15 @@
   # can request elevated permissions through the authentication agent.
   security.sudo.wheelNeedsPassword = true;
   security.polkit.enable = true;
+  # Cthulock authenticates the entered password through this dedicated PAM
+  # service. The locker itself comes from its pinned flake in Home Manager.
+  security.pam.services.cthulock = { };
   # Make Linux support input devices like touchpads and touchscreens.
   services.libinput.enable = true;
   # Let GTK/GNOME apps access more file systems.
   services.gvfs.enable = true;
-  # Provide the Freedesktop portal DBus service for lightweight i3 sessions.
-  # Toolkits such as GLFW query this service for desktop settings; without an
-  # activatable portal backend, clients like Kitty print startup warnings.
-  xdg.portal = {
-    enable = true;
-    extraPortals = [
-      pkgs.xdg-desktop-portal-gtk
-    ];
-    # i3 is not a full desktop environment, so choose the GTK backend as the
-    # generic implementation for portal interfaces.
-    config.common.default = [ "gtk" ];
-  };
+  # programs.niri installs and configures the GNOME and GTK portal backends.
+  # The GNOME backend is required for screen sharing under niri.
   # Make normal desktop apps mount, unmount, and inspect disks better.
   services.udisks2.enable = true;
   # Thumbnails for file managers.
@@ -322,8 +338,13 @@
     tunMode = true;
     autoStart = true;
   };
-  # Home Manager uses xfconf-query to declaratively configure xfce4-notifyd.
-  programs.xfconf.enable = true;
+
+  # Give wdotool access only to the virtual input device used by its niri
+  # fallback. This avoids granting access to physical keyboards and mice.
+  users.groups.uinput = { };
+  services.udev.extraRules = ''
+    KERNEL=="uinput", GROUP="uinput", MODE="0660", OPTIONS+="static_node=uinput"
+  '';
 
   # User
   users.users.${username} = {
@@ -332,6 +353,7 @@
     extraGroups = [
       "docker"
       "networkmanager"
+      "uinput"
       "wheel"
     ];
     # NixOS must install this package because the user account's login shell
