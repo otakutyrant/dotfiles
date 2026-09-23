@@ -52,10 +52,9 @@
   # values exported by this flake. Commands such as `nixos-rebuild --flake` and
   # `home-manager switch --flake` look here for named configurations.
   outputs =
-    # `inputs@{ ... }` destructures the flake inputs like an object parameter
-    # while also keeping the whole input set available as `inputs`.
-    # `{ ... }` is the general function arguments part.
-    inputs@{ home-manager, nixpkgs, ... }:
+    # `inputs` is the whole set of flake inputs declared above. Each input is
+    # reached explicitly through attribute access, e.g. `inputs.nixpkgs`.
+    inputs:
     # `let` starts private local bindings for this function body; these names
     # are helpers, not attributes exported by the flake.
     let
@@ -63,7 +62,7 @@
       supportedSystems = [ "x86_64-linux" ];
       username = "otakutyrant";
       hostname = "nixos";
-      pkgs = nixpkgs.legacyPackages.${system};
+      pkgs = inputs.nixpkgs.legacyPackages.${system};
       # Selected tools are only available or fresh enough in the unstable channel.
       pkgs-unstable = import inputs.nixpkgs-unstable {
         inherit system;
@@ -186,8 +185,8 @@
     {
       # Export shared development tools for project flakes that follow this
       # flake's stable nixpkgs input.
-      packages = nixpkgs.lib.genAttrs supportedSystems (system: {
-        nur = nixpkgs.legacyPackages.${system}.callPackage ./nixos/pkgs/nur.nix { };
+      packages = inputs.nixpkgs.lib.genAttrs supportedSystems (system: {
+        nur = inputs.nixpkgs.legacyPackages.${system}.callPackage ./nixos/pkgs/nur.nix { };
       });
       # Flake output keyword: `formatter` lets `nix fmt` choose the formatter
       # for this system automatically.
@@ -220,7 +219,7 @@
       # nixpkgs.lib.nixosSystem is a function that accepts system, specialArgs,
       # modules.
       # nixpkgs.lib.nixosSystem merges `moudles`.
-      nixosConfigurations.${hostname} = nixpkgs.lib.nixosSystem {
+      nixosConfigurations.${hostname} = inputs.nixpkgs.lib.nixosSystem {
         # It is equivalent to `system = system`.
         inherit system;
         specialArgs = {
@@ -234,7 +233,7 @@
         };
         modules = [
           ./nixos/configuration.nix
-          home-manager.nixosModules.home-manager
+          inputs.home-manager.nixosModules.home-manager
           {
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
@@ -254,10 +253,10 @@
 
       # Flake output keyword used by Home Manager: `homeConfigurations` exposes
       # standalone user profiles for `home-manager switch --flake`.
-      homeConfigurations.${username} = home-manager.lib.homeManagerConfiguration {
+      homeConfigurations.${username} = inputs.home-manager.lib.homeManagerConfiguration {
         # Standalone Home Manager needs a package set with unfree packages
         # enabled, because this user profile installs proprietary software.
-        pkgs = import nixpkgs {
+        pkgs = import inputs.nixpkgs {
           # `inherit system;` is shorthand for `system = system;`.
           inherit system;
           # Allow proprietary/unfree packages in this imported package set.
