@@ -8,23 +8,34 @@ def main [
         sleep $delay
     }
     let picture_dir = try {
-        xdg-user-dir PICTURES
+        ^xdg-user-dir PICTURES
     } catch {
         $env.HOME | path join Pictures
     }
     let dir = $env.XDG_SCREENSHOT_DIR? | default ($picture_dir | path join Screenshots)
-    mkdir $dir
+    mkdir $dir | ignore
     let file = $dir | path join $"(date now | format date '%Y-%m-%d_%H-%M-%S').png"
-    if $geometry != null {
-        maim -u -g $geometry $file
+    let selected_geometry = if $geometry != null {
+        $geometry
     } else if $full_screen {
-        maim -u $file
+        null
     } else {
-        maim -u -n -s $file
+        # `hacksaw` provides the drag-to-select UI; Escape cancels without
+        # taking a screenshot. `shotgun` performs the actual X11 capture.
+        try {
+            ^hacksaw | str trim
+        } catch {
+            exit 0
+        }
+    }
+    if $selected_geometry != null {
+        ^shotgun --geometry $selected_geometry --format png $file
+    } else {
+        ^shotgun --format png $file
     }
     if not ($file | path exists) {
         exit 0
     }
-    xclip -selection clipboard -t image/png -i $file
+    ^clipcatctl load --mime image/png --file $file
     notify-send -a screenshot_select.nu -i $file "Screenshot saved" $file
 }

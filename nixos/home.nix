@@ -59,6 +59,89 @@ in
     ./options/starship.nix
   ];
 
+  # Clipcat has separate configuration files for its clipboard daemon and
+  # clients. Keep their Unix socket paths in sync so the menu and CLI can talk
+  # to the daemon started by i3.
+  xdg.configFile."clipcat/clipcatd.toml".text = ''
+    daemonize = true
+    pid_file = "/run/user/1000/clipcatd.pid"
+    primary_threshold_ms = 5000
+    max_history = 50
+    clear_history_on_start = false
+    synchronize_selection_with_clipboard = false
+    history_file_path = "/home/otakutyrant/.cache/clipcat/clipcatd-history"
+    snippets = []
+
+    [log]
+    emit_journald = true
+    emit_stdout = false
+    emit_stderr = false
+    level = "INFO"
+
+    [watcher]
+    enable_clipboard = true
+    enable_primary = false
+    enable_secondary = false
+    sensitive_mime_types = ["x-kde-passwordManagerHint"]
+    filter_text_min_length = 1
+    filter_text_max_length = 20000000
+    denied_text_regex_patterns = []
+    capture_image = true
+    # Screenshots can exceed Clipcat's 5 MiB default image limit.
+    filter_image_max_size = 26214400
+
+    [grpc]
+    enable_http = false
+    enable_local_socket = true
+    host = "127.0.0.1"
+    port = 45045
+    local_socket = "/run/user/1000/clipcat/grpc.sock"
+
+    [dbus]
+    enable = true
+
+    [metrics]
+    enable = false
+    host = "127.0.0.1"
+    port = 45047
+
+    [desktop_notification]
+    enable = true
+    icon = "accessories-clipboard"
+    timeout_ms = 2000
+    long_plaintext_length = 2000
+  '';
+  xdg.configFile."clipcat/clipcatctl.toml".text = ''
+    server_endpoint = "/run/user/1000/clipcat/grpc.sock"
+    preview_length = 100
+    grpc_max_message_size = 8388608
+
+    [log]
+    emit_journald = true
+    emit_stdout = false
+    emit_stderr = false
+    level = "INFO"
+  '';
+  xdg.configFile."clipcat/clipcat-menu.toml".text = ''
+    server_endpoint = "/run/user/1000/clipcat/grpc.sock"
+    finder = "rofi"
+    preview_length = 80
+    grpc_max_message_size = 8388608
+
+    [log]
+    emit_journald = true
+    emit_stdout = false
+    emit_stderr = false
+    level = "INFO"
+
+    [rofi]
+    line_length = 100
+    menu_length = 30
+    menu_prompt = "Clipcat"
+    extra_arguments = []
+    show_source_prefix = false
+  '';
+
   home.username = username;
   home.homeDirectory = "/home/${username}";
   home.stateVersion = "26.05";
@@ -108,9 +191,6 @@ in
     tray = "auto";
   };
 
-  # Diodon ignores copied images by default. Enable image history so screenshot
-  # PNG clipboard entries can appear in its menu.
-  dconf.settings."net/launchpad/diodon/clipboard".add-images = true;
   # xfce4-notifyd 0.9 and newer can create a synchronized notification window
   # on every monitor while keeping a single D-Bus notification ID.
   xfconf.settings.xfce4-notifyd."show-notifications-on" = "all-monitors";

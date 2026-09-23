@@ -191,8 +191,9 @@ bindsym $mod+c exec google-chrome-stable
 bindsym $mod+d exec rofi -show drun
 # Lock
 bindsym $mod+shift+l exec i3lock
-# Show clipboard history.
-bindsym $mod+p exec diodon
+# Select a Clipcat item, then paste it into the application that had focus
+# before Rofi opened. `&&` prevents a paste if the menu is cancelled.
+bindsym $mod+p exec --no-startup-id clipcat-menu insert && xdotool key --clearmodifiers ctrl+v
 # Select a region, save the screenshot, and copy it to the clipboard.
 bindcode --release 107 exec --no-startup-id "$HOME/.local/bin/screenshot_select.nu"
 
@@ -201,6 +202,9 @@ bindcode --release 107 exec --no-startup-id "$HOME/.local/bin/screenshot_select.
 # Autostart desktop files according to XDG.
 # https://wiki.archlinux.org/index.php/XDG_Autostart
 exec --no-startup-id dex --autostart --environment i3
+# Run Clipcat's clipboard watcher in the background; --replace also makes this
+# safe when i3 reloads its configuration while the daemon is already running.
+exec --no-startup-id clipcatd --replace
 exec --no-startup-id "$HOME/.nix-profile/libexec/polkit-gnome-authentication-agent-1"
 exec_always --no-startup-id sh -c 'killall picom 2>/dev/null; exec picom --config "$HOME/.config/picom/picom.conf"'
 
