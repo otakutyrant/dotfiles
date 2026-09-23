@@ -8,8 +8,7 @@
 # Packages installed into the user's Home Manager profile.
 with pkgs; # Bring package names from pkgs into scope for the list below.
 [
-  # Shell
-  bash
+  bash # Seems to be required by home-manager
   # I do not know why `programs.home-manager.enable = true` does not work well,
   # so I have install it explictly.
   home-manager
@@ -18,136 +17,113 @@ with pkgs; # Bring package names from pkgs into scope for the list below.
   # pulls `pkgs.nushell` into the system closure because it is configured as the
   # login shell in configuration.nix.
 
-  # Audio.
-  alsa-lib
-  alsa-utils # Contains alsamixer and other audio device tools.
-  pavucontrol # PulseAudio volume control.
-  pulseaudio # Provides PulseAudio CLI tools.
+  # Utilities
 
-  # Archives.
-  gnutar
-  ouch # Human-friendly archive compress/decompress/list frontend.
+  gh # GitHub client
+  git-lfs # a Git extension for large files
+  dex # Autostart XDG desktop files.
+  # Send Ctrl+V after choosing a clip from Rofi; replace with wdotool after
+  # migrating this X11 setup to Wayland.
+  xdotool
 
-  # Network
-  curl
-  wget
-  iputils
-  openssh
-  rsync
+  ## Rust-powered
 
-  # File manager
-  (callPackage ./pkgs/tree.nix { })
+  ouch # Archiver
+  (callPackage ./pkgs/tree.nix { }) # Treer, optimized for document comments
+  tokei # Source code lines counter
+  page # Pager, based on Neovim
+  sd # Steam EDitor, search and replace, an alternative to sed
+  vimv # Batch files renamer, using Vim style
+  (callPackage ./pkgs/imageflow.nix { }) # Image manipulator, an alternative to imagemagick
+  (callPackage ./pkgs/oximedia.nix { }) # Video convertor, an alternative to ffmpeg or mediainfo
+  shotgun # Screen capturer, an alternative to feh or maim
+  (callPackage ./pkgs/hacksaw.nix { }) # Rust X11 region selector for shotgun.
+  macchina # System information shower, an alternative to lsb-release
+  clipcat # Clipboard manager
 
-  # Building
-  cmake
-  gcc
-  gnumake
-  pkg-config
+  # ==== GUI clients
 
-  # Development utilities.
-  prettier
-  tree-sitter
-  cloc
-  page
-  tldr
-  # Rename multiple files, written in Rust.
-  vimv
-  # Search and replace.
-  sd
-  file
-  git-lfs
+  ## GNOME clients
+  nautilus # File manager
+  file-roller # GUI Archiver
+  baobab # Disk analyser
+  gnome-system-monitor # System monitor
+  gnome-text-editor # GUI Editor
+  papers # Document viewer
+  fragments # Bittorrent client
+
+  ## Other GUI Clients
+  wpsoffice-cn # Office
+  onboard # Virtual keyboard
+  qbittorrent # Bittorrent client
+  wechat # Chat client
+  ticktick # Time management client
+  qt6Packages.fcitx5-configtool # IME config tool
+  (callPackage ./pkgs/nutstore.nix { }) # Sync client
+
+  # ==== Development
+
+  ## Editor
+  neovim
+  python3Packages.pynvim
+
+  ## Agent
   # Install Kimi Code CLI from MoonshotAI's own flake because it is not
   # provided by the pinned NixOS 26.05 nixpkgs package set. It provides the
   # `kimi` command and replaces the legacy Python-based kimi-cli.
   inputs.kimi-code.packages.${pkgs.stdenv.hostPlatform.system}.default
-  neovim
-  python3Packages.pynvim
+  pkgs-unstable.opencode # Open AI harness
+  # ChatGPT desktop app is packaged on a dedicated nixpkgs PR branch.
+  pkgs-chatgpt.chatgpt
 
-  # Python
-  python3
-  python3Packages.ipython
-  python3Packages.pip
-  uv
-  ruff
-  basedpyright
-  poethepoet # Provides the `poe` task runner command for pyproject.toml tasks.
-
-  # Frontend
-  eslint
-  oxlint
-  tsgolint
-  vscode-langservers-extracted
-  pnpm
-  typescript
-  typescript-language-server
-  tailwindcss-language-server
+  ## Database
   postgresql
-
-  # Prisma
-  # Provides Prisma schema-engine for NixOS.
-  prisma-engines
+  prisma-engines # Provides Prisma schema-engine for NixOS.
   prisma-language-server
 
-  # Rust
+  ## Python
+  python3
+  uv # Package Manager
+
+  ## TypeScript
+  typescript
+  pnpm # NPM package manager
+  typescript-language-server
+  vscode-langservers-extracted
+  tailwindcss-language-server
+
+  ## Rust
   rustup
 
-  # Lua
+  ## Lua
   lua
   stylua
   lua-language-server
 
-  # Nix
+  ## Nix, note that installing nix causes conflicts, so it is not included here
   nixd
   nixfmt
 
-  # Shells and data formats.
-  bash-language-server
-  shellcheck
+  ## Yaml
   yamlfmt
   yaml-language-server
+
+  ## TOML
   taplo
 
-  # Media
-  ffmpeg
-  imagemagick # Provides `magick`, which the image resize daemon uses to inspect and resize images.
-  mediainfo
+  # ==== Miscellanea
+
+  ## Audio
+  alsa-lib
+  alsa-utils # Contains alsamixer and other audio device tools.
+  pavucontrol # PulseAudio volume control.
+  pulseaudio # Provides PulseAudio CLI tools.
   python3Packages.sounddevice # Suppresses unnecessary ALSA errors in some Python audio tools.
 
-  # Miscellanea
-  openssl
+  ## Others
   scowl # English words
-  tmux
-  lsb-release
-  feh
-  maim # X11 screenshot tool.
-  diodon # GTK clipboard manager with tray and history menu.
-  libnotify
-  nautilus
-  file-roller
-  baobab
-  gnome-system-monitor
-  wpsoffice-cn
-  onboard # Virtual keyboard.
-  # ChatGPT desktop app is packaged on a dedicated nixpkgs PR branch.
-  pkgs-chatgpt.chatgpt
-  # AI coding agent packaged in nixpkgs-unstable.
-  pkgs-unstable.opencode
-  (callPackage ./pkgs/nutstore.nix { }) # Local Nutstore desktop sync client derivation.
-  fragments # Bittorrent client
-  qbittorrent
-  goldendict-ng
-  gnome-text-editor
-  nitrogen # Wallpaper manager
-  wechat
-  papers # Document viewer
-  ticktick
   arandr
-  qt6Packages.fcitx5-configtool
-  xfce4-notifyd
-  dex # Autostart XDG desktop files.
-  gimp # Image editor
-  xclip
-  xsel
+  xfce4-notifyd # Notification daemon
   # `openai-whisper` is accurate, but it brings a heavier Python stack and does not support GPU.
   # `whisper-ctranslate2` can be fast, but its Python/CUDA dependency surface is larger.
   # `whisperx` is useful for word timestamps and diarization, but it is overkill for normal SRT files.
