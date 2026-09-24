@@ -21,6 +21,11 @@ in
     PAGER = "page";
     SHELL = "${pkgs.nushell}/bin/nu";
 
+    # Let ncurses and Codex find the Kitty database through the standard
+    # search path; an empty TERMINFO avoids a stale override taking precedence.
+    TERMINFO = "";
+    TERMINFO_DIRS = "${pkgs.kitty}/lib/kitty/terminfo";
+
     # Keep tool state under XDG locations instead of each tool's default dotdir.
     CARGO_HOME = "${XDG_DATA_HOME}/cargo";
     # Enforce IPython to use XDG_CONFIG_HOME rather than ~/.ipython.
