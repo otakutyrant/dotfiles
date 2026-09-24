@@ -1,5 +1,6 @@
 # Function arguments.
 {
+  lib,
   hostname,
   pkgs,
   username,
@@ -88,7 +89,7 @@
     "nvidia_modeset"
     "nvidia_uvm"
     "nvidia_drm"
-    # wdotool falls back to a virtual kernel input device on niri.
+    # wdotool uses a virtual kernel input device for Wayland key injection.
     "uinput"
   ];
 
@@ -169,31 +170,43 @@
     # Steam and many games still need this.
     enable32Bit = true;
   };
-  # This option selects the NVIDIA graphics driver even though no X server is
-  # enabled; niri and Xwayland use the same kernel and userspace driver stack.
+  # This option selects the NVIDIA graphics driver for Sway and Xwayland.
   services.xserver.videoDrivers = [ "nvidia" ];
 
-  # Enable the Wayland compositor and its session entry for the display manager.
-  programs.niri.enable = true;
-  # greetd can start the niri Wayland session directly. tuigreet provides a
-  # small text login screen while keeping the existing explicit-login policy.
+  # Enable Sway, an i3-compatible Wayland compositor. The NVIDIA flag suppresses
+  # Sway's informational unsupported-GPU message; it does not add a source patch.
+  programs.sway = {
+    enable = true;
+    extraPackages = with pkgs; [
+      i3status-rust
+      swaylock
+      swayidle
+    ];
+    extraOptions = [ "--unsupported-gpu" ];
+  };
+  # Sway uses wlroots. Current wlroots has NVIDIA explicit-sync support, so
+  # community-maintained Sway builds no longer need the old NVIDIA patches.
+  # Retain the community-recommended cursor workaround for proprietary drivers.
+  environment.sessionVariables.WLR_NO_HARDWARE_CURSORS = "1";
+  # greetd starts Sway directly. tuigreet provides a small text login screen
+  # while keeping the existing explicit-login policy.
   services.greetd = {
     enable = true;
     settings.default_session = {
-      command = "${pkgs.tuigreet}/bin/tuigreet --time --remember --cmd ${pkgs.niri}/bin/niri-session";
+      command = "${pkgs.tuigreet}/bin/tuigreet --time --remember --cmd '${pkgs.sway}/bin/sway --unsupported-gpu'";
       user = "greeter";
     };
   };
 
   # NVIDIA's driver can retain freed compositor buffers and report very high
-  # VRAM use. This per-process profile applies niri's documented mitigation.
+  # VRAM use. Apply the NVIDIA buffer-pool mitigation to Sway.
   environment.etc."nvidia/nvidia-application-profiles-rc.d/50-limit-free-buffer-pool-in-wayland-compositors.json".text =
     builtins.toJSON {
       rules = [
         {
           pattern = {
             feature = "procname";
-            matches = "niri";
+            matches = "sway";
           };
           profile = "Limit Free Buffer Pool On Wayland Compositors";
         }
@@ -314,15 +327,27 @@
   # can request elevated permissions through the authentication agent.
   security.sudo.wheelNeedsPassword = true;
   security.polkit.enable = true;
-  # Cthulock authenticates the entered password through this dedicated PAM
-  # service. The locker itself comes from its pinned flake in Home Manager.
-  security.pam.services.cthulock = { };
+  # Swaylock authenticates through its dedicated PAM service.
+  security.pam.services.swaylock = { };
   # Make Linux support input devices like touchpads and touchscreens.
   services.libinput.enable = true;
   # Let GTK/GNOME apps access more file systems.
   services.gvfs.enable = true;
-  # programs.niri installs and configures the GNOME and GTK portal backends.
-  # The GNOME backend is required for screen sharing under niri.
+  # Configure the GTK portal backend for the lightweight Sway session.
+  xdg.portal = {
+    enable = true;
+    extraPortals = with pkgs; [
+      xdg-desktop-portal-gtk
+      xdg-desktop-portal-wlr
+    ];
+    config.common.default = [ "gtk" ];
+    # Prefer the wlroots portal for Sway while keeping GTK as a fallback. The
+    # Sway NixOS module sets this option to GTK, so override that default here.
+    config.sway.default = lib.mkForce [
+      "wlr"
+      "gtk"
+    ];
+  };
   # Make normal desktop apps mount, unmount, and inspect disks better.
   services.udisks2.enable = true;
   # Thumbnails for file managers.
@@ -339,8 +364,8 @@
     autoStart = true;
   };
 
-  # Give wdotool access only to the virtual input device used by its niri
-  # fallback. This avoids granting access to physical keyboards and mice.
+  # wdotool's uinput fallback lets the Clipcat shortcut paste into Wayland
+  # clients. Access is limited to the virtual input device, not physical input.
   users.groups.uinput = { };
   services.udev.extraRules = ''
     KERNEL=="uinput", GROUP="uinput", MODE="0660", OPTIONS+="static_node=uinput"

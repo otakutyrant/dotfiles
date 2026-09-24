@@ -1,5 +1,4 @@
 #!/usr/bin/env nu
 
-# Delay before opening niri's Rust-native interactive screenshot UI.
-sleep 5sec
-^niri msg action screenshot
+# Delay before selecting a Wayland screenshot region.
+^($env.HOME | path join .local/bin/screenshot_select.nu) --delay 5sec

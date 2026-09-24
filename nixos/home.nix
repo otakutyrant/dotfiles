@@ -56,15 +56,11 @@ in
     ./options/nushell.nix
     ./options/ssh.nix
     ./options/starship.nix
-    # These package modules install the Wayland utilities and keep their
-    # generated configuration beside the corresponding package declaration.
-    ./pkgs/cthulock.nix
-    ./pkgs/stasis.nix
   ];
 
   # Clipcat has separate configuration files for its clipboard daemon and
   # clients. Keep their Unix socket paths in sync so the menu and CLI can talk
-  # to the daemon started by niri.
+  # to the daemon started by Sway.
   xdg.configFile."clipcat/clipcatd.toml".text = ''
     daemonize = true
     pid_file = "/run/user/1000/clipcatd.pid"
@@ -196,7 +192,7 @@ in
 
   xdg.userDirs.enable = true;
   xdg.configFile."user-dirs.dirs".force = true;
-  # Set an explicit cursor theme because niri is not a full desktop environment.
+  # Set an explicit cursor theme because Sway is not a full desktop environment.
   # Keep the X11 link enabled so Xwayland clients use the same cursor theme.
   home.pointerCursor = {
     package = pkgs.bibata-cursors;
@@ -207,7 +203,7 @@ in
   };
   gtk = {
     enable = true;
-    # Provide a desktop-wide icon theme for applications launched by niri.
+    # Provide a desktop-wide icon theme for applications launched by Sway.
     iconTheme = {
       package = pkgs.adwaita-icon-theme;
       name = "Adwaita";
@@ -247,7 +243,7 @@ in
       ../Neovim
       ../Tmux
       ../XDG
-      ../niri
+      ../Sway
       ../joshuto
     ])
     // {
@@ -285,13 +281,4 @@ in
     rm -rf ${home}/.cache/nvim/luac
   '';
 
-  # nwg-displays needs to rewrite this file, so keep it outside Home Manager's
-  # immutable store links. The main niri config includes it and this creates an
-  # empty initial file before nwg-displays has saved the first display layout.
-  home.activation.ensureNiriMonitorConfig = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-    mkdir -p ${home}/.config/niri
-    if [ ! -e ${home}/.config/niri/monitor.kdl ]; then
-      touch ${home}/.config/niri/monitor.kdl
-    fi
-  '';
 }
