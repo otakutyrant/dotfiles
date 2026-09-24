@@ -4,15 +4,14 @@
 # Watches only the top level of /home/otakutyrant by default and resizes
 # supported image files in place when their shortest side is less than 800px.
 #
-# Image work is delegated to ImageMagick. Nushell handles polling, file state
+# Image work is delegated to Imageflow. Nushell handles polling, file state
 # tracking, and systemd-friendly logging.
 #
 # Supported formats:
 # - JPEG
 # - PNG
 # - WebP
-# - BMP
-# - TIFF
+# Imageflow can encode JPEG, PNG, and WebP, so other extensions are ignored.
 #
 # Notes:
 # - Aspect ratio is preserved.
@@ -39,9 +38,6 @@ const SUPPORTED_EXTENSIONS = [
     jpeg
     png
     webp
-    bmp
-    tif
-    tiff
 ]
 def log-message [level: string, message: string] {
     let timestamp = (date now | format date "%Y-%m-%d %H:%M:%S")
@@ -60,33 +56,7 @@ def is-supported-image [path: string] {
     )
     $extension in $SUPPORTED_EXTENSIONS
 }
-def image-info [path: string] {
-    let result = (do { ^magick identify -format "%m\t%w\t%h\n" -- $path } | complete)
-    if $result.exit_code != 0 {
-        return {
-            ok: false
-            reason: ($result.stderr | str trim)
-        }
-    }
-    let frames = ($result.stdout | lines)
-    if ($frames | length) != 1 {
-        return {ok: false, reason: "multi-frame image"}
-    }
-    let fields = ($frames | first | split row "\t")
-    if ($fields | length) != 3 {
-        return {
-            ok: false
-            reason: $"unexpected identify output: ($result.stdout | str trim)"
-        }
-    }
-    {
-        ok: true
-        format: ($fields | get 0)
-        width: ($fields | get 1 | into int)
-        height: ($fields | get 2 | into int)
-    }
-}
-def resize-image [path: string, target_short_side: int, format: string] {
+def resize-image [path: string, target_short_side: int] {
     let parsed = ($path | path parse)
     let parent = ($path | path dirname)
     let suffix = if ($parsed.extension | is-empty) {
@@ -94,31 +64,60 @@ def resize-image [path: string, target_short_side: int, format: string] {
     } else {
         $".($parsed.extension)"
     }
-    let temp_path = (mktemp --tmpdir-path $parent --suffix $suffix $".($parsed.stem)-XXXXXX")
-    let resize_geometry = $"($target_short_side)x($target_short_side)^"
-    let format_name = ($format | str upcase)
-    let result = if ($format_name in [JPEG, JPG]) {
-        do {
-            ^magick $path -auto-orient -resize $resize_geometry -quality 90 $temp_path
-        } | complete
-    } else if $format_name == "PNG" {
-        do {
-            ^magick $path -auto-orient -resize $resize_geometry -define png:compression-level=9 $temp_path
-        } | complete
+    let extension = ($parsed.extension | str downcase)
+    let preset = if $extension in [jpg, jpeg] {
+        {mozjpeg: {quality: 90, progressive: false}}
+    } else if $extension == "png" {
+        {lodepng: {maximum_deflate: false}}
     } else {
-        do {
-            ^magick $path -auto-orient -resize $resize_geometry $temp_path
-        } | complete
+        {webplossy: {quality: 90}}
     }
-    if $result.exit_code == 0 {
-        mv --force $temp_path $path
-        return {ok: true, reason: ""}
+    let temp_path = (mktemp --tmpdir-path $parent --suffix $suffix $".($parsed.stem)-XXXXXX")
+    let job_path = (mktemp --suffix .json image-resize-job-XXXXXX)
+    let job = {
+        io: [
+            {io_id: 0, direction: "in", io: "placeholder"}
+            {io_id: 1, direction: "out", io: "placeholder"}
+        ]
+        framewise: {
+            steps: [
+                {decode: {io_id: 0}}
+                {constrain: {mode: "larger_than", w: $target_short_side, h: $target_short_side}}
+                {encode: {io_id: 1, preset: $preset}}
+            ]
+        }
     }
-    rm --force $temp_path
-    {
-        ok: false
-        reason: ($result.stderr | str trim)
+    ($job | to json) | save --force $job_path
+    let result = (do {
+        ^imageflow_tool v1/build --json $job_path --in $path --out 1 $temp_path
+    } | complete)
+    rm --force $job_path
+    if $result.exit_code != 0 {
+        rm --force $temp_path
+        return {ok: false, reason: ($result.stderr | str trim)}
     }
+    let operation = try {
+        $result.stdout
+        | from json
+        | get data.build_result
+    } catch {
+        rm --force $temp_path
+        return {ok: false, reason: $"unexpected Imageflow response: ($result.stdout | str trim)"}
+    }
+    let decoded = ($operation.decodes | first)
+    let source_short_side = ([$decoded.w, $decoded.h] | math min)
+    if $source_short_side >= $target_short_side {
+        rm --force $temp_path
+        return {ok: true, resized: false, reason: ""}
+    }
+    let encoded = ($operation.encodes | first)
+    let output_short_side = ([$encoded.w, $encoded.h] | math min)
+    if $output_short_side < $target_short_side {
+        rm --force $temp_path
+        return {ok: false, reason: $"Imageflow left the short side at ($output_short_side)px"}
+    }
+    mv --force $temp_path $path
+    {ok: true, resized: true, reason: ""}
 }
 def scan-once [
     root: string
@@ -144,27 +143,13 @@ def scan-once [
             $known_states = ($known_states | upsert $path $state)
             continue
         }
-        let info = (image-info $path)
-        if not $info.ok {
-            if $verbose {
-                log-message DEBUG $"Skipping ($path): ($info.reason)"
-            } else if $info.reason != "multi-frame image" {
-                log-message WARNING $"Skipping unreadable image ($path): ($info.reason)"
-            }
-            $known_states = ($known_states | upsert $path $state)
-            continue
-        }
-        let short_side = ([
-            $info.width
-            $info.height
-        ] | math min)
-        if $short_side >= $target_short_side {
-            $known_states = ($known_states | upsert $path $state)
-            continue
-        }
-        let resized = (resize-image $path $target_short_side $info.format)
+        let resized = (resize-image $path $target_short_side)
         if not $resized.ok {
             log-message WARNING $"Failed to resize ($path): ($resized.reason)"
+            $known_states = ($known_states | upsert $path $state)
+            continue
+        }
+        if not $resized.resized {
             $known_states = ($known_states | upsert $path $state)
             continue
         }
