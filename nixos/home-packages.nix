@@ -39,6 +39,7 @@ with pkgs; # Bring package names from pkgs into scope for the list below.
   ### Media tools
   (callPackage ./pkgs/imageflow.nix { }) # Image tool, an alternative to ImageMagick.
   (callPackage ./pkgs/oximedia.nix { }) # Video converter, an alternative to ffmpeg or mediainfo.
+  wiremix # Rust terminal mixer for stream volumes, routing, and device profiles.
 
   ### Wayland tools
   wayshot # Rust screenshot capture, for Wayland instead of X11 tools like maim.
@@ -67,6 +68,7 @@ with pkgs; # Bring package names from pkgs into scope for the list below.
   qt6Packages.fcitx5-configtool # IME config tool
   (callPackage ./pkgs/nutstore.nix { }) # Sync client
   waytrogen # Wallpaper chooser, Rust-powered
+  pwvucontrol # Graphical mixer for PipeWire, Rust-powered
 
   # ==== Development
 
@@ -120,14 +122,6 @@ with pkgs; # Bring package names from pkgs into scope for the list below.
 
   # ==== Miscellanea
 
-  ## Audio
-  alsa-lib
-  alsa-utils # Contains alsamixer and other audio device tools.
-  pavucontrol # PulseAudio volume control.
-  pulseaudio # Provides PulseAudio CLI tools.
-  python3Packages.sounddevice # Suppresses unnecessary ALSA errors in some Python audio tools.
-
-  ## Others
   scowl # English words
   # `openai-whisper` is accurate, but it brings a heavier Python stack and does not support GPU.
   # `whisper-ctranslate2` can be fast, but its Python/CUDA dependency surface is larger.
