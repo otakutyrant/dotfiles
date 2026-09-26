@@ -169,12 +169,57 @@ in
     fileWidgetCommand = "fd --type f --strip-cwd-prefix --hidden --follow --exclude .git";
   };
   programs.google-chrome.enable = true;
-  programs.joshuto.enable = true; # Terminal file manager.
+  programs.joshuto = {
+    enable = true; # Terminal file manager.
+    # Keep Joshuto's TOML settings in Home Manager; its preview scripts remain
+    # linked from the joshuto directory and are referenced here by path.
+    settings = {
+      xdg_open = true;
+      display.line_number_style = "relative";
+      preview = {
+        preview_script = "~/.config/joshuto/preview_file.nu";
+        preview_shown_hook_script = "~/.config/joshuto/on_preview_shown.nu";
+        preview_removed_hook_script = "~/.config/joshuto/on_preview_removed.nu";
+      };
+      class.text_default = [ { command = "nvim"; } ];
+    };
+    mimetype.mimetype.text."inherit" = "text_default";
+  };
   # Install local mpv package with Unicode-aware subtitle line wrapping through
   # Home Manager's mpv module.
   programs.mpv = {
     enable = true;
     package = pkgs.callPackage ./pkgs/mpv.nix { };
+    # These settings replace the linked mpv.conf and input.conf files.
+    config = {
+      sub-visibility = "yes";
+      sub-auto = "fuzzy";
+      audio-file-auto = "fuzzy";
+      save-position-on-quit = "yes";
+      autofit-larger = "100%x100%";
+      geometry = "50%:50%";
+      sub-font = "Sarasa Mono Slab SC Semibold";
+      sub-font-size = 40;
+      sub-margin-x = 80;
+      sub-margin-y = 48;
+      profile = "gpu-hq";
+      scale = "ewa_lanczossharp";
+      cscale = "ewa_lanczossharp";
+      video-sync = "display-resample";
+      interpolation = true;
+      tscale = "oversample";
+      keep-open = "yes";
+    };
+    bindings = {
+      RIGHT = "sub-seek 1";
+      LEFT = "sub-seek -1";
+      ENTER = "script-message-to subtitle_cmds ab-loop-sub pause";
+      "Shift+ENTER" = "script-message-to subtitle_cmds ab-loop-sub";
+      y = "script-message-to subtitle_cmds copy-subtitle";
+      # Nix string interpolation must be escaped so mpv receives its own
+      # ${...} expressions for the active A-B loop and current filename.
+      g = ''run ffmpeg -y -nostdin -ss ''${=ab-loop-a}s -to ''${=ab-loop-b}s -fflags +genpts -i ''${stream-open-filename} -avoid_negative_ts 1 -c copy -map 0 dump_''${filename}_''${=ab-loop-a}-''${=ab-loop-b}.mp4 ; show-text "ffmpeg dumping done"'';
+    };
   };
   programs.npm = {
     enable = true;

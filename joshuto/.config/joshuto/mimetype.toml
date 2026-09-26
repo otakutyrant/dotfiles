@@ -1,8 +1,0 @@
-[class]
-text_default = [
-  { command = "nvim" },
-]
-
-[mimetype]
-[mimetype.text]
-inherit = "text_default"
