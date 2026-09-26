@@ -184,6 +184,12 @@
     ];
     extraOptions = [ "--unsupported-gpu" ];
   };
+  # Walker uses Elephant as its application and provider backend. Enable the
+  # backend at login so both the launcher and its dmenu mode can work.
+  services.elephant.enable = true;
+  # Sway imports its live Wayland environment and restarts Elephant after the
+  # compositor starts, so Elephant does not capture a stale display socket.
+  systemd.user.services.elephant.wantedBy = [ ];
   # Sway uses wlroots. Current wlroots has NVIDIA explicit-sync support, so
   # community-maintained Sway builds no longer need the old NVIDIA patches.
   # Retain the community-recommended cursor workaround for proprietary drivers.

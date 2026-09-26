@@ -39,6 +39,10 @@
     # its upstream flake as a separate pinned input. It replaces the legacy
     # Python-based kimi-cli.
     kimi-code.url = "github:MoonshotAI/kimi-code";
+    # nmrs-gui is a Rust/GTK4 NetworkManager frontend that is not yet provided
+    # by this flake's nixpkgs channel, so consume its upstream package.
+    nmrs.url = "github:networkmanager-rs/nmrs-gui";
+    nmrs.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   # Flake-specific top-level keyword: `outputs` is the function that returns

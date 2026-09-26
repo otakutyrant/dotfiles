@@ -123,7 +123,7 @@ in
   '';
   xdg.configFile."clipcat/clipcat-menu.toml".text = ''
     server_endpoint = "/run/user/1000/clipcat/grpc.sock"
-    finder = "rofi"
+    finder = "custom"
     preview_length = 80
     grpc_max_message_size = 8388608
 
@@ -133,12 +133,18 @@ in
     emit_stderr = false
     level = "INFO"
 
-    [rofi]
-    line_length = 100
-    menu_length = 30
-    menu_prompt = "Clipcat"
-    extra_arguments = []
-    show_source_prefix = false
+    [custom_finder]
+    program = "/etc/profiles/per-user/otakutyrant/bin/walker"
+    args = ["--dmenu", "--exit", "--placeholder", "Clipcat"]
+  '';
+  # Keep Walker's application provider focused on desktop entries for the
+  # main launcher, and force GTK to focus its search field when it opens.
+  xdg.configFile."walker/config.toml".text = ''
+    force_keyboard_focus = true
+
+    [providers]
+    default = ["desktopapplications"]
+    empty = ["desktopapplications"]
   '';
 
   home.username = username;
@@ -176,7 +182,6 @@ in
   };
   programs.obs-studio.enable = true;
   programs.ripgrep.enable = true; # Grep alternative.
-  programs.rofi.enable = true; # Application launcher.
   programs.yt-dlp.enable = true; # YouTube downloader.
   programs.zoxide = {
     enable = true; # Jump tool.

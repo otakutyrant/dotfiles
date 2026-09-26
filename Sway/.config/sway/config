@@ -175,12 +175,12 @@ bindsym $mod+Return exec kitty
 bindsym $mod+n exec nautilus
 # Start a browser with mod+c.
 bindsym $mod+c exec google-chrome-stable
-# Start rofi in desktop-entry launcher mode.
-bindsym $mod+d exec rofi -show drun
+# Start the warm Walker service and open it with mod+d.
+bindsym $mod+d exec --no-startup-id /etc/profiles/per-user/otakutyrant/bin/walker
 # Lock
 bindsym $mod+shift+l exec swaylock -f
 # Select a Clipcat item, then paste it into the application that had focus
-# before Rofi opened. `&&` prevents a paste if the menu is cancelled.
+# before Walker opened. `&&` prevents a paste if the menu is cancelled.
 bindsym $mod+p exec --no-startup-id clipcat-menu insert && wdotool key --clearmodifiers ctrl+v
 # Select a region, save the screenshot, and copy it to the clipboard.
 bindcode --release 107 exec --no-startup-id "$HOME/.local/bin/screenshot_select.nu"
@@ -190,6 +190,10 @@ bindcode --release 107 exec --no-startup-id "$HOME/.local/bin/screenshot_select.
 # Autostart desktop files according to XDG.
 # https://wiki.archlinux.org/index.php/XDG_Autostart
 exec --no-startup-id dex --autostart --environment sway
+# Elephant needs the current Wayland socket; greetd can start its user service
+# before Sway and leave it pointing at an old WAYLAND_DISPLAY value.
+exec --no-startup-id sh -c 'systemctl --user import-environment WAYLAND_DISPLAY SWAYSOCK && systemctl --user restart elephant'
+exec --no-startup-id /etc/profiles/per-user/otakutyrant/bin/walker --gapplication-service
 exec --no-startup-id waytrogen --restore
 exec --no-startup-id wired
 # Run Clipcat's clipboard watcher in the background; --replace also makes this

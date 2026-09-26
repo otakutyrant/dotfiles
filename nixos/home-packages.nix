@@ -22,6 +22,8 @@ with pkgs; # Bring package names from pkgs into scope for the list below.
   gh # GitHub client
   git-lfs # a Git extension for large files
   dex # Autostart XDG desktop files.
+  walker # Rust/Wayland application launcher and dmenu-compatible picker.
+  inputs.nmrs.packages.${pkgs.stdenv.hostPlatform.system}.default
 
   ## Rust-powered
 
