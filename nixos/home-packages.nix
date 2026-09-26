@@ -106,6 +106,9 @@ with pkgs; # Bring package names from pkgs into scope for the list below.
   ## Rust
   rustup
 
+  ## C/C++
+  gcc # Provides `cc` for tools that expect a C compiler on PATH.
+
   ## Lua
   lua
   stylua
