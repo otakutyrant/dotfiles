@@ -1,9 +1,0 @@
-[Desktop Entry]
-Type=Application
-Name=Diodon
-Comment=Clipboard manager
-Exec=diodon
-Icon=diodon
-Terminal=false
-Categories=Utility;GTK;
-X-GNOME-Autostart-enabled=true

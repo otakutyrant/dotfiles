@@ -187,9 +187,8 @@ bindcode --release 107 exec --no-startup-id "$HOME/.local/bin/screenshot_select.
 
 # # Startups
 
-# Autostart desktop files according to XDG.
-# https://wiki.archlinux.org/index.php/XDG_Autostart
-exec --no-startup-id dex --autostart --environment sway
+# Start WeChat once per Sway session; exec does not repeat on config reload.
+exec --no-startup-id wechat
 # Elephant needs the current Wayland socket; greetd can start its user service
 # before Sway and leave it pointing at an old WAYLAND_DISPLAY value.
 exec --no-startup-id sh -c 'systemctl --user import-environment WAYLAND_DISPLAY SWAYSOCK && systemctl --user restart elephant'

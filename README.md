@@ -117,8 +117,9 @@ Desktop files are also XDG data files:
 
 - `XDG/.local/share/applications/*.desktop` defines launcher entries for menus
   and `rofi -show drun`.
-- `XDG/.config/autostart/*.desktop` defines applications started by `dex` during
-  login.
+
+Applications started at login are configured directly in the startup section of
+`Sway/.config/sway/config`.
 
 Use static desktop files here when the command is stable, such as
 `Exec=systemctl suspend`. If a desktop entry needs Nix interpolation, such as a
