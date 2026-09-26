@@ -32,7 +32,7 @@ home-manager switch --flake .#otakutyrant
 
 Home Manager links the checked-in dotfile directories into `$HOME`. The helper
 in `nixos/home.nix` recursively exposes files from directories such as `XDG`,
-`Sway`, `Kitty`, `Neovim`, `Nushell`, `Systemd`, and `Tmux`.
+`Sway`, `Kitty`, `Neovim`, `Nushell`, and `Systemd`.
 
 System options live in `nixos/configuration.nix`. User packages live in
 `nixos/home-packages.nix`, with local package derivations under `nixos/pkgs`.
@@ -72,21 +72,18 @@ Now time to make the windows management hierarchical! In Linux, I use Sway to ma
 | Windows Manager  |  Sway  | GUI clients          |               $mod                |   super    |
 | Virtual Terminal | kitty  | CLI clients          |                N/A                |    alt     |
 |      Editor      | Neovim | Files                |            learder key            |   space    |
-|   Multiplixer    |  tmux  | Remote sessions      |          the prefix key           |   ctrl-w   |
 
 | name   | What do tabs call in them? | How to allocate a new tab? | How to jump to a tab? |
 | ------ | -------------------------- | -------------------------- | --------------------- |
 | Sway   | workspace                  | N/A                        | super+num             |
 | kitty  | tab                        | alt+n                      | alt+num               |
 | Neovim | tabpage                    | space+n                    | space+num             |
-| tmux   | window                     | ctrl-w+n                   | ctrl-w+num            |
 
 | name   | What do windows call in them? | How to move focus between windows? | How to split a window horizontally or vertically? | How to distribute windows horizontally or vertically? | How to kill a window? |
 | ------ | ----------------------------- | ---------------------------------- | ------------------------------------------------- | ----------------------------------------------------- | --------------------- |
 | Sway   | window                        | super+hjkl                         | super+s or super+v                                | super+- or super+\|                                  | super+q               |
 | kitty  | window                        | alt+hjkl                           | alt+s or alt+v                                    | alt+- or alt+\|                                       | alt+q                 |
 | Neovim | window                        | space+hjkl                         | space+s or space+v                                | N/A                                                   | space+q               |
-| tmux   | pane                          | ctrl-w+hjkl                        | ctrl-w+s or ctrl-w+v                              | N/A                                                   | ctrl-w+q              |
 
 Note:
 
@@ -96,13 +93,10 @@ Note:
 4. In Sway, `super+s` and `super+v` split the focused container using the original i3 behavior.
 5. \- is a minus symbol and | bar symbol.
 6. If you want to adjust the border between windows, use mouse. All hierarchies support it.
-7. It seems that tmux can distribute windows too. But I have no interest to figure out how.
-8. `super+t` arranges the workspace in a tabbed layout.
-9. Although I said windows can be moved between tabs, I do not list related keymaps in the table.
+7. `super+t` arranges the workspace in a tabbed layout.
+8. Although I said windows can be moved between tabs, I do not list related keymaps in the table.
 
 Do you notice the relation between master keys? They are distributed in the left-bottom part of my Happy Hacking Keyboard exactly. How well organized they are.
-
-Haplessly, kitty cannot handle remote sessions so far. So though I dislike tmux, it is still maintained as alternative to kitty in the dotfiles and listed in the table.
 
 ![Here is the demonstration.](demo.png)
 

@@ -246,7 +246,6 @@ in
     (linkDotfileDirs [
       ../mpv
       ../Neovim
-      ../Tmux
       ../XDG
       ../Sway
       ../joshuto
