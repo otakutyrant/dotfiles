@@ -1,8 +1,8 @@
 -- Sort neo-tree siblings by project and package dependencies.
 -- Project dependencies come from dependency-cruiser and are topologically
 -- ordered. Package dependencies mirror tyrant-rules: TypeScript packages use
--- index.*, Python packages use __init__.py, and @module-group members share
--- one layer.
+-- index.*, Python packages use __init__.py, Nushell packages use mod.nu, and
+-- @module-group members share one layer.
 local M = {}
 
 local entry_names = {
@@ -11,6 +11,7 @@ local entry_names = {
     "index.mts",
     "index.cts",
     "__init__.py",
+    "mod.nu",
 }
 
 local cache = {}
@@ -229,8 +230,10 @@ end
 
 local function declared_name(tag_body)
     -- Descriptions start after a whitespace-surrounded dash, as required by
-    -- enforce-package-layer-dependencies.
-    return vim.trim((tag_body:match("^(.-)%s+%-%s+") or tag_body))
+    -- enforce-package-layer-dependencies. A Nu comment may wrap the
+    -- description onto the next line, leaving its separator dash at line end.
+    local names = tag_body:match("^(.-)%s+%-%s+") or tag_body
+    return vim.trim((names:gsub("%s+%-%s*$", "")))
 end
 
 local function read_spec(directory)
@@ -252,6 +255,7 @@ local function read_spec(directory)
         for _, line in ipairs(lines) do
             local doc_line = line:gsub("^%s*/%*+", "")
                 :gsub("^%s*%* ?", "")
+                :gsub("^%s*# ?", "")
                 :gsub("%*/%s*$", "")
                 :match("^%s*(.-)%s*$")
             local group = doc_line:match("^@module%-group%s+(.+)")
@@ -295,7 +299,12 @@ local function source_prefix(name)
 
     local python_prefix = name:match("^(.*)%.py$")
     if python_prefix then
-        return python_prefix, "_"
+        return python_prefix, "."
+    end
+
+    local nushell_prefix = name:match("^(.*)%.nu$")
+    if nushell_prefix then
+        return nushell_prefix, "."
     end
 end
 
