@@ -196,6 +196,7 @@ exec --no-startup-id sh -c 'systemctl --user import-environment WAYLAND_DISPLAY 
 exec --no-startup-id /etc/profiles/per-user/otakutyrant/bin/walker --gapplication-service
 exec --no-startup-id waytrogen --restore
 exec --no-startup-id wired
+exec --no-startup-id /etc/profiles/per-user/otakutyrant/bin/ironbar
 # Run Clipcat's clipboard watcher in the background; --replace also makes this
 # safe when i3 reloads its configuration while the daemon is already running.
 exec --no-startup-id clipcatd --replace
@@ -214,49 +215,6 @@ exec --no-startup-id swayidle -w timeout 600 'swaylock -f' timeout 601 'swaymsg 
 # Keep fullscreen apps from triggering the idle lock or display power-off.
 for_window [app_id=".*"] inhibit_idle fullscreen
 for_window [class=".*"] inhibit_idle fullscreen
-
-# # Bar
-
-bar {
-  output DP-3
-  tray_output DP-3
-  # Swaybar otherwise only searches the minimal hicolor fallback theme.
-  # Use the same icon theme configured for GTK in Home Manager so SNI icons
-  # such as Fcitx and Blueman resolve to their proper artwork.
-  icon_theme Adwaita
-  font pango:JetBrainsMono Nerd Font 13
-  status_command i3status-rs ~/.config/i3status-rust/config.toml
-  colors {
-    background #15171c
-    statusline #d8dee9
-    separator  #4b5563
-    focused_workspace  #1f7a8c #1f7a8c #ffffff
-    active_workspace   #30343f #30343f #d8dee9
-    inactive_workspace #15171c #15171c #9ca3af
-    urgent_workspace   #b00020 #b00020 #ffffff
-    binding_mode       #b45309 #b45309 #ffffff
-  }
-}
-
-bar {
-  output DP-1
-  output DP-2
-  tray_output none
-  # Keep icon lookup consistent if the tray is later enabled on these outputs.
-  icon_theme Adwaita
-  font pango:JetBrainsMono Nerd Font 13
-  status_command i3status-rs ~/.config/i3status-rust/config-secondary.toml
-  colors {
-    background #15171c
-    statusline #d8dee9
-    separator  #4b5563
-    focused_workspace  #1f7a8c #1f7a8c #ffffff
-    active_workspace   #30343f #30343f #d8dee9
-    inactive_workspace #15171c #15171c #9ca3af
-    urgent_workspace   #b00020 #b00020 #ffffff
-    binding_mode       #b45309 #b45309 #ffffff
-  }
-}
 
 # # Scratchpad
 # Because conventional $mod+minus is occupied. Use the up-right key of HHKB,

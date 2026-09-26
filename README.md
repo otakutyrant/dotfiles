@@ -141,9 +141,10 @@ Session environment variables are managed in `nixos/home.nix`.
 # Wayland and NVIDIA
 
 Sway reads the plain-text config at `Sway/.config/sway/config`. It preserves
-the original workspaces, shortcuts, layout rules, scratchpad, and i3status-rust
-bars. The screenshot and idle tools use Wayshot, wl-clipboard-rs, Swaylock,
-and Swayidle. The screenshot selector saves captures
+the original workspaces, shortcuts, layout rules, and scratchpad. Ironbar
+provides workspace and system-information modules, with a Nushell script for
+NVIDIA GPU utilization and memory. The screenshot and idle tools use Wayshot,
+wl-clipboard-rs, Swaylock, and Swayidle. The screenshot selector saves captures
 under `~/Pictures/Screenshots` and copies them to the clipboard.
 
 The output rules in the config retain the former three-monitor layout. Check

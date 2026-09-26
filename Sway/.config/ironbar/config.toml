@@ -1,0 +1,83 @@
+# Ironbar replaces swaybar and the old i3status-rust process. Keep a workspace
+# bar on each output, with the system tray and detailed status on the main one.
+
+[monitors.DP-3]
+position = "top"
+height = 32
+anchor_to_edges = true
+icon_theme = "Adwaita"
+
+[[monitors.DP-3.start]]
+type = "workspaces"
+all_monitors = false
+favorites = ["甲", "乙", "丙", "丁", "戊", "己", "庚", "辛", "壬", "癸"]
+
+[[monitors.DP-3.end]]
+type = "sys_info"
+format = [
+  "󰮯 {load_average_1:.2} {load_average_5:.2} {load_average_15:.2}",
+  "󰍛 {memory_percent:.1}%",
+  "󰋊 {disk_free#G@/:.1} GB",
+  "󰓢 {net_down@Mihomo:.1} / {net_up@Mihomo:.1} Mb/s",
+]
+interval = 5
+
+[[monitors.DP-3.end]]
+type = "script"
+cmd = "/home/otakutyrant/.local/bin/gpu_status.nu"
+interval = 5000
+
+[[monitors.DP-3.end]]
+type = "clock"
+format = "%a %F %T"
+
+[[monitors.DP-3.end]]
+type = "tray"
+
+[monitors.DP-1]
+position = "top"
+height = 32
+anchor_to_edges = true
+icon_theme = "Adwaita"
+
+[[monitors.DP-1.start]]
+type = "workspaces"
+all_monitors = false
+favorites = ["甲", "乙", "丙", "丁", "戊", "己", "庚", "辛", "壬", "癸"]
+
+[[monitors.DP-1.end]]
+type = "sys_info"
+format = [
+  "󰮯 {load_average_1:.2} {load_average_5:.2} {load_average_15:.2}",
+  "󰍛 {memory_percent:.1}%",
+  "󰓢 {net_down@Mihomo:.1} / {net_up@Mihomo:.1} Mb/s",
+]
+interval = 5
+
+[[monitors.DP-1.end]]
+type = "clock"
+format = "%a %F %T"
+
+[monitors.DP-2]
+position = "top"
+height = 32
+anchor_to_edges = true
+icon_theme = "Adwaita"
+
+[[monitors.DP-2.start]]
+type = "workspaces"
+all_monitors = false
+favorites = ["甲", "乙", "丙", "丁", "戊", "己", "庚", "辛", "壬", "癸"]
+
+[[monitors.DP-2.end]]
+type = "sys_info"
+format = [
+  "󰮯 {load_average_1:.2} {load_average_5:.2} {load_average_15:.2}",
+  "󰍛 {memory_percent:.1}%",
+  "󰓢 {net_down@Mihomo:.1} / {net_up@Mihomo:.1} Mb/s",
+]
+interval = 5
+
+[[monitors.DP-2.end]]
+type = "clock"
+format = "%a %F %T"

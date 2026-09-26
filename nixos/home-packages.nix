@@ -44,6 +44,7 @@ with pkgs; # Bring package names from pkgs into scope for the list below.
   wiremix # Rust terminal mixer for stream volumes, routing, and device profiles.
 
   ### Wayland tools
+  ironbar # Rust and GTK4 panel for Sway, including workspace and system-info modules.
   wayshot # Rust screenshot capture, for Wayland instead of X11 tools like maim.
   # Provides wl-copy/wl-paste and wl-clip, which is similar to xclip on Wayland.
   wl-clipboard-rs

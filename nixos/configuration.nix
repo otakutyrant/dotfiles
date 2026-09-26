@@ -178,7 +178,6 @@
   programs.sway = {
     enable = true;
     extraPackages = with pkgs; [
-      i3status-rust
       swaylock
       swayidle
     ];

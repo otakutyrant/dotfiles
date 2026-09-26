@@ -1,0 +1,32 @@
+* {
+  font-family: "JetBrainsMono Nerd Font";
+  font-size: 13px;
+  color: #d8dee9;
+}
+
+window,
+.background {
+  background-color: #15171c;
+}
+
+.workspaces .item {
+  padding: 0 10px;
+  color: #9ca3af;
+}
+
+.workspaces .item.focused {
+  background-color: #1f7a8c;
+  color: #ffffff;
+}
+
+.workspaces .item.urgent {
+  background-color: #b00020;
+  color: #ffffff;
+}
+
+.sysinfo .item,
+.script,
+.clock,
+.tray {
+  padding: 0 8px;
+}
