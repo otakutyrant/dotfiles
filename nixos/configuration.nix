@@ -186,6 +186,9 @@
   # Walker uses Elephant as its application and provider backend. Enable the
   # backend at login so both the launcher and its dmenu mode can work.
   services.elephant.enable = true;
+  # Elephant runs desktop-entry commands from its systemd user service, so add
+  # the shell it uses to expand those commands to the service's PATH.
+  systemd.user.services.elephant.path = [ pkgs.bash ];
   # Sway imports its live Wayland environment and restarts Elephant after the
   # compositor starts, so Elephant does not capture a stale display socket.
   systemd.user.services.elephant.wantedBy = [ ];
