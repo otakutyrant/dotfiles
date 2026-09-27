@@ -176,7 +176,7 @@ bindsym $mod+n exec nautilus
 # Start a browser with mod+c.
 bindsym $mod+c exec google-chrome-stable
 # Start the warm Walker service and open it with mod+d.
-bindsym $mod+d exec --no-startup-id /etc/profiles/per-user/otakutyrant/bin/walker
+bindsym $mod+d exec --no-startup-id walker
 # Lock
 bindsym $mod+shift+l exec swaylock -f
 # Select a Clipcat item, then paste it into the application that had focus
@@ -192,14 +192,13 @@ exec --no-startup-id wechat
 # Elephant needs the current Wayland socket; greetd can start its user service
 # before Sway and leave it pointing at an old WAYLAND_DISPLAY value.
 exec --no-startup-id sh -c 'systemctl --user import-environment WAYLAND_DISPLAY SWAYSOCK && systemctl --user restart elephant'
-exec --no-startup-id /etc/profiles/per-user/otakutyrant/bin/walker --gapplication-service
+exec --no-startup-id walker --gapplication-service
 exec --no-startup-id waytrogen --restore
 exec --no-startup-id wired
-exec --no-startup-id /etc/profiles/per-user/otakutyrant/bin/ironbar
+exec --no-startup-id ironbar
 # Run Clipcat's clipboard watcher in the background; --replace also makes this
 # safe when i3 reloads its configuration while the daemon is already running.
 exec --no-startup-id clipcatd --replace
-exec --no-startup-id "$HOME/.nix-profile/libexec/polkit-gnome-authentication-agent-1"
 # Sway composites windows itself; do not start the old X11-only Picom daemon.
 
 # Keep the three-display layout in Sway so it also applies when outputs reconnect.

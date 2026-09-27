@@ -134,7 +134,7 @@ in
     level = "INFO"
 
     [custom_finder]
-    program = "/etc/profiles/per-user/otakutyrant/bin/walker"
+    program = "walker"
     args = ["--dmenu", "--exit", "--placeholder", "Clipcat"]
   '';
   # Keep Walker's application provider focused on desktop entries for the
@@ -155,7 +155,7 @@ in
   # they are useful to programs launched outside Nushell too.
   home.sessionPath = [
     "${home}/.local/bin"
-    "${home}/.nix-profile/bin"
+    "${config.home.profileDirectory}/bin"
     "${home}/.local/share/cargo/bin"
   ];
 

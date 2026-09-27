@@ -17,6 +17,9 @@
 
   # Set mirrors.
   nix.settings = {
+    # Use XDG state directories for Nix profiles, including the user profile,
+    # like `~/.local/state/nix/profile/`.
+    use-xdg-base-directories = true;
     substituters = [
       "https://mirrors.tuna.tsinghua.edu.cn/nix-channels/store"
       "https://mirrors.ustc.edu.cn/nix-channels/store"
