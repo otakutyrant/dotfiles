@@ -25,5 +25,6 @@ def main [
             exit 0
         }
     }
-    ^wl-copy --type image/png < $file
+    # Pipe the PNG bytes; Nushell treats `< $file` as literal arguments.
+    open --raw $file | ^wl-copy --type image/png
 }
