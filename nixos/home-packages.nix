@@ -129,6 +129,12 @@ with pkgs; # Bring package names from pkgs into scope for the list below.
   ## TOML
   taplo
 
+  ## SAST
+  codeql
+
+  ## Sandbox container
+  bubblewrap # Provides the `bwrap` command for creating sandboxed processes.
+
   # ==== Miscellanea
 
   scowl # English words
