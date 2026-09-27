@@ -251,9 +251,12 @@ in
         preview_shown_hook_script = "~/.config/joshuto/on_preview_shown.nu";
         preview_removed_hook_script = "~/.config/joshuto/on_preview_removed.nu";
       };
-      class.text_default = [ { command = "nvim"; } ];
     };
-    mimetype.mimetype.text."inherit" = "text_default";
+    mimetype = {
+      # Joshuto stores opener classes and MIME mappings in mimetype.toml.
+      class.text_default = [ { command = "nvim"; } ];
+      mimetype.text."inherit" = "text_default";
+    };
   };
   # Install local mpv package with Unicode-aware subtitle line wrapping through
   # Home Manager's mpv module.
