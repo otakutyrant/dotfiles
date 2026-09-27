@@ -8,6 +8,8 @@
       size = 10.0;
     };
     keybindings = {
+      # Match the Ctrl+V shortcut sent by the Clipcat Sway binding.
+      "ctrl+v" = "paste_from_clipboard";
       "alt+v" = "launch --location=vsplit --cwd=current";
       "alt+s" = "launch --location=hsplit --cwd=current";
       "alt+h" = "neighboring_window left";
