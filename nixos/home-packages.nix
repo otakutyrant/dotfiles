@@ -21,6 +21,7 @@ with pkgs; # Bring package names from pkgs into scope for the list below.
 
   gh # GitHub client
   git-lfs # a Git extension for large files
+  file # Joshuto uses this command to detect file types and MIME types.
   walker # Rust/Wayland application launcher and dmenu-compatible picker.
   inputs.nmrs.packages.${pkgs.stdenv.hostPlatform.system}.default
 
