@@ -89,7 +89,7 @@ in
     filter_text_max_length = 20000000
     denied_text_regex_patterns = []
     capture_image = true
-    # Screenshots can exceed Clipcat's 5 MiB default image limit.
+    # Allow images up to 25 MiB, matching the client message limits below.
     filter_image_max_size = 26214400
 
     [grpc]
@@ -116,7 +116,8 @@ in
   xdg.configFile."clipcat/clipcatctl.toml".text = ''
     server_endpoint = "/run/user/1000/clipcat/grpc.sock"
     preview_length = 100
-    grpc_max_message_size = 8388608
+    # Match the daemon's 25 MiB image limit.
+    grpc_max_message_size = 26214400
 
     [log]
     emit_journald = true
@@ -128,7 +129,8 @@ in
     server_endpoint = "/run/user/1000/clipcat/grpc.sock"
     finder = "custom"
     preview_length = 80
-    grpc_max_message_size = 8388608
+    # Match the daemon's 25 MiB image limit.
+    grpc_max_message_size = 26214400
 
     [log]
     emit_journald = true
