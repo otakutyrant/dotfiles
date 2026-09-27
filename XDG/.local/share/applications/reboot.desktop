@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Version=1.5
+Name=reboot
+GenericName=Reboot
+Comment=Restart the computer
+Exec=systemctl reboot
+Icon=system-reboot
+Categories=System
+Terminal=false
