@@ -178,6 +178,8 @@
 
   # Enable Sway, an i3-compatible Wayland compositor. The NVIDIA flag suppresses
   # Sway's informational unsupported-GPU message; it does not add a source patch.
+  # NixOS's Wayland session module enables XDG autostart for window-manager
+  # sessions by default, which starts entries such as fcitx5's at login.
   programs.sway = {
     enable = true;
     extraPackages = with pkgs; [

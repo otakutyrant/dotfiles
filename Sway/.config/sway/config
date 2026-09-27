@@ -1,3 +1,7 @@
+# Load NixOS's Sway session integration, including its systemd targets and
+# environment setup.
+include /etc/sway/config.d/*
+
 # Set the win key as master key.
 set $mod Mod4
 
@@ -187,28 +191,15 @@ bindcode --release 107 exec --no-startup-id "$HOME/.local/bin/screenshot_select.
 
 # # Startups
 
-# Start WeChat once per Sway session; exec does not repeat on config reload.
-exec --no-startup-id wechat
-# Elephant needs the current Wayland socket; greetd can start its user service
-# before Sway and leave it pointing at an old WAYLAND_DISPLAY value.
-exec --no-startup-id sh -c 'systemctl --user import-environment WAYLAND_DISPLAY SWAYSOCK && systemctl --user restart elephant'
-exec --no-startup-id walker --gapplication-service
-exec --no-startup-id waytrogen --restore
-exec --no-startup-id wired
-exec --no-startup-id ironbar
-# Run Clipcat's clipboard watcher in the background; --replace also makes this
-# safe when i3 reloads its configuration while the daemon is already running.
-exec --no-startup-id clipcatd --replace
-# Sway composites windows itself; do not start the old X11-only Picom daemon.
+# greetd starts Sway directly, so start NixOS's XDG autostart target here after
+# importing the live Wayland environment. Restart Elephant against this session.
+exec --no-startup-id sh -c 'systemctl --user import-environment DISPLAY WAYLAND_DISPLAY SWAYSOCK && systemctl --user start xdg-autostart-if-no-desktop-manager.target && systemctl --user restart elephant'
 
 # Keep the three-display layout in Sway so it also applies when outputs reconnect.
 # Sway's 270-degree transform preserves the old XRandR left rotation.
 output DP-2 mode 1920x1080 position 0 0 transform 270
 output DP-3 mode 2560x1440 position 1080 480
 output DP-1 mode 1920x1080 position 3640 0 transform 270
-
-# Sleep displays after 10 minutes of inactivity.
-exec --no-startup-id swayidle -w timeout 600 'swaylock -f' timeout 601 'swaymsg "output * power off"' resume 'swaymsg "output * power on"'
 
 # Keep fullscreen apps from triggering the idle lock or display power-off.
 for_window [app_id=".*"] inhibit_idle fullscreen
@@ -220,6 +211,5 @@ for_window [class=".*"] inhibit_idle fullscreen
 # Vim, analogous to its assignment here.
 bindsym $mod+grave scratchpad show
 bindsym $mod+Shift+grave move scratchpad
-exec --no-startup-id gnome-text-editor "$HOME/Nutstore Files/Nutstore/scratchpad"
 # Title matching works for both native Wayland and XWayland clients.
 for_window [title="^scratchpad$"] move scratchpad

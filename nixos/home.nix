@@ -137,15 +137,82 @@ in
     program = "walker"
     args = ["--dmenu", "--exit", "--placeholder", "Clipcat"]
   '';
-  # Keep Walker's application provider focused on desktop entries for the
-  # main launcher, and force GTK to focus its search field when it opens.
-  xdg.configFile."walker/config.toml".text = ''
-    force_keyboard_focus = true
+  # Start programs through XDG autostart when they have no Home Manager or
+  # NixOS service option. Waytrogen needs --restore, and the editor entry keeps
+  # opening the configured scratchpad file on login.
+  xdg.autostart = {
+    enable = true;
+    entries = [
+      "${pkgs.wechat}/share/applications/wechat.desktop"
+      (pkgs.writeText "waytrogen-restore.desktop" ''
+        [Desktop Entry]
+        Type=Application
+        Name=Waytrogen Restore
+        Exec=${pkgs.waytrogen}/bin/waytrogen --restore
+        Terminal=false
+        NoDisplay=true
+      '')
+      (pkgs.writeText "wired.desktop" ''
+        [Desktop Entry]
+        Type=Application
+        Name=Wired Notifications
+        Exec=${pkgs.wired}/bin/wired
+        Terminal=false
+        NoDisplay=true
+      '')
+      (pkgs.writeText "ironbar.desktop" ''
+        [Desktop Entry]
+        Type=Application
+        Name=Ironbar
+        Exec=${pkgs.ironbar}/bin/ironbar
+        Terminal=false
+        NoDisplay=true
+      '')
+      (pkgs.writeText "gnome-text-editor-scratchpad.desktop" ''
+        [Desktop Entry]
+        Type=Application
+        Name=Scratchpad
+        Exec=${pkgs.gnome-text-editor}/bin/gnome-text-editor "${home}/Nutstore Files/Nutstore/scratchpad"
+        Terminal=false
+        NoDisplay=true
+      '')
+    ];
+  };
 
-    [providers]
-    default = ["desktopapplications"]
-    empty = ["desktopapplications"]
-  '';
+  # Walker has a Home Manager service option. Keep its existing launcher
+  # settings and start its background application service with the session.
+  services.walker = {
+    enable = true;
+    systemd.enable = true;
+    settings = {
+      force_keyboard_focus = true;
+      providers.default = [ "desktopapplications" ];
+      providers.empty = [ "desktopapplications" ];
+    };
+  };
+
+  # Use Home Manager's service modules for these session daemons while keeping
+  # the existing hand-written Clipcat configuration files above authoritative.
+  services.clipcat = {
+    enable = true;
+    daemonSettings = { };
+    ctlSettings = { };
+    menuSettings = { };
+  };
+  services.swayidle = {
+    enable = true;
+    timeouts = [
+      {
+        timeout = 600;
+        command = "${pkgs.swaylock}/bin/swaylock -f";
+      }
+      {
+        timeout = 601;
+        command = "${pkgs.sway}/bin/swaymsg 'output * power off'";
+        resumeCommand = "${pkgs.sway}/bin/swaymsg 'output * power on'";
+      }
+    ];
+  };
 
   home.username = username;
   home.homeDirectory = "/home/${username}";
