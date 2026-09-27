@@ -186,8 +186,10 @@ bindsym $mod+shift+l exec swaylock -f
 # Select a Clipcat item, then paste it into the application that had focus
 # before Walker opened. `&&` prevents a paste if the menu is cancelled.
 bindsym $mod+p exec --no-startup-id clipcat-menu insert && wdotool key --clearmodifiers ctrl+v
-# Select a region, save the screenshot, and copy it to the clipboard.
-bindcode --release 107 exec --no-startup-id "$HOME/.local/bin/screenshot_select.nu"
+# Consume PrintScreen on key-down. A release binding lets Fcitx5 see the press
+# but not the release, causing its virtual keyboard to repeat the key.
+# Close the lock fd in the child so wl-copy cannot keep it after the selector.
+bindcode --no-repeat 107 exec --no-startup-id flock -n -o "$XDG_RUNTIME_DIR/screenshot-select-v2.lock" "$HOME/.local/bin/screenshot_select.nu"
 
 # # Startups
 
