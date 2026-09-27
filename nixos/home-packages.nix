@@ -1,5 +1,6 @@
 {
   inputs,
+  notificationDaemon,
   pkgs,
   pkgs-chatgpt,
   pkgs-unstable,
@@ -53,7 +54,7 @@ with pkgs; # Bring package names from pkgs into scope for the list below.
   # Used to send Ctrl+V after selecting a Clipcat item from the menu.
   (callPackage ./pkgs/wdotool.nix { })
   awww # Rust wallpaper daemon used by Waytrogen.
-  wired # Rust notification daemon.
+  notificationDaemon # Patched Rust notification daemon with readable action buttons.
 
   # ==== GUI clients
 

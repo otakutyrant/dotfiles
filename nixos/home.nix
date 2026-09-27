@@ -10,9 +10,12 @@
 }:
 
 let
+  # Use one patched daemon for both installation and XDG autostart.
+  notificationDaemon = pkgs-unstable.callPackage ./pkgs/nwg-notifications.nix { };
   homePackages = import ./home-packages.nix {
     inherit
       inputs
+      notificationDaemon
       pkgs
       pkgs-chatgpt
       pkgs-unstable
@@ -152,11 +155,11 @@ in
         Terminal=false
         NoDisplay=true
       '')
-      (pkgs.writeText "wired.desktop" ''
+      (pkgs.writeText "nwg-notifications.desktop" ''
         [Desktop Entry]
         Type=Application
-        Name=Wired Notifications
-        Exec=${pkgs.wired}/bin/wired
+        Name=NWG Notifications
+        Exec=${notificationDaemon}/bin/nwg-notifications --wm sway
         Terminal=false
         NoDisplay=true
       '')

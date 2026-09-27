@@ -1,0 +1,21 @@
+diff --git a/src/ui/popup.rs b/src/ui/popup.rs
+--- a/src/ui/popup.rs
++++ b/src/ui/popup.rs
+@@ -265 +265 @@
+-    summary.set_lines(1);
++    summary.set_lines(3);
+@@ -300 +300,2 @@
+             btn.add_css_class("popup-action-btn");
++            btn.set_has_frame(false);
+diff --git a/src/assets/notifications.css b/src/assets/notifications.css
+--- a/src/assets/notifications.css
++++ b/src/assets/notifications.css
+@@ -66 +66 @@
+-.popup-action-btn {
++button.popup-action-btn {
+@@ -75 +75,4 @@
+-.popup-action-btn:hover {
++button.popup-action-btn label {
++    color: #ffffff;
++}
++button.popup-action-btn:hover {

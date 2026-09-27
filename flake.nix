@@ -184,6 +184,9 @@
       # flake's stable nixpkgs input.
       packages = inputs.nixpkgs.lib.genAttrs supportedSystems (system: {
         nur = inputs.nixpkgs.legacyPackages.${system}.callPackage ./nixos/pkgs/nur.nix { };
+        # Expose the Home Manager notification daemon for standalone builds.
+        # Upstream needs Rust 1.97; stable nixpkgs still has Rust 1.95.
+        nwg-notifications = pkgs-unstable.callPackage ./nixos/pkgs/nwg-notifications.nix { };
       });
       # Flake output keyword: `formatter` lets `nix fmt` choose the formatter
       # for this system automatically.
