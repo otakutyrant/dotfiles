@@ -2,15 +2,14 @@
 # bar on each output, with the system tray and detailed status on the main one.
 
 [monitors.DP-3]
-position = "top"
-height = 32
+position = "bottom"
+height = 40
 anchor_to_edges = true
 icon_theme = "Adwaita"
 
 [[monitors.DP-3.start]]
 type = "workspaces"
 all_monitors = false
-favorites = ["甲", "乙", "丙", "丁", "戊", "己", "庚", "辛", "壬", "癸"]
 
 [[monitors.DP-3.end]]
 type = "sys_info"
@@ -35,15 +34,14 @@ format = "%a %F %T"
 type = "tray"
 
 [monitors.DP-1]
-position = "top"
-height = 32
+position = "bottom"
+height = 40
 anchor_to_edges = true
 icon_theme = "Adwaita"
 
 [[monitors.DP-1.start]]
 type = "workspaces"
 all_monitors = false
-favorites = ["甲", "乙", "丙", "丁", "戊", "己", "庚", "辛", "壬", "癸"]
 
 [[monitors.DP-1.end]]
 type = "sys_info"
@@ -59,15 +57,14 @@ type = "clock"
 format = "%a %F %T"
 
 [monitors.DP-2]
-position = "top"
-height = 32
+position = "bottom"
+height = 40
 anchor_to_edges = true
 icon_theme = "Adwaita"
 
 [[monitors.DP-2.start]]
 type = "workspaces"
 all_monitors = false
-favorites = ["甲", "乙", "丙", "丁", "戊", "己", "庚", "辛", "壬", "癸"]
 
 [[monitors.DP-2.end]]
 type = "sys_info"

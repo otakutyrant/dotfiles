@@ -1,6 +1,6 @@
 * {
   font-family: "JetBrainsMono Nerd Font";
-  font-size: 13px;
+  font-size: 18px;
   color: #d8dee9;
 }
 
@@ -9,13 +9,57 @@ window,
   background-color: #15171c;
 }
 
+/* Match the old i3status-rust palette and override GTK's light button theme. */
+button,
+button label {
+  background-color: #15171c;
+  background-image: none;
+  color: #d8dee9;
+}
+
+button {
+  border: none;
+  box-shadow: none;
+  outline: none;
+}
+
+.bar {
+  background-color: #15171c;
+  border-bottom: 1px solid #30343f;
+}
+
 .workspaces .item {
+  margin: 2px;
   padding: 0 10px;
-  color: #9ca3af;
+  border-radius: 4px;
+  background-color: transparent;
+  color: #d8dee9;
+  font-size: 18px;
 }
 
 .workspaces .item.focused {
   background-color: #1f7a8c;
+  color: #ffffff;
+}
+
+.workspaces button.focused,
+.workspaces button.focused label {
+  background-color: #1f7a8c;
+  color: #ffffff;
+}
+
+.workspaces button,
+.workspaces button:hover,
+.workspaces button:focus,
+.clock,
+.clock label {
+  border: none;
+  box-shadow: none;
+  outline: none;
+}
+
+.workspaces .item:hover {
+  background-color: #30343f;
   color: #ffffff;
 }
 
@@ -28,5 +72,57 @@ window,
 .script,
 .clock,
 .tray {
-  padding: 0 8px;
+  margin: 2px;
+  padding: 0 7px;
+  border-radius: 4px;
+}
+
+.sysinfo .item,
+.script {
+  color: #d8dee9;
+}
+
+.clock {
+  margin-right: 6px;
+  background-color: #15171c;
+  color: #d8dee9;
+  font-size: 18px;
+}
+
+.clock label {
+  background-color: #15171c;
+  color: #d8dee9;
+}
+
+.tray {
+  background: transparent;
+  background-color: transparent;
+  background-image: none;
+  border: none;
+  box-shadow: none;
+}
+
+.tray > * {
+  margin: 0 3px;
+  padding: 0;
+}
+
+.tray button,
+.tray button:hover,
+.tray button:active,
+.tray button:checked,
+.tray button image,
+.tray * {
+  background-color: transparent;
+  background-image: none;
+  border: none;
+  box-shadow: none;
+}
+
+/* Some status notifier items publish a text label beside their icon. */
+.tray label {
+  font-size: 0;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
 }
