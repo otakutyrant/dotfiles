@@ -21,6 +21,7 @@ with pkgs; # Bring package names from pkgs into scope for the list below.
   gh # GitHub client
   git-lfs # a Git extension for large files
   file # Joshuto uses this command to detect file types and MIME types.
+  (callPackage ./pkgs/nur.nix { }) # Nur task runner used by this repository.
   walker # Rust/Wayland application launcher and dmenu-compatible picker.
   (callPackage ./pkgs/nmrs.nix { }) # GTK4 NetworkManager frontend.
 
