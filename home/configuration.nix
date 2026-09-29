@@ -310,7 +310,17 @@ in
   # Home Manager's mpv module.
   programs.mpv = {
     enable = true;
-    package = pkgs.callPackage ./pkgs/mpv.nix { };
+    package = pkgs.mpv.override {
+      # mpv depends on libass which is not built with libunibreak. So overwrite
+      # them here.
+      mpv-unwrapped = pkgs.mpv-unwrapped.override {
+        libass = pkgs.libass.overrideAttrs (oldAttrs: {
+          configureFlags = (oldAttrs.configureFlags or [ ]) ++ [ "--enable-libunibreak" ];
+          # Add libunibreak, which lets libass wrap long Chinese subtitle lines.
+          buildInputs = (oldAttrs.buildInputs or [ ]) ++ [ pkgs.libunibreak ];
+        });
+      };
+    };
     # These settings replace the linked mpv.conf and input.conf files.
     config = {
       sub-visibility = "yes";
