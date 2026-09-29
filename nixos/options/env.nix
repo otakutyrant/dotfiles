@@ -35,9 +35,11 @@ in
     # https://github.com/jackMort/ChatGPT.nvim/issues/267#issuecomment-1676609465
     OPENAI_API_HOST = "api.openai.com";
 
-    # Input method variables used by graphical applications.
-    GTK_IM_MODULE = "fcitx";
-    QT_IM_MODULE = "fcitx";
+    # Fcitx5's native Wayland frontend is enabled in configuration.nix. Do
+    # not force GTK or Qt to use the legacy X11/DBus frontend here: on native
+    # Wayland apps that bypasses the compositor-provided cursor rectangle and
+    # can put the candidate panel at an incorrect screen edge.  X11 apps use
+    # XMODIFIERS through XWayland instead.
     XMODIFIERS = "@im=fcitx";
     SDL_IM_MODULE = "fcitx";
   };

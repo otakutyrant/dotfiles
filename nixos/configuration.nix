@@ -245,6 +245,14 @@
   i18n.inputMethod = {
     enable = true;
     type = "fcitx5";
+    # Use the Wayland text-input protocol in Sway so Fcitx receives the
+    # compositor's logical cursor rectangle instead of an X11 coordinate that
+    # can be wrong on rotated or adjacent outputs.
+    fcitx5.waylandFrontend = true;
+    # A horizontal candidate list can extend past a narrow/rotated output
+    # edge. The vertical layout keeps the popup inside that output while
+    # preserving cursor-relative placement.
+    fcitx5.settings.addons.classicui.globalSection."Vertical Candidate List" = "True";
     fcitx5.addons = with pkgs; [
       # Add the zhwiki vocabulary used by the synchronized
       # terra_pinyin.extended.dict.yaml dictionary.
