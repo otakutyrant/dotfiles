@@ -1,0 +1,73 @@
+# Nur is the repository task entrypoint for agents and interactive work.
+
+def tracked-files [extension: string] {
+    ^git ls-files
+    | lines
+    | where { |path| ($path | str ends-with $extension) and ($path | path exists) }
+}
+
+def nix-files [] {
+    tracked-files ".nix"
+    | where { |path| $path != "nixos/hardware-configuration.nix" }
+}
+
+def lua-files [] {
+    tracked-files ".lua"
+}
+
+def nu-files [] {
+    tracked-files ".nu"
+}
+
+# Format all checked-in Nix and Lua files.
+export def "nur format" [] {
+    let nix_files = (nix-files)
+    if ($nix_files | is-not-empty) {
+        ^nixfmt ...$nix_files
+    }
+
+    let lua_files = (lua-files)
+    if ($lua_files | is-not-empty) {
+        ^stylua ...$lua_files
+    }
+}
+
+# Check formatting without changing files.
+export def "nur lint" [] {
+    let nix_files = (nix-files)
+    if ($nix_files | is-not-empty) {
+        ^nixfmt --check ...$nix_files
+    }
+
+    let lua_files = (lua-files)
+    if ($lua_files | is-not-empty) {
+        ^stylua --check ...$lua_files
+    }
+}
+
+# Evaluate the Nix configurations and check Nushell and Lua diagnostics.
+export def "nur typecheck" [] {
+    # Nix does not have a separate type checker. Evaluating these derivation
+    # paths checks the flake, NixOS modules, and Home Manager module types.
+    ^nix eval --no-update-lock-file --raw ".#nixosConfigurations.nixos.config.system.build.toplevel.drvPath" | ignore
+    ^nix eval --no-update-lock-file --raw ".#homeConfigurations.otakutyrant.activationPackage.drvPath" | ignore
+
+    # Only Error diagnostics fail this Lua check.
+    ^lua-language-server --check . --checklevel Error --check_format pretty --logpath /tmp/dotfiles-lua-language-server-log
+
+    # Autoload files must be sourceable. Check every Nushell file for parser
+    # errors while reserving direct sourcing for autoload files.
+    for file in (nu-files | where { |path| $path | str starts-with "Nushell/.config/nushell/autoload/" }) {
+        ^nu -n -c $"source ($file)"
+    }
+
+    for file in (nu-files) {
+        ^nu --ide-check 0 $file | ignore
+    }
+}
+
+# Run every deterministic repository quality check.
+export def "nur check" [] {
+    nur lint
+    nur typecheck
+}
