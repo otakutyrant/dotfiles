@@ -1,31 +1,13 @@
-/**
-  A flake is a Nix project with a standard interface.
-  `inputs` declares the project's dependencies, `outputs` declares what the
-  project exports, and flake.lock pins the exact resolved dependency versions.
-*/
-
-# The top-level attribute set.
 {
-  # Flake-specific top-level keyword: `description` is optional metadata. Nix
-  # shows it in flake metadata output, but it does not affect evaluation.
   description = "otakutyrant dotfiles for NixOS and Home Manager";
 
-  # Flake-specific top-level keyword: `inputs` declares external flakes. These
-  # inputs are pinned in flake.lock so rebuilds use reproducible versions until
-  # the lock file is updated.
+  # Inputs are pinned in flake.lock so rebuilds remain reproducible.
   inputs = {
-    # Flake input keyword: `url` tells Nix where to fetch the `nixpkgs` input.
-    # nixpkgs is the main package collection and module library used by Nix
-    # and NixOS.
-    # This line defines `nixpkgs` and `url` at them same time. That said, it is
-    # equivalent to `nixpkgs = { url = "..." };`.
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-26.05";
     # Keep an unstable package set available for selected fast-moving tools
     # without moving the whole system away from the stable NixOS channel.
     nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
-    # Define the `home-manager` flake input.
     home-manager = {
-      # Flake input keyword: `url` tells Nix where to fetch Home Manager.
       url = "github:nix-community/home-manager/release-26.05";
       # Flake input keyword: `follows` makes Home Manager reuse this flake's
       # `nixpkgs` input instead of bringing a separate nixpkgs revision.
@@ -34,63 +16,24 @@
     };
   };
 
-  # Flake-specific top-level keyword: `outputs` is the function that returns
-  # values exported by this flake. Commands such as `nixos-rebuild --flake` and
-  # `home-manager switch --flake` look here for named configurations.
   outputs =
-    # `inputs` is the whole set of flake inputs declared above. Each input is
-    # reached explicitly through attribute access, e.g. `inputs.nixpkgs`.
     inputs:
-    # `let` starts private local bindings for this function body; these names
-    # are helpers, not attributes exported by the flake.
     let
       system = "x86_64-linux";
-      supportedSystems = [ "x86_64-linux" ];
       username = "otakutyrant";
       hostname = "nixos";
-      pkgs = inputs.nixpkgs.legacyPackages.${system};
       # Selected tools are only available or fresh enough in the unstable channel.
       pkgs-unstable = import inputs.nixpkgs-unstable {
         inherit system;
         config.allowUnfree = true;
       };
-      # Keep the Nur task runner available both as a reusable flake package
-      # and inside this repository's development shell.
-      nurPackage = pkgs.callPackage ./nixos/pkgs/nur.nix { };
-      # `in` starts the expression that can use the local names defined above.
-      # The whole `let ... in ...` expression evaluates to the value after `in`.
-    in
-    # This attribute set is the actual value returned by `outputs`.
-    {
-      # Export shared development tools for project flakes that follow this
-      # flake's stable nixpkgs input.
-      packages = inputs.nixpkgs.lib.genAttrs supportedSystems (system: {
-        nur = nurPackage;
-        # Expose the locally packaged NetworkManager frontend for direct builds.
-        nmrs = inputs.nixpkgs.legacyPackages.${system}.callPackage ./nixos/pkgs/nmrs.nix { };
-        # Expose the Home Manager notification daemon for standalone builds.
-        # Upstream needs Rust 1.97; stable nixpkgs still has Rust 1.95.
-        nwg-notifications = pkgs-unstable.callPackage ./nixos/pkgs/nwg-notifications.nix { };
-      });
-      # A dev shell provides Nur and the quality tools used by nurfile.
-      devShells.${system}.default = pkgs.mkShell {
-        packages = with pkgs; [
-          lua-language-server
-          nurPackage
-          nixfmt
-          nushell
-          pre-commit
-          stylua
-        ];
+      # These arguments are needed by the shared Home Manager module.
+      homeSpecialArgs = {
+        inherit inputs username pkgs-unstable;
       };
-
-      # Flake output keyword: `nixosConfigurations` exposes full NixOS machine
-      # configurations used by `nixos-rebuild --flake`.
-      # nixpkgs.lib.nixosSystem is a function that accepts system, specialArgs,
-      # modules.
-      # nixpkgs.lib.nixosSystem merges `moudles`.
+    in
+    {
       nixosConfigurations.${hostname} = inputs.nixpkgs.lib.nixosSystem {
-        # It is equivalent to `system = system`.
         inherit system;
         specialArgs = {
           inherit
@@ -105,37 +48,19 @@
           inputs.home-manager.nixosModules.home-manager
           {
             home-manager.useGlobalPkgs = true;
-            home-manager.extraSpecialArgs = {
-              inherit
-                inputs
-                username
-                pkgs-unstable
-                ;
-            };
-            # nixosConfigurations.${hostname} resues the home.nix here.
+            home-manager.extraSpecialArgs = homeSpecialArgs;
             home-manager.users.${username} = import ./nixos/home.nix;
           }
         ];
       };
 
-      # Flake output keyword used by Home Manager: `homeConfigurations` exposes
-      # standalone user profiles for `home-manager switch --flake`.
       homeConfigurations.${username} = inputs.home-manager.lib.homeManagerConfiguration {
-        # Standalone Home Manager needs a package set with unfree packages
-        # enabled, because this user profile installs proprietary software.
+        # Standalone Home Manager needs unfree packages for this user profile.
         pkgs = import inputs.nixpkgs {
-          # `inherit system;` is shorthand for `system = system;`.
           inherit system;
-          # Allow proprietary/unfree packages in this imported package set.
           config.allowUnfree = true;
         };
-        extraSpecialArgs = {
-          inherit
-            inputs
-            username
-            pkgs-unstable
-            ;
-        };
+        extraSpecialArgs = homeSpecialArgs;
         modules = [ ./nixos/home.nix ];
       };
     };
