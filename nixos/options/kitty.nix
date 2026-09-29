@@ -8,8 +8,12 @@
       size = 10.0;
     };
     keybindings = {
-      # Match the Ctrl+V shortcut sent by the Clipcat Sway binding.
-      "ctrl+v" = "paste_from_clipboard";
+      # Send Ctrl+V to terminal applications. Pasting clipboard contents
+      # directly into neo-tree tries to edit its read-only buffer and causes
+      # Vim E21; neo-tree uses Ctrl+V for opening a vertical split.
+      "ctrl+v" = "send_text all \\x16";
+      # Keep an explicit clipboard-paste shortcut for terminal applications.
+      "ctrl+shift+v" = "paste_from_clipboard";
       "alt+v" = "launch --location=vsplit --cwd=current";
       "alt+s" = "launch --location=hsplit --cwd=current";
       "alt+h" = "neighboring_window left";
