@@ -31,11 +31,11 @@ home-manager switch --flake .#otakutyrant
 ```
 
 Home Manager links the checked-in dotfile directories into `$HOME`. The helper
-in `nixos/home.nix` recursively exposes files from directories such as `XDG`,
+in `home/configuration.nix` recursively exposes files from directories such as `XDG`,
 `Sway`, `Kitty`, `Neovim`, `Nushell`, and `Systemd`.
 
 System options live in `nixos/configuration.nix`. User packages live in
-`nixos/home-packages.nix`, with local package derivations under `nixos/pkgs`.
+`home/packages.nix`, with local package derivations under `home/pkgs`.
 
 # Make dotfiles simple
 
@@ -131,7 +131,7 @@ For example, `XDG/.local/bin/screenshot_delay.nu` is exposed through
 
 # Environment Variables
 
-Session environment variables are managed in `nixos/home.nix`.
+Session environment variables are managed in `home/configuration.nix`.
 
 # Wayland and NVIDIA
 
@@ -168,7 +168,7 @@ Xwayland remains available for existing X11 clients.
 
 This repository targets NixOS with Home Manager. System options live in
 `nixos/configuration.nix`, while user-facing development and GUI packages are
-organized in `nixos/home-packages.nix`. Package names there are Nixpkgs
+organized in `home/packages.nix`. Package names there are Nixpkgs
 attribute names, not names from another distribution.
 
 I noticed a trend that traditional GNU CLI clients are replaced by high-performance Rust alternatives, like `find` is replaced by `fd`, `grep` by `ripgrep` or `fzf`, `less` by `page` and so on.

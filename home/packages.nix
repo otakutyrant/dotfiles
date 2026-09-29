@@ -35,7 +35,9 @@ with pkgs; # Bring package names from pkgs into scope for the list below.
   sd # Steam EDitor, search and replace, an alternative to sed
   macchina # System information shower, an alternative to lsb-release
   clipcat # Clipboard manager, an alternative to doidon
-  rqbit # BitTorrent client, an alternative to Fragments or qBittorrent
+  # Use the newer rqbit release from unstable; stable 8.1.1 leaves deferred
+  # magnet submissions unresolved in the persistent server workflow.
+  pkgs-unstable.rqbit # BitTorrent client, an alternative to Fragments or qBittorrent
 
   ### Media tools
   (callPackage ./pkgs/imageflow.nix { }) # Image tool, an alternative to ImageMagick.

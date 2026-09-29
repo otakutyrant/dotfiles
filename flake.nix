@@ -49,7 +49,7 @@
           {
             home-manager.useGlobalPkgs = true;
             home-manager.extraSpecialArgs = homeSpecialArgs;
-            home-manager.users.${username} = import ./nixos/home.nix;
+            home-manager.users.${username} = import ./home/configuration.nix;
           }
         ];
       };
@@ -61,7 +61,7 @@
           config.allowUnfree = true;
         };
         extraSpecialArgs = homeSpecialArgs;
-        modules = [ ./nixos/home.nix ];
+        modules = [ ./home/configuration.nix ];
       };
     };
 }

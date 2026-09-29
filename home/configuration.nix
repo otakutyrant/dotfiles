@@ -10,7 +10,7 @@
 let
   # Use one patched daemon for both installation and XDG autostart.
   notificationDaemon = pkgs-unstable.callPackage ./pkgs/nwg-notifications.nix { };
-  homePackages = import ./home-packages.nix {
+  homePackages = import ./packages.nix {
     inherit
       notificationDaemon
       pkgs
@@ -180,6 +180,29 @@ in
     ];
   };
 
+  # Register rqbit as the default handler for magnet links. The handler talks
+  # to the user service below, so clicking a magnet link starts a download in
+  # the same persistent rqbit session used by the Web UI.
+  xdg.desktopEntries.rqbit = {
+    name = "rqbit Magnet Handler";
+    comment = "Add magnet links to rqbit";
+    # Use rqbit's native client-to-server path; it accepts magnet URLs and
+    # submits them to the already-running persistent server.
+    exec = "${pkgs-unstable.rqbit}/bin/rqbit download --server-url http://127.0.0.1:3030 %u";
+    terminal = false;
+    type = "Application";
+    mimeType = [ "x-scheme-handler/magnet" ];
+    categories = [
+      "Network"
+      "FileTransfer"
+    ];
+    settings = {
+      # Some GTK application choosers require TryExec before listing a custom
+      # URI handler, even when the Exec command uses an absolute store path.
+      TryExec = "${pkgs-unstable.rqbit}/bin/rqbit";
+    };
+  };
+
   # Walker has a Home Manager service option. Keep its existing launcher
   # settings and start its background application service with the session.
   services.walker = {
@@ -200,6 +223,33 @@ in
     ctlSettings = { };
     menuSettings = { };
   };
+
+  # Keep rqbit's HTTP API and torrent session alive for the whole graphical
+  # login. The download directory is also rqbit's default output directory.
+  systemd.user.services.rqbit = {
+    Unit = {
+      Description = "rqbit BitTorrent server";
+      After = [ "graphical-session.target" ];
+      PartOf = [ "graphical-session.target" ];
+    };
+    Service = {
+      ExecStartPre = "${pkgs.coreutils}/bin/mkdir -p ${home}/Downloads";
+      # Clash's fake-IP DNS maps the default DHT bootstrap hostnames into
+      # 198.18.0.0/16, where rqbit cannot complete its UDP bootstrap. Use the
+      # bootstrap servers' real IPv4 addresses and send outgoing peer
+      # connections through Clash's local SOCKS5 endpoint.
+      ExecStart = builtins.concatStringsSep " " [
+        "${pkgs-unstable.rqbit}/bin/rqbit"
+        "--socks-url socks5://127.0.0.1:7890"
+        "--dht-bootstrap-addrs 185.157.221.247:25401,87.98.162.88:6881,212.129.33.59:6881"
+        "server start ${home}/Downloads"
+      ];
+      Restart = "on-failure";
+      RestartSec = 5;
+    };
+    Install.WantedBy = [ "graphical-session.target" ];
+  };
+
   services.swayidle = {
     enable = true;
     timeouts = [

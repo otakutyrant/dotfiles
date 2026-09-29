@@ -406,7 +406,7 @@
     ];
     # NixOS must install this package because the user account's login shell
     # points at its `bin/nu` executable. Do not also list `nushell` in
-    # home-packages.nix; Home Manager's Nushell module handles the user profile
+    # home/packages.nix; Home Manager's Nushell module handles the user profile
     # side, while this option handles the system login-shell side.
     shell = pkgs.nushell;
   };
