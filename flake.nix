@@ -23,9 +23,6 @@
     # Keep an unstable package set available for selected fast-moving tools
     # without moving the whole system away from the stable NixOS channel.
     nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
-    # The ChatGPT desktop app is not yet in a stable nixpkgs channel. Track the
-    # PR branch that packages it for Linux until it lands upstream.
-    nixpkgs-chatgpt.url = "github:Moraxyc/nixpkgs/chatgpt-linux";
     # Define the `home-manager` flake input.
     home-manager = {
       # Flake input keyword: `url` tells Nix where to fetch Home Manager.
@@ -35,14 +32,6 @@
       # home-manager depends on nixpkgs so we reuse aforementioned nixpkgs.
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    # Kimi Code CLI is not packaged by this flake's nixpkgs channel, so keep
-    # its upstream flake as a separate pinned input. It replaces the legacy
-    # Python-based kimi-cli.
-    kimi-code.url = "github:MoonshotAI/kimi-code";
-    # nmrs-gui is a Rust/GTK4 NetworkManager frontend that is not yet provided
-    # by this flake's nixpkgs channel, so consume its upstream package.
-    nmrs.url = "github:networkmanager-rs/nmrs-gui";
-    nmrs.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   # Flake-specific top-level keyword: `outputs` is the function that returns
@@ -62,13 +51,6 @@
       pkgs = inputs.nixpkgs.legacyPackages.${system};
       # Selected tools are only available or fresh enough in the unstable channel.
       pkgs-unstable = import inputs.nixpkgs-unstable {
-        inherit system;
-        config.allowUnfree = true;
-      };
-      # The ChatGPT desktop app is unfree and lives on a separate nixpkgs branch
-      # until its Linux packaging lands upstream. Import that branch with unfree
-      # packages allowed so it can be installed alongside the main profile.
-      pkgs-chatgpt = import inputs.nixpkgs-chatgpt {
         inherit system;
         config.allowUnfree = true;
       };
@@ -184,6 +166,8 @@
       # flake's stable nixpkgs input.
       packages = inputs.nixpkgs.lib.genAttrs supportedSystems (system: {
         nur = inputs.nixpkgs.legacyPackages.${system}.callPackage ./nixos/pkgs/nur.nix { };
+        # Expose the locally packaged NetworkManager frontend for direct builds.
+        nmrs = inputs.nixpkgs.legacyPackages.${system}.callPackage ./nixos/pkgs/nmrs.nix { };
         # Expose the Home Manager notification daemon for standalone builds.
         # Upstream needs Rust 1.97; stable nixpkgs still has Rust 1.95.
         nwg-notifications = pkgs-unstable.callPackage ./nixos/pkgs/nwg-notifications.nix { };
@@ -227,7 +211,6 @@
             inputs
             username
             hostname
-            pkgs-chatgpt
             pkgs-unstable
             ;
         };
@@ -240,7 +223,6 @@
               inherit
                 inputs
                 username
-                pkgs-chatgpt
                 pkgs-unstable
                 ;
             };
@@ -265,7 +247,6 @@
           inherit
             inputs
             username
-            pkgs-chatgpt
             pkgs-unstable
             ;
         };

@@ -1,8 +1,6 @@
 {
-  inputs,
   notificationDaemon,
   pkgs,
-  pkgs-chatgpt,
   pkgs-unstable,
 }:
 
@@ -24,7 +22,7 @@ with pkgs; # Bring package names from pkgs into scope for the list below.
   git-lfs # a Git extension for large files
   file # Joshuto uses this command to detect file types and MIME types.
   walker # Rust/Wayland application launcher and dmenu-compatible picker.
-  inputs.nmrs.packages.${pkgs.stdenv.hostPlatform.system}.default
+  (callPackage ./pkgs/nmrs.nix { }) # GTK4 NetworkManager frontend.
 
   ## Rust-powered
 
@@ -86,10 +84,9 @@ with pkgs; # Bring package names from pkgs into scope for the list below.
   # Install Kimi Code CLI from MoonshotAI's own flake because it is not
   # provided by the pinned NixOS 26.05 nixpkgs package set. It provides the
   # `kimi` command and replaces the legacy Python-based kimi-cli.
-  inputs.kimi-code.packages.${pkgs.stdenv.hostPlatform.system}.default
+  (callPackage ./pkgs/kimi-code.nix { }) # Kimi Code CLI.
   pkgs-unstable.opencode # Open AI harness
-  # ChatGPT desktop app is packaged on a dedicated nixpkgs PR branch.
-  pkgs-chatgpt.chatgpt
+  (callPackage ./pkgs/chatgpt.nix { }) # ChatGPT desktop app.
 
   ## Database
   postgresql

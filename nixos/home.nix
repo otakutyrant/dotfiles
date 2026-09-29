@@ -1,9 +1,7 @@
 {
   config,
-  inputs,
   lib,
   pkgs,
-  pkgs-chatgpt,
   pkgs-unstable,
   username,
   ...
@@ -14,10 +12,8 @@ let
   notificationDaemon = pkgs-unstable.callPackage ./pkgs/nwg-notifications.nix { };
   homePackages = import ./home-packages.nix {
     inherit
-      inputs
       notificationDaemon
       pkgs
-      pkgs-chatgpt
       pkgs-unstable
       ;
   };
