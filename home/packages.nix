@@ -23,6 +23,7 @@ with pkgs; # Bring package names from pkgs into scope for the list below.
   file # Joshuto uses this command to detect file types and MIME types.
   (callPackage ./pkgs/nur.nix { }) # Nur task runner used by this repository.
   walker # Rust/Wayland application launcher and dmenu-compatible picker.
+  networkmanagerapplet # NetworkManager tray applet and its nm-signal icons.
   (callPackage ./pkgs/nmrs.nix { }) # GTK4 NetworkManager frontend.
 
   ## Rust-powered
