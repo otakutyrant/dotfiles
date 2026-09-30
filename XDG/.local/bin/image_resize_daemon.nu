@@ -74,7 +74,47 @@ def resize-image [path: string, target_short_side: int] {
     }
     let temp_path = (mktemp --tmpdir-path $parent --suffix $suffix $".($parsed.stem)-XXXXXX")
     let job_path = (mktemp --suffix .json image-resize-job-XXXXXX)
-    let job = {
+    # Probe first so the resize can constrain the actual shorter axis. Imageflow's
+    # `larger_than` mode targets the longer axis for non-square images, which can
+    # leave the shorter side below the requested size.
+    let probe_job = {
+        io: [
+            {io_id: 0, direction: "in", io: "placeholder"}
+        ]
+        framewise: {
+            steps: [
+                {decode: {io_id: 0}}
+            ]
+        }
+    }
+    ($probe_job | to json) | save --force $job_path
+    let probe_result = (do {
+        ^imageflow_tool v1/build --json $job_path --in $path
+    } | complete)
+    if $probe_result.exit_code != 0 {
+        rm --force $job_path $temp_path
+        return {ok: false, reason: ($probe_result.stderr | str trim)}
+    }
+    let probe_operation = try {
+        $probe_result.stdout
+        | from json
+        | get data.build_result
+    } catch {
+        rm --force $job_path $temp_path
+        return {ok: false, reason: $"unexpected Imageflow response: ($probe_result.stdout | str trim)"}
+    }
+    let decoded = ($probe_operation.decodes | first)
+    let source_short_side = ([$decoded.w, $decoded.h] | math min)
+    if $source_short_side >= $target_short_side {
+        rm --force $job_path $temp_path
+        return {ok: true, resized: false, reason: ""}
+    }
+    let constraint = if $decoded.w <= $decoded.h {
+        {mode: "fit", w: $target_short_side}
+    } else {
+        {mode: "fit", h: $target_short_side}
+    }
+    let resize_job = {
         io: [
             {io_id: 0, direction: "in", io: "placeholder"}
             {io_id: 1, direction: "out", io: "placeholder"}
@@ -82,12 +122,12 @@ def resize-image [path: string, target_short_side: int] {
         framewise: {
             steps: [
                 {decode: {io_id: 0}}
-                {constrain: {mode: "larger_than", w: $target_short_side, h: $target_short_side}}
+                {constrain: $constraint}
                 {encode: {io_id: 1, preset: $preset}}
             ]
         }
     }
-    ($job | to json) | save --force $job_path
+    ($resize_job | to json) | save --force $job_path
     let result = (do {
         ^imageflow_tool v1/build --json $job_path --in $path --out 1 $temp_path
     } | complete)
@@ -103,12 +143,6 @@ def resize-image [path: string, target_short_side: int] {
     } catch {
         rm --force $temp_path
         return {ok: false, reason: $"unexpected Imageflow response: ($result.stdout | str trim)"}
-    }
-    let decoded = ($operation.decodes | first)
-    let source_short_side = ([$decoded.w, $decoded.h] | math min)
-    if $source_short_side >= $target_short_side {
-        rm --force $temp_path
-        return {ok: true, resized: false, reason: ""}
     }
     let encoded = ($operation.encodes | first)
     let output_short_side = ([$encoded.w, $encoded.h] | math min)
