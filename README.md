@@ -30,12 +30,26 @@ If the system user already exists and Home Manager is installed:
 home-manager switch --flake .#otakutyrant
 ```
 
-Home Manager links the checked-in dotfile directories into `$HOME`. The helper
-in `home/configuration.nix` recursively exposes files from directories such as `XDG`,
-`Sway`, `Kitty`, `Neovim`, `Nushell`, and `Systemd`.
+Home Manager evaluates `home/configuration.nix`, which recursively imports the
+focused files under `home/modules` and `home/options`.
 
-System options live in `nixos/configuration.nix`. User packages live in
-`home/packages.nix`, with local package derivations under `home/pkgs`.
+## Repository layout
+
+- `home/modules` groups related user packages and their explanatory comments.
+- `home/options` configures Home Manager programs, services, GTK, XDG, and the
+  user environment.
+- `home/pkgs` contains repository-local package derivations exposed as
+  `pkgs.local.<name>` by the flake overlay.
+- `home/files` contains raw configuration, desktop, YAML, Lua, and Nushell files.
+  Their owning option module installs them at the appropriate Home Manager path.
+- `nixos/modules` groups system-level features, while `nixos/options` contains
+  focused NixOS settings. `nixos/configuration.nix` imports both recursively.
+- `nixos/files` contains raw files installed by NixOS modules.
+- `lib` contains small Nix helpers shared by Home Manager and NixOS.
+
+`lib/import-modules.nix` performs recursive module discovery, so adding a Nix
+file below an imported `modules` or `options` directory does not require editing
+a central import list.
 
 # Make dotfiles simple
 
@@ -105,37 +119,42 @@ Do you notice the relation between master keys? They are distributed in the left
 I keep files in XDG locations when the application expects them there.
 
 Configuration files should live under `$XDG_CONFIG_HOME` when possible. In this
-repository, that usually means putting them under `XDG/.config`, which Home
-Manager links into `~/.config`.
+repository, raw configuration lives under `home/files/config`. The corresponding
+module in `home/options` installs it under `~/.config`.
 
-Default application choices belong in `mimeapps.list`.
+Default application choices live in `home/files/config/mimeapps.list` and are
+installed by `home/options/xdg.nix`.
 
-Personal commands live in `$HOME/.local/bin`, although `XDG_BIN_HOME` is not
-specified so far.
+Personal commands live in `home/files/bin`; `home/options/scripts.nix` installs
+them into `$HOME/.local/bin`.
 
 Desktop files are also XDG data files:
 
-- `XDG/.local/share/applications/*.desktop` defines launcher entries for menus
-  and `rofi -show drun`.
+- `home/files/applications/*.desktop` defines launcher entries for application
+  menus.
 
-Applications started at login are configured directly in the startup section of
-`Sway/.config/sway/config`.
+Applications started at login use entries under `home/files/config/autostart`,
+which `home/options/xdg.nix` installs into the XDG autostart directory.
 
 Use static desktop files here when the command is stable, such as
 `Exec=systemctl suspend`. If a desktop entry needs Nix interpolation, such as a
-specific `${pkgs.foo}/bin/foo` path, define it with Home Manager instead.
+specific `${pkgs.foo}/bin/foo` path, keep the template in `home/files` and render
+it from `home/options/xdg.nix` with `lib/render-template.nix`.
 
 Personal commands that should appear in rofi can be paired with a desktop file.
-For example, `XDG/.local/bin/screenshot_delay.nu` is exposed through
-`XDG/.local/share/applications/screenshot-delay.desktop`.
+For example, `home/files/bin/screenshot_delay.nu` is exposed through
+`home/files/applications/screenshot-delay.desktop`.
 
 # Environment Variables
 
-Session environment variables are managed in `home/configuration.nix`.
+User session environment variables are managed in `home/options/env.nix`.
+Variables that must exist before Home Manager starts are managed in
+`nixos/options/env.nix`.
 
 # Wayland and NVIDIA
 
-Sway reads the plain-text config at `Sway/.config/sway/config`. It preserves
+Sway reads the plain-text config at `home/files/config/sway/config`, installed by
+`home/options/xdg.nix`. It preserves
 the original workspaces, shortcuts, layout rules, and scratchpad. Ironbar
 provides workspace and system-information modules, with a Nushell script for
 NVIDIA GPU utilization and memory. The screenshot and idle tools use Wayshot,
@@ -166,10 +185,11 @@ Xwayland remains available for existing X11 clients.
 
 # Packages
 
-This repository targets NixOS with Home Manager. System options live in
-`nixos/configuration.nix`, while user-facing development and GUI packages are
-organized in `home/packages.nix`. Package names there are Nixpkgs
-attribute names, not names from another distribution.
+This repository targets NixOS with Home Manager. System-wide packages and
+services are organized under `nixos/modules`, while user-facing development,
+command-line, and GUI packages are grouped under `home/modules`. Package names
+there are Nixpkgs attribute names, not names from another distribution. Custom
+derivations live under `home/pkgs` and are exposed through `pkgs.local`.
 
 I noticed a trend that traditional GNU CLI clients are replaced by high-performance Rust alternatives, like `find` is replaced by `fd`, `grep` by `ripgrep` or `fzf`, `less` by `page` and so on.
 
@@ -179,6 +199,6 @@ There are some related configuration. Ignore them if you do not live in China.
 
 # Too many themes and you do not know which one is the best?
 
-Don't worry, only infants make choice, while adults want the whole enchilada! Just install all of them and random pick one every time you launch the client. You can consult how I do that in my [Neovim themes](Neovim/.config/nvim/lua/plugins/themes.lua). When fate plays its hand, a captivating theme will gracefully unfurl.
+Don't worry, only infants make choice, while adults want the whole enchilada! Just install all of them and random pick one every time you launch the client. You can consult how I do that in my [Neovim themes](home/files/config/nvim/lua/plugins/themes.lua). When fate plays its hand, a captivating theme will gracefully unfurl.
 
 The random theme mechanism of Kitty, Sway, and related applications is still a work in progress.
