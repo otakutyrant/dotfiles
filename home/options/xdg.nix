@@ -9,9 +9,9 @@ let
   # Use the same patched notification daemon for package installation and XDG
   # autostart so the launched executable includes the local popup fixes.
   notificationDaemon = pkgs.local.nwg-notifications;
-  # Desktop templates keep desktop-entry syntax out of Nix. replaceVars fills
-  # in store paths that are only known while evaluating this user profile.
-  desktopFile = source: substitutions: pkgs.replaceVars source substitutions;
+  # Desktop templates keep desktop-entry syntax out of Nix. The shared helper
+  # fills in store paths that are only known while evaluating this profile.
+  renderTemplate = import ../../lib/render-template.nix { inherit pkgs; };
 in
 {
   # Clipcat has separate configuration files for its clipboard daemon and
@@ -45,22 +45,22 @@ in
     entries = [ "${pkgs.wechat}/share/applications/wechat.desktop" ];
   };
   xdg.configFile."autostart/waytrogen-restore.desktop".source =
-    desktopFile ../files/config/autostart/waytrogen-restore.desktop
+    renderTemplate ../files/config/autostart/waytrogen-restore.desktop
       {
         waytrogen = "${pkgs.waytrogen}/bin/waytrogen";
       };
   xdg.configFile."autostart/nwg-notifications.desktop".source =
-    desktopFile ../files/config/autostart/nwg-notifications.desktop
+    renderTemplate ../files/config/autostart/nwg-notifications.desktop
       {
         nwgNotifications = "${notificationDaemon}/bin/nwg-notifications";
       };
   xdg.configFile."autostart/ironbar.desktop".source =
-    desktopFile ../files/config/autostart/ironbar.desktop
+    renderTemplate ../files/config/autostart/ironbar.desktop
       {
         ironbar = "${pkgs.ironbar}/bin/ironbar";
       };
   xdg.configFile."autostart/gnome-text-editor-scratchpad.desktop".source =
-    desktopFile ../files/config/autostart/gnome-text-editor-scratchpad.desktop
+    renderTemplate ../files/config/autostart/gnome-text-editor-scratchpad.desktop
       {
         gnomeTextEditor = "${pkgs.gnome-text-editor}/bin/gnome-text-editor";
         scratchpad = "${home}/Nutstore Files/Nutstore/scratchpad";
@@ -68,9 +68,11 @@ in
 
   # Register rqbit as the default handler for magnet links. It submits links to
   # the persistent rqbit user service defined in the main Home Manager profile.
-  xdg.dataFile."applications/rqbit.desktop".source = desktopFile ../files/applications/rqbit.desktop {
-    rqbit = "${pkgs.unstable.rqbit}/bin/rqbit";
-  };
+  xdg.dataFile."applications/rqbit.desktop".source =
+    renderTemplate ../files/applications/rqbit.desktop
+      {
+        rqbit = "${pkgs.unstable.rqbit}/bin/rqbit";
+      };
 
   # Static application launchers migrated from the former Stow tree.
   xdg.dataFile."applications/kitty-ci.desktop".source = ../files/applications/kitty-ci.desktop;
