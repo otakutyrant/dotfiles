@@ -1,4 +1,4 @@
-{ config, pkgs-unstable, ... }:
+{ config, pkgs, ... }:
 
 {
   # Configure the NVIDIA driver at the NixOS module level. This belongs under
@@ -23,7 +23,7 @@
     # to this system's kernel and avoids importing unrelated unstable libraries.
     package =
       let
-        unstableNvidia = pkgs-unstable.linuxPackages.nvidiaPackages.latest;
+        unstableNvidia = pkgs.unstable.linuxPackages.nvidiaPackages.latest;
       in
       config.boot.kernelPackages.nvidiaPackages.mkDriver {
         inherit (unstableNvidia) version;
