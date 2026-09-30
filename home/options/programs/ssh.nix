@@ -1,0 +1,30 @@
+{ pkgs, ... }:
+
+{
+  programs.ssh = {
+    enable = true;
+    package = pkgs.openssh;
+    enableDefaultConfig = false;
+    settings = {
+      "github.com" = {
+        User = "git";
+        Hostname = "ssh.github.com";
+        Port = 443;
+        IdentityFile = "~/.ssh/id_ed25519";
+      };
+      "*" = {
+        ForwardAgent = false;
+        AddKeysToAgent = "yes";
+        Compression = false;
+        ServerAliveInterval = 0;
+        ServerAliveCountMax = 3;
+        HashKnownHosts = false;
+        UserKnownHostsFile = "~/.ssh/known_hosts";
+        ControlMaster = "no";
+        ControlPath = "~/.ssh/master-%r@%n:%p";
+        ControlPersist = "no";
+      };
+    };
+  };
+  services.ssh-agent.enable = true;
+}

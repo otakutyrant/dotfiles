@@ -1,0 +1,6 @@
+[Desktop Entry]
+Type=Application
+Name=Ironbar
+Exec=@ironbar@
+Terminal=false
+NoDisplay=true

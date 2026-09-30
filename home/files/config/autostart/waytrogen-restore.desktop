@@ -1,0 +1,6 @@
+[Desktop Entry]
+Type=Application
+Name=Waytrogen Restore
+Exec=@waytrogen@ --restore
+Terminal=false
+NoDisplay=true

@@ -2,268 +2,37 @@
   config,
   lib,
   pkgs,
-  pkgs-unstable,
   username,
   ...
 }:
 
 let
-  # Use one patched daemon for both installation and XDG autostart.
-  notificationDaemon = pkgs-unstable.callPackage ./pkgs/nwg-notifications.nix { };
-  homePackages = import ./packages.nix {
-    inherit
-      notificationDaemon
-      pkgs
-      pkgs-unstable
-      ;
-  };
   home = config.home.homeDirectory;
-  # Recursively expose every file under a dotfile directory through Home
-  # Manager, preserving each path relative to that directory.
-  linkDotfileDir =
+  # Discover Nix modules recursively so related options can live in category
+  # directories without maintaining another hard-coded import list. Attribute
+  # names returned by attrNames are sorted, so evaluation remains deterministic.
+  importModules =
     dir:
     let
-      collect =
-        prefix: path:
-        lib.concatMapAttrs (
-          name: type:
-          let
-            relativePath = if prefix == "" then name else "${prefix}/${name}";
-            sourcePath = path + "/${name}";
-          in
-          if type == "directory" then
-            collect relativePath sourcePath
-          else
-            {
-              ${relativePath}.source = sourcePath;
-            }
-        ) (builtins.readDir path);
+      entries = builtins.readDir dir;
     in
-    collect "" dir;
-  # Merge multiple dotfile directories into one Home Manager file attrset.
-  linkDotfileDirs = dirs: lib.foldl' (files: dir: files // linkDotfileDir dir) { } dirs;
+    lib.concatMap (
+      name:
+      let
+        path = dir + "/${name}";
+        type = entries.${name};
+      in
+      if type == "directory" then
+        importModules path
+      else if type == "regular" && lib.hasSuffix ".nix" name then
+        [ path ]
+      else
+        [ ]
+    ) (builtins.attrNames entries);
 in
 {
-  # Keep large Home Manager option groups in focused sibling modules so this
-  # file stays readable while still evaluating as one merged user profile.
-  imports = [
-    ./options/codex.nix
-    ./options/direnv.nix
-    ./options/env.nix
-    ./options/git.nix
-    ./options/kitty.nix
-    ./options/nushell.nix
-    ./options/ssh.nix
-    ./options/starship.nix
-  ];
-
-  # Clipcat has separate configuration files for its clipboard daemon and
-  # clients. Keep their Unix socket paths in sync so the menu and CLI can talk
-  # to the daemon started by Sway.
-  xdg.configFile."clipcat/clipcatd.toml".text = ''
-    daemonize = true
-    pid_file = "/run/user/1000/clipcatd.pid"
-    primary_threshold_ms = 5000
-    max_history = 50
-    clear_history_on_start = false
-    synchronize_selection_with_clipboard = false
-    history_file_path = "/home/otakutyrant/.cache/clipcat/clipcatd-history"
-    snippets = []
-
-    [log]
-    emit_journald = true
-    emit_stdout = false
-    emit_stderr = false
-    level = "INFO"
-
-    [watcher]
-    enable_clipboard = true
-    enable_primary = false
-    enable_secondary = false
-    sensitive_mime_types = ["x-kde-passwordManagerHint"]
-    filter_text_min_length = 1
-    filter_text_max_length = 20000000
-    denied_text_regex_patterns = []
-    capture_image = true
-    # Allow images up to 25 MiB, matching the client message limits below.
-    filter_image_max_size = 26214400
-
-    [grpc]
-    enable_http = false
-    enable_local_socket = true
-    host = "127.0.0.1"
-    port = 45045
-    local_socket = "/run/user/1000/clipcat/grpc.sock"
-
-    [dbus]
-    enable = true
-
-    [metrics]
-    enable = false
-    host = "127.0.0.1"
-    port = 45047
-
-    [desktop_notification]
-    enable = true
-    icon = "accessories-clipboard"
-    timeout_ms = 2000
-    long_plaintext_length = 2000
-  '';
-  xdg.configFile."clipcat/clipcatctl.toml".text = ''
-    server_endpoint = "/run/user/1000/clipcat/grpc.sock"
-    preview_length = 100
-    # Match the daemon's 25 MiB image limit.
-    grpc_max_message_size = 26214400
-
-    [log]
-    emit_journald = true
-    emit_stdout = false
-    emit_stderr = false
-    level = "INFO"
-  '';
-  xdg.configFile."clipcat/clipcat-menu.toml".text = ''
-    server_endpoint = "/run/user/1000/clipcat/grpc.sock"
-    finder = "custom"
-    preview_length = 80
-    # Match the daemon's 25 MiB image limit.
-    grpc_max_message_size = 26214400
-
-    [log]
-    emit_journald = true
-    emit_stdout = false
-    emit_stderr = false
-    level = "INFO"
-
-    [custom_finder]
-    program = "walker"
-    args = ["--dmenu", "--exit", "--placeholder", "Clipcat"]
-  '';
-  # Start programs through XDG autostart when they have no Home Manager or
-  # NixOS service option. Waytrogen needs --restore, and the editor entry keeps
-  # opening the configured scratchpad file on login.
-  xdg.autostart = {
-    enable = true;
-    entries = [
-      "${pkgs.wechat}/share/applications/wechat.desktop"
-      (pkgs.writeText "waytrogen-restore.desktop" ''
-        [Desktop Entry]
-        Type=Application
-        Name=Waytrogen Restore
-        Exec=${pkgs.waytrogen}/bin/waytrogen --restore
-        Terminal=false
-        NoDisplay=true
-      '')
-      (pkgs.writeText "nwg-notifications.desktop" ''
-        [Desktop Entry]
-        Type=Application
-        Name=NWG Notifications
-        Exec=${notificationDaemon}/bin/nwg-notifications --wm sway
-        Terminal=false
-        NoDisplay=true
-      '')
-      (pkgs.writeText "ironbar.desktop" ''
-        [Desktop Entry]
-        Type=Application
-        Name=Ironbar
-        Exec=${pkgs.ironbar}/bin/ironbar
-        Terminal=false
-        NoDisplay=true
-      '')
-      (pkgs.writeText "gnome-text-editor-scratchpad.desktop" ''
-        [Desktop Entry]
-        Type=Application
-        Name=Scratchpad
-        Exec=${pkgs.gnome-text-editor}/bin/gnome-text-editor "${home}/Nutstore Files/Nutstore/scratchpad"
-        Terminal=false
-        NoDisplay=true
-      '')
-    ];
-  };
-
-  # Register rqbit as the default handler for magnet links. The handler talks
-  # to the user service below, so clicking a magnet link starts a download in
-  # the same persistent rqbit session used by the Web UI.
-  xdg.desktopEntries.rqbit = {
-    name = "rqbit Magnet Handler";
-    comment = "Add magnet links to rqbit";
-    # Use rqbit's native client-to-server path; it accepts magnet URLs and
-    # submits them to the already-running persistent server.
-    exec = "${pkgs-unstable.rqbit}/bin/rqbit download --server-url http://127.0.0.1:3030 %u";
-    terminal = false;
-    type = "Application";
-    mimeType = [ "x-scheme-handler/magnet" ];
-    categories = [
-      "Network"
-      "FileTransfer"
-    ];
-    settings = {
-      # Some GTK application choosers require TryExec before listing a custom
-      # URI handler, even when the Exec command uses an absolute store path.
-      TryExec = "${pkgs-unstable.rqbit}/bin/rqbit";
-    };
-  };
-
-  # Walker has a Home Manager service option. Keep its existing launcher
-  # settings and start its background application service with the session.
-  services.walker = {
-    enable = true;
-    systemd.enable = true;
-    settings = {
-      force_keyboard_focus = true;
-      providers.default = [ "desktopapplications" ];
-      providers.empty = [ "desktopapplications" ];
-    };
-  };
-
-  # Use Home Manager's service modules for these session daemons while keeping
-  # the existing hand-written Clipcat configuration files above authoritative.
-  services.clipcat = {
-    enable = true;
-    daemonSettings = { };
-    ctlSettings = { };
-    menuSettings = { };
-  };
-
-  # Keep rqbit's HTTP API and torrent session alive for the whole graphical
-  # login. The download directory is also rqbit's default output directory.
-  systemd.user.services.rqbit = {
-    Unit = {
-      Description = "rqbit BitTorrent server";
-      After = [ "graphical-session.target" ];
-      PartOf = [ "graphical-session.target" ];
-    };
-    Service = {
-      ExecStartPre = "${pkgs.coreutils}/bin/mkdir -p ${home}/Downloads";
-      # Clash's fake-IP DNS maps the default DHT bootstrap hostnames into
-      # 198.18.0.0/16, where rqbit cannot complete its UDP bootstrap. Use the
-      # bootstrap servers' real IPv4 addresses and send outgoing peer
-      # connections through Clash's local SOCKS5 endpoint.
-      ExecStart = builtins.concatStringsSep " " [
-        "${pkgs-unstable.rqbit}/bin/rqbit"
-        "--socks-url socks5://127.0.0.1:7890"
-        "--dht-bootstrap-addrs 185.157.221.247:25401,87.98.162.88:6881,212.129.33.59:6881"
-        "server start ${home}/Downloads"
-      ];
-      Restart = "on-failure";
-      RestartSec = 5;
-    };
-    Install.WantedBy = [ "graphical-session.target" ];
-  };
-
-  services.swayidle = {
-    enable = true;
-    timeouts = [
-      {
-        timeout = 600;
-        command = "${pkgs.swaylock}/bin/swaylock -f";
-      }
-      {
-        timeout = 601;
-        command = "${pkgs.sway}/bin/swaymsg 'output * power off'";
-        resumeCommand = "${pkgs.sway}/bin/swaymsg 'output * power on'";
-      }
-    ];
-  };
+  # Evaluate every category module and focused option module as one profile.
+  imports = importModules ./modules ++ importModules ./options;
 
   home.username = username;
   home.homeDirectory = "/home/${username}";
@@ -277,105 +46,6 @@ in
     "${home}/.local/share/cargo/bin"
   ];
 
-  programs.anki.enable = true;
-  programs.btop.enable = true; # System monitor.
-  programs.calibre.enable = true;
-  programs.fd.enable = true; # Simple, fast and user-friendly alternative to find.
-  programs.fzf = {
-    enable = true; # Fuzzy search.
-    defaultCommand = "fd --type f --strip-cwd-prefix --hidden --follow --exclude .git";
-    fileWidgetCommand = "fd --type f --strip-cwd-prefix --hidden --follow --exclude .git";
-  };
-  programs.google-chrome.enable = true;
-  programs.joshuto = {
-    enable = true; # Terminal file manager.
-    # Keep Joshuto's TOML settings in Home Manager; its preview scripts remain
-    # linked from the joshuto directory and are referenced here by path.
-    settings = {
-      xdg_open = true;
-      display.line_number_style = "relative";
-      preview = {
-        preview_script = "~/.config/joshuto/preview_file.nu";
-        preview_shown_hook_script = "~/.config/joshuto/on_preview_shown.nu";
-        preview_removed_hook_script = "~/.config/joshuto/on_preview_removed.nu";
-      };
-    };
-    mimetype = {
-      # Joshuto stores opener classes and MIME mappings in mimetype.toml.
-      class.text_default = [ { command = "nvim"; } ];
-      mimetype.text."inherit" = "text_default";
-    };
-  };
-  # Install local mpv package with Unicode-aware subtitle line wrapping through
-  # Home Manager's mpv module.
-  programs.mpv = {
-    enable = true;
-    package = pkgs.mpv.override {
-      # mpv depends on libass which is not built with libunibreak. So overwrite
-      # them here.
-      mpv-unwrapped = pkgs.mpv-unwrapped.override {
-        libass = pkgs.libass.overrideAttrs (oldAttrs: {
-          configureFlags = (oldAttrs.configureFlags or [ ]) ++ [ "--enable-libunibreak" ];
-          # Add libunibreak, which lets libass wrap long Chinese subtitle lines.
-          buildInputs = (oldAttrs.buildInputs or [ ]) ++ [ pkgs.libunibreak ];
-        });
-      };
-    };
-    # These settings replace the linked mpv.conf and input.conf files.
-    config = {
-      sub-visibility = "yes";
-      sub-auto = "fuzzy";
-      audio-file-auto = "fuzzy";
-      save-position-on-quit = "yes";
-      autofit-larger = "100%x100%";
-      geometry = "50%:50%";
-      sub-font = "Sarasa Mono Slab SC Semibold";
-      sub-font-size = 40;
-      sub-margin-x = 80;
-      sub-margin-y = 48;
-      profile = "gpu-hq";
-      scale = "ewa_lanczossharp";
-      cscale = "ewa_lanczossharp";
-      video-sync = "display-resample";
-      interpolation = true;
-      tscale = "oversample";
-      keep-open = "yes";
-    };
-    bindings = {
-      RIGHT = "sub-seek 1";
-      LEFT = "sub-seek -1";
-      ENTER = "script-message-to subtitle_cmds ab-loop-sub pause";
-      "Shift+ENTER" = "script-message-to subtitle_cmds ab-loop-sub";
-      y = "script-message-to subtitle_cmds copy-subtitle";
-      # Nix string interpolation must be escaped so mpv receives its own
-      # ${...} expressions for the active A-B loop and current filename.
-      g = ''run ffmpeg -y -nostdin -ss ''${=ab-loop-a}s -to ''${=ab-loop-b}s -fflags +genpts -i ''${stream-open-filename} -avoid_negative_ts 1 -c copy -map 0 dump_''${filename}_''${=ab-loop-a}-''${=ab-loop-b}.mp4 ; show-text "ffmpeg dumping done"'';
-    };
-  };
-  programs.npm = {
-    enable = true;
-    settings.registry = "https://npmreg.proxy.ustclug.org/";
-  };
-  programs.obs-studio.enable = true;
-  programs.ripgrep.enable = true; # Grep alternative.
-  programs.yt-dlp.enable = true; # YouTube downloader.
-  programs.zoxide = {
-    enable = true; # Jump tool.
-    enableNushellIntegration = true;
-  };
-
-  # Ironbar reads StatusNotifier items, so start nm-applet in indicator mode
-  # instead of its legacy XEmbed tray mode.
-  xsession.preferStatusNotifierItems = true;
-  services.network-manager-applet.enable = true;
-  services.polkit-gnome.enable = true;
-  services.udiskie = {
-    enable = true;
-    tray = "auto";
-  };
-
-  xdg.userDirs.enable = true;
-  xdg.configFile."user-dirs.dirs".force = true;
   # Set an explicit cursor theme because Sway is not a full desktop environment.
   # Keep the X11 link enabled so Xwayland clients use the same cursor theme.
   home.pointerCursor = {
@@ -385,83 +55,4 @@ in
     gtk.enable = true;
     x11.enable = true;
   };
-  gtk = {
-    enable = true;
-    # Provide a desktop-wide icon theme for applications launched by Sway.
-    iconTheme = {
-      package = pkgs.adwaita-icon-theme;
-      name = "Adwaita";
-    };
-    gtk3 = {
-      bookmarks = [
-        "file://${home}/Pictures/Screenshots"
-        "file://${home}/Nutstore%20Files/Nutstore"
-        "file://${home}/Downloads"
-        "file://${home}/Videos"
-      ];
-    };
-  };
-  home.packages = homePackages;
-
-  # User services
-  systemd.user.services.image-resize-daemon = {
-    Unit = {
-      Description = "Upscale small images under /home/otakutyrant";
-      After = [ "default.target" ];
-    };
-
-    Service = {
-      Type = "simple";
-      ExecStart = "${home}/.local/bin/image_resize_daemon.nu --root ${home} --target-short-side 800 --interval 5";
-      Restart = "always";
-      RestartSec = 5;
-    };
-
-    Install.WantedBy = [ "default.target" ];
-  };
-
-  # Link the checked-in dotfile directories into the user's home directory.
-  home.file =
-    (linkDotfileDirs [
-      ../mpv
-      ../Neovim
-      ../XDG
-      ../Sway
-      ../joshuto
-    ])
-    // {
-      # Rime stores static configuration beside generated databases. Force only
-      # these four paths so Home Manager can replace Rime-created regular files
-      # with managed links without touching mutable user dictionaries.
-      ".local/share/fcitx5/rime/default.custom.yaml" = {
-        source = ../XDG/.local/share/fcitx5/rime/default.custom.yaml;
-        force = true;
-      };
-      ".local/share/fcitx5/rime/fcitx5.custom.yaml" = {
-        source = ../XDG/.local/share/fcitx5/rime/fcitx5.custom.yaml;
-        force = true;
-      };
-      ".local/share/fcitx5/rime/terra_pinyin.custom.yaml" = {
-        source = ../XDG/.local/share/fcitx5/rime/terra_pinyin.custom.yaml;
-        force = true;
-      };
-      ".local/share/fcitx5/rime/terra_pinyin.extended.dict.yaml" = {
-        source = ../XDG/.local/share/fcitx5/rime/terra_pinyin.extended.dict.yaml;
-        force = true;
-      };
-      "${home}/.local/share/Anki2/prefs21.db".force = true;
-    };
-
-  # The dotfile directories above are linked into the Nix store, where every
-  # file has the epoch mtime. Neovim's module loader (vim.loader, enabled in
-  # editor.lua) caches compiled bytecode in ~/.cache/nvim/luac, keyed by path
-  # and validated by mtime. When an activation re-points a config symlink to a
-  # new store path, the mtime stays epoch, so the loader keeps serving stale
-  # bytecode from the previous generation (e.g. oxlint silently missing after
-  # switching eslint to oxlint). Clearing the cache after every activation is
-  # cheap and forces recompilation from the new sources.
-  home.activation.clearNvimLuacCache = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-    rm -rf ${home}/.cache/nvim/luac
-  '';
-
 }

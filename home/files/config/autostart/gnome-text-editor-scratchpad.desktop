@@ -1,0 +1,6 @@
+[Desktop Entry]
+Type=Application
+Name=Scratchpad
+Exec=@gnomeTextEditor@ "@scratchpad@"
+Terminal=false
+NoDisplay=true

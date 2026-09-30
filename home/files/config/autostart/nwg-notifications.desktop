@@ -1,0 +1,6 @@
+[Desktop Entry]
+Type=Application
+Name=NWG Notifications
+Exec=@nwgNotifications@ --wm sway
+Terminal=false
+NoDisplay=true

@@ -1,65 +1,67 @@
 {
+  config,
   pkgs,
-  pkgs-unstable,
   ...
 }:
 
-# Editors, language tooling, compilers, and developer services.
-with pkgs;
-[
-  ## Editor
-  neovim
-  python3Packages.pynvim
+{
+  # Editors, language tooling, compilers, and developer services.
+  home.packages = [
+    ## Editor
+    pkgs.neovim
+    pkgs.python3Packages.pynvim
 
-  ## Agent
-  # Install Kimi Code CLI from MoonshotAI's own flake because it is not
-  # provided by the pinned NixOS 26.05 nixpkgs package set. It provides the
-  # `kimi` command and replaces the legacy Python-based kimi-cli.
-  (callPackage ../pkgs/kimi-code.nix { }) # Kimi Code CLI.
-  pkgs-unstable.opencode # Open AI harness.
-  (callPackage ../pkgs/chatgpt.nix { }) # ChatGPT desktop app.
+    ## Agent
+    # Install Kimi Code CLI from MoonshotAI's own flake because it is not
+    # provided by the pinned NixOS 26.05 nixpkgs package set. It provides the
+    # `kimi` command and replaces the legacy Python-based kimi-cli.
+    config.programs.codex.package # Codex CLI.
+    pkgs.local.chatgpt # ChatGPT desktop app.
+    pkgs.local.kimi-code # Kimi Code CLI.
+    pkgs.unstable.opencode # Open AI harness.
 
-  ## Database
-  postgresql
-  prisma-engines # Provides Prisma schema-engine for NixOS.
-  prisma-language-server
+    ## Database
+    pkgs.postgresql
+    pkgs.prisma-engines # Provides Prisma schema-engine for NixOS.
+    pkgs.prisma-language-server
 
-  ## Python
-  python3
-  uv # Package manager.
+    ## Python
+    pkgs.python3
+    pkgs.uv # Package manager.
 
-  ## TypeScript
-  typescript
-  pnpm # NPM package manager.
-  typescript-language-server
-  vscode-langservers-extracted
-  tailwindcss-language-server
+    ## TypeScript
+    pkgs.typescript
+    pkgs.pnpm # NPM package manager.
+    pkgs.typescript-language-server
+    pkgs.vscode-langservers-extracted
+    pkgs.tailwindcss-language-server
 
-  ## Rust
-  rustup
+    ## Rust
+    pkgs.rustup
 
-  ## C/C++
-  gcc # Provides `cc` for tools that expect a compiler on PATH.
+    ## C/C++
+    pkgs.gcc # Provides `cc` for tools that expect a compiler on PATH.
 
-  ## Lua
-  lua
-  stylua
-  lua-language-server
+    ## Lua
+    pkgs.lua
+    pkgs.stylua
+    pkgs.lua-language-server
 
-  ## Nix, note that installing Nix causes conflicts, so it is not included here.
-  nixd
-  nixfmt
+    ## Nix, note that installing Nix causes conflicts, so it is not included here.
+    pkgs.nixd
+    pkgs.nixfmt
 
-  ## YAML
-  yamlfmt
-  yaml-language-server
+    ## YAML
+    pkgs.yamlfmt
+    pkgs.yaml-language-server
 
-  ## TOML
-  taplo
+    ## TOML
+    pkgs.taplo
 
-  ## SAST
-  codeql
+    ## SAST
+    pkgs.codeql
 
-  ## Sandbox container
-  bubblewrap # Provides the `bwrap` command for creating sandboxed processes.
-]
+    ## Sandbox container
+    pkgs.bubblewrap # Provides the `bwrap` command for creating sandboxed processes.
+  ];
+}

@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=rqbit Magnet Handler
+Comment=Add magnet links to rqbit
+Exec=@rqbit@ download --server-url http://127.0.0.1:3030 %u
+TryExec=@rqbit@
+Terminal=false
+MimeType=x-scheme-handler/magnet;
+Categories=Network;FileTransfer;

@@ -23,13 +23,37 @@
       username = "otakutyrant";
       hostname = "nixos";
       # Selected tools are only available or fresh enough in the unstable channel.
-      pkgs-unstable = import inputs.nixpkgs-unstable {
+      unstablePackages = import inputs.nixpkgs-unstable {
         inherit system;
         config.allowUnfree = true;
       };
+      # Expose repository-local packages under `pkgs.local` without replacing
+      # similarly named packages from nixpkgs, such as GNU Tree.
+      localPackagesOverlay = final: _previous: {
+        # Make the secondary package set available through the ordinary `pkgs`
+        # argument instead of passing a separate module argument everywhere.
+        unstable = unstablePackages;
+
+        local = {
+          chatgpt = final.callPackage ./home/pkgs/chatgpt.nix { };
+          imageflow = final.callPackage ./home/pkgs/imageflow.nix { };
+          kimi-code = final.callPackage ./home/pkgs/kimi-code.nix { };
+          nmrs = final.callPackage ./home/pkgs/nmrs.nix { };
+          nur = final.callPackage ./home/pkgs/nur.nix { };
+          nutstore = final.callPackage ./home/pkgs/nutstore.nix { };
+          oximedia = final.callPackage ./home/pkgs/oximedia.nix { };
+          tree = final.callPackage ./home/pkgs/tree.nix { };
+          wayshot = final.callPackage ./home/pkgs/wayshot.nix { };
+          wdotool = final.callPackage ./home/pkgs/wdotool.nix { };
+          wkeys = final.callPackage ./home/pkgs/wkeys.nix { };
+
+          # Fast-moving packages intentionally come from unstable nixpkgs.
+          nwg-notifications = unstablePackages.callPackage ./home/pkgs/nwg-notifications.nix { };
+        };
+      };
       # These arguments are needed by the shared Home Manager module.
       homeSpecialArgs = {
-        inherit inputs username pkgs-unstable;
+        inherit username;
       };
     in
     {
@@ -37,16 +61,15 @@
         inherit system;
         specialArgs = {
           inherit
-            inputs
             username
             hostname
-            pkgs-unstable
             ;
         };
         modules = [
           ./nixos/configuration.nix
           inputs.home-manager.nixosModules.home-manager
           {
+            nixpkgs.overlays = [ localPackagesOverlay ];
             home-manager.useGlobalPkgs = true;
             home-manager.extraSpecialArgs = homeSpecialArgs;
             home-manager.users.${username} = import ./home/configuration.nix;
@@ -59,6 +82,7 @@
         pkgs = import inputs.nixpkgs {
           inherit system;
           config.allowUnfree = true;
+          overlays = [ localPackagesOverlay ];
         };
         extraSpecialArgs = homeSpecialArgs;
         modules = [ ./home/configuration.nix ];
