@@ -13,8 +13,22 @@ let
   # Desktop templates keep desktop-entry syntax out of Nix. The shared helper
   # fills in store paths that are only known while evaluating this profile.
   renderTemplate = import ../../lib/render-template.nix { inherit pkgs; };
+  # rqbit 9 no longer has a CLI option for submitting downloads to a running
+  # server, so bridge desktop magnet links to its HTTP API. Keep the Nushell
+  # implementation in files/bin and substitute only immutable package paths.
+  rqbitMagnetHandler = renderTemplate ../files/bin/rqbit_magnet_handler.nu {
+    curl = "${pkgs.curl}/bin/curl";
+    notifySend = "${pkgs.libnotify}/bin/notify-send";
+    nu = "${pkgs.nushell}/bin/nu";
+    systemctl = "${pkgs.systemd}/bin/systemctl";
+  };
 in
 {
+  home.file.".local/bin/rqbit-magnet-handler" = {
+    source = rqbitMagnetHandler;
+    executable = true;
+  };
+
   # Clipcat has separate configuration files for its clipboard daemon and
   # clients. Keep their Unix socket paths in sync so the menu and CLI can talk
   # to the daemon started by Sway.
@@ -72,7 +86,7 @@ in
   xdg.dataFile."applications/rqbit.desktop".source =
     renderTemplate ../files/applications/rqbit.desktop
       {
-        rqbit = "${pkgs.unstable.rqbit}/bin/rqbit";
+        rqbitMagnetHandler = "${home}/.local/bin/rqbit-magnet-handler";
         systemdRun = "${pkgs.systemd}/bin/systemd-run";
       };
 

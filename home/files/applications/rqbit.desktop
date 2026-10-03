@@ -2,8 +2,8 @@
 Type=Application
 Name=rqbit Magnet Handler
 Comment=Add magnet links to rqbit
-Exec=@systemdRun@ --user --collect --quiet --property=Type=exec @rqbit@ download --server-url http://127.0.0.1:3030 %u
-TryExec=@rqbit@
+Exec=@systemdRun@ --user --collect --quiet --property=Type=exec @rqbitMagnetHandler@ %u
+TryExec=@rqbitMagnetHandler@
 Terminal=false
 MimeType=x-scheme-handler/magnet;
 Categories=Network;FileTransfer;
