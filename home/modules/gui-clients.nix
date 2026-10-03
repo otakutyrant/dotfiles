@@ -4,16 +4,37 @@
   ...
 }:
 
+let
+  withFcitxQt = pkgs.callPackage ../../lib/wrap-with-fcitx-qt.nix { };
+in
 {
   # GUI applications that do not belong to the GNOME client group.
   home.packages = [
     config.programs.kitty.package # GPU-accelerated terminal emulator.
     pkgs.walker # Rust/Wayland application launcher and dmenu-compatible picker.
-    pkgs.wpsoffice-cn # Office suite.
+    (withFcitxQt {
+      package = pkgs.wpsoffice-cn;
+      executables = [
+        "et"
+        "wpp"
+        "wps"
+        "wpspdf"
+      ];
+    }) # Qt office suite; Sway needs Fcitx's Qt input module.
     pkgs.local.wkeys # On-screen Wayland keyboard, Rust-powered.
-    pkgs.wechat # Chat client.
+    (withFcitxQt {
+      package = pkgs.wechat;
+      executables = [ "wechat" ];
+    }) # WeChat bundles the Fcitx Qt plugin but only enables it via QT_IM_MODULE.
     pkgs.ticktick # Time management client.
-    pkgs.qt6Packages.fcitx5-configtool # IME config tool.
+    (withFcitxQt {
+      package = pkgs.qt6Packages.fcitx5-configtool;
+      executables = [
+        "fcitx5-config-qt"
+        "fcitx5-migrator"
+        "kbd-layout-viewer5"
+      ];
+    }) # Qt configuration interfaces need the same Sway-specific override.
     pkgs.local.nutstore # Sync client.
     pkgs.waytrogen # Wallpaper chooser, Rust-powered.
     pkgs.pwvucontrol # Graphical mixer for PipeWire, Rust-powered.
