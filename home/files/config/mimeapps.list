@@ -26,6 +26,8 @@ video/x-theora=mpv.desktop
 
 x-scheme-handler/http=google-chrome.desktop
 x-scheme-handler/https=google-chrome.desktop
+x-scheme-handler/magnet=rqbit.desktop
+
 inode/directory=org.gnome.Nautilus.desktop
 x-scheme-handler/trash=org.gnome.Nautilus.desktop
 

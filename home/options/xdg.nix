@@ -1,5 +1,6 @@
 {
   config,
+  lib,
   pkgs,
   ...
 }:
@@ -72,6 +73,7 @@ in
     renderTemplate ../files/applications/rqbit.desktop
       {
         rqbit = "${pkgs.unstable.rqbit}/bin/rqbit";
+        systemdRun = "${pkgs.systemd}/bin/systemd-run";
       };
 
   # Static application launchers migrated from the former Stow tree.
@@ -81,6 +83,14 @@ in
   xdg.dataFile."applications/screenshot-delay.desktop".source =
     ../files/applications/screenshot-delay.desktop;
   xdg.dataFile."applications/sleep.desktop".source = ../files/applications/sleep.desktop;
+
+  # Desktop files under ~/.local/share are linked after Home Manager builds its
+  # package profile, so refresh the per-user cache once those links are in
+  # place. GTK's application chooser otherwise keeps an older mimeinfo.cache
+  # and can report that no application supports a newly added URI scheme.
+  home.activation.updateUserDesktopDatabase = lib.hm.dag.entryAfter [ "linkGeneration" ] ''
+    run ${pkgs.desktop-file-utils}/bin/update-desktop-database ${lib.escapeShellArg "${config.xdg.dataHome}/applications"}
+  '';
 
   # Rime stores static configuration beside generated databases. Force only
   # these paths so activation does not replace mutable user dictionaries.
