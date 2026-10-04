@@ -40,6 +40,7 @@
     # Use the current rqbit release from unstable. Magnet links are submitted
     # separately through its HTTP API because rqbit 9's CLI is stateless.
     pkgs.unstable.rqbit # BitTorrent client, an alternative to Fragments or qBittorrent.
+    pkgs.localsend # Local-network file sharing between desktop and mobile devices.
 
     # Media tools, Rust-powered
     pkgs.local.imageflow # Image tool, an alternative to ImageMagick.
