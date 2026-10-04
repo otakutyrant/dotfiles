@@ -9,6 +9,10 @@
   # Home Manager, while NixOS provides the compositor and session integration.
   programs.sway = {
     enable = true;
+    # Stable NixOS 26.05 still provides Sway 1.11. Sway 1.12 re-applies output
+    # constraints when GTK repositions a layer-shell popup, keeping Ironbar's
+    # sliding tray submenus on-screen above a bottom bar.
+    package = pkgs.local.sway;
     extraPackages = [ ];
     extraOptions = [ "--unsupported-gpu" ];
   };
@@ -25,7 +29,8 @@
   services.greetd = {
     enable = true;
     settings.default_session = {
-      command = "${pkgs.tuigreet}/bin/tuigreet --time --remember --cmd '${pkgs.sway}/bin/sway --unsupported-gpu'";
+      # Keep greetd on the same Sway package as the NixOS session wrapper.
+      command = "${pkgs.tuigreet}/bin/tuigreet --time --remember --cmd '${pkgs.local.sway}/bin/sway --unsupported-gpu'";
       user = "greeter";
     };
   };

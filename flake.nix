@@ -49,6 +49,10 @@
           wkeys = final.callPackage ./home/pkgs/wkeys.nix { };
           wl-clipboard-rs = final.callPackage ./home/pkgs/wl-clipboard-rs.nix { };
 
+          # Sway 1.12 fixes layer-shell popup repositioning, which GTK's
+          # sliding tray submenus require near the bottom edge of an output.
+          sway = unstablePackages.sway;
+
           # Fast-moving packages intentionally come from unstable nixpkgs.
           nwg-notifications = unstablePackages.callPackage ./home/pkgs/nwg-notifications.nix { };
         };

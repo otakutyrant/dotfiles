@@ -42,7 +42,7 @@ in
     pkgs.local.nmrs # GTK4 NetworkManager frontend.
 
     # Wayland
-    pkgs.ironbar # Rust and GTK4 panel for Sway, including workspace and system-info modules.
+    pkgs.unstable.ironbar # Current GTK4 panel; sliding tray submenus rely on Sway 1.12.
     pkgs.swayidle # Idle timeout manager used by the Home Manager service.
     pkgs.swaylock # Screen locker invoked by Sway key bindings and idle timeouts.
     # Build upstream wayshot with the merged BGR888 stride fix before nixpkgs
