@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Version=1.5
+Name=Screenshot All Monitors
+GenericName=Full Desktop Screenshot
+Comment=Capture all connected monitors and copy the image
+Exec=screenshot_select.nu --full-screen
+Icon=applets-screenshooter
+Categories=Graphics;
+Terminal=false

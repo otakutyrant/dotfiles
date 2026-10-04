@@ -106,6 +106,8 @@ in
   xdg.dataFile."applications/kitty-ci.desktop".source = ../files/applications/kitty-ci.desktop;
   xdg.dataFile."applications/poweroff.desktop".source = ../files/applications/poweroff.desktop;
   xdg.dataFile."applications/reboot.desktop".source = ../files/applications/reboot.desktop;
+  xdg.dataFile."applications/screenshot-all-monitors.desktop".source =
+    ../files/applications/screenshot-all-monitors.desktop;
   xdg.dataFile."applications/screenshot-delay.desktop".source =
     ../files/applications/screenshot-delay.desktop;
   xdg.dataFile."applications/sleep.desktop".source = ../files/applications/sleep.desktop;

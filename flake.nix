@@ -45,6 +45,7 @@
           oximedia = final.callPackage ./home/pkgs/oximedia.nix { };
           tree = final.callPackage ./home/pkgs/tree.nix { };
           wayshot = final.callPackage ./home/pkgs/wayshot.nix { };
+          waysip = final.callPackage ./home/pkgs/waysip.nix { };
           wdotool = final.callPackage ./home/pkgs/wdotool.nix { };
           wkeys = final.callPackage ./home/pkgs/wkeys.nix { };
           wl-clipboard-rs = final.callPackage ./home/pkgs/wl-clipboard-rs.nix { };

@@ -48,6 +48,8 @@ in
     # Build upstream wayshot with the merged BGR888 stride fix before nixpkgs
     # updates its older 1.4.6 package.
     pkgs.local.wayshot
+    # Rust selector used for click-to-monitor and drag-to-region screenshots.
+    pkgs.local.waysip
     # Provides wl-copy/wl-paste and wl-clip, which is similar to xclip on Wayland.
     pkgs.local.wl-clipboard-rs
     # Used to send Ctrl+V after selecting a Clipcat item from the menu.
