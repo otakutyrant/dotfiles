@@ -1,0 +1,123 @@
+#!/usr/bin/env nu
+
+def --wrapped main [
+    agent: string
+    --work(-w): path = "."
+    --rw: list<path> = []
+    --ro: list<path> = []
+    ...agent_args: string
+] {
+    let work = ($work | path expand)
+    if not ($work | path exists) {
+        error make { msg: $"Working directory does not exist: ($work)" }
+    }
+
+    let spec = match $agent {
+        "codex" => {
+            state: ($env.HOME | path join ".codex")
+            state_env: "CODEX_HOME"
+        }
+        "kimi" => {
+            state: ($env.HOME | path join ".kimi-code")
+            state_env: "KIMI_CODE_HOME"
+        }
+        _ => { error make { msg: "agent must be 'codex' or 'kimi'" } }
+    }
+
+    if not ($spec.state | path exists) {
+        error make { msg: $"State directory does not exist: ($spec.state)" }
+    }
+
+    let executable = (
+        which $agent
+        | where type == "external"
+        | get path
+        | first
+    )
+    let real_executable = (^readlink -f $executable | str trim)
+    let user_profile = ($env.HOME | path join ".local/state/nix/profile")
+    let sandbox_path = $"/nix-profile/bin:/run/current-system/sw/bin:($env.PATH | str join (char esep))"
+
+    mut bwrap_args = [
+        "--unshare-all" "--share-net"
+        "--die-with-parent" "--new-session"
+        "--clearenv"
+
+        "--dir" "/nix"
+        "--ro-bind" "/nix/store" "/nix/store"
+        "--dir" "/nix-profile"
+        "--ro-bind" $user_profile "/nix-profile"
+        "--dir" "/run"
+        "--dir" "/run/current-system"
+        "--ro-bind-try" "/run/current-system/sw" "/run/current-system/sw"
+
+        "--dir" "/bin"
+        "--symlink" "/run/current-system/sw/bin/sh" "/bin/sh"
+        "--dir" "/usr"
+        "--dir" "/usr/bin"
+        "--symlink" "/run/current-system/sw/bin/env" "/usr/bin/env"
+
+        "--dir" "/etc"
+        "--dir" "/etc/ssl"
+        "--ro-bind-try" "/etc/resolv.conf" "/etc/resolv.conf"
+        "--ro-bind-try" "/etc/hosts" "/etc/hosts"
+        "--ro-bind-try" "/etc/nsswitch.conf" "/etc/nsswitch.conf"
+        "--ro-bind-try" "/etc/passwd" "/etc/passwd"
+        "--ro-bind-try" "/etc/group" "/etc/group"
+        "--ro-bind-try" "/etc/localtime" "/etc/localtime"
+        "--ro-bind-try" "/etc/ssl/certs" "/etc/ssl/certs"
+
+        "--proc" "/proc"
+        "--dev" "/dev"
+        "--tmpfs" "/tmp"
+        "--dir" "/home"
+        "--tmpfs" "/home/agent"
+
+        "--dir" "/state"
+        "--bind" $spec.state "/state"
+        "--dir" "/workspace"
+        "--bind" $work "/workspace"
+        "--dir" "/extra"
+        "--dir" "/extra/rw"
+        "--dir" "/extra/ro"
+
+        "--setenv" "HOME" "/home/agent"
+        "--setenv" "USER" "agent"
+        "--setenv" "LOGNAME" "agent"
+        "--setenv" "PATH" $sandbox_path
+        "--setenv" "TMPDIR" "/tmp"
+        "--setenv" "XDG_CACHE_HOME" "/tmp/cache"
+        "--setenv" "TERM" ($env.TERM? | default "xterm-256color")
+        "--setenv" "LANG" ($env.LANG? | default "C.UTF-8")
+        "--setenv" "SSL_CERT_FILE" "/etc/ssl/certs/ca-bundle.crt"
+        "--setenv" "NIX_SSL_CERT_FILE" "/etc/ssl/certs/ca-bundle.crt"
+        "--setenv" $spec.state_env "/state"
+        "--chdir" "/workspace"
+    ]
+
+    mut workspace_args = []
+
+    for item in ($rw | enumerate) {
+        let source = ($item.item | path expand)
+        if not ($source | path exists) {
+            error make { msg: $"Extra directory does not exist: ($source)" }
+        }
+        let destination = $"/extra/rw/($item.index)"
+        $bwrap_args = ($bwrap_args | append ["--bind" $source $destination])
+        $workspace_args = ($workspace_args | append ["--add-dir" $destination])
+    }
+
+    for item in ($ro | enumerate) {
+        let source = ($item.item | path expand)
+        if not ($source | path exists) {
+            error make { msg: $"Extra directory does not exist: ($source)" }
+        }
+        let destination = $"/extra/ro/($item.index)"
+        $bwrap_args = ($bwrap_args | append ["--ro-bind" $source $destination])
+        $workspace_args = ($workspace_args | append ["--add-dir" $destination])
+    }
+
+    let root_args = if $agent == "codex" { ["-C" "/workspace"] } else { [] }
+
+    ^bwrap ...$bwrap_args -- $real_executable ...$root_args ...$workspace_args ...$agent_args
+}
