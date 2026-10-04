@@ -37,7 +37,6 @@
     # Use Wayland text-input coordinates instead of X11 coordinates so the
     # candidate panel follows the cursor across rotated displays.
     fcitx5.waylandFrontend = true;
-    fcitx5.settings.addons.classicui.globalSection."Vertical Candidate List" = "True";
     fcitx5.addons = with pkgs; [
       # Include the zhwiki vocabulary imported by the extended Rime dictionary.
       (fcitx5-rime.override {

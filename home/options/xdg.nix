@@ -52,6 +52,18 @@ in
     recursive = true;
   };
 
+  # Fcitx gives ~/.config precedence over the system-wide configuration from
+  # NixOS. Manage the Classic UI preferences here so a stale configtool file
+  # cannot restore the wide horizontal candidate row across monitor edges.
+  xdg.configFile."fcitx5/conf/classicui.conf" = {
+    force = true;
+    text = ''
+      Vertical Candidate List=True
+      WheelForPaging=True
+      Font="Sarasa Fixed SC 32"
+    '';
+  };
+
   # Start programs through XDG autostart when they have no Home Manager or
   # NixOS service option. Waytrogen needs --restore, and the editor entry keeps
   # opening the configured scratchpad file on login.
