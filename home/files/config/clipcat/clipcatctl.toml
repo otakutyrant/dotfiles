@@ -1,7 +1,7 @@
 server_endpoint = "/run/user/1000/clipcat/grpc.sock"
 preview_length = 100
-# Match the daemon's 25 MiB image limit.
-grpc_max_message_size = 26214400
+# Match the daemon's 40 MiB image limit.
+grpc_max_message_size = 41943040
 
 [log]
 emit_journald = true

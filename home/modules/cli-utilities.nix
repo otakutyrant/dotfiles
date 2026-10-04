@@ -36,7 +36,7 @@
     pkgs.local.tree # Treer, optimized for document comments.
     pkgs.sd # Steam EDitor, search and replace, an alternative to sed.
     pkgs.macchina # System information shower, an alternative to lsb-release.
-    pkgs.clipcat # Clipboard manager, an alternative to doidon.
+    pkgs.local.clipcat # Clipboard manager, with robust large-image publishing on Wayland.
     # Use the current rqbit release from unstable. Magnet links are submitted
     # separately through its HTTP API because rqbit 9's CLI is stateless.
     pkgs.unstable.rqbit # BitTorrent client, an alternative to Fragments or qBittorrent.

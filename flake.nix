@@ -36,6 +36,7 @@
 
         local = {
           chatgpt = final.callPackage ./home/pkgs/chatgpt.nix { };
+          clipcat = final.callPackage ./home/pkgs/clipcat.nix { };
           imageflow = final.callPackage ./home/pkgs/imageflow.nix { };
           kimi-code = final.callPackage ./home/pkgs/kimi-code.nix { };
           nmrs = final.callPackage ./home/pkgs/nmrs.nix { };
@@ -46,6 +47,7 @@
           wayshot = final.callPackage ./home/pkgs/wayshot.nix { };
           wdotool = final.callPackage ./home/pkgs/wdotool.nix { };
           wkeys = final.callPackage ./home/pkgs/wkeys.nix { };
+          wl-clipboard-rs = final.callPackage ./home/pkgs/wl-clipboard-rs.nix { };
 
           # Fast-moving packages intentionally come from unstable nixpkgs.
           nwg-notifications = unstablePackages.callPackage ./home/pkgs/nwg-notifications.nix { };

@@ -22,8 +22,9 @@ filter_text_min_length = 1
 filter_text_max_length = 20000000
 denied_text_regex_patterns = []
 capture_image = true
-# Allow images up to 25 MiB, matching the client message limits below.
-filter_image_max_size = 26214400
+# Clipcat silently drops decoded images larger than this limit. A full
+# 4720x1920 RGBA screenshot needs about 34.6 MiB, so allow 40 MiB.
+filter_image_max_size = 41943040
 
 [grpc]
 enable_http = false

@@ -49,7 +49,7 @@ in
     # updates its older 1.4.6 package.
     pkgs.local.wayshot
     # Provides wl-copy/wl-paste and wl-clip, which is similar to xclip on Wayland.
-    pkgs.wl-clipboard-rs
+    pkgs.local.wl-clipboard-rs
     # Used to send Ctrl+V after selecting a Clipcat item from the menu.
     pkgs.local.wdotool
     pkgs.awww # Rust wallpaper daemon used by Waytrogen.
