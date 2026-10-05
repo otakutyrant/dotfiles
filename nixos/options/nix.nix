@@ -24,6 +24,13 @@
     warn-dirty = false;
   };
 
+  # A better Nix helper.
+  programs.nh = {
+    enable = true;
+    # Let nh find this configuration without requiring --flake on each run.
+    flake = "/home/otakutyrant/Projects/dotfiles";
+  };
+
   # The daemon does not inherit the interactive user's proxy environment.
   systemd.services.nix-daemon.environment = rec {
     http_proxy = "http://127.0.0.1:7890";
