@@ -1,6 +1,8 @@
 [Desktop Entry]
 Type=Application
 Name=LocalSend
-Exec=@localsend@ --hidden
+# Starting hidden triggers a LocalSend 1.17.0 race before its HTTP server is
+# initialized, leaving only device discovery available. Start normally instead.
+Exec=@localsend@
 Terminal=false
 NoDisplay=true
