@@ -70,4 +70,12 @@ export def "nur typecheck" [] {
 export def "nur check" [] {
     nur lint
     nur typecheck
+    nur test-kimi-audit
+}
+
+# Test quota scheduling and completion gates without making network requests.
+export def "nur test-kimi-audit" [] {
+    with-env {PYTHONDONTWRITEBYTECODE: "1"} {
+        ^python3 -m unittest discover -s home/pkgs/kimi-audit -p 'test_*.py'
+    }
 }
