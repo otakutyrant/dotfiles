@@ -3,7 +3,7 @@
 
 [monitors.DP-3]
 position = "bottom"
-height = 40
+height = 32
 anchor_to_edges = true
 icon_theme = "Adwaita"
 
@@ -15,27 +15,33 @@ all_monitors = false
 type = "sys_info"
 format = [
   "󰮯 {load_average_1:.2} {load_average_5:.2} {load_average_15:.2}",
-  "󰍛 {memory_percent:.1}%",
-  "󰋊 {disk_free#G@/:.1} GB",
-  "󰓢 {net_down@Mihomo:.1} / {net_up@Mihomo:.1} Mb/s",
+  "  󰍛 {memory_percent:.1}%",
+  "  󰋊 {disk_free#G@/:.1} GB",
+  "  󰓢 {net_down@Mihomo:.1} / {net_up@Mihomo:.1} Mb/s  ",
 ]
-interval = 5
+# Keep bandwidth readings responsive while the other system metrics use their
+# five-second defaults.
+interval = { networks = 1 }
 
 [[monitors.DP-3.end]]
 type = "script"
+# GTK collapses leading spaces in script output, so style this named widget with
+# a left margin to keep a visible gap after the preceding network status.
+name = "gpu-status"
 cmd = "/home/otakutyrant/.local/bin/gpu_status.nu"
 interval = 5000
 
 [[monitors.DP-3.end]]
 type = "clock"
-format = "%a %F %T"
+format = "  %a %F %T"
 
 [[monitors.DP-3.end]]
 type = "tray"
+prefer_theme_icons = false
 
 [monitors.DP-1]
 position = "bottom"
-height = 40
+height = 32
 anchor_to_edges = true
 icon_theme = "Adwaita"
 
@@ -47,18 +53,20 @@ all_monitors = false
 type = "sys_info"
 format = [
   "󰮯 {load_average_1:.2} {load_average_5:.2} {load_average_15:.2}",
-  "󰍛 {memory_percent:.1}%",
-  "󰓢 {net_down@Mihomo:.1} / {net_up@Mihomo:.1} Mb/s",
+  "  󰍛 {memory_percent:.1}%",
+  "  󰓢 {net_down@Mihomo:.1} / {net_up@Mihomo:.1} Mb/s  ",
 ]
-interval = 5
+# Keep bandwidth readings responsive while the other system metrics use their
+# five-second defaults.
+interval = { networks = 1 }
 
 [[monitors.DP-1.end]]
 type = "clock"
-format = "%a %F %T"
+format = "  %a %F %T"
 
 [monitors.DP-2]
 position = "bottom"
-height = 40
+height = 32
 anchor_to_edges = true
 icon_theme = "Adwaita"
 
@@ -70,11 +78,13 @@ all_monitors = false
 type = "sys_info"
 format = [
   "󰮯 {load_average_1:.2} {load_average_5:.2} {load_average_15:.2}",
-  "󰍛 {memory_percent:.1}%",
-  "󰓢 {net_down@Mihomo:.1} / {net_up@Mihomo:.1} Mb/s",
+  "  󰍛 {memory_percent:.1}%",
+  "  󰓢 {net_down@Mihomo:.1} / {net_up@Mihomo:.1} Mb/s  ",
 ]
-interval = 5
+# Keep bandwidth readings responsive while the other system metrics use their
+# five-second defaults.
+interval = { networks = 1 }
 
 [[monitors.DP-2.end]]
 type = "clock"
-format = "%a %F %T"
+format = "  %a %F %T"

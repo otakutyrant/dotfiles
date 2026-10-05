@@ -1,0 +1,88 @@
+/* Use a solid white panel behind every Ironbar widget. */
+#bar {
+  background-color: #ffffff;
+}
+
+/* Tray items are GTK buttons by default. Remove their button chrome so their
+ * icons sit directly on the white panel. */
+.tray .item,
+.tray .item:hover {
+  border: none;
+  border-radius: 0;
+  background-color: #ffffff;
+  background-image: none;
+  box-shadow: none;
+}
+
+/* Script labels discard leading spaces, so add a real gap before GPU status. */
+#gpu-status {
+  margin-left: 8px;
+}
+
+/* Keep unfocused workspace labels readable on the white panel. */
+.workspaces .item {
+  min-width: 28px;
+  margin: 4px;
+  padding: 2px 0 0;
+  border: none;
+  border-radius: 6px;
+  color: #000000;
+  background-image: none;
+  background-color: transparent;
+  box-shadow: none;
+}
+
+/* GTK label widgets do not consistently inherit the button's foreground
+ * color, so set Ironbar's textual workspace icon explicitly. */
+.workspaces .item label,
+.workspaces .item .text-icon {
+  color: #000000;
+}
+
+.workspaces .item.visible {
+  color: #000000;
+}
+
+.workspaces .item.visible label,
+.workspaces .item.visible .text-icon {
+  color: #000000;
+}
+
+/* Use an inverted color pair to identify the keyboard-active workspace. */
+.workspaces .item.focused {
+  color: #ffffff;
+  background-image: none;
+  background-color: #000000;
+  box-shadow: none;
+}
+
+.workspaces .item.focused label,
+.workspaces .item.focused .text-icon {
+  color: #ffffff;
+}
+
+.workspaces .item:hover {
+  color: #ffffff;
+  background-color: #30343f;
+}
+
+.workspaces .item:hover label,
+.workspaces .item:hover .text-icon {
+  color: #ffffff;
+}
+
+.workspaces .item.focused:hover {
+  background-color: #000000;
+}
+
+/* The clock is a button because it can open a calendar. Remove GTK's button
+ * chrome so it aligns visually with the plain system-information labels. */
+.clock {
+  margin: 0;
+  padding: 0 12px 0 4px;
+  border: none;
+  border-radius: 0;
+  background-image: none;
+  background-color: transparent;
+  box-shadow: none;
+}

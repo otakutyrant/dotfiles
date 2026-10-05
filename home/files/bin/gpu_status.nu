@@ -1,22 +1,21 @@
 #!/usr/bin/env nu
 
-# Poll NVIDIA's supported query interface for utilization and VRAM usage.
+# Poll NVIDIA's supported query interface for VRAM usage.
 let values = try {
-  ^nvidia-smi --query-gpu=utilization.gpu,memory.used,memory.total --format=csv,noheader,nounits
+  ^nvidia-smi --query-gpu=memory.used,memory.total --format=csv,noheader,nounits
   | str trim
   | split row ","
   | each { |value| $value | str trim }
 } catch {
-  print "󰢮 GPU unavailable"
+  print "  󰢮 GPU unavailable"
   exit 0
 }
 
-if ($values | length) < 3 {
-  print "󰢮 GPU unavailable"
+if ($values | length) < 2 {
+  print "  󰢮 GPU unavailable"
   exit 0
 }
 
-let utilization = ($values | get 0)
-let memory_used = ($values | get 1)
-let memory_total = ($values | get 2)
-print $"󰢮 ($utilization)% 󰍛 ($memory_used)/($memory_total) MiB"
+let memory_used = ($values | get 0)
+let memory_total = ($values | get 1)
+print $"  󰢮 ($memory_used)/($memory_total) MiB"
