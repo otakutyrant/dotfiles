@@ -1,0 +1,6 @@
+[Desktop Entry]
+Type=Application
+Name=LocalSend
+Exec=@localsend@ --hidden
+Terminal=false
+NoDisplay=true

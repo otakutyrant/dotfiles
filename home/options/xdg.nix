@@ -86,6 +86,13 @@ in
       {
         ironbar = "${pkgs.ironbar}/bin/ironbar";
       };
+  # Start LocalSend in the tray so it can receive files without opening its
+  # main window at every login.
+  xdg.configFile."autostart/localsend.desktop".source =
+    renderTemplate ../files/config/autostart/localsend.desktop
+      {
+        localsend = "${pkgs.localsend}/bin/localsend_app";
+      };
   xdg.configFile."autostart/gnome-text-editor-scratchpad.desktop".source =
     renderTemplate ../files/config/autostart/gnome-text-editor-scratchpad.desktop
       {

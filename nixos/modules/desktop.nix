@@ -66,6 +66,10 @@
   # Steam needs system-level graphics integration, udev rules, and libraries.
   programs.steam.enable = true;
 
+  # Install LocalSend through its NixOS module. Its firewall opening remains
+  # disabled because networking.nix restricts the port to the Wi-Fi interface.
+  programs.localsend.enable = true;
+
   # Install Clash Verge through NixOS because service and TUN modes require a
   # privileged helper that cannot be configured solely through Home Manager.
   programs.clash-verge = {
