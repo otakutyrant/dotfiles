@@ -26,6 +26,11 @@ in
     TERMINFO = "";
     TERMINFO_DIRS = "${pkgs.kitty}/lib/kitty/terminfo";
 
+    # Sandboxed GUI packages such as WeChat cannot discover Nix-store cursor
+    # themes through their FHS filesystem.  Expose Bibata's icon directory so
+    # they use the configured 24px cursor instead of a large fallback cursor.
+    XCURSOR_PATH = "${pkgs.bibata-cursors}/share/icons";
+
     # Keep tool state under XDG locations instead of each tool's default dotdir.
     CARGO_HOME = "${XDG_DATA_HOME}/cargo";
     # Enforce IPython to use XDG_CONFIG_HOME rather than ~/.ipython.

@@ -7,6 +7,7 @@
 {
   package,
   executables,
+  extraWrapperArgs ? [ ],
 }:
 
 # Sway does not implement the Wayland text-input protocol used by Qt, so Qt
@@ -25,7 +26,7 @@ symlinkJoin {
         exit 1
       fi
 
-      wrapProgram "$out/bin/$executable" --set QT_IM_MODULE fcitx
+      wrapProgram "$out/bin/$executable" --set QT_IM_MODULE fcitx ${lib.escapeShellArgs extraWrapperArgs}
     done
 
     # Most desktop entries use a command from PATH. WPS instead embeds its

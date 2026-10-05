@@ -25,6 +25,20 @@ in
     (withFcitxQt {
       package = pkgs.wechat;
       executables = [ "wechat" ];
+      # The AppImage runs in an FHS sandbox, where it cannot discover the
+      # desktop cursor theme.  Set the complete cursor configuration on the
+      # executable so it precisely matches Sway without needing a logout.
+      extraWrapperArgs = [
+        "--set"
+        "XCURSOR_PATH"
+        "${config.home.pointerCursor.package}/share/icons"
+        "--set"
+        "XCURSOR_THEME"
+        config.home.pointerCursor.name
+        "--set"
+        "XCURSOR_SIZE"
+        (toString config.home.pointerCursor.size)
+      ];
     }) # WeChat bundles the Fcitx Qt plugin but only enables it via QT_IM_MODULE.
     pkgs.ticktick # Time management client.
     (withFcitxQt {
