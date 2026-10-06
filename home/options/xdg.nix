@@ -7,9 +7,6 @@
 
 let
   home = config.home.homeDirectory;
-  # Use the same patched notification daemon for package installation and XDG
-  # autostart so the launched executable includes the local popup fixes.
-  notificationDaemon = pkgs.local.nwg-notifications;
   # Desktop templates keep desktop-entry syntax out of Nix. The shared helper
   # fills in store paths that are only known while evaluating this profile.
   renderTemplate = import ../../lib/render-template.nix { inherit pkgs; };
@@ -75,23 +72,6 @@ in
     renderTemplate ../files/config/autostart/waytrogen-restore.desktop
       {
         waytrogen = "${pkgs.waytrogen}/bin/waytrogen";
-      };
-  xdg.configFile."autostart/nwg-notifications.desktop".source =
-    renderTemplate ../files/config/autostart/nwg-notifications.desktop
-      {
-        nwgNotifications = "${notificationDaemon}/bin/nwg-notifications";
-      };
-  xdg.configFile."autostart/ironbar.desktop".source =
-    renderTemplate ../files/config/autostart/ironbar.desktop
-      {
-        ironbar = "${pkgs.ironbar}/bin/ironbar";
-      };
-  # Start LocalSend in the tray so it can receive files without opening its
-  # main window at every login.
-  xdg.configFile."autostart/localsend.desktop".source =
-    renderTemplate ../files/config/autostart/localsend.desktop
-      {
-        localsend = "${pkgs.localsend}/bin/localsend_app";
       };
   xdg.configFile."autostart/gnome-text-editor-scratchpad.desktop".source =
     renderTemplate ../files/config/autostart/gnome-text-editor-scratchpad.desktop
