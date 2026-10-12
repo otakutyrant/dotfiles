@@ -5,8 +5,7 @@
 }:
 
 let
-  # Powerline glyphs require a Nerd Font or Powerline-compatible font. Kitty is
-  # configured to use JetBrainsMono Nerd Font, so these separators render there.
+  # Sarasa Fixed SC includes the Powerline glyphs used by this prompt.
   leftCap = "";
   rightCap = "";
 in

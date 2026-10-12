@@ -30,7 +30,6 @@
       save-position-on-quit = "yes";
       autofit-larger = "100%x100%";
       geometry = "50%:50%";
-      sub-font = "Sarasa Mono Slab SC Semibold";
       sub-font-size = 40;
       sub-margin-x = 80;
       sub-margin-y = 48;

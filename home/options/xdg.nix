@@ -57,7 +57,7 @@ in
     text = ''
       Vertical Candidate List=True
       WheelForPaging=True
-      Font="Sarasa Fixed SC 32"
+      Font="Sarasa Fixed SC 22"
     '';
   };
 

@@ -4,12 +4,6 @@
   programs.kitty = {
     enable = true;
     package = pkgs.kitty;
-    # Home Manager writes this block to kitty.conf and installs kitty, so the
-    # terminal config can live beside the other program modules.
-    font = {
-      name = "JetBrainsMono Nerd Font";
-      size = 10.0;
-    };
     keybindings = {
       # Send Ctrl+V to terminal applications. Pasting clipboard contents
       # directly into neo-tree tries to edit its read-only buffer and causes

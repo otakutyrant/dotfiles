@@ -54,14 +54,32 @@
     ];
   };
 
+  # Avoid installing NixOS's unrelated default font bundle alongside Sarasa.
+  fonts.enableDefaultPackages = false;
+
   fonts.packages = with pkgs; [
-    sarasa-gothic
-    jetbrains-mono
-    noto-fonts
-    noto-fonts-cjk-sans
+    # This local package supplies only the Sarasa Fixed SC faces used here.
+    local.sarasa-fixed-sc
+    # Install only Nerd Font icon glyphs, not a patched text family. Neovim's
+    # nvim-web-devicons plugin uses these private-use characters for file icons.
+    nerd-fonts.symbols-only
+    # Sarasa does not contain color emoji, which need a dedicated fallback.
     noto-fonts-color-emoji
-    nerd-fonts.jetbrains-mono
   ];
+
+  # Use Sarasa Fixed SC consistently whenever an application requests a
+  # generic text font. Individual applications should only name a font when
+  # they intentionally need a non-default size.
+  fonts.fontconfig.defaultFonts = {
+    sansSerif = [ "Sarasa Fixed SC" ];
+    serif = [ "Sarasa Fixed SC" ];
+    monospace = [
+      "Sarasa Fixed SC"
+      # Use this only when Sarasa lacks a Neovim Devicon glyph.
+      "Symbols Nerd Font Mono"
+    ];
+    emoji = [ "Noto Color Emoji" ];
+  };
 
   # Steam needs system-level graphics integration, udev rules, and libraries.
   programs.steam.enable = true;
