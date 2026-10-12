@@ -7,8 +7,9 @@
 
 # I do not intend to publish this profile-specific package to nixpkgs.
 # Nixpkgs' sarasa-gothic package installs every family, language, and weight.
-# This package keeps only the hinted Simplified-Chinese Sarasa Fixed faces used
-# by this profile, making the installed font closure substantially smaller.
+# This package keeps only the regular hinted Simplified-Chinese Sarasa Fixed
+# face used by this profile, avoiding separate weight/style family entries in
+# font pickers and making the installed font closure substantially smaller.
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "sarasa-fixed-sc";
   version = "1.0.37";
@@ -28,7 +29,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   installPhase = ''
     runHook preInstall
-    find . -type f -name '*.ttf' -exec install -Dm444 {} -t "$out/share/fonts/truetype" \;
+    install -Dm444 SarasaFixedSC-Regular.ttf "$out/share/fonts/truetype/SarasaFixedSC-Regular.ttf"
     runHook postInstall
   '';
 

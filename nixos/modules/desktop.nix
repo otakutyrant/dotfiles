@@ -63,8 +63,8 @@
     # Install only Nerd Font icon glyphs, not a patched text family. Neovim's
     # nvim-web-devicons plugin uses these private-use characters for file icons.
     nerd-fonts.symbols-only
-    # Sarasa does not contain color emoji, which need a dedicated fallback.
-    noto-fonts-color-emoji
+    # Sarasa does not contain color emoji, so use Blobmoji as the fallback.
+    local.blobmoji
   ];
 
   # Use Sarasa Fixed SC consistently whenever an application requests a
@@ -78,6 +78,8 @@
       # Use this only when Sarasa lacks a Neovim Devicon glyph.
       "Symbols Nerd Font Mono"
     ];
+    # Blobmoji keeps the upstream Noto Color Emoji family name for application
+    # compatibility, even though this local package supplies the glyphs.
     emoji = [ "Noto Color Emoji" ];
   };
 
