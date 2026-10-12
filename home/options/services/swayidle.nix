@@ -3,6 +3,12 @@
 {
   services.swayidle = {
     enable = true;
+    events = {
+      # Ironbar can remain alive with invalid Wayland surfaces after suspend,
+      # which prevents its systemd restart policy from taking effect. Let the
+      # compositor restore its outputs first, then recreate the panel.
+      after-resume = "${pkgs.coreutils}/bin/sleep 2 && ${pkgs.systemd}/bin/systemctl --user restart ironbar.service";
+    };
     timeouts = [
       {
         timeout = 600;
