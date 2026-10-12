@@ -58,13 +58,16 @@
   fonts.enableDefaultPackages = false;
 
   fonts.packages = with pkgs; [
+    # Zhudou contributes only CJK punctuation; Sarasa remains the text face.
+    # This is put before Sarasa so its centered punctuation is available.
+    local.zhudou-sans
     # This local package supplies only the Sarasa Fixed SC faces used here.
     local.sarasa-fixed-sc
+    # Sarasa does not contain color emoji, so use Blobmoji as the fallback.
+    local.blobmoji
     # Install only Nerd Font icon glyphs, not a patched text family. Neovim's
     # nvim-web-devicons plugin uses these private-use characters for file icons.
     nerd-fonts.symbols-only
-    # Sarasa does not contain color emoji, so use Blobmoji as the fallback.
-    local.blobmoji
   ];
 
   # Use Sarasa Fixed SC consistently whenever an application requests a
@@ -82,6 +85,37 @@
     # compatibility, even though this local package supplies the glyphs.
     emoji = [ "Noto Color Emoji" ];
   };
+
+  # Prefer Zhudou's CJK punctuation for all generic sans-serif text. Web apps
+  # such as X commonly mark an entire English-interface document as `en`, even
+  # when individual runs contain Chinese. A language-gated fallback therefore
+  # never sees Zhudou for those runs. Zhudou contains punctuation only, so
+  # Sarasa remains responsible for Han characters and normal text.
+  fonts.fontconfig.localConf = ''
+    <?xml version='1.0'?>
+    <!DOCTYPE fontconfig SYSTEM 'urn:fontconfig:fonts.dtd'>
+    <fontconfig>
+    <!-- Enable Zhudou's centered CJK punctuation. Half-width quotes prevent
+         English contractions such as “Cap’n” from gaining a full-width gap. -->
+    <match target="font">
+      <test name="family" compare="eq">
+        <string>Zhudou Sans</string>
+      </test>
+      <edit name="fontfeatures" mode="append">
+        <string>cpct=1</string>
+        <string>hwid=1</string>
+      </edit>
+    </match>
+    <match target="pattern">
+      <test name="family" compare="eq">
+        <string>sans-serif</string>
+      </test>
+      <edit name="family" mode="prepend" binding="strong">
+        <string>Zhudou Sans</string>
+      </edit>
+    </match>
+    </fontconfig>
+  '';
 
   # Steam needs system-level graphics integration, udev rules, and libraries.
   programs.steam.enable = true;
