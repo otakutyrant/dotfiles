@@ -1,2 +1,7 @@
 patch:
   translator/dictionary: terra_pinyin.extended
+  # Use the dedicated two-em dash and midline ellipsis with Zhongdou Sans.
+  "punctuator/full_shape/^": { commit: "⋯⋯" }
+  "punctuator/full_shape/_": "⸺"
+  "punctuator/half_shape/^": { commit: "⋯⋯" }
+  "punctuator/half_shape/_": "⸺"
