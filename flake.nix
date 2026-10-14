@@ -51,7 +51,7 @@
           wdotool = final.callPackage ./home/pkgs/wdotool.nix { };
           wkeys = final.callPackage ./home/pkgs/wkeys.nix { };
           wl-clipboard-rs = final.callPackage ./home/pkgs/wl-clipboard-rs.nix { };
-          zhudou-sans = final.callPackage ./home/pkgs/zhudou-sans.nix { };
+          zhongdou-sans = final.callPackage ./home/pkgs/zhongdou-sans.nix { };
 
           # Sway 1.12 fixes layer-shell popup repositioning, which GTK's
           # sliding tray submenus require near the bottom edge of an output.
