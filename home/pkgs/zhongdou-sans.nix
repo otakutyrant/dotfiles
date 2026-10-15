@@ -7,17 +7,18 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "zhongdou-sans";
-  version = "unstable-2026-10-15";
+  version = "unstable-2026-10-16";
 
   # Pin the personal fork whose zh-CN locale uses zh-TW's centered `locl`
   # lookup, keeps punctuation at full width, centers brackets at every weight,
   # defaults curly quotes to half-width, supplies a centered U+22EF ellipsis,
-  # and aligns fallback baselines with Sarasa Fixed SC in Pango/GTK.
+  # removes unrelated alphanumerics and symbol collections, and aligns fallback
+  # baselines with Sarasa Fixed SC in Pango/GTK.
   src = fetchFromGitHub {
     owner = "otakutyrant";
     repo = "Zhongdou-Sans";
-    rev = "cc26db0c9cb4a69abd8b0f953010033f9bd21417";
-    hash = "sha256-sjl/SJhc9neFBwkgMNmW3+HRzxOinMvZvoRNxtIDjEY=";
+    rev = "6ece193a663214b8efc503702382cab5cecdbc5a";
+    hash = "sha256-c9bT5NC/XBHFlSx+mygmJYb6X8sELFgZdVsqpy4uDZM=";
   };
 
   nativeBuildInputs = [ python3Packages.fonttools ];
