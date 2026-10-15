@@ -59,7 +59,7 @@
 
   fonts.packages = with pkgs; [
     # Zhongdou contributes only CJK punctuation; Sarasa remains the text face.
-    # This is put before Sarasa so its centered punctuation is available.
+    # Font preference is controlled by the fontconfig rules below.
     local.zhongdou-sans
     # This local package supplies only the Sarasa Fixed SC faces used here.
     local.sarasa-fixed-sc
@@ -86,11 +86,9 @@
     emoji = [ "Noto Color Emoji" ];
   };
 
-  # Prefer Zhongdou's CJK punctuation for all generic sans-serif text. Web apps
-  # such as X commonly mark an entire English-interface document as `en`, even
-  # when individual runs contain Chinese. A language-gated fallback therefore
-  # never sees Zhongdou for those runs. Zhongdou contains punctuation only, so
-  # Sarasa remains responsible for Han characters and normal text.
+  # Prefer Zhongdou punctuation only for sans-serif. Text Editor explicitly
+  # requests this family for prose; terminals keep Sarasa as their monospace
+  # primary font so a punctuation-only face cannot determine their cell size.
   fonts.fontconfig.localConf = ''
     <?xml version='1.0'?>
     <!DOCTYPE fontconfig SYSTEM 'urn:fontconfig:fonts.dtd'>
