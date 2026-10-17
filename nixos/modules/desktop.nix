@@ -86,6 +86,38 @@
     emoji = [ "Noto Color Emoji" ];
   };
 
+  # Install this after fontconfig's generic emoji aliases. Color emoji fonts
+  # contain ASCII digits for keycap sequences; placing Sarasa first prevents
+  # browsers from using their oversized digit glyphs in ordinary prose while
+  # retaining Noto Color Emoji for characters that Sarasa cannot render. Clear
+  # the emoji alias's color and language preferences so fontconfig honors this
+  # family order; glyph coverage still sends real emoji to the color font.
+  fonts.fontconfig.confPackages = [
+    (pkgs.writeTextFile {
+      name = "fontconfig-text-before-emoji";
+      destination = "/etc/fonts/conf.d/99-text-before-emoji.conf";
+      text = ''
+        <?xml version='1.0'?>
+        <!DOCTYPE fontconfig SYSTEM 'urn:fontconfig:fonts.dtd'>
+        <fontconfig>
+          <match target="pattern">
+            <test name="family" compare="eq">
+              <string>Noto Color Emoji</string>
+            </test>
+            <edit name="family" mode="assign" binding="strong">
+              <string>Sarasa Fixed SC</string>
+            </edit>
+            <edit name="family" mode="append" binding="strong">
+              <string>Noto Color Emoji</string>
+            </edit>
+            <edit name="color" mode="delete"/>
+            <edit name="lang" mode="delete"/>
+          </match>
+        </fontconfig>
+      '';
+    })
+  ];
+
   # Prefer Zhongdou punctuation only for sans-serif. Text Editor explicitly
   # requests this family for prose; terminals keep Sarasa as their monospace
   # primary font so a punctuation-only face cannot determine their cell size.
