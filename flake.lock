@@ -57,7 +57,25 @@
       "inputs": {
         "home-manager": "home-manager",
         "nixpkgs": "nixpkgs",
-        "nixpkgs-unstable": "nixpkgs-unstable"
+        "nixpkgs-unstable": "nixpkgs-unstable",
+        "zhongdou-sans": "zhongdou-sans"
+      }
+    },
+    "zhongdou-sans": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1792252745,
+        "narHash": "sha256-WeE8236epHTL30+NvWkuDVuGVme1nQsur0jHMB2sfzM=",
+        "path": "/home/otakutyrant/Projects/Zhongdou-Sans",
+        "type": "path"
+      },
+      "original": {
+        "path": "/home/otakutyrant/Projects/Zhongdou-Sans",
+        "type": "path"
       }
     }
   },

@@ -7,6 +7,12 @@
     # Keep an unstable package set available for selected fast-moving tools
     # without moving the whole system away from the stable NixOS channel.
     nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
+    # Until Zhongdou Sans lands in nixpkgs, build this machine's current
+    # checkout so local font testing does not depend on the older release.
+    zhongdou-sans = {
+      url = "path:/home/otakutyrant/Projects/Zhongdou-Sans";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     home-manager = {
       url = "github:nix-community/home-manager/release-26.05";
       # Flake input keyword: `follows` makes Home Manager reuse this flake's
@@ -51,7 +57,9 @@
           wdotool = final.callPackage ./home/pkgs/wdotool.nix { };
           wkeys = final.callPackage ./home/pkgs/wkeys.nix { };
           wl-clipboard-rs = final.callPackage ./home/pkgs/wl-clipboard-rs.nix { };
-          zhongdou-sans = final.callPackage ./home/pkgs/zhongdou-sans.nix { };
+          # This temporary input replaces home/pkgs/zhongdou-sans.nix until the
+          # package is available directly as pkgs.zhongdou-sans in nixpkgs.
+          zhongdou-sans = inputs.zhongdou-sans.packages.${system}.default;
 
           # Sway 1.12 fixes layer-shell popup repositioning, which GTK's
           # sliding tray submenus require near the bottom edge of an output.
