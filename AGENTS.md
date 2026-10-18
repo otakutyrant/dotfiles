@@ -40,6 +40,11 @@ run `nur check` after implementation. Full builds are slower and potentially
 networked, so run them when Nix modules, packages, inputs, or deployment behavior
 change.
 
+Panoptor is a persistent Kitty session, not a window. Its roles may continue
+while its OS window is hidden. The Yihui desktop launcher shows the existing
+session, or starts it and then shows it; visibility changes must not duplicate
+or terminate its roles.
+
 ## Architecture and ownership
 
 - `flake.nix` is the sole integration point for NixOS, Home Manager, overlays,

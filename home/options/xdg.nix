@@ -89,8 +89,10 @@ in
         systemdRun = "${pkgs.systemd}/bin/systemd-run";
       };
 
-  # Static application launchers migrated from the former Stow tree.
-  xdg.dataFile."applications/kitty-ci.desktop".source = ../files/applications/kitty-ci.desktop;
+  # The launcher reveals the persistent Yihui Panoptor session instead of
+  # treating its Kitty window as the session lifecycle.
+  xdg.dataFile."applications/yihui-panoptor.desktop".source =
+    ../files/applications/yihui-panoptor.desktop;
   xdg.dataFile."applications/poweroff.desktop".source = ../files/applications/poweroff.desktop;
   xdg.dataFile."applications/reboot.desktop".source = ../files/applications/reboot.desktop;
   xdg.dataFile."applications/screenshot-all-monitors.desktop".source =

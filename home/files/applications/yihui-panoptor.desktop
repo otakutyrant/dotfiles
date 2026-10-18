@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Version=1.5
+Name=Yihui Panoptor
+GenericName=Panoptor Session
+Comment=Show the persistent Yihui development session
+Exec=show_yihui_panoptor.nu
+Path=/home/otakutyrant/Projects/ci
+Icon=terminal
+Categories=Development;System;
+Terminal=false
