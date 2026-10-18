@@ -57,11 +57,25 @@ Find a client which has highly refined default configuration so you do not overr
 
 As for Neovim. If you can use third-part tool to handle files, use them rather than install an corresponding plugin, like useless Black plugin because you can execute external commands in Ex command as `:!black %`. Tinkering Neovim is ceaseless.
 
-`nur format` formats Nix and Lua files. `nur check` runs the same format checks
-plus Nix evaluation, Lua diagnostics, and Nushell source/parser checks.
-Nushell is checked but not formatted because `nufmt` has corrupted valid
-scripts in this repository.
-`.pre-commit-config.yaml` wires these commands into pre-commit.
+## Development
+
+The flake provides every repository quality tool. Enter it directly, or approve
+the included nix-direnv environment once:
+
+```nu
+nix develop
+direnv allow
+```
+
+`nur --list` shows the complete command catalog. `nur format` formats Nix and
+Lua files, while `nur check` runs formatting checks, static analysis,
+architecture and data validation, Nix evaluation, Lua diagnostics, and Nushell
+checks. Nushell is checked but not formatted because `nufmt` has corrupted
+valid scripts in this repository.
+
+Use `nur build-nixos` or `nur build-home` for a non-activating build. The
+explicit `nur switch-nixos` and `nur switch-home` commands update the live
+machine or user profile and should only be run intentionally.
 
 # Introduction to unified, hierarchical windows management
 
