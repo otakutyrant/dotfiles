@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-stdenvNoCC.mkDerivation (finalAttrs: {
+stdenvNoCC.mkDerivation {
   pname = "blobmoji";
   version = "unstable-2025-09-29";
 
@@ -29,4 +29,4 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     license = lib.licenses.ofl;
     platforms = lib.platforms.all;
   };
-})
+}

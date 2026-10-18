@@ -2,3 +2,4 @@
 # This api key is used by ChatGPT.nvim.
 chatgpt_api.txt
 __pycache__
+.direnv

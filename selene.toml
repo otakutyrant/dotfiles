@@ -1,0 +1,6 @@
+std = "dotfiles"
+
+[lints]
+# Lazy.nvim plugin specifications intentionally combine a positional repository
+# name with named options, which is exactly the mixed-table shape it expects.
+mixed_table = "allow"

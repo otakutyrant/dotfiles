@@ -1,0 +1,5 @@
+# Flat repeated option assignments are the idiomatic, readable shape used by
+# these NixOS and Home Manager modules. Empty module arguments are likewise
+# clearer here than replacing `{ ... }:` with the anonymous `_:` form.
+disabled = ["empty_pattern", "repeated_keys"]
+ignore = [".direnv", "nixos/hardware-configuration.nix"]

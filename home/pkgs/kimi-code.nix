@@ -52,7 +52,7 @@ in
 
 stdenv.mkDerivation {
   pname = "kimi-code";
-  version = appPackage.version;
+  inherit (appPackage) version;
   inherit src;
 
   pnpmDeps = fetchPnpmDeps {

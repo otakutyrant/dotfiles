@@ -1,0 +1,28 @@
+# nu-lint is intentionally scoped to stable correctness and ownership rules.
+# Its full experimental catalog currently emits hundreds of style suggestions
+# for command wrappers where external-process behavior is deliberate.
+[groups]
+idioms = "off"
+parsing = "off"
+filesystem = "off"
+dead-code = "off"
+posix = "off"
+iteration = "off"
+runtime-errors = "off"
+filtering = "off"
+performance = "off"
+type-safety = "off"
+documentation = "off"
+effects = "off"
+external = "off"
+formatting = "off"
+naming = "off"
+upstream = "off"
+
+[rules]
+nu_parse_error = "error"
+unused_helper_functions = "error"
+unused_parameter = "error"
+unused_variable = "error"
+add_doc_comment_exported_fn = "error"
+kebab_case_commands = "error"

@@ -64,11 +64,18 @@
 
           # Sway 1.12 fixes layer-shell popup repositioning, which GTK's
           # sliding tray submenus require near the bottom edge of an output.
-          sway = unstablePackages.sway;
+          inherit (unstablePackages) sway;
 
           # Fast-moving packages intentionally come from unstable nixpkgs.
           nwg-notifications = unstablePackages.callPackage ./home/pkgs/nwg-notifications.nix { };
         };
+      };
+      # Keep repository tooling separate from the installed Home Manager
+      # profile so a checkout can run its checks through `nix develop`.
+      developmentPackages = import inputs.nixpkgs {
+        inherit system;
+        config.allowUnfree = true;
+        overlays = [ localPackagesOverlay ];
       };
       # These arguments are needed by the shared Home Manager module.
       homeSpecialArgs = {
@@ -76,6 +83,27 @@
       };
     in
     {
+      devShells.${system}.default = developmentPackages.mkShell {
+        packages = with developmentPackages; [
+          deadnix
+          desktop-file-utils
+          gitMinimal
+          jq
+          lua-language-server
+          nh
+          nixfmt
+          nu-lint
+          nushell
+          local.nur
+          ripgrep
+          selene
+          statix
+          stylua
+          taplo
+          yq-go
+        ];
+      };
+
       nixosConfigurations.${hostname} = inputs.nixpkgs.lib.nixosSystem {
         inherit system;
         specialArgs = {

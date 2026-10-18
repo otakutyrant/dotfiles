@@ -1,8 +1,12 @@
 { lib }:
 
 let
-  # Return every regular Nix file below a directory. Directories and attribute
-  # names are traversed in sorted order so module evaluation is deterministic.
+  /**
+    Return every regular Nix file below a directory.
+
+    Directories and attribute names are traversed in sorted order so module
+    evaluation is deterministic.
+  */
   importModules =
     dir:
     let

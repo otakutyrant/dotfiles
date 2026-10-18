@@ -110,6 +110,21 @@ local alabaster = {
     },
 }
 
+-- Keep disabled definitions reachable as a catalog so changing the active
+-- selection does not require reconstructing a plugin specification.
+local available_themes = {
+    tokyonight = tokyonight,
+    monokai = monokai,
+    nord = nord,
+    everforest = everforest,
+    onedark = onedark,
+    gruvbox = gruvbox,
+    rose_pine = rose_pine,
+    catppuccin = catppuccin,
+    zenbones = zenbones,
+    alabaster = alabaster,
+}
+
 local function get_random_element(list, weighted)
     --[[
     --If weighted set to true, the element of the list is a list presumably.
@@ -147,7 +162,7 @@ local function enable_colorscheme(theme_name)
 end
 
 local themes = {
-    alabaster,
+    available_themes.alabaster,
 }
 
 -- Make all theme plugins loaded early to set colorscheme thereafter.

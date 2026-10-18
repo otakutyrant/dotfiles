@@ -4,6 +4,9 @@
   symlinkJoin,
 }:
 
+/**
+  Wrap selected executables from a package with Qt's Fcitx input method.
+*/
 {
   package,
   executables,

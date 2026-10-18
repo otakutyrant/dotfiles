@@ -158,7 +158,6 @@ def scan-once [
     target_short_side: int
     known: record
     recently_resized: record
-    verbose: bool
 ] {
     mut known_states = $known
     mut resized_states = $recently_resized
@@ -210,7 +209,6 @@ def main [
     --target-short-side: int = 800
     --interval: int = 5
     --once
-    --verbose
 ] {
     if $target_short_side <= 0 {
         log-message ERROR "--target-short-side must be greater than zero"
@@ -230,12 +228,12 @@ def main [
         recently_resized: {}
     }
     if $once {
-        $state = (scan-once $resolved_root $target_short_side $state.known $state.recently_resized $verbose)
+        $state = (scan-once $resolved_root $target_short_side $state.known $state.recently_resized)
         exit 0
     }
     log-message INFO $"Watching ($resolved_root) for images whose shortest side is below ($target_short_side)px"
     loop {
-        $state = (scan-once $resolved_root $target_short_side $state.known $state.recently_resized $verbose)
+        $state = (scan-once $resolved_root $target_short_side $state.known $state.recently_resized)
         sleep ($interval * 1sec)
     }
 }
