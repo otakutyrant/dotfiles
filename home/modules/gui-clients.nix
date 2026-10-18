@@ -52,7 +52,7 @@ in
     pkgs.local.nutstore # Sync client.
     pkgs.waytrogen # Wallpaper chooser, Rust-powered.
     pkgs.pwvucontrol # Graphical mixer for PipeWire, Rust-powered.
-    pkgs.rnote # Rust/GTK4 drawing and image annotation app; upstream targets Wayland. Alternative to pinta.
+    pkgs.local.photocraft # Rust image editor with layered PSD support.
     pkgs.networkmanagerapplet # NetworkManager tray applet and its nm-signal icons.
     pkgs.local.nmrs # GTK4 NetworkManager frontend.
 

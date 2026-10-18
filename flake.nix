@@ -50,6 +50,7 @@
           nur = final.callPackage ./home/pkgs/nur.nix { };
           nutstore = final.callPackage ./home/pkgs/nutstore.nix { };
           oximedia = final.callPackage ./home/pkgs/oximedia.nix { };
+          photocraft = final.callPackage ./home/pkgs/photocraft.nix { };
           sarasa-fixed-sc = final.callPackage ./home/pkgs/sarasa-fixed-sc.nix { };
           tree = final.callPackage ./home/pkgs/tree.nix { };
           wayshot = final.callPackage ./home/pkgs/wayshot.nix { };
