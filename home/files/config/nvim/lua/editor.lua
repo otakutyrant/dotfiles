@@ -8,8 +8,6 @@ vim.wo.relativenumber = true
 vim.wo.cursorline = true
 -- Highlight the screen column of the cursor.
 vim.wo.cursorcolumn = true
--- Highlight the screen column 80 for conventional code styles.
-vim.wo.colorcolumn = "80"
 -- Reveal and distinguish tab, trail space, nbsp, and break more legibly.
 -- http://vi.stackexchange.com/a/430/5663
 -- Because trail space is enough, I discard the eol marker.
@@ -127,39 +125,8 @@ local python_path =
     vim.fn.substitute(vim.fn.system(which_command), "\n", "", "g")
 vim.g.python3_host_prog = python_path
 
--- ## Indentation
-
--- http://vimcasts.org/episodes/tabs-and-spaces/
--- Almost all code styles prefers four spaces instead of one tab.
--- So in Insert mode: use spaces in place of tab characters.
-vim.opt.expandtab = true
--- Set four spaces that a <Tab> in the file counts for.
-vim.opt.tabstop = 4
-vim.opt.softtabstop = 4
-vim.opt.shiftwidth = 4
 -- Enables the experimental Lua module loader, maybe faster.
 vim.loader.enable()
-
--- Set two spaces for some filetypes, especially web development.
-vim.api.nvim_create_autocmd("FileType", {
-    pattern = {
-        "javascript",
-        "javascriptreact",
-        "typescript",
-        "typescriptreact",
-        "html",
-        "css",
-        "json",
-        "nix",
-        "prisma",
-    },
-    callback = function()
-        vim.bo.shiftwidth = 2
-        vim.bo.tabstop = 2
-        vim.bo.softtabstop = 2
-        vim.bo.expandtab = true
-    end,
-})
 
 -- # Keymap enhancement
 

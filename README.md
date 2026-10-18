@@ -57,6 +57,11 @@ Find a client which has highly refined default configuration so you do not overr
 
 As for Neovim. If you can use third-part tool to handle files, use them rather than install an corresponding plugin, like useless Black plugin because you can execute external commands in Ex command as `:!black %`. Tinkering Neovim is ceaseless.
 
+Neovim does not impose language-specific code style. On save it delegates to
+the corresponding external formatter, which discovers project-local
+configuration from the working tree when available and otherwise uses its own
+defaults.
+
 ## Development
 
 The flake provides every repository quality tool. Enter it directly, or approve
