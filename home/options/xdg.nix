@@ -89,8 +89,8 @@ in
         systemdRun = "${pkgs.systemd}/bin/systemd-run";
       };
 
-  # The launcher reveals the persistent Yihui Panoptor session instead of
-  # treating its Kitty window as the session lifecycle.
+  # The launcher focuses or creates a Kitty TUI client while keeping Yihui's
+  # headless Process Compose session as the independent lifecycle owner.
   xdg.dataFile."applications/yihui-panoptor.desktop".source =
     ../files/applications/yihui-panoptor.desktop;
   xdg.dataFile."applications/poweroff.desktop".source = ../files/applications/poweroff.desktop;

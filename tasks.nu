@@ -211,13 +211,18 @@ export def "nur test" [] {
     nur test-architecture
 }
 
+# Run repository structure, raw-data, and deterministic fixture checks.
+export def "nur verify" [] {
+    nur architecture
+    nur validate-data
+    nur test
+}
+
 # Run every deterministic repository quality check in fail-fast order.
 export def "nur check" [] {
     nur lint
-    nur architecture
-    nur validate-data
     nur typecheck
-    nur test
+    nur verify
 }
 
 # Build the NixOS configuration without activating it.

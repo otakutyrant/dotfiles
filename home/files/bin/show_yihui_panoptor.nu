@@ -1,29 +1,29 @@
 #!/usr/bin/env nu
 
-# Reveal Yihui's persistent Panoptor session, starting it only when absent.
+# Focus Yihui's Process Compose TUI, starting the headless session only when absent.
 const PROJECT_ROOT = "/home/otakutyrant/Projects/ci"
+const APP_ID = "yihui-panoptor"
 
-def session-address []: nothing -> string {
-    let runtime_directory = $env.XDG_RUNTIME_DIR? | default null
-    if $runtime_directory == null {
-        error make { msg: "XDG_RUNTIME_DIR is required to locate Yihui Panoptor." }
+def project-command [arguments: list<string>]: nothing -> record {
+    ^direnv exec $PROJECT_ROOT nur ...$arguments | complete
+}
+
+def focus-existing-window []: nothing -> bool {
+    let result = (^swaymsg $"[app_id=\"($APP_ID)\"] focus" | complete)
+    if $result.exit_code != 0 {
+        return false
     }
-    $"unix:($runtime_directory)/yihui-nur.sock"
+    let replies = try { $result.stdout | from json } catch { [] }
+    $replies | any { |reply| $reply.success? | default false }
 }
 
-def remote [address: string arguments: list<string>]: nothing -> record {
-    ^kitten @ --to $address ...$arguments | complete
-}
-
-let address = session-address
-if (remote $address [ls]).exit_code != 0 {
-    let started = (^direnv exec $PROJECT_ROOT nur session | complete)
-    if $started.exit_code != 0 {
-        error make { msg: ($started.stderr | str trim) }
+if not (focus-existing-window) {
+    if (project-command [panoptor list --json]).exit_code != 0 {
+        let started = project-command [panoptor start]
+        if $started.exit_code != 0 {
+            error make { msg: (($started.stdout + $started.stderr) | str trim) }
+        }
     }
-}
 
-let shown = remote $address [resize-os-window --match all --action show --no-response]
-if $shown.exit_code != 0 {
-    error make { msg: ($shown.stderr | str trim) }
+    ^kitty --class $APP_ID --title "Yihui Panoptor" direnv exec $PROJECT_ROOT nur panoptor attach
 }

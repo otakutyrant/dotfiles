@@ -1,3 +1,4 @@
 # Nur is the repository task entrypoint for agents and interactive work.
 # The growing catalog lives in a Nushell module so this root stays discoverable.
 export use ./tasks.nu *
+export use ./tasks/panoptor.nu *

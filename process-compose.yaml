@@ -1,0 +1,96 @@
+version: "0.5"
+name: dotfiles-panoptor
+is_strict: true
+ordered_shutdown: true
+log_level: info
+log_length: 1000
+
+shell:
+  shell_command: nu
+  shell_argument: --commands
+
+processes:
+  nix_lint:
+    command: nur lint-nix
+    namespace: validation
+    availability:
+      restart: "no"
+    watch:
+      debounce: 500ms
+      paths:
+        - path: .
+          include: ["*.nix"]
+          exclude: [".direnv/**"]
+
+  nix_typecheck:
+    command: nur typecheck-nix
+    namespace: validation
+    availability:
+      restart: "no"
+    watch:
+      debounce: 500ms
+      paths:
+        - path: .
+          include: ["*.nix", "flake.lock"]
+          exclude: [".direnv/**"]
+
+  lua_lint:
+    command: nur lint-lua
+    namespace: validation
+    availability:
+      restart: "no"
+    watch:
+      debounce: 500ms
+      paths:
+        - path: .
+          include: ["*.lua", "selene.toml", "stylua.toml"]
+          exclude: [".direnv/**"]
+
+  lua_typecheck:
+    command: nur typecheck-lua
+    namespace: validation
+    availability:
+      restart: "no"
+    watch:
+      debounce: 500ms
+      paths:
+        - path: .
+          include: ["*.lua"]
+          exclude: [".direnv/**"]
+
+  nushell_lint:
+    command: nur lint-nushell
+    namespace: validation
+    availability:
+      restart: "no"
+    watch:
+      debounce: 500ms
+      paths:
+        - path: .
+          include: ["*.nu", "nurfile"]
+          exclude: [".direnv/**"]
+
+  nushell_typecheck:
+    command: nur typecheck-nushell
+    namespace: validation
+    availability:
+      restart: "no"
+    watch:
+      debounce: 500ms
+      paths:
+        - path: .
+          include: ["*.nu", "nurfile"]
+          exclude: [".direnv/**"]
+
+  repository_checks:
+    command: nur verify
+    namespace: validation
+    availability:
+      restart: "no"
+    watch:
+      debounce: 500ms
+      paths:
+        - path: .
+          include:
+            ["*.nix", "*.nu", "*.lua", "*.yaml", "*.yml", "*.toml", "*.json", "*.desktop", "nurfile"]
+          exclude: [".direnv/**"]
