@@ -1,0 +1,13 @@
+[Desktop Entry]
+Type=Application
+Version=1.5
+Name=qBittorrent
+GenericName=BitTorrent Client
+Comment=Download and share files over BitTorrent
+Exec=@qbittorrent@ %U
+TryExec=@qbittorrent@
+Icon=qbittorrent
+Terminal=false
+Categories=Network;FileTransfer;P2P;
+MimeType=application/x-bittorrent;x-scheme-handler/magnet;
+StartupNotify=true

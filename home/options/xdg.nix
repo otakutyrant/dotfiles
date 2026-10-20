@@ -19,6 +19,11 @@ let
     nu = "${pkgs.nushell}/bin/nu";
     systemctl = "${pkgs.systemd}/bin/systemctl";
   };
+  # Use the same rendered entry in the application menu and XDG autostart so
+  # both launch the qBittorrent package selected by this Home Manager profile.
+  qbittorrentDesktopEntry = renderTemplate ../files/applications/qbittorrent.desktop {
+    qbittorrent = "${pkgs.qbittorrent}/bin/qbittorrent";
+  };
 in
 {
   home.file.".local/bin/rqbit-magnet-handler" = {
@@ -79,6 +84,7 @@ in
         gnomeTextEditor = "${pkgs.gnome-text-editor}/bin/gnome-text-editor";
         scratchpad = "${home}/Nutstore Files/Nutstore/scratchpad";
       };
+  xdg.configFile."autostart/qbittorrent.desktop".source = qbittorrentDesktopEntry;
 
   # Register rqbit as the default handler for magnet links. It submits links to
   # the persistent rqbit user service defined in the main Home Manager profile.
@@ -88,6 +94,7 @@ in
         rqbitMagnetHandler = "${home}/.local/bin/rqbit-magnet-handler";
         systemdRun = "${pkgs.systemd}/bin/systemd-run";
       };
+  xdg.dataFile."applications/qbittorrent.desktop".source = qbittorrentDesktopEntry;
 
   # The launcher focuses or creates a Kitty TUI client while keeping Yihui's
   # headless Process Compose session as the independent lifecycle owner.

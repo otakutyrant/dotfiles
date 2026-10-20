@@ -55,6 +55,7 @@ in
     pkgs.local.photocraft # Rust image editor with layered PSD support.
     pkgs.networkmanagerapplet # NetworkManager tray applet and its nm-signal icons.
     pkgs.local.nmrs # GTK4 NetworkManager frontend.
+    pkgs.qbittorrent # Bittorrent client.
 
     # Wayland
     pkgs.unstable.ironbar # Current GTK4 panel; sliding tray submenus rely on Sway 1.12.
