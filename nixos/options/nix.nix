@@ -20,6 +20,8 @@
       "nix-command" # Enable commands such as nix shell and nix build.
       "flakes"
     ];
+    # Reject Nix's deprecated unquoted URL syntax before it is removed.
+    lint-url-literals = "fatal";
     # The dotfiles are often evaluated while edits are still in progress.
     warn-dirty = false;
   };
