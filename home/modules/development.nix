@@ -31,7 +31,8 @@
 
     ## TypeScript
     pkgs.typescript
-    pkgs.pnpm # NPM package manager.
+    # Stay on pnpm 10 for Kimi Code compatibility while receiving security fixes.
+    pkgs.pnpm_10_latest # NPM package manager.
     pkgs.typescript-language-server
     pkgs.vscode-langservers-extracted
     pkgs.tailwindcss-language-server

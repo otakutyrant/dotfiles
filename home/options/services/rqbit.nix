@@ -22,9 +22,12 @@ in
       # 198.18.0.0/16, where rqbit cannot complete its UDP bootstrap. Use the
       # bootstrap servers' real IPv4 addresses. Bind rqbit to the physical
       # Wi-Fi interface so DHT UDP bypasses Clash's unreliable gVisor TUN path.
+      # uTP is still experimental in rqbit, but enabling it allows metadata
+      # discovery from peers that do not accept BitTorrent connections over TCP.
       ExecStart = builtins.concatStringsSep " " [
         "${pkgs.unstable.rqbit}/bin/rqbit"
         "--bind-device wlp7s0"
+        "--experimental-enable-utp-listen"
         "--dht-bootstrap-addrs 185.157.221.247:25401,87.98.162.88:6881,212.129.33.59:6881"
         "server start ${home}/Downloads"
       ];

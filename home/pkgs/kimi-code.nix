@@ -4,7 +4,7 @@
   stdenv,
   fetchPnpmDeps,
   nodejs_24,
-  pnpm_10,
+  pnpm_10_latest,
   pnpmConfigHook,
   makeWrapper,
   ripgrep,
@@ -14,7 +14,9 @@
 let
   # Kimi Code's native executable requires Node.js 24.15.0 or newer.
   nodejs = nodejs_24;
-  pnpm = pnpm_10.override { inherit nodejs; };
+  # Upstream targets pnpm 10; use its patched variant instead of the
+  # compatibility version pnpm_10, which is marked insecure.
+  pnpm = pnpm_10_latest.override { inherit nodejs; };
   src = fetchFromGitHub {
     owner = "MoonshotAI";
     repo = "kimi-code";
