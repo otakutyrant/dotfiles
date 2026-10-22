@@ -1,14 +1,14 @@
 def checked-files [extension: string] {
     ^git ls-files --cached --others --exclude-standard
     | lines
-    | where { |path| ($path | str ends-with $extension) and ($path | path exists) }
+    | where {|path| ($path | str ends-with $extension) and ($path | path exists) }
     | sort
     | uniq
 }
 
 def nix-files [] {
     checked-files ".nix"
-    | where { |path| $path != "nixos/hardware-configuration.nix" }
+    | where {|path| $path != "nixos/hardware-configuration.nix" }
 }
 
 def lua-files [] {
@@ -17,6 +17,13 @@ def lua-files [] {
 
 def nu-files [] {
     checked-files ".nu"
+}
+
+def formatted-nu-files [] {
+
+    # This Home Manager replaceVars template becomes valid Nu only after Nix
+    # substitutes its @sessionPath@ placeholder.
+    nu-files | where {|path| $path != "home/options/programs/nushell/extra-env.nu" }
 }
 
 def architecture-violations [files: list<record>] {
@@ -36,15 +43,19 @@ def architecture-violations [files: list<record>] {
 def assert-no-architecture-violations [files: list<record>] {
     let violations = (architecture-violations $files)
     if ($violations | is-not-empty) {
-        let details = ($violations | each { |item| $"($item.path) imports forbidden ($item.forbidden)" } | str join "; ")
-        error make { msg: $"Architecture boundary violation: ($details)" }
+        let details = (
+            $violations
+            | each {|item| $"($item.path) imports forbidden ($item.forbidden)" }
+            | str join "; "
+        )
+        error make {msg: $"Architecture boundary violation: ($details)"}
     }
 }
 
 def ensure-success [result: record, operation: string] {
     if $result.exit_code != 0 {
-        let message = ($result.stderr | str trim)
-        error make { msg: $"($operation) failed: ($message)" }
+        let message = $result.stderr | str trim
+        error make {msg: $"($operation) failed: ($message)"}
     }
 }
 
@@ -64,10 +75,19 @@ export def "nur format-lua" [] {
     }
 }
 
+# Format checked-in Nushell files with the pinned upstream nufmt release.
+export def "nur format-nushell" [] {
+    let files = (formatted-nu-files)
+    if ($files | is-not-empty) {
+        ^nufmt ...$files
+    }
+}
+
 # Format every source language with an approved safe formatter.
 export def "nur format" [] {
     nur format-nix
     nur format-lua
+    nur format-nushell
 }
 
 # Check Nix formatting, suspicious constructs, and unused bindings.
@@ -95,12 +115,11 @@ export def "nur lint-lua" [] {
     ^selene ...$files
 }
 
-# Check Nushell idioms and unused code without rewriting source files.
+# Check Nushell formatting, idioms, and unused code without rewriting source files.
 export def "nur lint-nushell" [] {
-    # extra-env.nu is a Home Manager replaceVars template and is not valid Nu
-    # until Nix substitutes its @sessionPath@ placeholder.
-    let files = (nu-files | where { |path| $path != "home/options/programs/nushell/extra-env.nu" })
+    let files = (formatted-nu-files)
     if ($files | is-not-empty) {
+        ^nufmt --dry-run ...$files
         ^nu-lint ...$files
     }
 }
@@ -116,10 +135,16 @@ export def "nur lint" [] {
 export def "nur typecheck-nix" [] {
     # Nix has no separate type checker. Evaluating the derivation paths checks
     # flake evaluation plus the NixOS and Home Manager module types.
-    let nixos = (^nix eval --no-update-lock-file --raw ".#nixosConfigurations.nixos.config.system.build.toplevel.drvPath" | complete)
+    let nixos = (
+        ^nix eval --no-update-lock-file --raw ".#nixosConfigurations.nixos.config.system.build.toplevel.drvPath"
+        | complete
+    )
     ensure-success $nixos "NixOS evaluation"
 
-    let home = (^nix eval --no-update-lock-file --raw ".#homeConfigurations.otakutyrant.activationPackage.drvPath" | complete)
+    let home = (
+        ^nix eval --no-update-lock-file --raw ".#homeConfigurations.otakutyrant.activationPackage.drvPath"
+        | complete
+    )
     ensure-success $home "Home Manager evaluation"
 }
 
@@ -131,7 +156,7 @@ export def "nur typecheck-lua" [] {
 # Check every Nushell source and directly source autoload modules.
 export def "nur typecheck-nushell" [] {
     let files = (nu-files)
-    for file in ($files | where { |path| $path | str contains "/autoload/" }) {
+    for file in ($files | where {|path| $path | str contains "/autoload/" }) {
         ^nu -n -c $"source ($file)"
     }
 
@@ -152,7 +177,7 @@ export def "nur validate-data" [] {
     let yaml_files = (
         (checked-files ".yaml")
         | append (checked-files ".yml")
-        | where { |path| not ($path | str ends-with ".dict.yaml") }
+        | where {|path| not ($path | str ends-with ".dict.yaml") }
     )
     for file in $yaml_files {
         let result = (^yq eval "." $file | complete)
@@ -182,8 +207,8 @@ export def "nur validate-data" [] {
 export def "nur architecture" [] {
     let files = (
         checked-files ".nix"
-        | where { |path| ($path | str starts-with "home/") or ($path | str starts-with "nixos/") or ($path | str starts-with "lib/") }
-        | each { |path| { path: $path, content: (open --raw $path) } }
+        | where {|path| ($path | str starts-with "home/") or ($path | str starts-with "nixos/") or ($path | str starts-with "lib/") }
+        | each {|path| { path: $path, content: (open --raw $path) } }
     )
     assert-no-architecture-violations $files
 }
@@ -191,9 +216,15 @@ export def "nur architecture" [] {
 # Exercise representative allowed and forbidden Nix dependency boundaries.
 export def "nur test-architecture" [] {
     assert-no-architecture-violations [
-        { path: "home/options/example.nix", content: "import ../../../lib/example.nix" }
-        { path: "nixos/options/example.nix", content: "import ../../lib/example.nix" }
-        { path: "lib/example.nix", content: "{ lib }: lib.id" }
+        {
+            path: "home/options/example.nix"
+            content: "import ../../../lib/example.nix"
+        }
+        {
+            path: "nixos/options/example.nix"
+            content: "import ../../lib/example.nix"
+        }
+        {path: "lib/example.nix", content: "{ lib }: lib.id"}
     ]
 
     let forbidden = (architecture-violations [
@@ -202,7 +233,7 @@ export def "nur test-architecture" [] {
         { path: "lib/example.nix", content: "import ../home/example.nix" }
     ])
     if ($forbidden | length) != 3 {
-        error make { msg: "Architecture fixtures did not reject every forbidden dependency" }
+        error make {msg: "Architecture fixtures did not reject every forbidden dependency"}
     }
 }
 

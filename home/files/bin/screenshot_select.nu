@@ -1,13 +1,16 @@
 #!/usr/bin/env nu
 
 def visible-window-boxes [node: record] {
+
     # Floating windows must come first because WaySip picks the first matching
     # rectangle, and a floating window can overlap a tiled one.
     let floating = try { $node.floating_nodes } catch { [] }
     let tiled = try { $node.nodes } catch { [] }
     let own = try {
         if $node.visible and $node.pid != null and $node.rect.width > 0 and $node.rect.height > 0 {
-            [$"($node.rect.x),($node.rect.y) ($node.rect.width)x($node.rect.height)"]
+            [
+                $"($node.rect.x),($node.rect.y) ($node.rect.width)x($node.rect.height)"
+            ]
         } else {
             []
         }
@@ -17,7 +20,7 @@ def visible-window-boxes [node: record] {
 
     $floating
     | append $tiled
-    | reduce --fold $own { |child, boxes| $boxes | append (visible-window-boxes $child) }
+    | reduce --fold $own {|child, boxes| $boxes | append (visible-window-boxes $child) }
 }
 
 def main [

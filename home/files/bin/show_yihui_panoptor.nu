@@ -13,15 +13,21 @@ def focus-existing-window []: nothing -> bool {
     if $result.exit_code != 0 {
         return false
     }
-    let replies = try { $result.stdout | from json } catch { [] }
-    $replies | any { |reply| $reply.success? | default false }
+    let replies = try {
+        $result.stdout | from json
+    } catch {
+        []
+    }
+    $replies | any {|reply| $reply.success? | default false }
 }
 
 if not (focus-existing-window) {
     if (project-command [panoptor list --json]).exit_code != 0 {
         let started = project-command [panoptor start]
         if $started.exit_code != 0 {
-            error make { msg: (($started.stdout + $started.stderr) | str trim) }
+            error make {
+                msg: (($started.stdout + $started.stderr) | str trim)
+            }
         }
     }
 

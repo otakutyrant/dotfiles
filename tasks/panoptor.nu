@@ -9,7 +9,9 @@ const PROJECT_NAME = "dotfiles"
 def repository-root []: nothing -> string {
     let result = ^git -C $PROJECT_ROOT rev-parse --show-toplevel | complete
     if $result.exit_code != 0 {
-        error make {msg: ($result.stderr | str trim)}
+        error make {
+            msg: ($result.stderr | str trim)
+        }
     }
     $result.stdout | str trim | path expand
 }
@@ -21,7 +23,9 @@ def worktree-id []: nothing -> string {
 def runtime-directory []: nothing -> string {
     let base = $env.XDG_RUNTIME_DIR? | default null
     if $base == null {
-        error make {msg: "XDG_RUNTIME_DIR is required for Panoptor's private runtime state."}
+        error make {
+            msg: "XDG_RUNTIME_DIR is required for Panoptor's private runtime state."
+        }
     }
     $base | path join $PROJECT_NAME $"panoptor-(worktree-id)"
 }
@@ -50,27 +54,38 @@ def --wrapped client-result [...arguments: string]: nothing -> record {
 
 def require-session [] {
     if (client-result process list --output json).exit_code != 0 {
-        error make {msg: "No dotfiles Panoptor session is running.", help: "Run `nur panoptor start`."}
+        error make {
+            msg: "No dotfiles Panoptor session is running."
+            help: "Run `nur panoptor start`."
+        }
     }
 }
 
 def process-state [role: string]: nothing -> string {
     let listing = client-result process list --output json
     if $listing.exit_code != 0 {
-        error make {msg: "Could not read Panoptor process state.", help: ($listing.stderr | str trim)}
+        error make {
+            msg: "Could not read Panoptor process state."
+            help: ($listing.stderr | str trim)
+        }
     }
-    let processes = try { $listing.stdout | from json } catch {
+    let processes = try {
+        $listing.stdout | from json
+    } catch {
         error make {msg: "Process Compose returned invalid JSON process state."}
     }
     let process = $processes | where name == $role | get --optional 0
     if $process == null {
-        error make {msg: $"Unknown Panoptor role '($role)'.", help: "Run `nur panoptor list`."}
+        error make {
+            msg: $"Unknown Panoptor role '($role)'."
+            help: "Run `nur panoptor list`."
+        }
     }
     # The pinned nu-lint parser still recognizes the pre-0.114 spelling.
     $process.status? | default unknown | into string | str downcase
 }
 
-def run-role-action [action: string role: string] {
+def run-role-action [action: string, role: string] {
     require-session
     let actual_action = if $action == rerun {
         let state = process-state $role
@@ -83,7 +98,10 @@ def run-role-action [action: string role: string] {
     }
     let result = client-result process $actual_action $role
     if $result.exit_code != 0 {
-        error make {msg: $"Could not ($actual_action) Panoptor role '($role)'.", help: (($result.stdout + $result.stderr) | str trim)}
+        error make {
+            msg: $"Could not ($actual_action) Panoptor role '($role)'."
+            help: (($result.stdout + $result.stderr) | str trim)
+        }
     }
     print $"($role): ($actual_action) requested."
 }
@@ -92,7 +110,10 @@ def start-panoptor [] {
     prepare-runtime-directory
     let socket = socket-path
     if (client-result process list --output json).exit_code == 0 {
-        error make {msg: "Dotfiles Panoptor is already running.", help: "Run `nur panoptor list` or `nur panoptor attach`."}
+        error make {
+            msg: "Dotfiles Panoptor is already running."
+            help: "Run `nur panoptor list` or `nur panoptor attach`."
+        }
     }
     if ($socket | path exists) {
         rm --force $socket
@@ -101,7 +122,10 @@ def start-panoptor [] {
         ^process-compose --use-uds --unix-socket $socket --log-file (server-log-path) --ordered-shutdown up --config $CONFIG_PATH --detached --tui=false --disable-dotenv --keep-project | complete
     }
     if $started.exit_code != 0 {
-        error make {msg: "Process Compose could not start dotfiles Panoptor.", help: (($started.stdout + $started.stderr) | str trim)}
+        error make {
+            msg: "Process Compose could not start dotfiles Panoptor."
+            help: (($started.stdout + $started.stderr) | str trim)
+        }
     }
     for _ in 1..40 {
         if (client-result process list --output json).exit_code == 0 {
@@ -110,14 +134,20 @@ def start-panoptor [] {
         }
         sleep 250ms
     }
-    error make {msg: "Panoptor did not open its control socket.", help: $"Inspect (server-log-path)."}
+    error make {
+        msg: "Panoptor did not open its control socket."
+        help: $"Inspect (server-log-path)."
+    }
 }
 
 def stop-panoptor [] {
     require-session
     let stopped = client-result down
     if $stopped.exit_code != 0 {
-        error make {msg: "Process Compose could not stop dotfiles Panoptor.", help: (($stopped.stdout + $stopped.stderr) | str trim)}
+        error make {
+            msg: "Process Compose could not stop dotfiles Panoptor."
+            help: (($stopped.stdout + $stopped.stderr) | str trim)
+        }
     }
     print "Dotfiles Panoptor stopped."
 }
@@ -155,7 +185,7 @@ export def "nur panoptor list" [--json] {
 }
 
 # Print a bounded tail from one role's log buffer.
-export def "nur panoptor output" [role: string --tail: int = 100] {
+export def "nur panoptor output" [role: string, --tail: int = 100] {
     prepare-runtime-directory
     require-session
     if $tail < 1 {
@@ -165,7 +195,7 @@ export def "nur panoptor output" [role: string --tail: int = 100] {
 }
 
 # Start, stop, restart, or freshly rerun one role.
-export def "nur panoptor role" [action: string role: string] {
+export def "nur panoptor role" [action: string, role: string] {
     prepare-runtime-directory
     run-role-action $action $role
 }

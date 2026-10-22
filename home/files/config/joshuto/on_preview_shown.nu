@@ -68,12 +68,32 @@ def main [
     match $mime_type {
         "image/svg+xml" | "image/svg" => {
             let cached = (ensure-svg-cache $file_path)
-            show-image $cached $preview_x $preview_y $preview_width $preview_height
+            (show-image
+                $cached
+                $preview_x
+                $preview_y
+                $preview_width
+                $preview_height
+            )
         }
-        _ => { show-image $file_path $preview_x $preview_y $preview_width $preview_height }
-        _ => {
+        _ if ($mime_type | str starts-with "image/") => {
+            (show-image
+                $file_path
+                $preview_x
+                $preview_y
+                $preview_width
+                $preview_height
+            )
+        }
+        _ if ($mime_type | str starts-with "video/") => {
             let cached = (ensure-video-cache $file_path)
-            show-image $cached $preview_x $preview_y $preview_width $preview_height
+            (show-image
+                $cached
+                $preview_x
+                $preview_y
+                $preview_width
+                $preview_height
+            )
         }
         _ => { clear-image }
     }

@@ -52,6 +52,7 @@
           imageflow = final.callPackage ./home/pkgs/imageflow.nix { };
           kimi-code = final.callPackage ./home/pkgs/kimi-code.nix { };
           nmrs = final.callPackage ./home/pkgs/nmrs.nix { };
+          nufmt = final.callPackage ./home/pkgs/nufmt.nix { };
           nur = final.callPackage ./home/pkgs/nur.nix { };
           nutstore = final.callPackage ./home/pkgs/nutstore.nix { };
           oximedia = final.callPackage ./home/pkgs/oximedia.nix { };
@@ -109,6 +110,7 @@
           nh
           nixfmt
           nu-lint
+          local.nufmt
           nushell
           panoptorProcessCompose
           local.nur

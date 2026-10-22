@@ -72,11 +72,10 @@ nix develop
 direnv allow
 ```
 
-`nur --list` shows the complete command catalog. `nur format` formats Nix and
-Lua files, while `nur check` runs formatting checks, static analysis,
+`nur --list` shows the complete command catalog. `nur format` formats Nix, Lua,
+and Nushell files, while `nur check` runs formatting checks, static analysis,
 architecture and data validation, Nix evaluation, Lua diagnostics, and Nushell
-checks. Nushell is checked but not formatted because `nufmt` has corrupted
-valid scripts in this repository.
+checks.
 
 Use `nur build-nixos` or `nur build-home` for a non-activating build. The
 explicit `nur switch-nixos` and `nur switch-home` commands update the live

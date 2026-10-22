@@ -40,11 +40,11 @@ const SUPPORTED_EXTENSIONS = [
     webp
 ]
 def log-message [level: string, message: string] {
-    let timestamp = (date now | format date "%Y-%m-%d %H:%M:%S")
+    let timestamp = date now | format date "%Y-%m-%d %H:%M:%S"
     print $"($timestamp) ($level) ($message)"
 }
 def file-state [path: string] {
-    let row = (ls $path | first)
+    let row = ls $path | first
     {
         size: ($row.size | into int)
         modified: ($row.modified | format date "%s%f")
@@ -57,20 +57,26 @@ def is-supported-image [path: string] {
     $extension in $SUPPORTED_EXTENSIONS
 }
 def resize-image [path: string, target_short_side: int] {
-    let parsed = ($path | path parse)
-    let parent = ($path | path dirname)
+    let parsed = $path | path parse
+    let parent = $path | path dirname
     let suffix = if ($parsed.extension | is-empty) {
         ".img"
     } else {
         $".($parsed.extension)"
     }
-    let extension = ($parsed.extension | str downcase)
+    let extension = $parsed.extension | str downcase
     let preset = if $extension in [jpg, jpeg] {
-        {mozjpeg: {quality: 90, progressive: false}}
+        {
+            mozjpeg: {quality: 90, progressive: false}
+        }
     } else if $extension == "png" {
-        {lodepng: {maximum_deflate: false}}
+        {
+            lodepng: {maximum_deflate: false}
+        }
     } else {
-        {webplossy: {quality: 90}}
+        {
+            webplossy: {quality: 90}
+        }
     }
     let temp_path = (mktemp --tmpdir-path $parent --suffix $suffix $".($parsed.stem)-XXXXXX")
     let job_path = (mktemp --suffix .json image-resize-job-XXXXXX)
@@ -83,7 +89,9 @@ def resize-image [path: string, target_short_side: int] {
         ]
         framewise: {
             steps: [
-                {decode: {io_id: 0}}
+                {
+                    decode: {io_id: 0}
+                }
             ]
         }
     }
@@ -93,7 +101,10 @@ def resize-image [path: string, target_short_side: int] {
     } | complete)
     if $probe_result.exit_code != 0 {
         rm --force $job_path $temp_path
-        return {ok: false, reason: ($probe_result.stderr | str trim)}
+        return {
+            ok: false
+            reason: ($probe_result.stderr | str trim)
+        }
     }
     let probe_operation = try {
         $probe_result.stdout
@@ -101,10 +112,13 @@ def resize-image [path: string, target_short_side: int] {
         | get data.build_result
     } catch {
         rm --force $job_path $temp_path
-        return {ok: false, reason: $"unexpected Imageflow response: ($probe_result.stdout | str trim)"}
+        return {
+            ok: false
+            reason: $"unexpected Imageflow response: ($probe_result.stdout | str trim)"
+        }
     }
-    let decoded = ($probe_operation.decodes | first)
-    let source_short_side = ([$decoded.w, $decoded.h] | math min)
+    let decoded = $probe_operation.decodes | first
+    let source_short_side = [$decoded.w, $decoded.h] | math min
     if $source_short_side >= $target_short_side {
         rm --force $job_path $temp_path
         return {ok: true, resized: false, reason: ""}
@@ -121,9 +135,13 @@ def resize-image [path: string, target_short_side: int] {
         ]
         framewise: {
             steps: [
-                {decode: {io_id: 0}}
+                {
+                    decode: {io_id: 0}
+                }
                 {constrain: $constraint}
-                {encode: {io_id: 1, preset: $preset}}
+                {
+                    encode: {io_id: 1, preset: $preset}
+                }
             ]
         }
     }
@@ -134,7 +152,10 @@ def resize-image [path: string, target_short_side: int] {
     rm --force $job_path
     if $result.exit_code != 0 {
         rm --force $temp_path
-        return {ok: false, reason: ($result.stderr | str trim)}
+        return {
+            ok: false
+            reason: ($result.stderr | str trim)
+        }
     }
     let operation = try {
         $result.stdout
@@ -142,13 +163,19 @@ def resize-image [path: string, target_short_side: int] {
         | get data.build_result
     } catch {
         rm --force $temp_path
-        return {ok: false, reason: $"unexpected Imageflow response: ($result.stdout | str trim)"}
+        return {
+            ok: false
+            reason: $"unexpected Imageflow response: ($result.stdout | str trim)"
+        }
     }
-    let encoded = ($operation.encodes | first)
-    let output_short_side = ([$encoded.w, $encoded.h] | math min)
+    let encoded = $operation.encodes | first
+    let output_short_side = [$encoded.w, $encoded.h] | math min
     if $output_short_side < $target_short_side {
         rm --force $temp_path
-        return {ok: false, reason: $"Imageflow left the short side at ($output_short_side)px"}
+        return {
+            ok: false
+            reason: $"Imageflow left the short side at ($output_short_side)px"
+        }
     }
     mv --force $temp_path $path
     {ok: true, resized: true, reason: ""}
@@ -199,10 +226,7 @@ def scan-once [
             }
         }
     }
-    {
-        known: $known_states
-        recently_resized: $resized_states
-    }
+    {known: $known_states, recently_resized: $resized_states}
 }
 def main [
     --root: string = /home/otakutyrant
@@ -218,7 +242,7 @@ def main [
         log-message ERROR "--interval must be greater than zero"
         exit 2
     }
-    let resolved_root = ($root | path expand)
+    let resolved_root = $root | path expand
     if not ($resolved_root | path exists) {
         log-message ERROR $"Root path does not exist: ($resolved_root)"
         exit 2
@@ -228,12 +252,26 @@ def main [
         recently_resized: {}
     }
     if $once {
-        $state = (scan-once $resolved_root $target_short_side $state.known $state.recently_resized)
+        $state = (
+            (scan-once
+                $resolved_root
+                $target_short_side
+                $state.known
+                $state.recently_resized
+            )
+        )
         exit 0
     }
     log-message INFO $"Watching ($resolved_root) for images whose shortest side is below ($target_short_side)px"
     loop {
-        $state = (scan-once $resolved_root $target_short_side $state.known $state.recently_resized)
+        $state = (
+            (scan-once
+                $resolved_root
+                $target_short_side
+                $state.known
+                $state.recently_resized
+            )
+        )
         sleep ($interval * 1sec)
     }
 }

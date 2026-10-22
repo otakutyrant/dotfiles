@@ -9,7 +9,7 @@ def print-command-output [result: record] {
 }
 
 def run-preview [command: closure] {
-    let result = (do $command | complete)
+    let result = do $command | complete
     if $result.exit_code == 0 {
         print-command-output $result
         exit 0
@@ -19,6 +19,7 @@ def run-preview [command: closure] {
 
 def handle-extension [file_path: string, extension: string] {
     match $extension {
+
         # Archives and compressed files. ouch covers tar/zip/7z/rar and
         # friends; --yes accepts formats it infers from the file signature
         # (e.g. .jar) without prompting. Exotic formats ouch cannot read
@@ -35,7 +36,7 @@ def handle-extension [file_path: string, extension: string] {
         "torrent" => {
             run-preview {|| ^transmission-show -- $file_path }
         }
-        _ => {}
+        _ => { }
     }
 }
 
@@ -66,9 +67,19 @@ def handle-media-preview [file_path: string, kind: string] {
     exit 0
 }
 
-def handle-mime [file_path: string, mime_type: string, preview_width: int, preview_height: int] {
+def handle-mime [
+    file_path: string
+    mime_type: string
+    preview_width: int
+    preview_height: int
+] {
     if ($mime_type | str starts-with "text/") or ($mime_type | str ends-with "/xml") {
-        let file_size = (ls $file_path | first | get size | into int)
+        let file_size = (
+            ls $file_path
+            | first
+            | get size
+            | into int
+        )
         if $file_size <= $HIGHLIGHT_SIZE_MAX {
             if not (which bat | is-empty) {
                 run-preview {|| ^bat --color=always --paging=never --style=plain --terminal-width $preview_width $file_path }
@@ -109,16 +120,17 @@ def handle-fallback [file_path: string] {
     exit 1
 }
 
-def main [
-    --path: string = "",
-    --preview-width: int = 10,
-    --preview-height: int = 10,
-] {
+def main [--path: string = "", --preview-width: int = 10, --preview-height: int = 10] {
     if $path == "" {
         exit 1
     }
 
-    let extension = ($path | path parse | get extension | str downcase)
+    let extension = (
+        $path
+        | path parse
+        | get extension
+        | str downcase
+    )
     handle-extension $path $extension
 
     let mime_result = (do {
@@ -126,7 +138,12 @@ def main [
     } | complete)
 
     if $mime_result.exit_code == 0 {
-        handle-mime $path ($mime_result.stdout | str trim) $preview_width $preview_height
+        (handle-mime
+            $path
+            ($mime_result.stdout | str trim)
+            $preview_width
+            $preview_height
+        )
     }
 
     handle-fallback $path
