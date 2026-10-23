@@ -7,4 +7,19 @@
     package = pkgs.unstable.codex;
     context = builtins.readFile ./codex-context.md;
   };
+
+  # These companion tools are introduced for Codex-driven development. Keep
+  # them beside Codex instead of wrapping its package so they remain ordinary,
+  # reusable commands in the Home Manager environment.
+  home.packages = [
+    pkgs.shellcheck # Codex uses ShellCheck to lint maintained sh and Bash scripts.
+    pkgs.shfmt # Codex uses shfmt to format maintained sh and Bash scripts.
+    pkgs.actionlint # Codex uses actionlint to validate GitHub Actions workflows.
+    pkgs.hadolint # Codex uses hadolint to lint Dockerfiles.
+    pkgs.difftastic # Codex uses the `difft` binary for syntax-aware code review.
+    pkgs.strace # Codex uses strace to diagnose process and system-call behavior.
+    pkgs.rsync # Codex uses rsync for efficient, metadata-aware file synchronization.
+    pkgs.lsof # Codex uses lsof to identify processes that hold files or sockets.
+    pkgs.iproute2 # Codex uses the iproute2 `ss` command to inspect network sockets.
+  ];
 }

@@ -9,6 +9,11 @@
       alias = {
         c = "commit";
         d = "diff";
+        # Keep Difftastic opt-in: ordinary `git diff` remains available when a
+        # conventional patch is more useful than a syntax-aware review.
+        dft = "-c diff.external=difft diff";
+        ds = "-c diff.external=difft show --ext-diff";
+        dl = "-c diff.external=difft log -p --ext-diff";
         s = "status";
         g = "log --name-only --graph --all --date=format-local:'%Y-%m-%d %H:%M:%S' --format='%C(auto)%h%d %cd %s'";
         l = "log --name-only";
