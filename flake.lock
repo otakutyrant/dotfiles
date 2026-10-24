@@ -90,11 +90,11 @@
     },
     "nixpkgs-unstable": {
       "locked": {
-        "lastModified": 1790046670,
-        "narHash": "sha256-MYiI+CzL0tuWgRPjGsKCDHqYs2T3OzMlMQWOYWG0qso=",
+        "lastModified": 1792502884,
+        "narHash": "sha256-IoNisKcGbUjdd45qCqywGMCYmZ5EnkxezvLII0FWwNA=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "6774f7bc253789b113a4f39285dc0fa100abeacc",
+        "rev": "02c087f3fe673c9e317f206a627cb6b910336dbe",
         "type": "github"
       },
       "original": {
@@ -227,11 +227,11 @@
     },
     "tyrant-skills": {
       "locked": {
-        "lastModified": 1792850190,
-        "narHash": "sha256-NEeggS6HgfNKWElTTJh90bcTG00orokQqPLu3xW/zgI=",
+        "lastModified": 1792853053,
+        "narHash": "sha256-02Y1AzmJxdse6XD926qRAS1n/w2INHdrOxzyYDNMlOg=",
         "ref": "refs/heads/main",
-        "rev": "bec93c6c6e279c925e9ae099cc705bf915d6e018",
-        "revCount": 20,
+        "rev": "eba2e6a31b96e3a73aa492a9528c742ed004cf9a",
+        "revCount": 21,
         "type": "git",
         "url": "file:///home/otakutyrant/Projects/tyrant-skills"
       },
