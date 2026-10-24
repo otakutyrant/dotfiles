@@ -7,11 +7,6 @@
     # Keep an unstable package set available for selected fast-moving tools
     # without moving the whole system away from the stable NixOS channel.
     nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
-    # Native file watching is part of Process Compose only from 1.122.0. Pin
-    # that release so Panoptor, rather than nested watcher processes, owns the
-    # repository's validation lifecycle.
-    process-compose.url = "github:F1bonacc1/process-compose/v1.122.0";
-    process-compose.inputs.nixpkgs.follows = "nixpkgs";
     # Until Zhongdou Sans lands in nixpkgs, build this machine's Git checkout
     # so the lock records the tested source revision instead of an opaque path
     # snapshot.
@@ -87,17 +82,10 @@
         config.allowUnfree = true;
         overlays = [ localPackagesOverlay ];
       };
-      # The upstream tag retains 1.120.0 in its Nix metadata. Correct the
-      # displayed and embedded version while keeping the tagged watcher source.
-      panoptorProcessCompose =
-        inputs.process-compose.packages.${system}.process-compose.overrideAttrs
-          (previous: {
-            version = "1.122.0";
-            __intentionallyOverridingVersion = true;
-            ldflags = builtins.map (
-              flag: builtins.replaceStrings [ "v${previous.version}" ] [ "v1.122.0" ] flag
-            ) previous.ldflags;
-          });
+      # Panoptor requires Process Compose 1.122.0 for native file watching.
+      # The unstable package set now provides that release directly, avoiding
+      # a redundant upstream flake and its additional transitive inputs.
+      panoptorProcessCompose = unstablePackages.process-compose;
       # These arguments are needed by the shared Home Manager module.
       homeSpecialArgs = {
         inherit username;
