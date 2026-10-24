@@ -21,7 +21,7 @@
     };
     # Install Tyrant skills from a Git revision pinned alongside every other
     # external input; its Home Manager module owns the Codex skill path.
-    tyrant-skills.url = "git+file:///home/otakutyrant/Projects/tyrant-skills";
+    tyrant-skills.url = "git+https://github.com/otakutyrant/tyrant-skills";
     home-manager = {
       url = "github:nix-community/home-manager/release-26.05";
       # Flake input keyword: `follows` makes Home Manager reuse this flake's
