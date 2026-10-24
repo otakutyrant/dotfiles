@@ -12,12 +12,16 @@
     # repository's validation lifecycle.
     process-compose.url = "github:F1bonacc1/process-compose/v1.122.0";
     process-compose.inputs.nixpkgs.follows = "nixpkgs";
-    # Until Zhongdou Sans lands in nixpkgs, build this machine's current
-    # checkout so local font testing does not depend on the older release.
+    # Until Zhongdou Sans lands in nixpkgs, build this machine's Git checkout
+    # so the lock records the tested source revision instead of an opaque path
+    # snapshot.
     zhongdou-sans = {
-      url = "path:/home/otakutyrant/Projects/Zhongdou-Sans";
+      url = "git+file:///home/otakutyrant/Projects/Zhongdou-Sans";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    # Install Tyrant skills from a Git revision pinned alongside every other
+    # external input; its Home Manager module owns the Codex skill path.
+    tyrant-skills.url = "git+file:///home/otakutyrant/Projects/tyrant-skills";
     home-manager = {
       url = "github:nix-community/home-manager/release-26.05";
       # Flake input keyword: `follows` makes Home Manager reuse this flake's
@@ -138,7 +142,12 @@
             nixpkgs.overlays = [ localPackagesOverlay ];
             home-manager.useGlobalPkgs = true;
             home-manager.extraSpecialArgs = homeSpecialArgs;
-            home-manager.users.${username} = import ./home/configuration.nix;
+            home-manager.users.${username} = {
+              imports = [
+                ./home/configuration.nix
+                inputs.tyrant-skills.homeManagerModules.tyrant-agents
+              ];
+            };
           }
         ];
       };
@@ -151,7 +160,10 @@
           overlays = [ localPackagesOverlay ];
         };
         extraSpecialArgs = homeSpecialArgs;
-        modules = [ ./home/configuration.nix ];
+        modules = [
+          ./home/configuration.nix
+          inputs.tyrant-skills.homeManagerModules.tyrant-agents
+        ];
       };
     };
 }

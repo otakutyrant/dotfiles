@@ -1,8 +1,41 @@
 {
   "nodes": {
+    "crane": {
+      "locked": {
+        "lastModified": 1768319649,
+        "narHash": "sha256-VFkNyxHxkqGp8gf8kfFMW1j6XeBy609kv6TE9uF/0Js=",
+        "owner": "ipetkov",
+        "repo": "crane",
+        "rev": "4b6527687cfd20da3c2ef8287e01b74c2d6c705b",
+        "type": "github"
+      },
+      "original": {
+        "owner": "ipetkov",
+        "repo": "crane",
+        "type": "github"
+      }
+    },
     "flake-utils": {
       "inputs": {
         "systems": "systems"
+      },
+      "locked": {
+        "lastModified": 1731533236,
+        "narHash": "sha256-l0KFg5HjrsfsO/JpG+r7fRrqm12kzFHyUHqHCVpMMbI=",
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "rev": "11707dc2f618dd54ca8739b309ec4fc024de578b",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "type": "github"
+      }
+    },
+    "flake-utils_2": {
+      "inputs": {
+        "systems": "systems_2"
       },
       "locked": {
         "lastModified": 1731533236,
@@ -71,6 +104,43 @@
         "type": "github"
       }
     },
+    "nixpkgs_2": {
+      "locked": {
+        "lastModified": 1768302833,
+        "narHash": "sha256-h5bRFy9bco+8QcK7rGoOiqMxMbmn21moTACofNLRMP4=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "61db79b0c6b838d9894923920b612048e1201926",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixpkgs-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "nu-lint": {
+      "inputs": {
+        "crane": "crane",
+        "flake-utils": "flake-utils_2",
+        "nixpkgs": "nixpkgs_2",
+        "rust-overlay": "rust-overlay"
+      },
+      "locked": {
+        "lastModified": 1792227661,
+        "narHash": "sha256-agzudwCrfB5DSW1PSPOBuvRyA/wZT1vTocccZ9juHFI=",
+        "ref": "refs/heads/main",
+        "rev": "a1dcaf1d3f9ed01c0e1600b5620a03149113218b",
+        "revCount": 409,
+        "type": "git",
+        "url": "https://codeberg.org/wvhulle/nu-lint"
+      },
+      "original": {
+        "type": "git",
+        "url": "https://codeberg.org/wvhulle/nu-lint"
+      }
+    },
     "process-compose": {
       "inputs": {
         "flake-utils": "flake-utils",
@@ -99,7 +169,30 @@
         "nixpkgs": "nixpkgs",
         "nixpkgs-unstable": "nixpkgs-unstable",
         "process-compose": "process-compose",
+        "tyrant-skills": "tyrant-skills",
         "zhongdou-sans": "zhongdou-sans"
+      }
+    },
+    "rust-overlay": {
+      "inputs": {
+        "nixpkgs": [
+          "zhongdou-sans",
+          "nu-lint",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1789802016,
+        "narHash": "sha256-QVFfArbYaQMGK4dFV+5RUL72Ci+hNHVhaF/R9qJfDhs=",
+        "owner": "oxalica",
+        "repo": "rust-overlay",
+        "rev": "26a71e661c47bd21a05d06fec749f3f7c75e9d12",
+        "type": "github"
+      },
+      "original": {
+        "owner": "oxalica",
+        "repo": "rust-overlay",
+        "type": "github"
       }
     },
     "systems": {
@@ -117,21 +210,55 @@
         "type": "github"
       }
     },
+    "systems_2": {
+      "locked": {
+        "lastModified": 1681028828,
+        "narHash": "sha256-Vy1rq5AaRuLzOxct8nz4T6wlgyUR7zLU309k9mBC768=",
+        "owner": "nix-systems",
+        "repo": "default",
+        "rev": "da67096a3b9bf56a91d16901293e51ba5b49a27e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-systems",
+        "repo": "default",
+        "type": "github"
+      }
+    },
+    "tyrant-skills": {
+      "locked": {
+        "lastModified": 1792850190,
+        "narHash": "sha256-NEeggS6HgfNKWElTTJh90bcTG00orokQqPLu3xW/zgI=",
+        "ref": "refs/heads/main",
+        "rev": "bec93c6c6e279c925e9ae099cc705bf915d6e018",
+        "revCount": 20,
+        "type": "git",
+        "url": "file:///home/otakutyrant/Projects/tyrant-skills"
+      },
+      "original": {
+        "type": "git",
+        "url": "file:///home/otakutyrant/Projects/tyrant-skills"
+      }
+    },
     "zhongdou-sans": {
       "inputs": {
         "nixpkgs": [
           "nixpkgs"
-        ]
+        ],
+        "nu-lint": "nu-lint"
       },
       "locked": {
-        "lastModified": 1792252745,
-        "narHash": "sha256-WeE8236epHTL30+NvWkuDVuGVme1nQsur0jHMB2sfzM=",
-        "path": "/home/otakutyrant/Projects/Zhongdou-Sans",
-        "type": "path"
+        "lastModified": 1792850190,
+        "narHash": "sha256-/Ulgd0HxkzO3LnWPuWCxqaAO5aY4V7zcO2gMxGCnopw=",
+        "ref": "refs/heads/main",
+        "rev": "ad015ad57df6f9191bb714a11f39c3e90c9b08ea",
+        "revCount": 77,
+        "type": "git",
+        "url": "file:///home/otakutyrant/Projects/Zhongdou-Sans"
       },
       "original": {
-        "path": "/home/otakutyrant/Projects/Zhongdou-Sans",
-        "type": "path"
+        "type": "git",
+        "url": "file:///home/otakutyrant/Projects/Zhongdou-Sans"
       }
     }
   },
