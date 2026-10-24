@@ -80,6 +80,8 @@ state. The local Zhongdou Sans flake input intentionally points to a checkout
 outside this repository; do not replace or vendor it without explicit direction.
 
 Preserve unrelated worktree changes. Keep compatibility with both the integrated
-NixOS configuration and standalone Home Manager output. Use Conventional Commits
-for requested commits, and split large work into independently reviewable and
-revertible commits when useful; do not commit unless the user asks.
+NixOS configuration and standalone Home Manager output.
+
+Use Git with Conventional Commits (`type[optional scope]: imperative summary`).
+Keep commits atomic and independently revertible, and commit only when
+explicitly requested.
