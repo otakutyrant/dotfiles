@@ -37,6 +37,8 @@ format = "  %a %F %T"
 
 [[monitors.DP-3.end]]
 type = "tray"
+# Keep each application's original tray icon instead of allowing the configured
+# GTK icon theme to replace it with a themed alternative.
 prefer_theme_icons = false
 
 [monitors.DP-1]
