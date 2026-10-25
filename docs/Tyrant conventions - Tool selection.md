@@ -45,7 +45,7 @@ Decide only applicable responsibilities; interactors are optional.
 | --- | --- | --- | --- | --- |
 | Package manager | pnpm | uv | LuaRocks | Nupm when needed |
 | Database | Prisma | not applicable | not applicable | not applicable |
-| Linter | Oxlint with `oxlint-plugin-eslint` and `oxlint-tsgolint` | Ruff and Pylint | Selene | Tyrant `nu-lint` fork |
+| Linter | Oxlint with `oxlint-plugin-eslint` and `oxlint-tsgolint` | Ruff and Pylint | Selene | `nu-lint` |
 | Formatter | Prettier | Ruff | StyLua | `nufmt` |
 | Tester | Vitest | pytest | busted | `std/assert`; `nupm test` with Nupm |
 | Logger | Winston | `logging` | LuaLogging | `std/log` |
