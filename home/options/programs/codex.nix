@@ -1,10 +1,24 @@
 { pkgs, ... }:
 
+let
+  # Keep Codex's mutable config.toml under Codex's control while overriding the
+  # new one-row-per-event scroll default for every CLI invocation.
+  codexWithFasterScrolling = pkgs.symlinkJoin {
+    name = "codex-with-faster-scrolling";
+    paths = [ pkgs.unstable.codex ];
+    nativeBuildInputs = [ pkgs.makeWrapper ];
+    postBuild = ''
+      wrapProgram $out/bin/codex \
+        --add-flags "--config tui.mouse_scroll_speed=3.0"
+    '';
+  };
+in
+
 {
   # Codex reads this context as its global behavior prompt.
   programs.codex = {
     enable = true;
-    package = pkgs.unstable.codex;
+    package = codexWithFasterScrolling;
     context = builtins.readFile ./codex-context.md;
   };
 
