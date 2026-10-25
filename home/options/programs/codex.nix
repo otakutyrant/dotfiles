@@ -22,6 +22,11 @@ in
     context = builtins.readFile ./codex-context.md;
   };
 
+  # Install reviewed command policy in Codex's user configuration layer. Keep
+  # this separate from mutable default.rules, which Codex updates when an
+  # approval is persisted interactively.
+  home.file.".codex/rules/packages.rules".source = ../../files/codex/rules/packages.rules;
+
   # These companion tools are introduced for Codex-driven development. Keep
   # them beside Codex instead of wrapping its package so they remain ordinary,
   # reusable commands in the Home Manager environment.

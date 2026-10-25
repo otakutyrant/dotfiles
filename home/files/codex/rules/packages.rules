@@ -1,0 +1,133 @@
+# A prefix also matches every invocation with trailing arguments. Keep an
+# executable broad only when every supported mode is acceptably safe.
+
+# Static analyzers and reporters have no write or command-execution mode.
+prefix_rule(
+    pattern = [["shellcheck", "actionlint", "hadolint", "difft", "tokei"]],
+    decision = "allow",
+    justification = "Read-only source analysis and reporting",
+    match = ["shellcheck script.nu", "actionlint .github/workflows/check.yml"],
+)
+
+# These fixed-purpose probes report local state without changing it.
+prefix_rule(
+    pattern = [["nixos-version", "nix-info", "pg_isready"]],
+    decision = "allow",
+    justification = "Read-only version or service-readiness query",
+    match = ["nixos-version", "pg_isready --timeout=2"],
+)
+
+# Language formatters and fixers may rewrite source files in place. These broad
+# rules intentionally authorize both diagnostic/check and write/fix modes.
+prefix_rule(
+    pattern = [["shfmt", "deadnix", "nufmt", "nixfmt", "stylua", "yamlfmt", "statix", "taplo", "rustfmt"]],
+    decision = "allow",
+    justification = "Allow language diagnostics, automatic fixes, and in-place source formatting",
+    match = [
+        "shfmt -w script.sh",
+        "deadnix --edit flake.nix",
+        "nufmt tasks.nu",
+        "nixfmt flake.nix",
+        "stylua .",
+        "yamlfmt .",
+        "statix fix .",
+        "taplo format pyproject.toml",
+        "rustfmt src/main.rs",
+    ],
+)
+
+prefix_rule(
+    pattern = ["cargo", "fmt"],
+    decision = "allow",
+    justification = "Allow Cargo formatting, which may rewrite Rust source files",
+    match = ["cargo fmt", "cargo fmt --all"],
+)
+
+# These validators and linters do not have source-rewriting modes.
+prefix_rule(
+    pattern = ["desktop-file-validate"],
+    decision = "allow",
+    justification = "Validate desktop entries without modifying them",
+)
+
+prefix_rule(
+    pattern = [["selene", "nu-lint"]],
+    decision = "allow",
+    justification = "Read-only source linting",
+)
+
+# Git status is observational; Git diff may write an explicit output file or
+# invoke a configured external diff driver. Both are intentionally allowed.
+prefix_rule(
+    pattern = ["git", "status", "--short"],
+    decision = "allow",
+    justification = "Report worktree state in a compact form",
+)
+
+prefix_rule(
+    pattern = ["git", "diff"],
+    decision = "allow",
+    justification = "Allow diff inspection, output-file writes, and configured external diff drivers",
+    match = [
+        "git diff",
+        "git diff --output=changes.patch",
+        "git diff --ext-diff",
+    ],
+)
+
+prefix_rule(
+    pattern = ["gh", "auth", "status"],
+    decision = "allow",
+    justification = "Inspect GitHub CLI authentication state",
+)
+
+prefix_rule(
+    pattern = ["gh", "run", ["list", "view", "watch"]],
+    decision = "allow",
+    justification = "Observe GitHub Actions runs without changing them",
+)
+
+prefix_rule(
+    pattern = ["gh", "pr", ["checks", "list", "status", "view"]],
+    decision = "allow",
+    justification = "Inspect pull requests without changing them",
+)
+
+# pnpm's metadata/query subcommands do not install packages or run project
+# lifecycle scripts. `view` performs read-only registry network access.
+prefix_rule(
+    pattern = ["pnpm", ["list", "why", "view"]],
+    decision = "allow",
+    justification = "Inspect installed or registry package metadata",
+)
+
+# Codex should not run these workstation-administration commands.
+prefix_rule(
+    pattern = [["sudo", "su", "pkexec"]],
+    decision = "forbidden",
+    justification = "Run privileged administration manually instead",
+)
+
+prefix_rule(
+    pattern = [["mkfs", "mkfs.bfs", "mkfs.cramfs", "mkfs.fat", "mkfs.exfat", "mkfs.minix", "mke2fs", "make-bcache", "wipefs", "fdisk", "cfdisk", "sfdisk", "blkdiscard"]],
+    decision = "forbidden",
+    justification = "Run destructive disk and filesystem operations manually",
+)
+
+prefix_rule(
+    pattern = [["useradd", "userdel", "usermod", "groupadd", "groupdel", "groupmod", "chpasswd", "newusers"]],
+    decision = "forbidden",
+    justification = "Manage system accounts manually or declaratively through NixOS",
+)
+
+prefix_rule(
+    pattern = [["dropdb", "dropuser", "pg_resetwal"]],
+    decision = "forbidden",
+    justification = "Perform irreversible PostgreSQL administration manually",
+)
+
+prefix_rule(
+    pattern = [["nixos-install", "systemd-firstboot", "systemd-repart", "systemd-cryptsetup"]],
+    decision = "forbidden",
+    justification = "Perform installation, repartitioning, and cryptographic setup manually",
+)
