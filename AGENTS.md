@@ -61,8 +61,12 @@ Yihui's roles.
 - `lib/import-modules.nix` recursively discovers module and option files in
   deterministic order. Adding a file beneath an imported `modules` or `options`
   directory does not require a central import-list edit.
-- Raw files under `home/files` and `nixos/files` are installed by an owning Nix
-  module. Change the raw file and its owner together when their interface moves.
+- Keep deployable raw content out of inline Nix strings. Put each script,
+  application configuration, rule file, desktop entry, or other independently
+  sourced artifact under `home/files` or `nixos/files`, then install it from its
+  owning Nix module with `source`. Use inline `text` only for small values that
+  Nix must generate or interpolate. Change a raw file and its owner together
+  when their interface moves.
 
 Use Nixdoc comments for reusable Nix helpers, LDoc/LuaDoc annotations for
 exported Lua APIs, and concise help comments for public Nushell commands. Keep
