@@ -1,0 +1,65 @@
+# Keep irreversible workstation administration outside Codex, even when a
+# matching tool rule would otherwise allow a broader command prefix.
+
+prefix_rule(
+    pattern = [["sudo", "su", "pkexec"]],
+    decision = "forbidden",
+    justification = "Run privileged administration manually instead",
+)
+
+prefix_rule(
+    pattern = [
+        [
+            "mkfs",
+            "mkfs.bfs",
+            "mkfs.btrfs",
+            "mkfs.cramfs",
+            "mkfs.exfat",
+            "mkfs.ext2",
+            "mkfs.ext3",
+            "mkfs.ext4",
+            "mkfs.f2fs",
+            "mkfs.fat",
+            "mkfs.jfs",
+            "mkfs.minix",
+            "mkfs.msdos",
+            "mkfs.nilfs2",
+            "mkfs.ntfs",
+            "mkfs.reiserfs",
+            "mkfs.vfat",
+            "mkfs.xfs",
+            "mke2fs",
+            "make-bcache",
+            "wipefs",
+            "fdisk",
+            "cfdisk",
+            "sfdisk",
+            "blkdiscard",
+        ],
+    ],
+    decision = "forbidden",
+    justification = "Run destructive disk and filesystem operations manually",
+    match = [
+        "mkfs.ext4 /dev/example",
+        "mkfs.btrfs --force /dev/example",
+        "mkfs.vfat /dev/example",
+    ],
+)
+
+prefix_rule(
+    pattern = [["useradd", "userdel", "usermod", "groupadd", "groupdel", "groupmod", "chpasswd", "newusers"]],
+    decision = "forbidden",
+    justification = "Manage system accounts manually or declaratively through NixOS",
+)
+
+prefix_rule(
+    pattern = [["dropdb", "dropuser", "pg_resetwal"]],
+    decision = "forbidden",
+    justification = "Perform irreversible PostgreSQL administration manually",
+)
+
+prefix_rule(
+    pattern = [["nixos-install", "systemd-firstboot", "systemd-repart", "systemd-cryptsetup"]],
+    decision = "forbidden",
+    justification = "Perform installation, repartitioning, and cryptographic setup manually",
+)

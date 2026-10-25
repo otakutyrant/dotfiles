@@ -13,29 +13,30 @@ let
     '';
   };
 in
-
 {
-  # Codex reads this context as its global behavior prompt.
+  # Codex reads this context as its global behavior prompt. Command policy is
+  # owned by the recursively imported codex-rules.nix sibling module.
   programs.codex = {
     enable = true;
     package = codexWithFasterScrolling;
     context = builtins.readFile ./codex-context.md;
   };
 
-  # Install reviewed command policy in Codex's user configuration layer. Keep
-  # this separate from mutable default.rules, which Codex updates when an
-  # approval is persisted interactively.
-  home.file.".codex/rules/packages.rules".source = ../../files/codex/rules/packages.rules;
-
-  # These companion tools are introduced for Codex-driven development. Keep
-  # them beside Codex instead of wrapping its package so they remain ordinary,
-  # reusable commands in the Home Manager environment.
+  # These packages are introduced specifically for Codex-driven development.
+  # codex-rules.nix asserts that every package referenced by a generated rule
+  # is declared in the final merged home.packages value.
   home.packages = [
     pkgs.shellcheck # Codex uses ShellCheck to lint maintained sh and Bash scripts.
     pkgs.shfmt # Codex uses shfmt to format maintained sh and Bash scripts.
     pkgs.actionlint # Codex uses actionlint to validate GitHub Actions workflows.
     pkgs.hadolint # Codex uses hadolint to lint Dockerfiles.
     pkgs.difftastic # Codex uses the `difft` binary for syntax-aware code review.
+    pkgs.deadnix
+    pkgs.local.nufmt
+    pkgs.statix
+    pkgs.desktop-file-utils
+    pkgs.selene
+    pkgs.nu-lint
     pkgs.strace # Codex uses strace to diagnose process and system-call behavior.
     pkgs.rsync # Codex uses rsync for efficient, metadata-aware file synchronization.
     pkgs.lsof # Codex uses lsof to identify processes that hold files or sockets.
