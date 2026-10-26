@@ -1,10 +1,18 @@
-{ pkgs, ... }:
+{
+  pkgs,
+  tyrantSkills,
+  ...
+}:
 
 let
   # Keep Codex's mutable config.toml under Codex's control while overriding the
   # new one-row-per-event scroll default for every CLI invocation.
   codexWithFasterScrolling = pkgs.symlinkJoin {
     name = "codex-with-faster-scrolling";
+    # Home Manager uses the package version to distinguish modern TOML Codex
+    # releases, which support CODEX_HOME, from the legacy YAML client. Preserve
+    # it across the wrapper or home.preferXdgDirectories silently has no effect.
+    version = pkgs.unstable.codex.version;
     paths = [ pkgs.unstable.codex ];
     nativeBuildInputs = [ pkgs.makeWrapper ];
     postBuild = ''
@@ -20,6 +28,11 @@ in
     enable = true;
     package = codexWithFasterScrolling;
     context = builtins.readFile ../../files/AGENTS.md;
+    # Use Home Manager's Codex integration so it links the complete skill
+    # directory under CODEX_HOME/skills. The former imported module recursively
+    # linked each leaf; Codex rejects a symlinked SKILL.md whose canonical path
+    # escapes the skill root and silently omitted tyrant-agents.
+    skills.tyrant-agents = "${tyrantSkills}/skills/tyrant-agents";
   };
 
   # These packages are introduced specifically for Codex-driven development.

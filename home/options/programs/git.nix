@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ config, pkgs, ... }:
 
 {
   # User-wide Git settings. Home Manager renders this to ~/.config/git/config.
@@ -18,7 +18,9 @@
         g = "log --name-only --graph --all --date=format-local:'%Y-%m-%d %H:%M:%S' --format='%C(auto)%h%d %cd %s'";
         l = "log --name-only";
       };
-      credential.helper = "store";
+      # credential-store otherwise prefers an existing ~/.git-credentials and
+      # keeps recreating the legacy top-level file.
+      credential.helper = "store --file ${config.xdg.configHome}/git/credentials";
       filter.lfs = {
         clean = "git-lfs clean -- %f";
         smudge = "git-lfs smudge -- %f";

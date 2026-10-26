@@ -4,7 +4,7 @@ primary_threshold_ms = 5000
 max_history = 50
 clear_history_on_start = false
 synchronize_selection_with_clipboard = false
-history_file_path = "/home/otakutyrant/.cache/clipcat/clipcatd-history"
+history_file_path = "@historyFile@"
 snippets = []
 
 [log]

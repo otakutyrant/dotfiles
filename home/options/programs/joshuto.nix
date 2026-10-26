@@ -1,4 +1,4 @@
-{ ... }:
+{ config, ... }:
 
 {
   # Source only Joshuto's helper scripts; Home Manager continues generating
@@ -16,9 +16,9 @@
       xdg_open = true;
       display.line_number_style = "relative";
       preview = {
-        preview_script = "~/.config/joshuto/preview_file.nu";
-        preview_shown_hook_script = "~/.config/joshuto/on_preview_shown.nu";
-        preview_removed_hook_script = "~/.config/joshuto/on_preview_removed.nu";
+        preview_script = "${config.xdg.configHome}/joshuto/preview_file.nu";
+        preview_shown_hook_script = "${config.xdg.configHome}/joshuto/on_preview_shown.nu";
+        preview_removed_hook_script = "${config.xdg.configHome}/joshuto/on_preview_removed.nu";
       };
     };
     mimetype = {

@@ -136,6 +136,11 @@ Do you notice the relation between master keys? They are distributed in the left
 
 I keep files in XDG locations when the application expects them there.
 
+Home Manager's XDG preference is enabled, so modules that support both legacy
+home-directory dotfiles and XDG paths choose the latter. This covers Codex,
+npm, and GTK 2. Kimi Code, Rustup, npm's cache, and CUDA's compilation cache
+also receive their supported path overrides explicitly.
+
 Configuration files should live under `$XDG_CONFIG_HOME` when possible. In this
 repository, raw configuration lives under `home/files/config`. The corresponding
 module in `home/options` installs it under `~/.config`.

@@ -89,6 +89,7 @@
       # These arguments are needed by the shared Home Manager module.
       homeSpecialArgs = {
         inherit username;
+        tyrantSkills = inputs.tyrant-skills;
       };
     in
     {
@@ -131,10 +132,7 @@
             home-manager.useGlobalPkgs = true;
             home-manager.extraSpecialArgs = homeSpecialArgs;
             home-manager.users.${username} = {
-              imports = [
-                ./home/configuration.nix
-                inputs.tyrant-skills.homeManagerModules.tyrant-agents
-              ];
+              imports = [ ./home/configuration.nix ];
             };
           }
         ];
@@ -148,10 +146,7 @@
           overlays = [ localPackagesOverlay ];
         };
         extraSpecialArgs = homeSpecialArgs;
-        modules = [
-          ./home/configuration.nix
-          inputs.tyrant-skills.homeManagerModules.tyrant-agents
-        ];
+        modules = [ ./home/configuration.nix ];
       };
     };
 }

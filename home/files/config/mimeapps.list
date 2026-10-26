@@ -1,11 +1,11 @@
 [Default Applications]
 
-image/bmp=feh.desktop
-image/jpeg=feh.desktop
-image/jpg=feh.desktop
-image/png=feh.desktop
-image/tiff=feh.desktop
-image/x-bmp=feh.desktop
+image/bmp=ai.storyteller.photocraft.desktop
+image/jpeg=ai.storyteller.photocraft.desktop
+image/jpg=ai.storyteller.photocraft.desktop
+image/png=ai.storyteller.photocraft.desktop
+image/tiff=ai.storyteller.photocraft.desktop
+image/x-bmp=ai.storyteller.photocraft.desktop
 
 text/plain=nvim.desktop
 

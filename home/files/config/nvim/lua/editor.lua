@@ -76,7 +76,7 @@ vim.api.nvim_create_autocmd("FileType", {
 })
 -- Adopt American English spell and avoid regarding cjk chars as spell error.
 vim.opt.spelllang = { "en_us", "cjk" }
-vim.opt.spellfile = vim.fn.expand("~/.config/nvim/spell/en.utf-8.add")
+vim.opt.spellfile = vim.fn.stdpath("config") .. "/spell/en.utf-8.add"
 
 -- # Behavior setting
 

@@ -3,7 +3,7 @@
 const launcher = path self sandbox
 
 def launch [args: list<string>, no_nix_daemon: bool] {
-    let kimi_home = $env.HOME | path join ".kimi-code"
+    let kimi_home = $env.KIMI_CODE_HOME? | default ($env.XDG_CONFIG_HOME | path join "kimi-code")
     mut launcher_args = [
         "--state-dir" $kimi_home
         "--state-env" "KIMI_CODE_HOME"

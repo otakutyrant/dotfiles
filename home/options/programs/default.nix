@@ -1,11 +1,6 @@
-{
-  config,
-  pkgs,
-  ...
-}:
+{ config, pkgs, ... }:
 
 let
-  home = config.home.homeDirectory;
   withFcitxQt = pkgs.callPackage ../../../lib/wrap-with-fcitx-qt.nix { };
   # Home Manager calls Anki's withAddons function after reading this package.
   # Wrap that final package so the add-on and Fcitx wrappers are both retained.
@@ -55,6 +50,7 @@ in
   programs.ripgrep.enable = true; # Grep alternative.
   programs.yt-dlp.enable = true; # YouTube downloader.
 
-  # Anki creates this database before Home Manager activation on some systems.
-  home.file."${home}/.local/share/Anki2/prefs21.db".force = true;
+  # Anki's module owns this file through home.file, so merge force through that
+  # same option while deriving its target from XDG_DATA_HOME.
+  home.file."${config.xdg.dataHome}/Anki2/prefs21.db".force = true;
 }

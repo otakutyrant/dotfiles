@@ -9,8 +9,10 @@ if (($schema_engine | length) > 0) {
     $env.PRISMA_SCHEMA_ENGINE_BINARY = ($schema_engine | first)
 }
 
-# Export local private API keys when the file exists.
-const api_keys = if ("~/api_keys.nu" | path expand | path exists) { "~/api_keys.nu" } else { null }
+# Export local private API keys from Nushell's XDG configuration directory when
+# the file exists; secrets remain unmanaged by the dotfiles repository.
+const api_keys_path = $nu.default-config-dir | path join "api_keys.nu"
+const api_keys = if ($api_keys_path | path exists) { $api_keys_path } else { null }
 source-env $api_keys
 
 # Home Manager's ssh-agent user service binds to $XDG_RUNTIME_DIR/ssh-agent,

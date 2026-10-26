@@ -7,8 +7,9 @@
 
 let
   home = config.home.homeDirectory;
-  # Desktop templates keep desktop-entry syntax out of Nix. The shared helper
-  # fills in store paths that are only known while evaluating this profile.
+  # Raw templates keep application-native syntax out of Nix. The shared helper
+  # fills in package executables and evaluated XDG paths while building the
+  # profile, avoiding hardcoded default locations in deployed configuration.
   renderTemplate = import ../../lib/render-template.nix { inherit pkgs; };
   # rqbit 9 no longer has a CLI option for submitting downloads to a running
   # server, so bridge desktop magnet links to its HTTP API. Keep the source
@@ -37,7 +38,11 @@ in
   # Clipcat has separate configuration files for its clipboard daemon and
   # clients. Keep their Unix socket paths in sync so the menu and CLI can talk
   # to the daemon started by Sway.
-  xdg.configFile."clipcat/clipcatd.toml".source = ../files/config/clipcat/clipcatd.toml;
+  xdg.configFile."clipcat/clipcatd.toml".source =
+    renderTemplate ../files/config/clipcat/clipcatd.toml
+      {
+        historyFile = "${config.xdg.cacheHome}/clipcat/clipcatd-history";
+      };
   xdg.configFile."clipcat/clipcatctl.toml".source = ../files/config/clipcat/clipcatctl.toml;
   xdg.configFile."clipcat/clipcat-menu.toml".source = ../files/config/clipcat/clipcat-menu.toml;
 
@@ -48,10 +53,10 @@ in
     source = ../files/config/sway;
     recursive = true;
   };
-  xdg.configFile."ironbar" = {
-    source = ../files/config/ironbar;
-    recursive = true;
+  xdg.configFile."ironbar/config.toml".source = renderTemplate ../files/config/ironbar/config.toml {
+    gpuStatus = "${home}/.local/libexec/gpu_status.nu";
   };
+  xdg.configFile."ironbar/style.css".source = ../files/config/ironbar/style.css;
   xdg.configFile."wired" = {
     source = ../files/config/wired;
     recursive = true;
@@ -142,7 +147,11 @@ in
     force = true;
   };
 
+  # Own the standard user-directory mappings consumed by desktop applications,
+  # including Nautilus, and create every mapped directory during activation so
+  # the declared XDG user-directory layout is kept complete.
   xdg.userDirs.enable = true;
+  xdg.userDirs.createDirectories = true;
   # xdg-user-dirs may create this file before Home Manager manages it.
   xdg.configFile."user-dirs.dirs".force = true;
 }

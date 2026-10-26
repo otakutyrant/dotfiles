@@ -110,6 +110,13 @@ in
 
   config = {
     programs.codex = {
+      # Let the upstream Home Manager module place these under CODEX_HOME so
+      # home.preferXdgDirectories applies consistently.
+      rules = {
+        tools = renderedToolsRules;
+        safety = ../../files/codex/safety.rules;
+      };
+
       managedTools = [
         {
           packages = [
@@ -445,12 +452,6 @@ in
         }
       ];
     };
-
-    # Generate package-related permissions from the declarations above. Safety
-    # policy stays a reviewed raw artifact, while default.rules remains mutable
-    # state maintained by Codex itself.
-    home.file.".codex/rules/tools.rules".text = renderedToolsRules;
-    home.file.".codex/rules/safety.rules".source = ../../files/codex/safety.rules;
 
     assertions = [
       {

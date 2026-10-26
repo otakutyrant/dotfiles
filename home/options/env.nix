@@ -4,9 +4,10 @@ let
   home = config.home.homeDirectory;
 in
 {
-  # These variables belong to the whole user login session, not just Nushell.
-  # Home Manager writes them to the session environment so GUI apps, desktop
-  # entries, terminals, and shells inherit the same baseline.
+  # These variables belong beyond Nushell, but Home Manager's session variables
+  # reach only consumers of its generated environment. A compositor started by
+  # greetd before that environment is loaded, and GUI applications it launches,
+  # need any required values mirrored in the NixOS login environment.
   home.sessionVariables = rec {
     # XDG base directories. Tool-specific variables below reuse these paths so
     # applications store config, cache, data, and state in predictable places.
@@ -31,14 +32,30 @@ in
     # they use the configured 24px cursor instead of a large fallback cursor.
     XCURSOR_PATH = "${pkgs.bibata-cursors}/share/icons";
 
-    # Keep tool state under XDG locations instead of each tool's default dotdir.
+    # Keep tool state and caches under XDG locations instead of each tool's
+    # default top-level dotdir.
     CARGO_HOME = "${XDG_DATA_HOME}/cargo";
-    # Enforce IPython to use XDG_CONFIG_HOME rather than ~/.ipython.
-    IPYTHONDIR = "${XDG_CONFIG_HOME}/ipython";
+    RUSTUP_HOME = "${XDG_DATA_HOME}/rustup";
+    CUDA_CACHE_PATH = "${XDG_CACHE_HOME}/nvidia/ComputeCache";
+    TRITON_CACHE_DIR = "${XDG_CACHE_HOME}/triton";
+    XCOMPOSECACHE = "${XDG_CACHE_HOME}/X11/compose";
 
-    # A workaround to an issue #267 of ChatGPT.nvim:
-    # https://github.com/jackMort/ChatGPT.nvim/issues/267#issuecomment-1676609465
-    OPENAI_API_HOST = "api.openai.com";
+    # Go's default GOPATH is ~/go. Keep installed tools and persistent Go state
+    # under XDG data while treating downloaded modules and build objects as
+    # caches with independent lifetimes.
+    GOPATH = "${XDG_DATA_HOME}/go";
+    GOBIN = "${GOPATH}/bin";
+    GOMODCACHE = "${XDG_CACHE_HOME}/go/mod";
+    GOCACHE = "${XDG_CACHE_HOME}/go/build";
+    GOENV = "${XDG_CONFIG_HOME}/go/env";
+
+    # NixOS sets the same value through PAM before greetd starts Sway. Repeat it
+    # here so standalone Home Manager and generated shell environments agree.
+    XAUTHORITY = "${XDG_STATE_HOME}/X11/Xauthority";
+
+    # Bash is installed for Home Manager and is occasionally invoked manually.
+    # Keep that fallback shell from recreating ~/.bash_history.
+    HISTFILE = "${XDG_STATE_HOME}/bash/history";
 
     # Fcitx5's native Wayland frontend is enabled in configuration.nix. Do
     # not force GTK or Qt to use the legacy X11/DBus frontend here: on native
@@ -48,4 +65,11 @@ in
     XMODIFIERS = "@im=fcitx";
     SDL_IM_MODULE = "fcitx";
   };
+
+  # Bash cannot create HISTFILE's parent itself. Managing a sentinel keeps the
+  # state directory available without treating mutable history as Nix data.
+  xdg.stateFile."bash/.keep".text = "";
+  # XAUTHORITY is selected before the graphical session starts, so its parent
+  # must already exist rather than relying on an X11 client to create it.
+  xdg.stateFile."X11/.keep".text = "";
 }

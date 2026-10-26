@@ -67,6 +67,32 @@ Yihui's roles.
   owning Nix module with `source`. Use inline `text` only for small values that
   Nix must generate or interpolate. Change a raw file and its owner together
   when their interface moves.
+- User configuration and runtime state must obey the XDG Base Directory
+  specification wherever the application permits it. Install files through the
+  semantic Home Manager options (`xdg.configFile`, `xdg.dataFile`, and
+  `xdg.stateFile`) and derive embedded paths from `config.xdg.configHome`,
+  `config.xdg.dataHome`, `config.xdg.cacheHome`, `config.xdg.stateHome`, or the
+  application's equivalent XDG-aware API. Modules for applications that are
+  natively XDG should use those semantic locations unconditionally and do not
+  need `home.preferXdgDirectories`. That preference is only for modules choosing
+  between a legacy location and an XDG location; it works only when the module
+  explicitly reads it and changes the managed target and any runtime discovery
+  variable. Do not hardcode default paths such as `~/.config` or `~/.cache` in
+  sourced files. When an application does not support XDG directly, redirect it
+  with its supported environment variable or a narrow wrapper and document the
+  compatibility mechanism beside the fix. A package-level XDG patch is allowed
+  when no narrower supported override exists, but keep it generic and testable,
+  prefer an upstreamed patch, and document migration of any existing user state.
+  Protocol-defined locations such as `~/.ssh` and executable locations such as
+  `~/.local/bin` and `~/.local/libexec` are intentional exceptions because XDG
+  does not provide replacements for them. This repository's requirement is
+  deliberately stricter than nixpkgs packaging policy; never assume a packaged
+  application is XDG-compliant merely because NixOS supplies it.
+- XDG does not replace general temporary storage. Use `XDG_RUNTIME_DIR` only
+  for small, user-private runtime objects that belong to the current login
+  session, such as sockets, locks, and named pipes; use `TMPDIR` for ordinary
+  scratch files. Use XDG cache or state only when the lifetime and semantics
+  genuinely match those categories.
 
 Use Nixdoc comments for reusable Nix helpers, LDoc/LuaDoc annotations for
 exported Lua APIs, and concise help comments for public Nushell commands. Keep

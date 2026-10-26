@@ -1,0 +1,11 @@
+#!/usr/bin/env nu
+
+# Put CodeQL's downloaded packs and compiled query plans in XDG cache while
+# retaining the package-managed executable outside this PATH wrapper.
+def main [...args: string] {
+    let cache_home = ($env.XDG_CACHE_HOME? | default ($env.HOME | path join ".cache"))
+    let common_caches = ($cache_home | path join "codeql")
+    let codeql = ($env.HOME | path join ".local/state/nix/profile/bin/codeql")
+    mkdir $common_caches
+    ^$codeql ...$args $"--common-caches=($common_caches)"
+}
