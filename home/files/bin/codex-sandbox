@@ -1,0 +1,39 @@
+#!/usr/bin/env nu
+
+const launcher = path self sandbox
+
+def launch [args: list<string>, no_nix_daemon: bool] {
+    let codex_home = $env.HOME | path join ".codex"
+    mut launcher_args = [
+        "--state-dir" $codex_home
+        "--state-env" "CODEX_HOME"
+        "--private-state-subdir" "ipc"
+    ]
+    if $no_nix_daemon {
+        $launcher_args = $launcher_args | append "--no-nix-daemon"
+    }
+
+    ^$launcher ...$launcher_args codex ...$args
+}
+
+# Run Codex with its own state inside the common untrusted-repository sandbox.
+def --wrapped main [
+    # Run without access to the host's multi-user Nix daemon.
+    --no-nix-daemon
+    # Arguments and flags passed unchanged to Codex.
+    ...args: string
+] {
+    launch $args $no_nix_daemon
+}
+
+# Run one non-interactive Codex task inside the sandbox and then exit.
+def --wrapped "main exec" [
+    # Run without access to the host's multi-user Nix daemon.
+    --no-nix-daemon
+    # Task for the sandboxed Codex worker to complete.
+    prompt: string
+    # Additional arguments and flags passed to `codex exec`.
+    ...args: string
+] {
+    launch (["exec" $prompt] | append $args) $no_nix_daemon
+}

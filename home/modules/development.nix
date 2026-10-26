@@ -17,7 +17,6 @@
     # `kimi` command and replaces the legacy Python-based kimi-cli.
     config.programs.codex.package # Codex CLI.
     pkgs.local.chatgpt # ChatGPT desktop app.
-    pkgs.local.kimi-code # Kimi Code CLI.
     pkgs.unstable.opencode # Open AI harness.
 
     ## Database
@@ -62,7 +61,8 @@
     ## SAST
     pkgs.codeql
 
-    ## Sandbox container
-    pkgs.bubblewrap # Provides the `bwrap` command for creating sandboxed processes.
+    ## Command sandbox
+    # sandbox constructs a minimal filesystem view for untrusted projects.
+    pkgs.bubblewrap
   ];
 }

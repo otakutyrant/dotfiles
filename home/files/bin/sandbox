@@ -1,0 +1,235 @@
+#!/usr/bin/env nu
+
+# Build the common Bubblewrap sandbox used by agent-specific launchers.
+def --wrapped main [
+    # Mount this agent state directory read-write inside the otherwise private home.
+    --state-dir: string
+    # Set this environment variable to the mounted state directory inside the sandbox.
+    --state-env: string
+    # Replace this relative state subdirectory with a private tmpfs for runtime sockets.
+    --private-state-subdir: string
+    # Do not expose the host's multi-user Nix daemon to the sandbox.
+    --no-nix-daemon
+    # Agent executable. This is required so the generic launcher never chooses an agent implicitly.
+    command: string
+    # Arguments and flags passed unchanged to the agent executable.
+    ...command_args: string
+] {
+    let repository = pwd | path expand
+    let host_home = $env.HOME | path expand
+    let user_profile = $host_home | path join ".local/state/nix/profile"
+    let uid = ^id -u | str trim
+    let runtime_dir = $"/run/user/($uid)"
+    let term = $env.TERM? | default "xterm-256color"
+    mut agent_environment = []
+
+    # Interactive agents must retain the caller's controlling terminal. Refuse
+    # to do that on kernels where legacy TIOCSTI terminal-input injection is
+    # enabled; this host disables it globally with the modern kernel setting.
+    let legacy_tiocsti = open --raw /proc/sys/dev/tty/legacy_tiocsti | str trim
+    if $legacy_tiocsti != "0" {
+        error make {msg: "Interactive sandboxing requires dev.tty.legacy_tiocsti=0"}
+    }
+
+    if ($state_env != null) and ($state_dir == null) {
+        error make {msg: "--state-env requires --state-dir"}
+    }
+    if ($private_state_subdir != null) and ($state_dir == null) {
+        error make {msg: "--private-state-subdir requires --state-dir"}
+    }
+
+    # Bubblewrap starts with an empty mount namespace. Expose only immutable Nix
+    # packages, the selected agent state, and the current repository. Mount
+    # operations are ordered deliberately: private parent filesystems must be
+    # created before narrower host paths are mounted into them.
+    mut arguments = [
+        # Isolate user, PID, IPC, UTS, cgroup, and mount namespaces. Retain the
+        # host network namespace so agents and package managers can reach the
+        # internet, localhost, and the LAN. Keep the controlling terminal for
+        # interactive shells; the TIOCSTI check above prevents input injection.
+        "--unshare-all"
+        "--share-net"
+        "--die-with-parent"
+
+        # Nix store objects are immutable. Profiles provide stable command names
+        # whose symlinks resolve into the read-only store.
+        "--ro-bind", "/nix/store"
+        "/nix/store"
+
+        # Hide the real home first. These empty directories are private to this
+        # sandbox and disappear at exit; they satisfy XDG-aware tools without
+        # revealing the host's configuration, cache, data, or state.
+        "--tmpfs", "/home"
+        "--dir", $host_home
+        "--dir", ($host_home | path join ".cache")
+        "--dir", ($host_home | path join ".config")
+        "--dir", ($host_home | path join ".local")
+        "--dir", ($host_home | path join ".local/share")
+        "--dir", ($host_home | path join ".local/state")
+        "--dir", ($host_home | path join ".local/state/nix")
+        "--ro-bind", $user_profile
+        $user_profile
+
+        # The current directory is the only ordinary host directory writable
+        # from the sandbox. Run this launcher from the repository root.
+        "--bind", $repository
+        $repository
+
+        # Give the agent fresh temporary and runtime filesystems. In particular,
+        # do not expose the host D-Bus, SSH/GPG agents, Wayland, Docker, Podman,
+        # or other Unix sockets normally found below /run, /tmp, and /var/tmp.
+        "--tmpfs", "/tmp"
+        "--tmpfs", "/run"
+        "--dir", "/run/user"
+        "--dir", $runtime_dir
+        "--ro-bind", "/run/current-system/sw"
+        "/run/current-system/sw"
+        "--dir", "/var"
+        "--symlink", "../tmp"
+        "/var/tmp"
+
+        # Show only processes in the sandbox's PID namespace and construct a
+        # minimal device tree rather than forwarding host devices.
+        "--proc", "/proc"
+        "--dev", "/dev"
+
+        # Supply only the host identity, name-service, certificate, and Nix
+        # configuration files needed by ordinary command-line networking.
+        "--dir", "/etc"
+        "--dir", "/etc/ssl"
+        "--dir", "/etc/ssl/certs"
+        "--dir", "/etc/nix"
+        "--ro-bind", "/etc/resolv.conf"
+        "/etc/resolv.conf"
+        "--ro-bind", (^readlink -f /etc/hosts | str trim)
+        "/etc/hosts"
+        "--ro-bind", (^readlink -f /etc/nsswitch.conf | str trim)
+        "/etc/nsswitch.conf"
+        "--ro-bind", (^readlink -f /etc/passwd | str trim)
+        "/etc/passwd"
+        "--ro-bind", (^readlink -f /etc/group | str trim)
+        "/etc/group"
+        "--ro-bind", (^readlink -f /etc/ssl/certs/ca-bundle.crt | str trim)
+        "/etc/ssl/certs/ca-bundle.crt"
+        "--ro-bind", (^readlink -f /etc/nix/nix.conf | str trim)
+        "/etc/nix/nix.conf"
+    ]
+
+    if $state_dir != null {
+        let expanded_state = $state_dir | path expand
+        if not ($expanded_state | path exists) {
+            error make {msg: $"Agent state directory does not exist: ($expanded_state)"}
+        }
+
+        # Agent state contains authentication plus mutable session history. It
+        # is the only host-home content deliberately made visible and writable.
+        $arguments = $arguments | append ["--bind" $expanded_state $expanded_state]
+
+        if $state_env != null {
+            $agent_environment = ["--setenv" $state_env $expanded_state]
+        }
+
+        if $private_state_subdir != null {
+            let private_path = $expanded_state | path join $private_state_subdir
+            if not ($private_path | path exists) {
+                error make {
+                    msg: $"Private state subdirectory does not exist: ($private_path)"
+                }
+            }
+            # A tmpfs at this location prevents a sandboxed agent from reaching
+            # a socket belonging to an agent instance outside the sandbox.
+            $arguments = $arguments | append ["--tmpfs" $private_path]
+        }
+    }
+
+    # Do not inherit secrets or ambient authority through environment variables.
+    # Rebuild a small deterministic environment after clearing everything.
+    $arguments = $arguments | append [
+        "--clearenv"
+        "--setenv" "HOME"
+        $host_home
+        "--setenv" "USER"
+        $env.USER
+        "--setenv" "LOGNAME"
+        $env.USER
+        "--setenv" "SHELL"
+        "/run/current-system/sw/bin/nu"
+        "--setenv" "PATH"
+        $"($user_profile)/bin:/run/current-system/sw/bin"
+        "--setenv" "TMPDIR"
+        "/tmp"
+        "--setenv" "XDG_CONFIG_HOME"
+        ($host_home | path join ".config")
+        "--setenv" "XDG_CACHE_HOME"
+        ($host_home | path join ".cache")
+        "--setenv" "XDG_DATA_HOME"
+        ($host_home | path join ".local/share")
+        "--setenv" "XDG_STATE_HOME"
+        ($host_home | path join ".local/state")
+        "--setenv" "XDG_RUNTIME_DIR"
+        $runtime_dir
+        "--setenv" "SSL_CERT_FILE"
+        "/etc/ssl/certs/ca-bundle.crt"
+        "--setenv" "NIX_SSL_CERT_FILE"
+        "/etc/ssl/certs/ca-bundle.crt"
+        "--setenv" "TERM"
+        $term
+        "--setenv" "LANG"
+        "C.UTF-8"
+    ]
+    $arguments = $arguments | append $agent_environment
+
+    if not $no_nix_daemon {
+
+        # The daemon protocol is designed for mutually untrusted local users,
+        # but a trusted Nix client has powers comparable to root. Read only the
+        # system configuration here: a user-level nix.conf cannot safely prove
+        # what privileges the host daemon grants to the connecting UID.
+        let nix_config = (
+            with-env {NIX_USER_CONF_FILES: "/dev/null"} { ^nix config show }
+            | lines
+        )
+        let trusted_users = (
+            $nix_config
+            | where {|line| $line | str starts-with "trusted-users = " }
+            | first
+            | str replace "trusted-users = " ""
+            | split row " "
+        )
+        let user_groups = ^id -Gn | str trim | split row " "
+        let client_is_trusted = $trusted_users | any {|entry|
+            ($entry == "*") or ($entry == $env.USER) or (($entry | str starts-with "@") and ($user_groups | any {|group| $entry == $"@($group)" }))
+        }
+
+        if $client_is_trusted {
+            error make {
+                msg: $"Refusing to expose the Nix daemon because ($env.USER) is a trusted Nix user; use --no-nix-daemon"
+            }
+        }
+
+        let nix_build_sandbox = (
+            $nix_config
+            | where {|line| $line | str starts-with "sandbox = " }
+            | first
+            | str replace "sandbox = " ""
+        )
+        if $nix_build_sandbox != "true" {
+            print --stderr $"warning: the host Nix build sandbox is set to '($nix_build_sandbox)'"
+        }
+
+        # Expose only the daemon socket, not the rest of /nix/var. The daemon
+        # can realize store paths but cannot reveal host-home files through its
+        # protocol. Malicious repositories can still consume persistent store
+        # space, CPU, network bandwidth, and build time; use --no-nix-daemon
+        # when those capabilities are unnecessary.
+        $arguments = $arguments | append [
+            "--ro-bind" "/nix/var/nix/daemon-socket"
+            "/nix/var/nix/daemon-socket"
+            "--setenv" "NIX_REMOTE"
+            "daemon"
+        ]
+    }
+
+    $arguments = $arguments | append ["--chdir" $repository]
+    ^bwrap ...$arguments "--" $command ...$command_args
+}

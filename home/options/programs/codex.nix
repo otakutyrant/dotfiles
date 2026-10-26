@@ -19,7 +19,7 @@ in
   programs.codex = {
     enable = true;
     package = codexWithFasterScrolling;
-    context = builtins.readFile ./codex-context.md;
+    context = builtins.readFile ../../files/AGENTS.md;
   };
 
   # These packages are introduced specifically for Codex-driven development.
