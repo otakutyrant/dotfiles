@@ -65,6 +65,35 @@ For an untrusted or unknown repository:
   the host's build sandbox. The trusted launcher refuses daemon access when the
   current user appears in `trusted-users`; do not weaken or bypass this check.
 
+## Prompts as source-of-truth comments
+
+The user's latest explicit prompt is the primary source of intended behavior.
+When a prompt, an existing comment, and the implementation disagree, follow the
+prompt and update the comment and implementation together.
+
+Distill durable intent from prompts into documentation comments in the owning
+code. Do not paste conversations or preserve incidental wording. Record the
+smallest self-contained explanation that will let a future agent understand the
+requirement without recovering the original conversation.
+
+- For a feature or ordinary implementation request, record a brief description
+  of what the code provides. Prefer the beginning documentation comment of the
+  owning file, module, type, function, or other public interface.
+- When the user asks a question or expresses confusion, answer normally and
+  also preserve the answer when it reveals a durable invariant, assumption,
+  design decision, constraint, or non-obvious behavior in the codebase. Add or
+  improve the comment proactively even when the user did not separately ask
+  for documentation.
+- For a bug fix, preserve the observable failure, its root cause or why the fix
+  is necessary, and how the chosen mechanism prevents the failure. Put this
+  explanation beside the fix or at the narrowest owning interface.
+
+Comments derived from prompts are part of the maintained behavior, not
+disposable narration. Keep them synchronized when the behavior changes, and do
+not remove their rationale unless a newer explicit prompt makes it obsolete.
+Avoid comments that merely restate syntax; preserve intent, boundaries, and
+reasoning that the code alone cannot prove.
+
 ## English writing helper
 
 When I write any prompt in English (excluding the global scope prompt and any
