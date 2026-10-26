@@ -39,25 +39,14 @@ in
       # Show directory contents fully, alias `ls -al`.
       ll = "ls -al";
 
-      # Kitty window control.
-      wider = "kitty @ resize-window --self --axis=horizontal --increment=60";
-
       # Neovim shortcuts.
       vi = "nvim";
-      cvi = ''nvim -p -c "tabdo lcd %:p:h"'';
 
       # ripgrep: Pretty output so it can pipe into pagers.
       rg = "rg -p";
 
       # Enables ssh trusted X11 forwarding. So you can access the X of remote hosts.
       ssh = "ssh -Y";
-
-      # systemd shortcut.
-      sc = "systemctl";
-
-      # yt-dlp: Solve China network issue via proxy, and download Chinese
-      # subtitles automatically.
-      "yt-dlp" = "yt-dlp --proxy 127.0.0.1:2340 --write-subs --sub-langs zh-CN";
 
     };
     # `with pkgs.nushellPlugins;` lets the list use plugin package names

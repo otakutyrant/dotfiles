@@ -11,9 +11,9 @@ let
   # fills in store paths that are only known while evaluating this profile.
   renderTemplate = import ../../lib/render-template.nix { inherit pkgs; };
   # rqbit 9 no longer has a CLI option for submitting downloads to a running
-  # server, so bridge desktop magnet links to its HTTP API. Keep the Nushell
-  # implementation in files/bin and substitute only immutable package paths.
-  rqbitMagnetHandler = renderTemplate ../files/bin/rqbit_magnet_handler.nu {
+  # server, so bridge desktop magnet links to its HTTP API. Keep the source
+  # template out of PATH and substitute only immutable package paths.
+  rqbitMagnetHandler = renderTemplate ../files/libexec/rqbit_magnet_handler.nu {
     curl = "${pkgs.curl}/bin/curl";
     notifySend = "${pkgs.libnotify}/bin/notify-send";
     nu = "${pkgs.nushell}/bin/nu";
@@ -26,10 +26,13 @@ let
   };
 in
 {
-  home.file.".local/bin/rqbit-magnet-handler" = {
+  # libexec holds helpers that are invoked by their owner rather than directly
+  # from an interactive shell, so these files do not need to be on PATH.
+  home.file.".local/libexec/rqbit-magnet-handler" = {
     source = rqbitMagnetHandler;
     executable = true;
   };
+  home.file.".local/libexec/screenshot_delay.nu".source = ../files/libexec/screenshot_delay.nu;
 
   # Clipcat has separate configuration files for its clipboard daemon and
   # clients. Keep their Unix socket paths in sync so the menu and CLI can talk
@@ -91,21 +94,25 @@ in
   xdg.dataFile."applications/rqbit.desktop".source =
     renderTemplate ../files/applications/rqbit.desktop
       {
-        rqbitMagnetHandler = "${home}/.local/bin/rqbit-magnet-handler";
+        rqbitMagnetHandler = "${home}/.local/libexec/rqbit-magnet-handler";
         systemdRun = "${pkgs.systemd}/bin/systemd-run";
       };
   xdg.dataFile."applications/qbittorrent.desktop".source = qbittorrentDesktopEntry;
 
-  # The launcher focuses or creates a Kitty TUI client while keeping Yihui's
-  # headless Process Compose session as the independent lifecycle owner.
-  xdg.dataFile."applications/yihui-panoptor.desktop".source =
-    ../files/applications/yihui-panoptor.desktop;
   xdg.dataFile."applications/poweroff.desktop".source = ../files/applications/poweroff.desktop;
   xdg.dataFile."applications/reboot.desktop".source = ../files/applications/reboot.desktop;
   xdg.dataFile."applications/screenshot-all-monitors.desktop".source =
-    ../files/applications/screenshot-all-monitors.desktop;
+    renderTemplate ../files/applications/screenshot-all-monitors.desktop
+      {
+        nu = "${pkgs.nushell}/bin/nu";
+        screenshotDelay = "${home}/.local/libexec/screenshot_delay.nu";
+      };
   xdg.dataFile."applications/screenshot-delay.desktop".source =
-    ../files/applications/screenshot-delay.desktop;
+    renderTemplate ../files/applications/screenshot-delay.desktop
+      {
+        nu = "${pkgs.nushell}/bin/nu";
+        screenshotDelay = "${home}/.local/libexec/screenshot_delay.nu";
+      };
   xdg.dataFile."applications/sleep.desktop".source = ../files/applications/sleep.desktop;
 
   # Desktop files under ~/.local/share are linked after Home Manager builds its

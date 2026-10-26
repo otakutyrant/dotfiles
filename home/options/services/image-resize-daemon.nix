@@ -1,9 +1,13 @@
-{ config, ... }:
+{ config, pkgs, ... }:
 
 let
   home = config.home.homeDirectory;
 in
 {
+  # libexec is for private service helpers that should not appear on PATH.
+  home.file.".local/libexec/image_resize_daemon.nu".source =
+    ../../files/libexec/image_resize_daemon.nu;
+
   # Continuously upscale newly created images that are too small for normal
   # viewing while keeping the daemon tied to the user's default target.
   systemd.user.services.image-resize-daemon = {
@@ -14,7 +18,7 @@ in
 
     Service = {
       Type = "simple";
-      ExecStart = "${home}/.local/bin/image_resize_daemon.nu --root ${home} --target-short-side 800 --interval 5";
+      ExecStart = "${pkgs.nushell}/bin/nu ${home}/.local/libexec/image_resize_daemon.nu --root ${home} --target-short-side 800 --interval 5";
       Restart = "always";
       RestartSec = 5;
     };

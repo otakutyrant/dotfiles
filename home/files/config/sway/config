@@ -184,9 +184,9 @@ bindsym $mod+p exec --no-startup-id clipcat-menu insert && wdotool key --clearmo
 # Consume PrintScreen on key-down. A release binding lets Fcitx5 see the press
 # but not the release, causing its virtual keyboard to repeat the key.
 # Close the lock fd in the child so wl-copy cannot keep it after the selector.
-bindcode --no-repeat 107 exec --no-startup-id flock -n -o "$XDG_RUNTIME_DIR/screenshot-select-v2.lock" "$HOME/.local/bin/screenshot_select.nu"
+bindcode --no-repeat 107 exec --no-startup-id flock -n -o "$XDG_RUNTIME_DIR/screenshot-select-v2.lock" nu "$HOME/.local/libexec/screenshot_delay.nu"
 # Select a visible window with Shift+PrintScreen, then save and copy its screenshot.
-bindcode --no-repeat Shift+107 exec --no-startup-id flock -n -o "$XDG_RUNTIME_DIR/screenshot-select-v2.lock" "$HOME/.local/bin/screenshot_select.nu" --window
+bindcode --no-repeat Shift+107 exec --no-startup-id flock -n -o "$XDG_RUNTIME_DIR/screenshot-select-v2.lock" nu "$HOME/.local/libexec/screenshot_delay.nu" --window
 
 # # Startups
 

@@ -28,7 +28,7 @@ type = "script"
 # GTK collapses leading spaces in script output, so style this named widget with
 # a left margin to keep a visible gap after the preceding network status.
 name = "gpu-status"
-cmd = "/home/otakutyrant/.local/bin/gpu_status.nu"
+cmd = "nu /home/otakutyrant/.local/libexec/gpu_status.nu"
 interval = 5000
 
 [[monitors.DP-3.end]]

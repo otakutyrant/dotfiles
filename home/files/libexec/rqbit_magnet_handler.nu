@@ -1,5 +1,7 @@
 #!@nu@
 
+# This source template becomes the private rqbit magnet handler after Home
+# Manager substitutes immutable package paths.
 def notify [message: string, urgency: string = "normal"] {
     ^@notifySend@ --app-name rqbit --urgency $urgency "rqbit magnet handler" $message
 }

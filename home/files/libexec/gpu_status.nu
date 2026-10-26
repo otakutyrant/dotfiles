@@ -1,6 +1,6 @@
 #!/usr/bin/env nu
 
-# Poll NVIDIA's supported query interface for VRAM usage.
+# Report VRAM usage for Ironbar through NVIDIA's supported query interface.
 let values = try {
     ^nvidia-smi --query-gpu=memory.used,memory.total --format=csv,noheader,nounits
     | str trim

@@ -21,10 +21,10 @@
 # - Subdirectories are ignored completely; the scan is not recursive.
 #
 # Run one scan:
-#   /home/otakutyrant/.local/bin/image_resize_daemon.nu --once
+#   nu /home/otakutyrant/.local/libexec/image_resize_daemon.nu --once
 #
 # Run continuously:
-#   /home/otakutyrant/.local/bin/image_resize_daemon.nu
+#   nu /home/otakutyrant/.local/libexec/image_resize_daemon.nu
 #
 # Install as a user service through Home Manager:
 #   home-manager switch --flake .#otakutyrant

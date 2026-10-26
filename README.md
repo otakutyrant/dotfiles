@@ -146,6 +146,10 @@ installed by `home/options/xdg.nix`.
 Personal commands live in `home/files/bin`; `home/options/scripts.nix` installs
 them into `$HOME/.local/bin`.
 
+Private helper scripts and templates live in `home/files/libexec`. Their
+consumers install or render them explicitly under `~/.local/libexec` rather
+than exposing them on `PATH`.
+
 Desktop files are also XDG data files:
 
 - `home/files/applications/*.desktop` defines launcher entries for application
@@ -159,9 +163,9 @@ Use static desktop files here when the command is stable, such as
 specific `${pkgs.foo}/bin/foo` path, keep the template in `home/files` and render
 it from `home/options/xdg.nix` with `lib/render-template.nix`.
 
-Personal commands that should appear in rofi can be paired with a desktop file.
-For example, `home/files/bin/screenshot_delay.nu` is exposed through
-`home/files/applications/screenshot-delay.desktop`.
+Desktop-only helpers stay outside `bin`. For example,
+`home/files/libexec/screenshot_delay.nu` serves the delayed and full-monitor
+screenshot entries under `home/files/applications`.
 
 # Environment Variables
 
