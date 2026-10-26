@@ -195,9 +195,8 @@ in
               pattern = [
                 "git"
                 "status"
-                "--short"
               ];
-              justification = "Report worktree state in a compact form";
+              justification = "Report worktree state";
             }
             {
               pattern = [
@@ -210,6 +209,72 @@ in
                 "git diff --output=changes.patch"
                 "git diff --ext-diff"
               ];
+            }
+            {
+              pattern = [
+                "git"
+                "add"
+              ];
+              justification = "Stage selected worktree changes";
+              match = [ "git add home/options/programs/codex-rules.nix" ];
+            }
+            {
+              pattern = [
+                "git"
+                "commit"
+              ];
+              justification = "Create a local commit from explicitly staged changes";
+              match = [ "git commit -m 'feat(codex): manage command rules'" ];
+            }
+            {
+              pattern = [
+                "git"
+                "reset"
+              ];
+              decision = "prompt";
+              justification = "Reset can rewrite the index, worktree, or branch history";
+              match = [ "git reset --soft HEAD~1" ];
+            }
+            {
+              pattern = [
+                "git"
+                "push"
+              ];
+              decision = "prompt";
+              justification = "Pushing changes shared remote state";
+              match = [ "git push origin main" ];
+            }
+            {
+              # Prefix rules cannot detect a force flag placed after a remote or
+              # ref, so block the conventional prefix forms explicitly.
+              pattern = [
+                "git"
+                "push"
+                [
+                  "-f"
+                  "--force"
+                ]
+              ];
+              decision = "forbidden";
+              justification = "Push without force, or perform the force-push manually after reviewing remote history";
+              match = [
+                "git push -f origin main"
+                "git push --force origin main"
+              ];
+              notMatch = [ "git push origin main" ];
+            }
+          ];
+        }
+        {
+          packages = [ pkgs.local.nur ];
+          rules = [
+            {
+              pattern = [
+                "nur"
+                "check"
+              ];
+              justification = "Run the repository's deterministic quality checks";
+              match = [ "nur check" ];
             }
           ];
         }
@@ -349,6 +414,15 @@ in
       systemRules = [
         {
           pattern = [
+            "nix"
+            "build"
+            "--no-link"
+          ];
+          justification = "Build a Nix target without creating a result symlink";
+          match = [ "nix build --no-link .#checks.x86_64-linux.default" ];
+        }
+        {
+          pattern = [
             [
               "nixos-version"
               "nix-info"
@@ -376,7 +450,7 @@ in
     # policy stays a reviewed raw artifact, while default.rules remains mutable
     # state maintained by Codex itself.
     home.file.".codex/rules/tools.rules".text = renderedToolsRules;
-    home.file.".codex/rules/safety.rules".source = ../../files/codex/rules/safety.rules;
+    home.file.".codex/rules/safety.rules".source = ../../files/codex/safety.rules;
 
     assertions = [
       {
