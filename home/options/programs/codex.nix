@@ -33,6 +33,8 @@ in
     # SKILL.md whose canonical path escapes the skill root.
     skills.english-writing-teacher = "${tyrantSkills}/skills/english-writing-teacher";
     skills.tyrant-agents = "${tyrantSkills}/skills/tyrant-agents";
+    # Keep AGENTS.md structure separate from full project-convention adoption.
+    skills.tyrant-global-agents-md-specification = "${tyrantSkills}/skills/tyrant-global-agents-md-specification";
   };
 
   # These packages are introduced specifically for Codex-driven development.
