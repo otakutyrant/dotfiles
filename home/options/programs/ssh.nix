@@ -6,12 +6,6 @@
     package = pkgs.openssh;
     enableDefaultConfig = false;
     settings = {
-      "github.com" = {
-        User = "git";
-        Hostname = "ssh.github.com";
-        Port = 443;
-        IdentityFile = "~/.ssh/id_ed25519";
-      };
       "*" = {
         ForwardAgent = false;
         AddKeysToAgent = "yes";

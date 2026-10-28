@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ pkgs, ... }:
 
 {
   # User-wide Git settings. Home Manager renders this to ~/.config/git/config.
@@ -18,9 +18,18 @@
         g = "log --name-only --graph --all --date=format-local:'%Y-%m-%d %H:%M:%S' --format='%C(auto)%h%d %cd %s'";
         l = "log --name-only";
       };
-      # credential-store otherwise prefers an existing ~/.git-credentials and
-      # keeps recreating the legacy top-level file.
-      credential.helper = "store --file ${config.xdg.configHome}/git/credentials";
+      # GitHub CLI owns mutable authentication state, while Git delegates only
+      # GitHub HTTPS credential requests to its authenticated account.
+      credential = {
+        "https://github.com".helper = [
+          ""
+          "${pkgs.gh}/bin/gh auth git-credential"
+        ];
+        "https://gist.github.com".helper = [
+          ""
+          "${pkgs.gh}/bin/gh auth git-credential"
+        ];
+      };
       filter.lfs = {
         clean = "git-lfs clean -- %f";
         smudge = "git-lfs smudge -- %f";

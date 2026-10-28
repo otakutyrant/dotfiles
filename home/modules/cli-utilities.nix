@@ -8,7 +8,7 @@
   # Small command-line and desktop integration utilities used across workflows.
   home.packages = [
     config.programs.git.package # Distributed version control system.
-    pkgs.gh # GitHub client.
+    pkgs.gh # GitHub client and Git credential helper.
     pkgs.git-lfs # A Git extension for large files.
 
     config.programs.ssh.package # SSH client and related secure-shell utilities.
