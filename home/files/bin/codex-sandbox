@@ -26,7 +26,10 @@ def --wrapped main [
     launch $args $no_nix_daemon
 }
 
-# Run one non-interactive Codex task inside the sandbox and then exit.
+# Run one non-interactive Codex task inside the sandbox and then exit. Bounded
+# tasks default to workspace-write because the outer sandbox already limits
+# writes to the current repository; callers can pass an explicit --sandbox
+# option when a read-only delegation is wanted.
 def --wrapped "main exec" [
     # Run without access to the host's multi-user Nix daemon.
     --no-nix-daemon
@@ -35,5 +38,13 @@ def --wrapped "main exec" [
     # Additional arguments and flags passed to `codex exec`.
     ...args: string
 ] {
-    launch (["exec" $prompt] | append $args) $no_nix_daemon
+    let has_sandbox_mode = $args | any {|arg|
+        ($arg == "--sandbox") or ($arg | str starts-with "--sandbox=")
+    }
+    let default_sandbox_args = if $has_sandbox_mode {
+        []
+    } else {
+        ["--sandbox" "workspace-write"]
+    }
+    launch ((["exec" $prompt] | append $default_sandbox_args) | append $args) $no_nix_daemon
 }
