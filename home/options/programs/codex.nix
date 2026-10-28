@@ -34,7 +34,7 @@ in
     skills.english-writing-teacher = "${tyrantSkills}/english-writing-teacher";
     skills.tyrant-agents = "${tyrantSkills}/tyrant-agents";
     # Keep AGENTS.md structure separate from full project-convention adoption.
-    skills.tyrant-global-agents-md-specification = "${tyrantSkills}/tyrant-global-agents-md-specification";
+    skills.tyrant-agent-md-specification = "${tyrantSkills}/tyrant-agent-md-specification";
     skills.tyrant-prompt-as-comments = "${tyrantSkills}/tyrant-prompt-as-comments";
   };
 
