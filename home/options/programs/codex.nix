@@ -37,6 +37,14 @@ in
     skills.tyrant-global-agents-md-specification = "${tyrantSkills}/skills/tyrant-global-agents-md-specification";
   };
 
+  # Keep project routing below ~/Projects instead of loading it in every Codex
+  # session through the global context. Replace the pre-existing unmanaged file
+  # during the first activation so Home Manager can assume ownership.
+  home.file."Projects/AGENTS.md" = {
+    source = ../../files/Projects/AGENTS.md;
+    force = true;
+  };
+
   # These packages are introduced specifically for Codex-driven development.
   # codex-rules.nix asserts that every package referenced by a generated rule
   # is declared in the final merged home.packages value.
