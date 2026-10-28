@@ -31,10 +31,11 @@ in
     # Declare every installed skill through Home Manager so dotfiles owns the
     # complete directories under CODEX_HOME/skills. Codex rejects a symlinked
     # SKILL.md whose canonical path escapes the skill root.
-    skills.english-writing-teacher = "${tyrantSkills}/skills/english-writing-teacher";
-    skills.tyrant-agents = "${tyrantSkills}/skills/tyrant-agents";
+    skills.english-writing-teacher = "${tyrantSkills}/english-writing-teacher";
+    skills.tyrant-agents = "${tyrantSkills}/tyrant-agents";
     # Keep AGENTS.md structure separate from full project-convention adoption.
-    skills.tyrant-global-agents-md-specification = "${tyrantSkills}/skills/tyrant-global-agents-md-specification";
+    skills.tyrant-global-agents-md-specification = "${tyrantSkills}/tyrant-global-agents-md-specification";
+    skills.tyrant-prompt-as-comments = "${tyrantSkills}/tyrant-prompt-as-comments";
   };
 
   # Keep project routing below ~/Projects instead of loading it in every Codex

@@ -68,26 +68,3 @@ current user appears in `trusted-users`; never weaken or bypass that check.
 Do not copy or invoke Bubblewrap commands from an untrusted repository. Use the
 trusted launchers maintained under `~/.local/bin` by the dotfiles repository so
 untrusted content cannot redefine the sandbox boundary.
-
-# Preserve durable prompt intent in source comments.
-
-Treat the user's latest explicit prompt as the primary source of intended
-behavior. When a prompt, an existing comment, and the implementation disagree,
-follow the prompt and update the comment and implementation together.
-
-Distill durable intent from prompts into documentation comments in the owning
-code. Do not paste conversations or preserve incidental wording; record the
-smallest self-contained explanation that lets a future agent understand the
-requirement without recovering the original conversation.
-
-Prefer the opening documentation comment of the owning file, module, type,
-function, or other public interface for feature documentation.
-
-* For a feature or ordinary implementation, briefly describe what the code provides at the owning interface.
-* For a question or confusion, answer normally and improve the comment proactively even without a separate documentation request.
-* For a bug fix, place the rationale beside the fix or at the narrowest owning interface.
-
-Comments derived from prompts are maintained behavior rather than disposable
-narration. Keep them synchronized when behavior changes, remove their rationale
-only when a newer explicit prompt makes it obsolete, and preserve intent,
-boundaries, and reasoning that the code alone cannot prove.
