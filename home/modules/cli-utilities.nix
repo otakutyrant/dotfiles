@@ -14,6 +14,8 @@
     config.programs.ssh.package # SSH client and related secure-shell utilities.
 
     pkgs.file # Joshuto uses this command to detect file types and MIME types.
+    # Joshuto uses trash-put for dD when its trash backend is enabled.
+    pkgs.trash-cli
 
     config.programs.direnv.package # Per-directory environment loader.
 
