@@ -237,9 +237,20 @@ export def "nur test-architecture" [] {
     }
 }
 
+# Verify that command runners which unconditionally invoke /bin/sh can start
+# inside the otherwise minimal sandbox without changing its Nushell default.
+export def "nur test-sandbox-shell" [] {
+    let result = (
+        ^home/files/bin/sandbox --no-nix-daemon /bin/sh -c 'test "$SHELL" = /run/current-system/sw/bin/nu'
+        | complete
+    )
+    ensure-success $result "Sandbox /bin/sh compatibility check"
+}
+
 # Run all deterministic repository tests.
 export def "nur test" [] {
     nur test-architecture
+    nur test-sandbox-shell
 }
 
 # Run repository structure, raw-data, and deterministic fixture checks.

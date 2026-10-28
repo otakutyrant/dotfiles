@@ -84,6 +84,15 @@ def --wrapped main [
         "--dir", $runtime_dir
         "--ro-bind", "/run/current-system/sw"
         "/run/current-system/sw"
+
+        # Some agent command runners invoke a fixed /bin/sh before they inspect
+        # the requested command or $SHELL. Keep Nushell as the advertised
+        # interactive shell, but provide this POSIX compatibility path so those
+        # runners can reach the system profile's immutable shell.
+        "--dir", "/bin"
+        "--symlink", "/run/current-system/sw/bin/sh"
+        "/bin/sh"
+
         "--dir", "/var"
         "--symlink", "../tmp"
         "/var/tmp"
