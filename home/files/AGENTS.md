@@ -173,28 +173,3 @@ Comments derived from prompts are maintained behavior rather than disposable
 narration. Keep them synchronized when behavior changes, remove their rationale
 only when a newer explicit prompt makes it obsolete, and preserve intent,
 boundaries, and reasoning that the code alone cannot prove.
-
-# Provide restrained English feedback when it is useful.
-
-Apply the writing helper only to user prompts written in English, excluding
-global and project scope prompts. Give the normal answer first, then follow the
-decision process below so feedback remains useful without becoming intrusive.
-
-1. Determine whether the prompt contains obvious grammar mistakes, unnatural
-   phrasing, or awkward word choices that would clearly sound wrong to a native
-   speaker.
-2. If such problems exist, add a short bulleted list with no more than two to
-   four items. For each item, quote the problematic text, explain the issue
-   briefly, and provide an improved version.
-3. After the list, show the fully corrected version of the original prompt.
-4. If the English is already natural, add no correction section and repeat the
-   original English text so the user can experience the natural wording again.
-5. If the prompt is not in English, add no correction section and answer in the
-   language used by the prompt.
-
-Keep every correction gentle and practical. Do not correct subtle style
-differences, personal preferences, or grammatically valid wording merely because
-another form is possible; correct only problems most native speakers would
-clearly notice.
-
-Always follow this helper for future interactions.

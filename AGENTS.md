@@ -51,6 +51,9 @@ Yihui's roles.
 
 - `flake.nix` is the sole integration point for NixOS, Home Manager, overlays,
   local packages, and development-shell outputs.
+- Installed Codex skills are owned by this repository. Declare every installed
+  skill through the dotfiles configuration instead of placing it only in
+  mutable Codex state.
 - `nixos/configuration.nix` owns system configuration; files under `nixos/` may
   use `lib/` but must not import `home/` directly.
 - `home/configuration.nix` owns user configuration; files under `home/` may use

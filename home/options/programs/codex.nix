@@ -28,10 +28,10 @@ in
     enable = true;
     package = codexWithFasterScrolling;
     context = builtins.readFile ../../files/AGENTS.md;
-    # Use Home Manager's Codex integration so it links the complete skill
-    # directory under CODEX_HOME/skills. The former imported module recursively
-    # linked each leaf; Codex rejects a symlinked SKILL.md whose canonical path
-    # escapes the skill root and silently omitted tyrant-agents.
+    # Declare every installed skill through Home Manager so dotfiles owns the
+    # complete directories under CODEX_HOME/skills. Codex rejects a symlinked
+    # SKILL.md whose canonical path escapes the skill root.
+    skills.english-writing-teacher = "${tyrantSkills}/skills/english-writing-teacher";
     skills.tyrant-agents = "${tyrantSkills}/skills/tyrant-agents";
   };
 

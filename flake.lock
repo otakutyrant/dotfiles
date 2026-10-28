@@ -171,11 +171,11 @@
     },
     "tyrant-skills": {
       "locked": {
-        "lastModified": 1792853053,
-        "narHash": "sha256-02Y1AzmJxdse6XD926qRAS1n/w2INHdrOxzyYDNMlOg=",
+        "lastModified": 1793178304,
+        "narHash": "sha256-YAqa9Vz1PV9EoIoXHj3Y/S6s8LTvWMZFzs1qm74Tlhg=",
         "ref": "refs/heads/main",
-        "rev": "eba2e6a31b96e3a73aa492a9528c742ed004cf9a",
-        "revCount": 21,
+        "rev": "40cd332881f94211e3ab31834fa8facec572b83c",
+        "revCount": 24,
         "type": "git",
         "url": "https://github.com/otakutyrant/tyrant-skills"
       },
