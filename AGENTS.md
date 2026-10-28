@@ -29,9 +29,10 @@ iterating and the complete deterministic check before handoff. Formatting is
 explicitly mutating; review its diff. Nushell formatting uses the pinned
 upstream `nufmt` package; run it through the Nur catalog like the other
 formatters. Full builds are slower and potentially networked, so run them when
-Nix modules, packages, inputs, or deployment behavior change. Commands that
-activate NixOS or Home Manager mutate the live machine and require an explicit
-deployment request.
+Nix modules, packages, inputs, or deployment behavior change. After the complete
+deterministic validation passes, agents always run `nh home switch` from the
+repository root to activate Home Manager changes before handoff. Commands that
+activate NixOS still require an explicit deployment request.
 
 Panoptor is a persistent, headless Process Compose validation session isolated
 per worktree. Check for it before launching a covered validation. When it is
