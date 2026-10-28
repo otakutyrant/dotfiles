@@ -2,19 +2,19 @@
 
 Created: 2026-10-27
 
-Pre-campaign dotfiles baseline: `e74764e` (`docs(agents): preserve prompt
-intent in comments`). The owning dotfiles change is
-`refactor(home): prefer XDG directories`; obtain its final object ID with
+Pre-campaign dotfiles baseline: `e74764e`
+(`docs(agents): preserve prompt intent in comments`). The owning dotfiles change
+is `refactor(home): prefer XDG directories`; obtain its final object ID with
 `git log -1 --format=%H -- TODO.md`. A commit cannot embed its own object ID
 because changing the embedded ID would produce a different commit.
 
 ## Goal
 
 Move user configuration, data, state, and caches out of legacy top-level home
-paths wherever the application can support the XDG Base Directory
-specification. Improve the owning upstream project when support is missing,
-then make that improvement available through Home Manager or nixpkgs without
-carrying an unexplained permanent local workaround.
+paths wherever the application can support the XDG Base Directory specification.
+Improve the owning upstream project when support is missing, then make that
+improvement available through Home Manager or nixpkgs without carrying an
+unexplained permanent local workaround.
 
 This is an ongoing application-by-application campaign, not permission to
 blindly patch every installed package. Work only on applications this host uses
@@ -62,13 +62,13 @@ useful upstream state it can reach.
    - Record the issue, pull request, review result, and merge commit below.
 5. Integrate downstream only when needed.
    - If Home Manager is the deficient layer, submit the module change there and
-     test both `home.preferXdgDirectories` branches when a legacy choice remains.
-     Applications that are natively XDG should use semantic `xdg.*File` options
-     unconditionally.
+     test both `home.preferXdgDirectories` branches when a legacy choice
+     remains. Applications that are natively XDG should use semantic `xdg.*File`
+     options unconditionally.
    - If an application patch is needed before the next release, prefer an
-     upstream-published patch in nixpkgs. Use `fetchpatch2` after it has a stable
-     upstream commit; vendor a patch only for a documented Nix-specific reason
-     or when no stable source exists.
+     upstream-published patch in nixpkgs. Use `fetchpatch2` after it has a
+     stable upstream commit; vendor a patch only for a documented Nix-specific
+     reason or when no stable source exists.
    - Add or extend package/module tests and document why the downstream patch
      can eventually be removed.
 6. Update these dotfiles.
@@ -96,27 +96,27 @@ user data. A test fixture must be synthetic and contain no real local state.
 ## Discovery backlog
 
 - [ ] Re-audit top-level hidden files and directories after the current Home
-  Manager generation is activated and the affected applications have each been
-  launched once.
+      Manager generation is activated and the affected applications have each
+      been launched once.
 - [ ] Map every remaining non-standard path to the executable that creates it;
-  process activity and reproducible clean-home tests are stronger evidence than
-  directory names or timestamps alone.
+      process activity and reproducible clean-home tests are stronger evidence
+      than directory names or timestamps alone.
 - [ ] Exclude deliberate locations such as `~/.ssh`, `~/.local/bin`, and
-  `~/.local/libexec`, plus the XDG roots themselves.
+      `~/.local/libexec`, plus the XDG roots themselves.
 - [ ] Confirm whether each legacy path contains live state before proposing
-  migration or deletion.
+      migration or deletion.
 - [ ] Open one ledger entry per confirmed noncompliant application. Do not use a
-  single patch or issue to combine unrelated applications.
+      single patch or issue to combine unrelated applications.
 
 ## Progress ledger
 
 Record dates as `YYYY-MM-DD` and full commit IDs. A pull request URL alone is
 not a commit record. Use `—` only when a layer genuinely does not apply.
 
-| Application | Legacy path | Correct destination | Owning layer | Status | Last verified | Upstream issue/PR | Upstream commit | HM/nixpkgs PR | HM/nixpkgs commit | Dotfiles commit | Notes |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| NVIDIA CUDA JIT cache | `~/.nv/ComputeCache` | `$XDG_CACHE_HOME/nvidia/ComputeCache` | NixOS login environment | integrated | 2026-10-27 | — | — | — | — | `git log -1 --format=%H -- TODO.md` | CUDA honors `CUDA_CACHE_PATH`, but Sway previously started without Home Manager's session variables. The NixOS login environment now supplies the override before greetd starts Sway; the deployed PAM environment contains it and `~/.nv` is absent after the fresh session. |
-| _Add confirmed candidates here_ | | | | discovery | 2026-10-27 | | | | | | Start only after reproducing creation on the current package. |
+| Application                     | Legacy path          | Correct destination                   | Owning layer            | Status     | Last verified | Upstream issue/PR | Upstream commit | HM/nixpkgs PR | HM/nixpkgs commit | Dotfiles commit                     | Notes                                                                                                                                                                                                                                                                         |
+| ------------------------------- | -------------------- | ------------------------------------- | ----------------------- | ---------- | ------------- | ----------------- | --------------- | ------------- | ----------------- | ----------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| NVIDIA CUDA JIT cache           | `~/.nv/ComputeCache` | `$XDG_CACHE_HOME/nvidia/ComputeCache` | NixOS login environment | integrated | 2026-10-27    | —                 | —               | —             | —                 | `git log -1 --format=%H -- TODO.md` | CUDA honors `CUDA_CACHE_PATH`, but Sway previously started without Home Manager's session variables. The NixOS login environment now supplies the override before greetd starts Sway; the deployed PAM environment contains it and `~/.nv` is absent after the fresh session. |
+| _Add confirmed candidates here_ |                      |                                       |                         | discovery  | 2026-10-27    |                   |                 |               |                   |                                     | Start only after reproducing creation on the current package.                                                                                                                                                                                                                 |
 
 Allowed status values are `discovery`, `reproduced`, `design`, `upstream-open`,
 `upstream-merged`, `downstream-open`, `downstream-merged`, `released`,

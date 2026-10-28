@@ -17,8 +17,8 @@ entrypoint and the module or helper that owns the affected file.
 
 ## Development environment and commands
 
-The default flake development shell owns repository tools. Run commands from
-the repository root after nix-direnv loads `.envrc`, or use
+The default flake development shell owns repository tools. Run commands from the
+repository root after nix-direnv loads `.envrc`, or use
 `nix develop --no-update-lock-file -c nur <task>`. Do not duplicate underlying
 tool commands in documentation; update the Nur catalog or flake when a workflow
 changes.
@@ -26,12 +26,12 @@ changes.
 Discover focused formatting, linting, type, architecture, data, test, build,
 deployment, and Panoptor commands through `nur --list`. Use focused tasks while
 iterating and the complete deterministic check before handoff. Formatting is
-explicitly mutating; review its diff. Nushell formatting uses the pinned upstream
-`nufmt` package; run it through the Nur catalog like the other formatters. Full
-builds are slower and potentially networked, so run them when Nix modules,
-packages, inputs, or deployment behavior change. Commands that activate NixOS
-or Home Manager mutate the live machine and require an explicit deployment
-request.
+explicitly mutating; review its diff. Nushell formatting uses the pinned
+upstream `nufmt` package; run it through the Nur catalog like the other
+formatters. Full builds are slower and potentially networked, so run them when
+Nix modules, packages, inputs, or deployment behavior change. Commands that
+activate NixOS or Home Manager mutate the live machine and require an explicit
+deployment request.
 
 Panoptor is a persistent, headless Process Compose validation session isolated
 per worktree. Check for it before launching a covered validation. When it is
@@ -52,8 +52,8 @@ Yihui's roles.
 - `flake.nix` is the sole integration point for NixOS, Home Manager, overlays,
   local packages, and development-shell outputs.
 - Installed Codex skills are owned by this repository. Declare every installed
-  skill through the dotfiles configuration instead of placing it only in
-  mutable Codex state.
+  skill through the dotfiles configuration instead of placing it only in mutable
+  Codex state.
 - `nixos/configuration.nix` owns system configuration; files under `nixos/` may
   use `lib/` but must not import `home/` directly.
 - `home/configuration.nix` owns user configuration; files under `home/` may use
@@ -91,11 +91,11 @@ Yihui's roles.
   does not provide replacements for them. This repository's requirement is
   deliberately stricter than nixpkgs packaging policy; never assume a packaged
   application is XDG-compliant merely because NixOS supplies it.
-- XDG does not replace general temporary storage. Use `XDG_RUNTIME_DIR` only
-  for small, user-private runtime objects that belong to the current login
-  session, such as sockets, locks, and named pipes; use `TMPDIR` for ordinary
-  scratch files. Use XDG cache or state only when the lifetime and semantics
-  genuinely match those categories.
+- XDG does not replace general temporary storage. Use `XDG_RUNTIME_DIR` only for
+  small, user-private runtime objects that belong to the current login session,
+  such as sockets, locks, and named pipes; use `TMPDIR` for ordinary scratch
+  files. Use XDG cache or state only when the lifetime and semantics genuinely
+  match those categories.
 
 Use Nixdoc comments for reusable Nix helpers, LDoc/LuaDoc annotations for
 exported Lua APIs, and concise help comments for public Nushell commands. Keep

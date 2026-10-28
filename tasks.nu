@@ -19,6 +19,10 @@ def nu-files [] {
     checked-files ".nu"
 }
 
+def markdown-files [] {
+    checked-files ".md"
+}
+
 def formatted-nu-files [] {
 
     # This Home Manager replaceVars template becomes valid Nu only after Nix
@@ -83,11 +87,20 @@ export def "nur format-nushell" [] {
     }
 }
 
+# Format checked-in Markdown files with the shared Prettier configuration.
+export def "nur format-markdown" [] {
+    let files = (markdown-files)
+    if ($files | is-not-empty) {
+        ^prettier --write ...$files
+    }
+}
+
 # Format every source language with an approved safe formatter.
 export def "nur format" [] {
     nur format-nix
     nur format-lua
     nur format-nushell
+    nur format-markdown
 }
 
 # Check Nix formatting, suspicious constructs, and unused bindings.
@@ -124,11 +137,20 @@ export def "nur lint-nushell" [] {
     }
 }
 
+# Check Markdown formatting without changing files.
+export def "nur lint-markdown" [] {
+    let files = (markdown-files)
+    if ($files | is-not-empty) {
+        ^prettier --check ...$files
+    }
+}
+
 # Run all source linters without modifying files.
 export def "nur lint" [] {
     nur lint-nix
     nur lint-lua
     nur lint-nushell
+    nur lint-markdown
 }
 
 # Evaluate both supported Nix configuration outputs.

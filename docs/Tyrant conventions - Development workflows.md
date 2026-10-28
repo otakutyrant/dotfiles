@@ -6,8 +6,8 @@ This is a Tyrant convention.
 
 Keep the root `nurfile` small and split a growing catalog into focused Nushell
 modules. A task is important when it is a common entrypoint, composes commands,
-prepares state, controls a long-running process, or preserves ordering,
-cleanup, safety, or environment boundaries.
+prepares state, controls a long-running process, or preserves ordering, cleanup,
+safety, or environment boundaries.
 
 Provide applicable focused commands for formatting, linting, type checking,
 architecture, tests, licenses, vulnerabilities, builds, frameworks, generated
@@ -33,16 +33,16 @@ file observation, debouncing, reruns, status, logs, and lifecycle. Preserve a
 non-watching Nur command for automation.
 
 Choose narrow roots and include/exclude patterns from repository evidence.
-Exclude large project-local state trees that the orchestrator's defaults do
-not cover. Verify that every configured watch actually arms; schema validation
-alone does not detect exhausted watcher limits or unsuitable roots. A failed
-one-shot must remain visibly failed while its watch stays armed so the next edit
-can recover it.
+Exclude large project-local state trees that the orchestrator's defaults do not
+cover. Verify that every configured watch actually arms; schema validation alone
+does not detect exhausted watcher limits or unsuitable roots. A failed one-shot
+must remain visibly failed while its watch stays armed so the next edit can
+recover it.
 
 Use a tool's native development watcher only where it is intrinsic to the
 framework server (for example, HMR). Avoid wrapping validation commands in
-language-specific watchers underneath Process Compose because that obscures
-real process state and shutdown behavior.
+language-specific watchers underneath Process Compose because that obscures real
+process state and shutdown behavior.
 
 ## Panoptor
 
@@ -60,15 +60,15 @@ the resulting topology. When a suitable Panoptor role exists, they first check
 for the session and use its task-runner controls to inspect current state,
 readiness, and bounded output and to freshly rerun or restart the affected role.
 They do not launch duplicate standalone watchers or services. Standalone
-one-shot tasks remain appropriate when the session is absent, no role covers
-the check, or a prescribed deterministic composite requires them. A role's
-running or previously successful state is not evidence for the current tree;
-rerun it when the result may predate relevant changes.
+one-shot tasks remain appropriate when the session is absent, no role covers the
+check, or a prescribed deterministic composite requires them. A role's running
+or previously successful state is not evidence for the current tree; rerun it
+when the result may predate relevant changes.
 
-Define stable role names plus applicable startup dependencies, readiness
-probes, restart policy, scheduled checks, and shutdown behavior. Distinguish
-readiness from liveness. Do not hide crash loops with unconditional restart;
-select restart behavior deliberately for each role.
+Define stable role names plus applicable startup dependencies, readiness probes,
+restart policy, scheduled checks, and shutdown behavior. Distinguish readiness
+from liveness. Do not hide crash loops with unconditional restart; select
+restart behavior deliberately for each role.
 
 Expose focused task-runner controls that can:
 
@@ -82,8 +82,8 @@ Expose focused task-runner controls that can:
   changes.
 
 Keep Process Compose behind Nur. Prefer a private Unix socket and runtime state
-outside the repository. Return useful failures for absent sessions or roles.
-Do not treat a running process as proof that its latest validation passed.
+outside the repository. Return useful failures for absent sessions or roles. Do
+not treat a running process as proof that its latest validation passed.
 
 ## Topology
 
@@ -99,12 +99,11 @@ Integrate their changes in the main worktree before using the singleton.
 ## Validation
 
 Use the pinned Process Compose version's authoritative schema and CLI help.
-Validate the configuration, command discovery, headless startup, structured
-list output, bounded logs, TUI attach/detach, shutdown, and recovery. Exercise
-at least one one-shot watch through a real file event and one long-running
-server through stop/start/restart. Confirm dependencies and readiness with live
-state, and stop the validation session unless the user asked to leave it
-running.
+Validate the configuration, command discovery, headless startup, structured list
+output, bounded logs, TUI attach/detach, shutdown, and recovery. Exercise at
+least one one-shot watch through a real file event and one long-running server
+through stop/start/restart. Confirm dependencies and readiness with live state,
+and stop the validation session unless the user asked to leave it running.
 
 ## Project deviations
 

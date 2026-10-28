@@ -107,6 +107,7 @@
           local.nufmt
           nushell
           panoptorProcessCompose
+          prettier
           local.nur
           ripgrep
           selene
