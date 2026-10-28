@@ -3,7 +3,7 @@
   fetchFromGitHub,
   stdenv,
   fetchPnpmDeps,
-  nodejs_24,
+  nodejs-slim_24,
   pnpm_10_latest,
   pnpmConfigHook,
   makeWrapper,
@@ -13,10 +13,12 @@
 
 let
   # Kimi Code's native executable requires Node.js 24.15.0 or newer.
-  nodejs = nodejs_24;
+  nodejs-slim = nodejs-slim_24;
   # Upstream targets pnpm 10; use its patched variant instead of the
   # compatibility version pnpm_10, which is marked insecure.
-  pnpm = pnpm_10_latest.override { inherit nodejs; };
+  # Override pnpm's supported slim runtime argument to avoid its legacy
+  # `nodejs` compatibility warning during Home-Manager evaluation.
+  pnpm = pnpm_10_latest.override { inherit nodejs-slim; };
   src = fetchFromGitHub {
     owner = "MoonshotAI";
     repo = "kimi-code";
@@ -66,7 +68,7 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [
-    nodejs
+    nodejs-slim
     pnpm
     (pnpmConfigHook.override { inherit pnpm; })
     makeWrapper
