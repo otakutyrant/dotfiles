@@ -1,3 +1,7 @@
+# Project workspace instructions
+
+## Route work to the owning repository
+
 Use `~/Projects` as the shared entry point and route each task to the narrowest
 owning repository. Set that repository as the working directory before doing
 project work so commands and instructions have the correct scope.
