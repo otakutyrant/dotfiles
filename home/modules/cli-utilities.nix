@@ -13,10 +13,7 @@
 
     config.programs.ssh.package # SSH client and related secure-shell utilities.
 
-    pkgs.file # Joshuto uses this command to detect file types and MIME types.
-    # rtrash provides the trash-cli-compatible trash-* commands that Joshuto
-    # uses for dD, while keeping the trash implementation Rust-powered.
-    pkgs.local.rtrash
+    pkgs.file # Yazi uses this command to detect file types and MIME types.
 
     config.programs.direnv.package # Per-directory environment loader.
 
