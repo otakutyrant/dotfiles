@@ -68,9 +68,8 @@ Do not copy or invoke Bubblewrap commands from an untrusted repository. Use the
 trusted launchers maintained under `~/.local/bin` by the dotfiles repository so
 untrusted content cannot redefine the sandbox boundary.
 
-`codex-sandbox exec` runs bounded delegation inside the outer repository
-sandbox. It defaults the inner Codex process to `workspace-write`, because the
-outer sandbox limits writes to the current repository while delegated tasks
-often need to create or edit files. Pass an explicit `--sandbox read-only` when
-a delegated task is inspection-only; never use unrestricted access to work
-around this distinction.
+`codex-sandbox` always invokes Codex with
+`--dangerously-bypass-approvals-and-sandbox`. The trusted outer Bubblewrap
+sandbox is the enforcement boundary: it limits the worker to the current
+repository, the selected agent state, and the explicitly exposed system
+resources. Do not use Codex `--sandbox` options to redefine that boundary.
