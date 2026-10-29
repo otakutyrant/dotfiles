@@ -35,7 +35,7 @@ in
     skills.tyrant-agents = "${tyrantSkills}/tyrant-agents";
     # Keep AGENTS.md structure separate from full project-convention adoption.
     skills.tyrant-agent-md-specification = "${tyrantSkills}/tyrant-agent-md-specification";
-    skills.tyrant-prompt-as-comments = "${tyrantSkills}/tyrant-prompt-as-comments";
+    skills.prompts-as-comments = "${tyrantSkills}/prompts-as-comments";
   };
 
   # Keep project routing below ~/Projects instead of loading it in every Codex
