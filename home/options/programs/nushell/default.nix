@@ -48,6 +48,9 @@ in
       # Enables ssh trusted X11 forwarding. So you can access the X of remote hosts.
       ssh = "ssh -Y";
 
+      # Show Git status for direct repository subdirectories.
+      gss = "git-status-subdirs";
+
     };
     # `with pkgs.nushellPlugins;` lets the list use plugin package names
     # directly. These packages are registered by Home Manager so Nushell can

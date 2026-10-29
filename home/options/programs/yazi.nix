@@ -1,8 +1,8 @@
 { pkgs, ... }:
 
 {
-  # Yazi replaces Joshuto with native previews, a Git status header, archive
-  # previews, and an explicit Vim-like navigation layer for this workstation.
+  # Yazi replaces Joshuto with native previews, archive previews, and an
+  # explicit Vim-like navigation layer for this workstation.
   programs.yazi = {
     enable = true;
     enableNushellIntegration = true;
@@ -12,12 +12,8 @@
     # existing ouch package instead of maintaining a separate preview script.
     extraPackages = [ pkgs.ouch ];
     plugins = {
-      git = pkgs.yaziPlugins.git;
-      githead = pkgs.yaziPlugins.githead;
-      git-repo = ../../files/config/yazi/plugins/git-repo.yazi;
       ouch = pkgs.yaziPlugins.ouch;
     };
-    initLua = ../../files/config/yazi/init.lua;
 
     settings = {
       mgr = {
@@ -67,18 +63,6 @@
         {
           mime = "application/{*zip,tar,bzip2,7z*,rar,xz,zstd,java-archive}";
           run = "ouch";
-        }
-      ];
-      plugin.prepend_fetchers = [
-        {
-          url = "*";
-          run = "git";
-          group = "git";
-        }
-        {
-          url = "*/";
-          run = "git";
-          group = "git";
         }
       ];
     };
