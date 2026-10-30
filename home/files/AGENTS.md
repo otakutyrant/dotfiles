@@ -73,3 +73,11 @@ untrusted content cannot redefine the sandbox boundary.
 sandbox is the enforcement boundary: it limits the worker to the current
 repository, the selected agent state, and the explicitly exposed system
 resources. Do not use Codex `--sandbox` options to redefine that boundary.
+
+# Disclose applied skills in every final response.
+
+End every final response with `Skills applied: <skill names>`, listing exactly
+the skills applied to the single prompt that triggered that response. Do not
+include skills applied only to earlier prompts in the conversation. Write
+`Skills applied: None` when that prompt did not apply any skill, so every
+response reports its own prompt-specific skill use explicitly.
