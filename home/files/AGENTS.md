@@ -74,6 +74,13 @@ sandbox is the enforcement boundary: it limits the worker to the current
 repository, the selected agent state, and the explicitly exposed system
 resources. Do not use Codex `--sandbox` options to redefine that boundary.
 
+# Copy text through Clipcat.
+
+When asked to copy text, run `clipcatctl insert "<text>"` directly in Nushell.
+Clipcat must own the copied entry and record it in history. Verify that the
+requested text appears in `clipcatctl list` before reporting success, without
+exposing unrelated clipboard history.
+
 # Disclose applied skills in every final response.
 
 End every final response with `Skills applied: <skill names>`, listing exactly
