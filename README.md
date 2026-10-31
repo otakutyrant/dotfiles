@@ -28,6 +28,10 @@ releases.
 - **Clear ownership.** Separate system configuration, user configuration, shared
   helpers, local packages, and raw files. Focused modules and deterministic
   discovery keep the structure navigable as it grows.
+- **Declarative application configuration.** Keep complete application-native
+  configuration files in the repository and install them through their owning
+  Nix modules with `source`. Application settings and their deployment stay
+  versioned together.
 - **Agent-friendly development.** Declare skills, command rules, and shared
   instructions alongside the configuration. Give agents the same task catalog
   and validation tools used interactively.
@@ -134,10 +138,19 @@ but must not import each other's trees; `nur architecture` checks these direct
 dependency boundaries.
 
 Raw scripts and application configuration stay in source files with an owning
-Nix module that installs them. Configuration, data, cache, and state follow XDG
-locations wherever applications support them, with explicit overrides or narrow
-compatibility wrappers where needed. Personal commands live in `home/files/bin`;
-private helpers and templates live in `home/files/libexec`.
+Nix module that installs them. For example, the
+[Neovim module](home/options/programs/neovim.nix) sources the complete Lua
+configuration tree, and the [XDG module](home/options/xdg.nix) sources Sway and
+Clipcat configuration. Keeping application-native files under `home/files` makes
+them directly readable, editable, and lintable in their own formats. Structured
+Home Manager options declare supported settings; raw files use `source`, with
+templates rendered when evaluated package paths or XDG locations are needed.
+Small generated values stay in Nix.
+
+Configuration, data, cache, and state follow XDG locations wherever applications
+support them, with explicit overrides or narrow compatibility wrappers where
+needed. Personal commands live in `home/files/bin`; private helpers and
+templates live in `home/files/libexec`.
 
 User session variables belong in [home/options/env.nix](home/options/env.nix).
 Values needed before greetd starts Sway belong in
