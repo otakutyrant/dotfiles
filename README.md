@@ -22,6 +22,9 @@ releases.
   Editor, and Papers provide everyday graphical tools within the Sway session.
   GTK styling, desktop portals, and file services integrate them with the
   desktop.
+- **Vim-style controls across applications.** Carry familiar navigation,
+  editing, and yank operations from Neovim into paging, file management, media
+  playback, and batch renaming, with related focus bindings in Sway and Kitty.
 - **Clear ownership.** Separate system configuration, user configuration, shared
   helpers, local packages, and raw files. Focused modules and deterministic
   discovery keep the structure navigable as it grows.
@@ -63,6 +66,25 @@ delegates formatting to external tools that use project-local configuration
 where available. Its
 [theme configuration](home/files/config/nvim/lua/plugins/themes.lua) uses
 Alabaster as the sole theme.
+
+### Vim-style controls
+
+Prefer tools and bindings that reuse familiar Vim habits across everyday tasks:
+
+| Tool           | Vim-style workflow                                                                                                       |
+| -------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| Neovim         | Modal editing, motions, searches, and text operations                                                                    |
+| page           | Neovim-backed paging for command output and Kitty scrollback                                                             |
+| Yazi           | `h/j/k/l` navigation, `gg`/`G` for first/last entry, `Ctrl+u`/`Ctrl+d` for half-page movement, and yank/paste operations |
+| mpv            | `y` yanks the current subtitle to the clipboard                                                                          |
+| vimv           | Batch renaming through a Neovim-based editing workflow                                                                   |
+| Sway and Kitty | Modifier plus `h/j/k/l` for directional window focus                                                                     |
+
+[Yazi's keymap](home/options/programs/yazi.nix) also provides `dd` to cut files,
+`y` to copy, and `p` to paste. The [mpv bindings](home/options/programs/mpv.nix)
+extend subtitle-oriented playback with subtitle seeking, looping, and copying.
+Each application keeps controls suited to its task while sharing familiar
+navigation and editing habits.
 
 ### Keyboard hierarchy
 
