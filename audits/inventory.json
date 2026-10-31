@@ -6306,7 +6306,7 @@
     },
     {
       "path": "home/files/config/nvim/lua/plugins/themes.lua",
-      "sha256": "e63f42f76b99a609c92f93a57bb1d25edcc9807c95f048da4994cab67064b189"
+      "sha256": "00be071110f202d33c850ddeda9b620220f18916240fc91fe79852d364dc448e"
     },
     {
       "path": "home/files/config/nvim/lua/plugins/treesitter.lua",

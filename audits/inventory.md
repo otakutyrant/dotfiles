@@ -36,6 +36,10 @@ The former `home/files/codex/default.rules` source was retired on 2026-10-31;
 its rules now belong to `home/options/programs/codex-rules.nix`. The JSON
 snapshot preserves its last digest under `retiredOwnedArtifacts`.
 
+On 2026-10-31, the Neovim theme configuration was reduced to Alabaster alone.
+Its owned artifact digest was refreshed in the JSON snapshot; the owning
+`module/home/options/programs/neovim.nix` entity remains pending.
+
 The last column records audit date / audited version and coverage status. A dash
 means no audit is recorded in the current baseline. All entities are pending
 after the user-requested reset. See [ledger.md](ledger.md) for completion

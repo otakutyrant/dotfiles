@@ -61,8 +61,8 @@ visual vocabulary for GTK applications.
 GNOME Text Editor serves prose editing, while Neovim handles code. Neovim
 delegates formatting to external tools that use project-local configuration
 where available. Its
-[theme configuration](home/files/config/nvim/lua/plugins/themes.lua) selects a
-theme at startup.
+[theme configuration](home/files/config/nvim/lua/plugins/themes.lua) uses
+Alabaster as the sole theme.
 
 ### Keyboard hierarchy
 
