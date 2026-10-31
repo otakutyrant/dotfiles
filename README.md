@@ -32,6 +32,9 @@ releases.
   configuration files in the repository and install them through their owning
   Nix modules with `source`. Application settings and their deployment stay
   versioned together.
+- **Strict XDG discipline.** Keep configuration, data, cache, and state in their
+  XDG locations, using supported overrides where applications need help. WeChat,
+  Nutstore, and Steam are the known holdouts.
 - **Agent-friendly development.** Declare skills, command rules, and shared
   instructions alongside the configuration. Give agents the same task catalog
   and validation tools used interactively.
@@ -147,10 +150,28 @@ Home Manager options declare supported settings; raw files use `source`, with
 templates rendered when evaluated package paths or XDG locations are needed.
 Small generated values stay in Nix.
 
-Configuration, data, cache, and state follow XDG locations wherever applications
-support them, with explicit overrides or narrow compatibility wrappers where
-needed. Personal commands live in `home/files/bin`; private helpers and
-templates live in `home/files/libexec`.
+### XDG discipline
+
+Keep the home directory tidy by following the XDG Base Directory specification
+wherever applications permit it. Home Manager installs configuration, data, and
+state through `xdg.configFile`, `xdg.dataFile`, and `xdg.stateFile`. Environment
+variables and narrow compatibility wrappers redirect tools that need explicit
+path overrides.
+
+Examples include Cargo and Rustup under XDG data, npm and GPU compilation caches
+under XDG cache, Go configuration and build caches in their respective XDG
+locations, and Bash history and Xauthority under XDG state.
+`home.preferXdgDirectories` selects XDG paths in Home Manager modules that
+support the preference; application-specific overrides cover other tools.
+
+The known XDG “traitors” are **WeChat, Nutstore, and Steam**: they remain
+exceptions to the goal of keeping application configuration and runtime state
+out of the home directory's top level. Protocol-defined paths such as `~/.ssh`
+and executable locations such as `~/.local/bin` are intentional exceptions.
+
+Personal commands live in `home/files/bin`; private helpers and templates live
+in `home/files/libexec`. Session sockets and locks belong under
+`XDG_RUNTIME_DIR`, while ordinary scratch files use `TMPDIR`.
 
 User session variables belong in [home/options/env.nix](home/options/env.nix).
 Values needed before greetd starts Sway belong in
