@@ -17,6 +17,7 @@
     # `kimi` command and replaces the legacy Python-based kimi-cli.
     config.programs.codex.package # Codex CLI.
     pkgs.local.chatgpt # ChatGPT desktop app.
+    pkgs.local.cindy # Cindy desktop agent (China edition).
     pkgs.unstable.opencode # Open AI harness.
 
     ## Database

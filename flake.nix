@@ -47,6 +47,7 @@
         local = {
           blobmoji = final.callPackage ./home/pkgs/blobmoji.nix { };
           chatgpt = final.callPackage ./home/pkgs/chatgpt.nix { };
+          cindy = final.callPackage ./home/pkgs/cindy.nix { };
           clipcat = final.callPackage ./home/pkgs/clipcat.nix { };
           imageflow = final.callPackage ./home/pkgs/imageflow.nix { };
           kimi-code = final.callPackage ./home/pkgs/kimi-code.nix { };
