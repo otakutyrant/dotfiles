@@ -1,271 +1,221 @@
-# How to manage dotfiles
+# Dotfiles
 
-This repository is now managed primarily through a Nix flake for NixOS and Home
-Manager.
+My personal NixOS and Home Manager configuration: a Wayland desktop built around
+Sway, GNOME applications, Rust-powered tools, and workflows that humans and
+coding agents can share.
 
-## Fresh NixOS system
+The configuration targets one `x86_64-linux` machine, host `nixos`, and user
+`otakutyrant`. Nix flakes pin the system, user environment, local packages, and
+development tools together. Stable Nixpkgs supplies the foundation, with
+selected packages taken from unstable when the desktop or tooling needs newer
+releases.
 
-Clone the repository with submodules:
+## Design priorities
+
+- **Wayland throughout.** Sway manages windows, Ironbar provides the panel, and
+  native Wayland tools handle screenshots, clipboard access, wallpapers, and
+  input. XWayland remains available for applications that need it.
+- **Rust-powered tools.** Prefer capable Rust applications across the shell,
+  desktop, and media workflows, including Nushell, Starship, Nur, Clipcat,
+  Waytrogen, rqbit, Imageflow, and OxiMedia.
+- **GNOME applications.** Nautilus, File Roller, Baobab, System Monitor, Text
+  Editor, and Papers provide everyday graphical tools within the Sway session.
+  GTK styling, desktop portals, and file services integrate them with the
+  desktop.
+- **Clear ownership.** Separate system configuration, user configuration, shared
+  helpers, local packages, and raw files. Focused modules and deterministic
+  discovery keep the structure navigable as it grows.
+- **Agent-friendly development.** Declare skills, command rules, and shared
+  instructions alongside the configuration. Give agents the same task catalog
+  and validation tools used interactively.
+- **Continuous validation and ongoing security review.** Panoptor watches source
+  changes and reruns validation roles. A separate audit inventory and ledger
+  track explicitly requested security reviews against exact source identities.
+
+## Desktop
+
+The session starts through greetd and uses Sway's keyboard-driven workspaces,
+tiling layouts, and scratchpad. The current configuration includes a
+three-monitor layout and NVIDIA-specific settings; inspect
+[the Sway configuration](home/files/config/sway/config) and
+[NVIDIA options](nixos/options/nvidia.nix) when adapting it to other hardware.
+
+The desktop brings together:
+
+- Ironbar for workspaces, tray icons, and system information, including a
+  Nushell helper for NVIDIA GPU statistics.
+- Walker with Elephant for application launching and selection menus.
+- Wayshot and Waysip for screenshots, with captures saved under
+  `~/Pictures/Screenshots` and copied to the clipboard.
+- Clipcat for clipboard history, wl-clipboard-rs for clipboard access, and
+  wdotool for pasting a selected history item.
+- Waytrogen with awww for wallpapers, nwg-notifications for notifications, and
+  Swayidle with Swaylock for idle handling and locking.
+- PipeWire with graphical and terminal mixers, plus fcitx5/Rime for Chinese
+  input through the native Wayland frontend.
+
+Sarasa Fixed SC supplies the text face, Zhongdou Sans contributes CJK
+punctuation, and Blobmoji supplies color emoji. Adwaita icons provide a common
+visual vocabulary for GTK applications.
+
+GNOME Text Editor serves prose editing, while Neovim handles code. Neovim
+delegates formatting to external tools that use project-local configuration
+where available. Its
+[theme configuration](home/files/config/nvim/lua/plugins/themes.lua) selects a
+theme at startup.
+
+### Keyboard hierarchy
+
+Sway manages GUI clients, Kitty manages terminal windows and tabs, and Neovim
+manages files and tabpages. Each layer has a distinct modifier:
+
+| Layer  | Modifier       | Numbered destination              | Close     |
+| ------ | -------------- | --------------------------------- | --------- |
+| Sway   | `Super`        | `Super+1` … `Super+0`: workspaces | `Super+q` |
+| Kitty  | `Alt`          | `Alt+1` … `Alt+0`: tabs           | `Alt+q`   |
+| Neovim | `Space` leader | `Space+1` … `Space+0`: tabpages   | `Space+q` |
+
+Sway and Kitty use their modifier with `h/j/k/l` to move focus. In Sway,
+`Super+s` and `Super+v` select split orientation; `Super+-` and `Super+|`
+arrange containers vertically and horizontally, and `Super+t` selects a tabbed
+layout. Kitty uses `Alt+s` and `Alt+v` to launch horizontal and vertical splits,
+with `Alt+n` for a new tab.
+
+The authoritative bindings live in the
+[Sway configuration](home/files/config/sway/config),
+[Kitty module](home/options/programs/kitty.nix), and
+[Neovim configuration](home/files/config/nvim).
+
+## Repository structure
+
+| Path                             | Responsibility                                                                        |
+| -------------------------------- | ------------------------------------------------------------------------------------- |
+| `flake.nix`, `flake.lock`        | Pinned inputs, overlays, local packages, configuration outputs, and development shell |
+| `nixos/configuration.nix`        | System configuration entrypoint                                                       |
+| `nixos/modules`, `nixos/options` | System features and focused settings                                                  |
+| `nixos/files`                    | Raw files installed by system modules                                                 |
+| `home/configuration.nix`         | User configuration entrypoint                                                         |
+| `home/modules`                   | Groups of user packages                                                               |
+| `home/options`                   | Program, service, GTK, XDG, and environment settings                                  |
+| `home/pkgs`                      | Local derivations exposed through `pkgs.local`                                        |
+| `home/files`                     | Application configuration, scripts, desktop entries, and agent instructions           |
+| `lib`                            | Shared Nix helpers                                                                    |
+| `nurfile`, `tasks.nu`, `tasks/`  | Discoverable repository commands and Panoptor controls                                |
+| `process-compose.yaml`           | Panoptor validation roles and file watches                                            |
+| `audits`                         | Security inventory, ledger, and retained evidence                                     |
+| `docs`                           | Development and tool-selection conventions                                            |
+
+[Module discovery](lib/import-modules.nix) recursively imports Nix files from
+the configured `modules` and `options` trees in deterministic order. New modules
+do not need a central import-list edit. System and user modules may use `lib`,
+but must not import each other's trees; `nur architecture` checks these direct
+dependency boundaries.
+
+Raw scripts and application configuration stay in source files with an owning
+Nix module that installs them. Configuration, data, cache, and state follow XDG
+locations wherever applications support them, with explicit overrides or narrow
+compatibility wrappers where needed. Personal commands live in `home/files/bin`;
+private helpers and templates live in `home/files/libexec`.
+
+User session variables belong in [home/options/env.nix](home/options/env.nix).
+Values needed before greetd starts Sway belong in
+[nixos/options/env.nix](nixos/options/env.nix). Default applications and desktop
+entries are managed through [the XDG module](home/options/xdg.nix).
+
+## Agents and security reviews
+
+[The Codex module](home/options/programs/codex.nix) declares installed skills
+from the pinned `tyrant-skills` input. Global instructions and workspace routing
+are maintained as source files under `home/files`, while
+[command policy](home/options/programs/codex-rules.nix) declares tool rules and
+checks that referenced tool packages are installed. Codex and Kimi have trusted
+sandbox launchers for working with untrusted repositories.
+
+Security review is part of repository maintenance. The ordered
+[audit inventory](audits/inventory.md) and its
+[identity snapshot](audits/inventory.json) track declared packages, inputs,
+modules, versions, revisions, and local content digests. The
+[ledger](audits/ledger.md) records review scope, scanner evidence, limitations,
+and outcomes. Changes invalidate coverage of the previous identity while
+preserving audit history.
+
+Audits start only on an explicit request and run through trusted sandbox
+launchers. A completed review requires the recorded manual review and an
+appropriate external dependency scan. Inventory entries alone do not establish
+audit coverage; consult the ledger for current status. Panoptor's continuous
+quality checks are separate from this security review workflow.
+
+## Development and validation
+
+The flake development shell owns the repository's quality tools. Use
+`nix develop` to enter it, or `direnv allow` to approve the included nix-direnv
+environment. From the repository root, discover tasks with:
 
 ```nu
-git clone --recursive https://github.com/otakutyrant/dotfiles.git /etc/nixos/dotfiles
-cd /etc/nixos/dotfiles
+nur --list
 ```
 
-Build the bundled host configuration:
+| Task                                  | Purpose                                                            |
+| ------------------------------------- | ------------------------------------------------------------------ |
+| `nur format`                          | Format Nix, Lua, Nushell, and Markdown                             |
+| `nur lint`                            | Run formatting checks and static linters                           |
+| `nur typecheck`                       | Evaluate NixOS and Home Manager; run LuaLS and Nushell diagnostics |
+| `nur verify`                          | Check architecture, validate raw data, and run deterministic tests |
+| `nur check`                           | Run the complete deterministic quality workflow                    |
+| `nur build-nixos`, `nur build-home`   | Build without activating                                           |
+| `nur switch-nixos`, `nur switch-home` | Build and activate the selected configuration                      |
+
+Focused tasks such as `nur lint-markdown` and `nur typecheck-nix` are available
+for iteration. The checks include Nixfmt, Statix, and Deadnix for Nix; StyLua,
+Selene, and LuaLS for Lua; nufmt and nu-lint for Nushell; and Prettier for
+Markdown. Raw-data validation covers YAML, TOML, JSON, and desktop entries.
+Deterministic tests exercise architecture boundaries and sandbox shell
+compatibility.
+
+### Panoptor
+
+Panoptor is a persistent, headless Process Compose session with a private
+control socket per worktree. Its roles watch Nix, Lua, Nushell, and repository
+data, rerunning the relevant checks after changes.
 
 ```nu
-sudo nixos-rebuild switch --flake .#nixos
-passwd otakutyrant
+nur panoptor check
+nur panoptor start
+nur panoptor list
+nur panoptor output nix_lint --tail 40
+nur panoptor role rerun nix_lint
+nur panoptor attach
+nur panoptor stop
 ```
 
-The NixOS configuration creates the `otakutyrant` user, enables flakes,
-NetworkManager, Docker, PipeWire, fcitx5, NVIDIA graphics, greetd, and Sway.
+Attaching or closing the TUI leaves the session running. Inspect an existing
+session and rerun affected roles rather than launching duplicate watchers. The
+current graph has no dedicated Markdown role, so use `nur lint-markdown` for
+README edits. Run `nur check` for the complete deterministic validation before
+handoff.
 
-## Home Manager only
+## Using this configuration
 
-If the system user already exists and Home Manager is installed:
+This checkout includes personal hardware settings, paths, network choices, and
+desktop preferences. Review them before deployment. In particular, the Zhongdou
+Sans flake input expects a Git checkout at
+`/home/otakutyrant/Projects/Zhongdou-Sans`; a fresh machine needs that source
+available before evaluating the flake.
+
+Clone into the trusted project workspace:
 
 ```nu
-home-manager switch --flake .#otakutyrant
+git clone https://github.com/otakutyrant/dotfiles.git ~/Projects/dotfiles
+cd ~/Projects/dotfiles
 ```
 
-Home Manager evaluates `home/configuration.nix`, which recursively imports the
-focused files under `home/modules` and `home/options`.
+The flake exports `nixosConfigurations.nixos`, including Home Manager for
+`otakutyrant`, and `homeConfigurations.otakutyrant` for standalone Home Manager.
+After preparing the local input and entering the development environment, use
+`nur build-nixos` or `nur build-home` to build the intended output. Deploy
+intentionally with `nur switch-nixos` or `nur switch-home`.
 
-## Repository layout
-
-- `home/modules` groups related user packages and their explanatory comments.
-- `home/options` configures Home Manager programs, services, GTK, XDG, and the
-  user environment.
-- `home/pkgs` contains repository-local package derivations exposed as
-  `pkgs.local.<name>` by the flake overlay.
-- `home/files` contains raw configuration, desktop, YAML, Lua, and Nushell
-  files. Their owning option module installs them at the appropriate Home
-  Manager path.
-- `nixos/modules` groups system-level features, while `nixos/options` contains
-  focused NixOS settings. `nixos/configuration.nix` imports both recursively.
-- `nixos/files` contains raw files installed by NixOS modules.
-- `lib` contains small Nix helpers shared by Home Manager and NixOS.
-
-`lib/import-modules.nix` performs recursive module discovery, so adding a Nix
-file below an imported `modules` or `options` directory does not require editing
-a central import list.
-
-# Make dotfiles simple
-
-Find a client which has highly refined default configuration so you do not
-override them too much (Neovim works well that it changes many vim default
-options). When overriding them, comment why you do that.
-
-As for Neovim. If you can use third-part tool to handle files, use them rather
-than install an corresponding plugin, like useless Black plugin because you can
-execute external commands in Ex command as `:!black %`. Tinkering Neovim is
-ceaseless.
-
-Neovim does not impose language-specific code style. On save it delegates to the
-corresponding external formatter, which discovers project-local configuration
-from the working tree when available and otherwise uses its own defaults.
-
-## Development
-
-The flake provides every repository quality tool. Enter it directly, or approve
-the included nix-direnv environment once:
-
-```nu
-nix develop
-direnv allow
-```
-
-`nur --list` shows the complete command catalog. `nur format` formats Nix, Lua,
-and Nushell files, while `nur check` runs formatting checks, static analysis,
-architecture and data validation, Nix evaluation, Lua diagnostics, and Nushell
-checks.
-
-Use `nur build-nixos` or `nur build-home` for a non-activating build. The
-explicit `nur switch-nixos` and `nur switch-home` commands update the live
-machine or user profile and should only be run intentionally.
-
-# Introduction to unified, hierarchical windows management
-
-Before the introduction, let us make sure what split means. Amazingly, "split
-window horizontally/vertically" is terribly ambiguous in
-[Linux](https://english.stackexchange.com/q/293520/355018). As an ESL learner, I
-decide to focus in the verb "split" itself. By instinct, if I split an object, I
-cut it through a horizontal line. But some other people may focus in the object
-itself. In other words, when the object is split "horizontally", it becomes two
-objects, distributed in horizontal direction. No wonder some Linux software will
-split objects horizontally in two different ways, because they focus in either
-verb or noun.
-
-To be clear. In the dotfiles, "split window horizontally" means to cut it
-through a horizontal line. However sometimes it is necessary to distribute
-windows horizontally or vertically. I won't use "split" but "distribute". I
-think "distribute all windows horizontally" is unambiguous. Due to some Linux
-software have a contract meaning of "split horizontally" from their reserved
-keywords in configuration, or even use "split" and "distribute" interchangeably,
-I will clarify them by comments, especially in Sway.
-
-Now image you have multiple windows in your screen and you are a heavy Vim user.
-You have a master key, used to combine with any key to manage **tabs** and
-**windows**. Tabs are usually numbered, and a tab contains multiple windows.
-Windows can be split, distributed, moved between tabs, and killed.
-
-When you want to jump the specific tab, just hit `master+num`.
-
-When you want split a window vertically or horizontally, hit `master+v` or
-`master+s` respectively. If you want distribute all windows in the current tab
-instantly, hit `master+|` or `master+-`, the meaning of bar and hash symbols are
-enough obvious.
-
-You would like to move focus between windows via `master+hjkl`.
-
-When you want to kill a windows, hit `master+q`.
-
-Now time to make the windows management hierarchical! In Linux, I use Sway to
-manage multiple GUI clients, including the Kitty terminal. Kitty manages
-multiple CLI clients, including shells and Neovim. Neovim then manages multiple
-files.
-
-|   Hierarchies    |  name  | What do they manage? | What do master keys call in them? | binded key |
-| :--------------: | :----: | -------------------- | :-------------------------------: | :--------: |
-| Windows Manager  |  Sway  | GUI clients          |               $mod                |   super    |
-| Virtual Terminal | kitty  | CLI clients          |                N/A                |    alt     |
-|      Editor      | Neovim | Files                |            learder key            |   space    |
-
-| name   | What do tabs call in them? | How to allocate a new tab? | How to jump to a tab? |
-| ------ | -------------------------- | -------------------------- | --------------------- |
-| Sway   | workspace                  | N/A                        | super+num             |
-| kitty  | tab                        | alt+n                      | alt+num               |
-| Neovim | tabpage                    | space+n                    | space+num             |
-
-| name   | What do windows call in them? | How to move focus between windows? | How to split a window horizontally or vertically? | How to distribute windows horizontally or vertically? | How to kill a window? |
-| ------ | ----------------------------- | ---------------------------------- | ------------------------------------------------- | ----------------------------------------------------- | --------------------- |
-| Sway   | window                        | super+hjkl                         | super+s or super+v                                | super+- or super+\|                                   | super+q               |
-| kitty  | window                        | alt+hjkl                           | alt+s or alt+v                                    | alt+- or alt+\|                                       | alt+q                 |
-| Neovim | window                        | space+hjkl                         | space+s or space+v                                | N/A                                                   | space+q               |
-
-Note:
-
-1. kitty does not define master key, but you can use it anyway.
-2. The Sway configuration declares ten named workspaces.
-3. In kitty, as far as I know, when you create a window, it always is a shell.
-4. In Sway, `super+s` and `super+v` split the focused container using the
-   original i3 behavior.
-5. \- is a minus symbol and | bar symbol.
-6. If you want to adjust the border between windows, use mouse. All hierarchies
-   support it.
-7. `super+t` arranges the workspace in a tabbed layout.
-8. Although I said windows can be moved between tabs, I do not list related
-   keymaps in the table.
-
-Do you notice the relation between master keys? They are distributed in the
-left-bottom part of my Happy Hacking Keyboard exactly. How well organized they
-are.
-
-![Here is the demonstration.](demo.png)
-
-# XDG
-
-I keep files in XDG locations when the application expects them there.
-
-Home Manager's XDG preference is enabled, so modules that support both legacy
-home-directory dotfiles and XDG paths choose the latter. This covers Codex, npm,
-and GTK 2. Kimi Code, Rustup, npm's cache, and CUDA's compilation cache also
-receive their supported path overrides explicitly.
-
-Configuration files should live under `$XDG_CONFIG_HOME` when possible. In this
-repository, raw configuration lives under `home/files/config`. The corresponding
-module in `home/options` installs it under `~/.config`.
-
-Default application choices live in `home/files/config/mimeapps.list` and are
-installed by `home/options/xdg.nix`.
-
-Personal commands live in `home/files/bin`; `home/options/scripts.nix` installs
-them into `$HOME/.local/bin`.
-
-Private helper scripts and templates live in `home/files/libexec`. Their
-consumers install or render them explicitly under `~/.local/libexec` rather than
-exposing them on `PATH`.
-
-Desktop files are also XDG data files:
-
-- `home/files/applications/*.desktop` defines launcher entries for application
-  menus.
-
-Applications started at login use entries under `home/files/config/autostart`,
-which `home/options/xdg.nix` installs into the XDG autostart directory.
-
-Use static desktop files here when the command is stable, such as
-`Exec=systemctl suspend`. If a desktop entry needs Nix interpolation, such as a
-specific `${pkgs.foo}/bin/foo` path, keep the template in `home/files` and
-render it from `home/options/xdg.nix` with `lib/render-template.nix`.
-
-Desktop-only helpers stay outside `bin`. For example,
-`home/files/libexec/screenshot_delay.nu` serves the delayed and full-monitor
-screenshot entries under `home/files/applications`.
-
-# Environment Variables
-
-User session environment variables are managed in `home/options/env.nix`.
-Variables that must exist before Home Manager starts are managed in
-`nixos/options/env.nix`.
-
-# Wayland and NVIDIA
-
-Sway reads the plain-text config at `home/files/config/sway/config`, installed
-by `home/options/xdg.nix`. It preserves the original workspaces, shortcuts,
-layout rules, and scratchpad. Ironbar provides workspace and system-information
-modules, with a Nushell script for NVIDIA GPU utilization and memory. The
-screenshot and idle tools use Wayshot, wl-clipboard-rs, Swaylock, and Swayidle.
-The screenshot selector saves captures under `~/Pictures/Screenshots` and copies
-them to the clipboard.
-
-The output rules in the config retain the former three-monitor layout. Check
-connector names and available modes with `swaymsg -t get_outputs`; DRM names can
-differ from the old XRandR names. Sway's `output` commands can be tested live
-before editing the persistent rules.
-
-Current wlroots and Sway support NVIDIA's explicit synchronization, so the old
-community source patches are no longer needed. The setup follows the
-nixpkgs-wayland community guidance: enable DRM modesetting, use
-`WLR_NO_HARDWARE_CURSORS=1`, and pass `--unsupported-gpu` to Sway. That option
-suppresses Sway's startup notice; it does not change its official support
-policy. The NVIDIA application profile also limits retained compositor buffers.
-
-The session keeps the other Wayland tools: Waytrogen with awww, Wired, Clipcat,
-wdotool, wkeys, and nwg-displays. rqbit replaces Fragments and qBittorrent. It
-cannot import Fragments/Transmission's saved session or piece-progress map. To
-carry downloaded progress over, start rqbit's server, then add each same torrent
-through its Web UI/API with `overwrite=true` and the existing download directory
-as `output_folder`. rqbit can resume from files already on disk and will verify
-their pieces. Keep the torrent's filenames and directory layout unchanged.
-Tracker state, ratios, and peer/session details do not transfer. Xwayland
-remains available for existing X11 clients.
-
-# Packages
-
-This repository targets NixOS with Home Manager. System-wide packages and
-services are organized under `nixos/modules`, while user-facing development,
-command-line, and GUI packages are grouped under `home/modules`. Package names
-there are Nixpkgs attribute names, not names from another distribution. Custom
-derivations live under `home/pkgs` and are exposed through `pkgs.local`.
-
-I noticed a trend that traditional GNU CLI clients are replaced by
-high-performance Rust alternatives, like `find` is replaced by `fd`, `grep` by
-`ripgrep` or `fzf`, `less` by `page` and so on.
-
-# China network issue
-
-There are some related configuration. Ignore them if you do not live in China.
-
-# Too many themes and you do not know which one is the best?
-
-Don't worry, only infants make choice, while adults want the whole enchilada!
-Just install all of them and random pick one every time you launch the client.
-You can consult how I do that in my
-[Neovim themes](home/files/config/nvim/lua/plugins/themes.lua). When fate plays
-its hand, a captivating theme will gracefully unfurl.
-
-The random theme mechanism of Kitty, Sway, and related applications is still a
-work in progress.
+The system configuration provides the user account, NVIDIA graphics,
+NetworkManager, Docker, PipeWire, fcitx5, greetd, and Sway. Standalone Home
+Manager manages the user environment; system services and hardware integration
+remain the responsibility of the host configuration.
