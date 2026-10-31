@@ -74,6 +74,50 @@ sandbox is the enforcement boundary: it limits the worker to the current
 repository, the selected agent state, and the explicitly exposed system
 resources. Do not use Codex `--sandbox` options to redefine that boundary.
 
+# Preserve data when deleting or replacing content.
+
+Use `rm -r -- <path>` for recursive removal. Never use `rm -rf`, `rm -fr`,
+separate recursive and force flags, or any other spelling that combines force
+with recursive removal. Inspect the exact targets first; do not add force to
+suppress a missing-path or permission error.
+
+Never delete remote repositories or published packages, versions, or release
+artifacts. This includes unpublishing, yanking, registry deletion, and
+equivalent API, SDK, script, plugin, and web operations. Local dependency
+removal such as `pnpm remove` is allowed within the task's scope.
+
+Never force an operation that overwrites existing files or discards data. Avoid
+forced copy/move/link operations, destructive synchronization, hard resets,
+forced checkout/restore, Git clean, forced tag replacement, and package-manager
+force modes that overwrite content or bypass safeguards. Use ordinary edits and
+conflict resolution; preserve unrelated changes and inspect destination paths.
+
+## Replace branches only with deliberate scope and concurrency protection.
+
+Branch replacement is permitted when required by the authorized task. Inspect
+the old and new tips and preserve unrelated work before replacing a local branch
+with `git branch -f`, `git switch -C`, or `git checkout -B`. For a remote
+branch, inspect its current tip and use an explicit lease:
+`git push --force-with-lease=refs/heads/<branch>:<expected-commit> <remote> HEAD:refs/heads/<branch>`.
+Respect push approval requirements. If the lease fails, inspect the new remote
+history before deciding how to proceed; never retry with an unchecked force.
+
+Never use plain `git push --force`, `-f`, a `+` refspec, `--mirror`, or
+`gh repo sync --force`. Do not combine a lease with those overrides or replace
+tags under the branch exception.
+
+## Apply the policy across command spellings and tools.
+
+Codex prefix rules cover conventional argument prefixes, not arbitrary flag
+positions or every equivalent operation. Follow these instructions regardless of
+flag order, combined flags, executable paths, aliases, wrappers, or tool. Never
+bypass a forbidden rule with another interface or by disabling approvals.
+
+Codex command rules are managed by dotfiles. Persist command policy changes in
+`home/options/programs/codex-rules.nix` and safety prohibitions in
+`home/files/codex/safety.rules`, then activate Home Manager. The installed
+`tools.rules` and `safety.rules` files are immutable Nix sources.
+
 # Copy text through Clipcat.
 
 When asked to copy text, run `clipcatctl insert "<text>"` directly in Nushell.

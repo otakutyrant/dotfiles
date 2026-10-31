@@ -130,7 +130,6 @@ in
               pattern = [
                 [
                   "shellcheck"
-                  "actionlint"
                   "hadolint"
                   "difft"
                 ]
@@ -138,8 +137,13 @@ in
               justification = "Read-only source analysis and reporting";
               match = [
                 "shellcheck script.nu"
-                "actionlint .github/workflows/check.yml"
               ];
+            }
+            {
+              pattern = [ "actionlint" ];
+              decision = "prompt";
+              justification = "Review workflow linting that can select external executables through tool options";
+              match = [ "actionlint .github/workflows/check.yml" ];
             }
           ];
         }
@@ -210,7 +214,10 @@ in
                 "git"
                 "diff"
               ];
-              justification = "Allow diff inspection, output-file writes, and configured external diff drivers";
+              # Trailing flags can re-enable external drivers or choose output
+              # files, so a supposedly safe leading flag cannot narrow this.
+              decision = "prompt";
+              justification = "Review diff options that can write output files or execute external diff and text-conversion drivers";
               match = [
                 "git diff"
                 "git diff --output=changes.patch"
@@ -222,7 +229,8 @@ in
                 "git"
                 "add"
               ];
-              justification = "Stage selected worktree changes";
+              decision = "prompt";
+              justification = "Review staged paths; force-add can include ignored secrets and broad pathspecs can include unrelated work";
               match = [ "git add home/options/programs/codex-rules.nix" ];
             }
             {
@@ -230,8 +238,24 @@ in
                 "git"
                 "commit"
               ];
-              justification = "Create a local commit from explicitly staged changes";
+              decision = "prompt";
+              justification = "Review commit scope, history amendments, hook execution, and verification bypass options";
               match = [ "git commit -m 'feat(codex): manage command rules'" ];
+            }
+            {
+              pattern = [
+                "git"
+                [
+                  "clone"
+                  "pull"
+                ]
+              ];
+              decision = "prompt";
+              justification = "Review remote helpers, configuration, hooks, destination paths, and history integration before fetching repository content";
+              match = [
+                "git clone https://example.invalid/repo.git"
+                "git pull --rebase origin topic"
+              ];
             }
             {
               pattern = [
@@ -251,25 +275,6 @@ in
               justification = "Pushing changes shared remote state";
               match = [ "git push origin main" ];
             }
-            {
-              # Prefix rules cannot detect a force flag placed after a remote or
-              # ref, so block the conventional prefix forms explicitly.
-              pattern = [
-                "git"
-                "push"
-                [
-                  "-f"
-                  "--force"
-                ]
-              ];
-              decision = "forbidden";
-              justification = "Push without force, or perform the force-push manually after reviewing remote history";
-              match = [
-                "git push -f origin main"
-                "git push --force origin main"
-              ];
-              notMatch = [ "git push origin main" ];
-            }
           ];
         }
         {
@@ -278,10 +283,17 @@ in
             {
               pattern = [
                 "nur"
-                "check"
               ];
-              justification = "Run the repository's deterministic quality checks";
-              match = [ "nur check" ];
+              # All Nur tasks are intentionally approved, including new tasks
+              # and deployment tasks. This does not establish repository trust
+              # or authorize NixOS deployment; those instructions still apply.
+              justification = "Allow every Nur command and task; execute repository tasks only with the required trust or outer sandbox";
+              match = [
+                "nur --list"
+                "nur check"
+                "nur panoptor list"
+                "nur switch-nixos"
+              ];
             }
           ];
         }
@@ -294,7 +306,12 @@ in
                 "auth"
                 "status"
               ];
-              justification = "Inspect GitHub CLI authentication state";
+              decision = "prompt";
+              justification = "Review authentication status options because --show-token and -t can disclose credentials";
+              match = [
+                "gh auth status"
+                "gh auth status --show-token"
+              ];
             }
             {
               pattern = [
@@ -328,6 +345,32 @@ in
                 ]
               ];
               justification = "Inspect pull requests without changing them";
+            }
+            {
+              pattern = [
+                "gh"
+                "repo"
+                "fork"
+              ];
+              decision = "prompt";
+              justification = "Review remote fork creation, optional cloning, and local remote changes";
+              match = [ "gh repo fork owner/repo --clone" ];
+            }
+            {
+              pattern = [
+                "gh"
+                "repo"
+                "list"
+              ];
+              justification = "List repositories visible to the authenticated GitHub account";
+            }
+            {
+              pattern = [
+                "gh"
+                "search"
+                "prs"
+              ];
+              justification = "Search GitHub pull requests without changing remote state";
             }
           ];
         }
@@ -401,7 +444,6 @@ in
                   "stylua"
                   "nixfmt"
                   "yamlfmt"
-                  "taplo"
                 ]
               ];
               justification = "Allow language diagnostics, automatic fixes, and in-place source formatting";
@@ -409,24 +451,86 @@ in
                 "stylua ."
                 "nixfmt flake.nix"
                 "yamlfmt ."
+              ];
+            }
+            {
+              pattern = [
+                "taplo"
+                [
+                  "format"
+                  "lint"
+                ]
+              ];
+              justification = "Format and validate TOML files without approving unrelated Taplo subcommands";
+              match = [
                 "taplo format pyproject.toml"
+                "taplo lint pyproject.toml"
               ];
             }
           ];
         }
       ];
 
-      # NixOS supplies these commands independently of Home Manager, so they
-      # have rules but deliberately do not pull duplicate packages into HOME.
+      # NixOS and other configuration modules supply these commands outside the
+      # managedTools package groups. Keep their policy here rather than in a
+      # separate saved-approval file so every command has one declarative owner.
       systemRules = [
+        {
+          # The trusted launcher supplies containment independently of Codex
+          # approvals; the worker must still follow repository trust rules.
+          pattern = [ "codex-sandbox" ];
+          justification = "Run the trusted outer sandbox; repository trust and containment requirements still apply";
+        }
+        {
+          pattern = [
+            "nh"
+            "home"
+            "switch"
+          ];
+          decision = "prompt";
+          justification = "Review the selected Home Manager configuration and activation scripts before running them with user privileges";
+          match = [
+            "nh home switch"
+            "nh home switch --file other.nix"
+          ];
+        }
         {
           pattern = [
             "nix"
             "build"
-            "--no-link"
           ];
-          justification = "Build a Nix target without creating a result symlink";
+          decision = "prompt";
+          justification = "Review build targets and options; --no-link suppresses a result symlink but does not restrict evaluation or builds";
           match = [ "nix build --no-link .#checks.x86_64-linux.default" ];
+        }
+        {
+          # Leading flags cannot restrict trailing commands or shell hooks.
+          pattern = [
+            "nix"
+            "develop"
+          ];
+          decision = "prompt";
+          justification = "Review development-shell hooks and arbitrary commands selected with -c before host execution";
+          match = [
+            "nix develop --no-update-lock-file -c nur check"
+            "nix develop -c bash"
+          ];
+        }
+        {
+          pattern = [
+            "nix"
+            "flake"
+            [
+              "check"
+              "metadata"
+            ]
+          ];
+          decision = "prompt";
+          justification = "Review the selected flake and options before evaluation, builds, downloads, or lock-file changes";
+          match = [
+            "nix flake check"
+            "nix flake metadata"
+          ];
         }
         {
           pattern = [
@@ -437,6 +541,13 @@ in
           ];
           justification = "Read-only system version query";
           match = [ "nixos-version" ];
+        }
+        {
+          pattern = [
+            "npm"
+            "view"
+          ];
+          justification = "Read package registry metadata without installing packages or running lifecycle scripts";
         }
         {
           pattern = [

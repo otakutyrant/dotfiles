@@ -63,3 +63,181 @@ prefix_rule(
     decision = "forbidden",
     justification = "Perform installation, repartitioning, and cryptographic setup manually",
 )
+
+# Prefix checks cover conventional spellings only. AGENTS.md applies the same
+# policy to every argument order and equivalent API or wrapper. Branch rewriting
+# remains possible with an explicit lease; unchecked force is forbidden.
+
+prefix_rule(
+    pattern = ["rm", ["-f", "--force", "-rf", "-fr", "-Rf", "-fR", "-rRf", "-rfR", "-Rrf", "-Rfr", "-frR", "-fRr"]],
+    decision = "forbidden",
+    justification = "Use rm -r without force; inspect targets and handle errors explicitly",
+    match = ["rm -rf scratch", "rm -fr scratch", "rm --force -r scratch", "rm -f -r scratch"],
+    not_match = ["rm -r -- scratch"],
+)
+
+prefix_rule(
+    pattern = ["rm", ["-r", "-R", "--recursive"], ["-f", "--force", "-rf", "-fr", "-Rf", "-fR"]],
+    decision = "forbidden",
+    justification = "Recursive removal must not suppress errors with force",
+    match = ["rm -r -f scratch", "rm --recursive --force scratch"],
+)
+
+prefix_rule(
+    pattern = [["cp", "mv", "ln"], ["-f", "--force", "-rf", "-fr", "-Rf", "-fR", "-sf", "-fs", "-Tf", "-fT"]],
+    decision = "forbidden",
+    justification = "Resolve destination conflicts without forced overwrite",
+    match = ["cp -f src dst", "mv --force src dst", "ln -sf src dst"],
+)
+
+prefix_rule(
+    pattern = [["cp", "mv", "ln"], ["-r", "-R", "--recursive", "-s", "--symbolic", "-T"], ["-f", "--force"]],
+    decision = "forbidden",
+    justification = "Resolve destination conflicts without forced overwrite",
+    match = ["cp -r -f src dst", "ln -s -f src dst"],
+)
+
+prefix_rule(
+    pattern = ["rsync", ["--delete", "--delete-before", "--delete-during", "--delete-delay", "--delete-after", "--delete-excluded", "--force", "--ignore-errors", "--inplace"]],
+    decision = "forbidden",
+    justification = "Do not force synchronization or delete destination content",
+    match = ["rsync --delete src/ dst/"],
+)
+
+# An explicit --force-with-lease=<ref>:<expected-commit> replaces the branch only
+# while its remote tip still matches the inspected commit. This prevents losing
+# intervening pushes; it does not lock the branch or reserve it for a time span.
+prefix_rule(
+    pattern = ["git", "push", ["-f", "--force", "--mirror"]],
+    decision = "forbidden",
+    justification = "Replace a branch only with an explicit force-with-lease and reviewed remote tip",
+    match = ["git push -f origin main", "git push --force origin main", "git push --mirror origin"],
+    not_match = ["git push --force-with-lease=refs/heads/topic:abc123 origin HEAD:refs/heads/topic", "git push origin main"],
+)
+
+prefix_rule(
+    pattern = ["git", "reset", "--hard"],
+    decision = "forbidden",
+    justification = "Preserve worktree content; use the scoped branch replacement workflow instead",
+    match = ["git reset --hard HEAD"],
+)
+
+prefix_rule(
+    pattern = ["git", "clean"],
+    decision = "forbidden",
+    justification = "Inspect and remove explicit paths with rm -r instead of Git clean",
+    match = ["git clean -fdx"],
+)
+
+prefix_rule(
+    pattern = ["git", ["checkout", "switch"], ["-f", "--force", "--discard-changes"]],
+    decision = "forbidden",
+    justification = "Preserve local changes when switching branches",
+    match = ["git checkout -f main", "git switch --discard-changes main"],
+    not_match = ["git checkout -B topic", "git switch -C topic"],
+)
+
+prefix_rule(
+    pattern = ["git", "tag", ["-f", "--force"]],
+    decision = "forbidden",
+    justification = "The branch replacement exception does not permit overwriting tags",
+    match = ["git tag -f v1.0"],
+)
+
+prefix_rule(
+    pattern = ["gh", "repo", "sync"],
+    decision = "prompt",
+    justification = "Use an explicit Git lease for branch replacement; ordinary sync requires review",
+    match = ["gh repo sync fork --force"],
+)
+
+prefix_rule(
+    pattern = ["gh", "repo", "sync", "--force"],
+    decision = "forbidden",
+    justification = "Use Git with an explicit force-with-lease instead of an unchecked repository sync",
+    match = ["gh repo sync --force fork"],
+)
+
+prefix_rule(
+    pattern = [["gh", "glab"], "repo", "delete"],
+    decision = "forbidden",
+    justification = "Never delete remote repositories",
+    match = ["gh repo delete owner/repo --yes", "glab repo delete owner/repo"],
+)
+
+prefix_rule(
+    pattern = [["gh", "glab"], "release", "delete"],
+    decision = "forbidden",
+    justification = "Never delete published release artifacts",
+    match = ["gh release delete v1.0", "glab release delete v1.0"],
+)
+
+prefix_rule(
+    pattern = [["npm", "pnpm"], ["unpublish", "unpub"]],
+    decision = "forbidden",
+    justification = "Never remove published packages or versions from a registry",
+    match = ["npm unpublish example --force", "pnpm unpublish example@1.0", "npm unpub example"],
+)
+
+prefix_rule(
+    pattern = ["yarn", "npm", "unpublish"],
+    decision = "forbidden",
+    justification = "Never remove published packages or versions from a registry",
+    match = ["yarn npm unpublish example"],
+)
+
+prefix_rule(
+    pattern = ["cargo", "yank"],
+    decision = "forbidden",
+    justification = "Never yank published package versions",
+    match = ["cargo yank --version 1.0.0 example"],
+)
+
+prefix_rule(
+    pattern = ["gem", "yank"],
+    decision = "forbidden",
+    justification = "Never yank published package versions",
+    match = ["gem yank example -v 1.0.0"],
+)
+
+prefix_rule(
+    pattern = [["npm", "pnpm"], ["install", "i", "add", "update", "up", "publish"], "--force"],
+    decision = "forbidden",
+    justification = "Do not bypass package-manager overwrite and compatibility safeguards",
+    match = ["pnpm install --force", "npm publish --force"],
+)
+
+prefix_rule(
+    pattern = [["npm", "pnpm"], "audit", "fix", "--force"],
+    decision = "forbidden",
+    justification = "Do not force dependency changes that bypass compatibility safeguards",
+    match = ["npm audit fix --force"],
+)
+
+prefix_rule(
+    pattern = ["gh", "api", ["-X", "--method"], "DELETE"],
+    decision = "forbidden",
+    justification = "Never delete remote repositories or packages through an API",
+    match = ["gh api -X DELETE repos/owner/repo"],
+)
+
+prefix_rule(
+    pattern = ["glab", "api", ["-X", "--method"], "DELETE"],
+    decision = "forbidden",
+    justification = "Never delete remote repositories or packages through an API",
+    match = ["glab api --method DELETE projects/123"],
+)
+
+prefix_rule(
+    pattern = [["crane", "skopeo"], "delete"],
+    decision = "forbidden",
+    justification = "Never delete published registry artifacts",
+    match = ["crane delete registry.example/image:tag", "skopeo delete docker://registry.example/image:tag"],
+)
+
+prefix_rule(
+    pattern = ["oras", "manifest", "delete"],
+    decision = "forbidden",
+    justification = "Never delete published registry artifacts",
+    match = ["oras manifest delete registry.example/image:tag"],
+)
