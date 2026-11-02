@@ -164,6 +164,25 @@
       "audit": "\u2014 / \u2014; pending"
     },
     {
+      "id": "package/accountsservice",
+      "priority": 0,
+      "version": "23.13.9",
+      "location": "nixos/modules/desktop.nix",
+      "contexts": "services.accounts-daemon enabled by programs.regreet",
+      "audit": "\u2014 / \u2014; pending",
+      "variants": [
+        {
+          "name": "accountsservice",
+          "path": "/nix/store/cl0mxr0l99516fxji27ip3i7q7x26ndr-accountsservice-23.13.9",
+          "version": "23.13.9",
+          "scope": "services.accounts-daemon enabled by programs.regreet",
+          "declarations": [
+            "nixos/modules/desktop.nix"
+          ]
+        }
+      ]
+    },
+    {
       "id": "package/autostart-clash-verge",
       "priority": 0,
       "version": "unknown",
@@ -566,6 +585,37 @@
       ]
     },
     {
+      "id": "package/regreet",
+      "priority": 0,
+      "version": "0.3.0 + layout patch",
+      "location": "nixos/modules/desktop.nix",
+      "contexts": "programs.regreet.package; transparent left panel and split clock",
+      "audit": "\u2014 / \u2014; pending",
+      "variants": [
+        {
+          "name": "regreet",
+          "path": "/nix/store/pg8awmq9ppg243bbs7cj28wrj60zffdf-regreet-0.3.0",
+          "version": "0.3.0",
+          "scope": "programs.regreet.package",
+          "declarations": [
+            "nixos/modules/desktop.nix"
+          ],
+          "patches": [
+            {
+              "path": "nixos/files/greetd/regreet-layout.patch",
+              "sha256": "664b612c512e4f5b949793734056a5eb31a77db12cf9bc191efe871252138aaa"
+            }
+          ]
+        }
+      ],
+      "patches": [
+        {
+          "path": "nixos/files/greetd/regreet-layout.patch",
+          "sha256": "664b612c512e4f5b949793734056a5eb31a77db12cf9bc191efe871252138aaa"
+        }
+      ]
+    },
+    {
       "id": "package/shadow",
       "priority": 0,
       "version": "4.19.4",
@@ -635,7 +685,7 @@
       "version": "0.11.1",
       "location": "nixos/modules/desktop.nix",
       "contexts": "declaration: tuigreet",
-      "audit": "\u2014 / \u2014; pending",
+      "audit": "\u2014 / \u2014; retired 2026-11-02 (replaced by ReGreet; prior status: pending)",
       "variants": [
         {
           "name": "tuigreet",
@@ -646,7 +696,8 @@
             "nixos/modules/desktop.nix"
           ]
         }
-      ]
+      ],
+      "retired": "2026-11-02"
     },
     {
       "id": "definition/home/pkgs/clipcat.nix",
@@ -2265,10 +2316,28 @@
     {
       "id": "module/nixos/modules/desktop.nix",
       "priority": 2,
-      "version": "sha256:40a1ee1ec58a7f9a3cf68a3a4eb16d88dc405fef04db37d83ba2808284f54625",
+      "version": "sha256:75619e417457c39ac72c754923014f27b72f5c3851bfd18f1e11e4a1039612ed",
       "location": "nixos/modules/desktop.nix",
       "contexts": "local module/helper",
-      "audit": "\u2014 / \u2014; pending"
+      "audit": "\u2014 / \u2014; pending",
+      "sources": [
+        {
+          "path": "nixos/files/greetd/regreet-layout.patch",
+          "sha256": "664b612c512e4f5b949793734056a5eb31a77db12cf9bc191efe871252138aaa"
+        },
+        {
+          "path": "nixos/files/greetd/regreet.css",
+          "sha256": "190974a1edbbacb0c027334744c6030f5c6fdcdbde35fe4194db00a155d00f09"
+        },
+        {
+          "path": "nixos/files/greetd/sway-config",
+          "sha256": "8b7ff89a22df1970fb8c5ed84e04a0cae1438f4b67e41fa24cbc55547ed410fe"
+        },
+        {
+          "path": "nixos/files/greetd/wallpaper.png",
+          "sha256": "fbd6ff957cdbd01564d1ef7945eb6b7e8de63d7f1ba2eddf06fcc2509d95e74e"
+        }
+      ]
     },
     {
       "id": "module/nixos/options/env.nix",
@@ -5796,8 +5865,8 @@
       "id": "package/adwaita-icon-theme",
       "priority": 3,
       "version": "50.0",
-      "location": "home/options/gtk.nix, ",
-      "contexts": "declaration: adwaita-icon-theme, home",
+      "location": "home/options/gtk.nix, nixos/modules/desktop.nix",
+      "contexts": "declaration: adwaita-icon-theme, home, ReGreet icon and cursor theme",
       "audit": "\u2014 / \u2014; pending",
       "variants": [
         {
@@ -5812,7 +5881,8 @@
           "version": "50.0",
           "scope": "declaration: adwaita-icon-theme",
           "declarations": [
-            "home/options/gtk.nix"
+            "home/options/gtk.nix",
+            "nixos/modules/desktop.nix"
           ]
         }
       ]
@@ -5913,6 +5983,25 @@
           "path": "/nix/store/av0kbs7p2cpkyb1rgypjn0vki0inwfbw-fontconfig-2.17.1-bin",
           "version": "2.17.1",
           "scope": "system/fonts"
+        }
+      ]
+    },
+    {
+      "id": "package/gnome-themes-extra",
+      "priority": 3,
+      "version": "3.28",
+      "location": "nixos/modules/desktop.nix",
+      "contexts": "programs.regreet.theme.package",
+      "audit": "\u2014 / \u2014; pending",
+      "variants": [
+        {
+          "name": "gnome-themes-extra",
+          "path": "/nix/store/26gfyqd3152r3138d33y19sf49klvc3i-gnome-themes-extra-3.28",
+          "version": "3.28",
+          "scope": "programs.regreet.theme.package",
+          "declarations": [
+            "nixos/modules/desktop.nix"
+          ]
         }
       ]
     },

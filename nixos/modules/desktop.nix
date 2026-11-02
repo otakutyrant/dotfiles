@@ -1,4 +1,5 @@
 {
+  config,
   lib,
   pkgs,
   ...
@@ -25,12 +26,47 @@
   # Sway imports its live Wayland environment and restarts Elephant itself.
   systemd.user.services.elephant.wantedBy = [ ];
 
-  # greetd starts the system-provided Sway session after an explicit login.
+  # A graphical greeter keeps login readable at the center display's native
+  # resolution. Its isolated Sway config must not start user-session services.
+  programs.regreet = {
+    enable = true;
+    # Keep the reference layout in ReGreet: a transparent left column with a
+    # large clock above the form. CSS alone cannot change GTK alignments.
+    package = pkgs.regreet.overrideAttrs (old: {
+      patches = (old.patches or [ ]) ++ [ ../files/greetd/regreet-layout.patch ];
+    });
+    font = {
+      package = pkgs.local.sarasa-fixed-sc;
+      name = "Sarasa Fixed SC";
+      size = 16;
+    };
+    extraCss = ../files/greetd/regreet.css;
+    settings = {
+      GTK.application_prefer_dark_theme = true;
+      background = {
+        # Snapshot the selected Nutstore artwork into the store so login does
+        # not depend on the home directory or the sync client being available.
+        path = "${../files/greetd/wallpaper.png}";
+        fit = "Cover";
+      };
+      appearance.greeting_msg = "";
+      widget.clock = {
+        format = "%H:%M\n%A %d %B";
+        resolution = "1s";
+      };
+    };
+  };
+
+  environment.etc."greetd/sway-config".source = pkgs.replaceVars ../files/greetd/sway-config {
+    regreet = lib.getExe config.programs.regreet.package;
+    swaymsg = "${pkgs.local.sway}/bin/swaymsg";
+  };
+
   services.greetd = {
     enable = true;
     settings.default_session = {
-      # Keep greetd on the same Sway package as the NixOS session wrapper.
-      command = "${pkgs.tuigreet}/bin/tuigreet --time --remember --cmd '${pkgs.local.sway}/bin/sway --unsupported-gpu'";
+      # Use the same compositor and NVIDIA flag as the authenticated session.
+      command = "${pkgs.dbus}/bin/dbus-run-session ${pkgs.local.sway}/bin/sway --unsupported-gpu --config /etc/greetd/sway-config";
       user = "greeter";
     };
   };

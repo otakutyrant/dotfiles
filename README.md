@@ -50,6 +50,15 @@ three-monitor layout and NVIDIA-specific settings; inspect
 [the Sway configuration](home/files/config/sway/config) and
 [NVIDIA options](nixos/options/nvidia.nix) when adapting it to other hardware.
 
+ReGreet provides a graphical login on the center display, with Sarasa text and a
+transparent panel on the left over the selected 白色魔装鬼 wallpaper. A local UI
+patch places the large clock, form, and power controls in one column, following
+the Astronaut Purple Leaves layout and Hyprland Kath alignment. The portrait
+displays stay asleep until login. Its isolated
+[greeter configuration](nixos/files/greetd/sway-config) starts no desktop
+applications; the normal Sway session starts after authentication. The
+[greeter stylesheet](nixos/files/greetd/regreet.css) owns its appearance.
+
 The desktop brings together:
 
 - Ironbar for workspaces, tray icons, and system information, including a

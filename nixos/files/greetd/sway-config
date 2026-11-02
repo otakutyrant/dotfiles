@@ -1,0 +1,17 @@
+# The login interface belongs on the landscape center display. Keep the
+# portrait side displays asleep until the authenticated desktop takes over.
+output DP-1 disable
+output DP-2 disable
+output DP-3 mode 2560x1440 position 0 0 scale 1
+output * bg #101820 solid_color
+
+# This is a greeter compositor, so do not load the desktop's autostart or
+# systemd session integration. VT switching remains available for recovery.
+xwayland disable
+seat * xcursor_theme Adwaita 24
+default_border none
+for_window [app_id="apps.regreet"] fullscreen enable
+
+# The greeter has no desktop portal services. Release the display when ReGreet
+# hands the authenticated session to greetd.
+exec "GDK_DEBUG=no-portals @regreet@; @swaymsg@ exit"

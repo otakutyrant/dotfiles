@@ -1,0 +1,127 @@
+/* The login column follows the Astronaut references. A light tint behind the
+ * whole column keeps the artwork visible while grouping the login controls. */
+window {
+  color: #c8ddfa;
+  background-color: #101622;
+}
+
+.login-panel,
+.clock-frame,
+.login-panel > border,
+.clock-frame > border {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+}
+
+.login-column {
+  background: alpha(#10182d, 0.45);
+  border: none;
+  border-radius: 0;
+  padding: 180px 0 150px;
+  box-shadow: none;
+}
+
+.login-column frame {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+}
+
+label {
+  text-shadow: 0 2px 6px alpha(#000000, 0.85);
+}
+
+.clock-time {
+  font-size: 144px;
+  font-weight: bold;
+  letter-spacing: -5px;
+}
+
+.clock-date {
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.login-message {
+  font-size: 18px;
+  font-weight: normal;
+}
+
+entry,
+combobox button {
+  min-height: 48px;
+  border-radius: 28px;
+  padding: 0 20px;
+  background-image: none;
+  background-color: alpha(#10182d, 0.65);
+  color: #dceaff;
+  border: 1px solid alpha(#c8ddfa, 0.15);
+  box-shadow: none;
+}
+
+entry:focus-within,
+combobox button:focus-visible {
+  border-color: #b6d5ff;
+  box-shadow: 0 0 0 2px alpha(#b6d5ff, 0.3);
+}
+
+button {
+  min-height: 42px;
+  padding: 4px 16px;
+  border-radius: 24px;
+  background-image: none;
+  background-color: alpha(#10182d, 0.55);
+  color: #c8ddfa;
+  border: 1px solid transparent;
+  box-shadow: none;
+  text-shadow: none;
+}
+
+button:hover {
+  background-color: alpha(#263b5b, 0.8);
+}
+
+button:focus-visible {
+  outline: 2px solid #b6d5ff;
+  outline-offset: 3px;
+}
+
+button.suggested-action {
+  background-color: #b6d5ff;
+  color: #142039;
+  font-weight: bold;
+}
+
+button.suggested-action:hover {
+  background-color: #d4e6ff;
+}
+
+button.suggested-action label,
+button.power-action label {
+  text-shadow: none;
+}
+
+button.cancel-action {
+  min-height: 24px;
+  padding: 0 16px;
+  background: transparent;
+  font-size: 15px;
+}
+
+button.power-action {
+  background: transparent;
+  border: none;
+  padding: 12px 28px;
+  font-size: 15px;
+}
+
+button.power-action:hover {
+  background-color: alpha(#10182d, 0.5);
+}
+
+infobar {
+  background-color: alpha(#481f2b, 0.9);
+  color: #ffffff;
+  border-radius: 12px;
+}
