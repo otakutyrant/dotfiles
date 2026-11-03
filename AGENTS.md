@@ -71,6 +71,12 @@ Yihui's roles.
   owning Nix module with `source`. Use inline `text` only for small values that
   Nix must generate or interpolate. Change a raw file and its owner together
   when their interface moves.
+- Whenever declaring a GUI client, ensure it has a desktop entry discoverable by
+  the application launcher. Reuse the package's desktop entry when available;
+  otherwise create one automatically in the same change, keeping its raw source
+  under `home/files/applications` and installing it through `xdg.dataFile` in
+  the owning Home Manager module. Use the declared package's executable and
+  icon.
 - User configuration and runtime state must obey the XDG Base Directory
   specification wherever the application permits it. Install files through the
   semantic Home Manager options (`xdg.configFile`, `xdg.dataFile`, and
