@@ -966,7 +966,7 @@
     {
       "id": "module/home/options/services/walker.nix",
       "priority": 1,
-      "version": "sha256:7088fcd094d50b51a515e62d7e867804893d6b65605803e07fd0c5489f9bb2ac",
+      "version": "sha256:aec0d790c7e4b478c1d77d8891b989bddc0c77d59fe10c40ba2dd4e493ea0469",
       "location": "home/options/services/walker.nix",
       "contexts": "local module/helper",
       "audit": "\u2014 / \u2014; pending"

@@ -49,6 +49,10 @@ On 2026-11-03, Typora 1.14.9 was declared in the GUI package group. Its package
 identity and the owning module digest were added or refreshed together; both
 remain pending audit.
 
+On 2026-11-03, the Walker module gained an activation hook to refresh an already
+running Elephant after profile and desktop-link updates. Its module digest was
+refreshed; its audit status remains pending.
+
 The last column records audit date / audited version and coverage status. A dash
 means no audit is recorded in the current baseline. All entities are pending
 after the user-requested reset. See [ledger.md](ledger.md) for completion
@@ -134,7 +138,7 @@ requirements.
 | P1       | `module/home/options/services/network-manager-applet.nix` | `sha256:2de08156c47c`                      | home/options/services/network-manager-applet.nix                                                                                                                                                               | — / —; pending                    |
 | P1       | `module/home/options/services/rqbit.nix`                  | `sha256:03a7af272e14`                      | home/options/services/rqbit.nix                                                                                                                                                                                | — / —; pending                    |
 | P1       | `module/home/options/services/swayidle.nix`               | `sha256:9ba3f2c272b2`                      | home/options/services/swayidle.nix                                                                                                                                                                             | — / —; pending                    |
-| P1       | `module/home/options/services/walker.nix`                 | `sha256:7088fcd094d5`                      | home/options/services/walker.nix                                                                                                                                                                               | — / —; pending                    |
+| P1       | `module/home/options/services/walker.nix`                 | `sha256:aec0d790c7e4`                      | home/options/services/walker.nix                                                                                                                                                                               | — / —; pending                    |
 | P1       | `module/nixos/modules/development.nix`                    | `sha256:45f74c928c72`                      | nixos/modules/development.nix                                                                                                                                                                                  | — / —; pending                    |
 | P1       | `module/nixos/options/audio.nix`                          | `sha256:52d929e22fe4`                      | nixos/options/audio.nix                                                                                                                                                                                        | — / —; pending                    |
 | P1       | `module/nixos/options/bluetooth.nix`                      | `sha256:66334821f091`                      | nixos/options/bluetooth.nix                                                                                                                                                                                    | — / —; pending                    |
