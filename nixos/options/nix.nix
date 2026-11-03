@@ -3,6 +3,8 @@
 {
   # Configure Nix itself separately from the packages and services it builds.
   nix.settings = {
+    # Deduplicate new store files to keep disk usage down between cleanups.
+    auto-optimise-store = true;
     # Use XDG state directories for profiles, including the user profile under
     # ~/.local/state/nix/profile.
     use-xdg-base-directories = true;

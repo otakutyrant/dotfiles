@@ -142,7 +142,7 @@
     {
       "id": "module/nixos/options/nix.nix",
       "priority": 0,
-      "version": "sha256:89203d54b5c41910aff504c05c54c700516777cfec4f736d00b8fef33726df52",
+      "version": "sha256:7ca9d09aec02f675b42027f26d7c22e42478d0aab4cfce0df57b51610966cccc",
       "location": "nixos/options/nix.nix",
       "contexts": "local module/helper",
       "audit": "\u2014 / \u2014; pending"
