@@ -846,7 +846,7 @@
     {
       "id": "module/home/modules/gui-clients.nix",
       "priority": 1,
-      "version": "sha256:4c25d12b404b3e51008c574171b80535064254d5af01c221d6094e2e96da0a7f",
+      "version": "sha256:3ce1de62dac0b31a1944571d4b9071ab02cb710380fd2d0afadf37e3f632b23f",
       "location": "home/modules/gui-clients.nix",
       "contexts": "local module/helper",
       "audit": "\u2014 / \u2014; pending"
@@ -1876,6 +1876,31 @@
           "path": "/nix/store/phzf14wa4m39smjx51lq2xngqk9k7imr-ticktick-8.0.10",
           "version": "8.0.10",
           "scope": "declaration: ticktick",
+          "declarations": [
+            "home/modules/gui-clients.nix"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "package/typora",
+      "priority": 1,
+      "version": "1.14.9",
+      "location": "home/modules/gui-clients.nix",
+      "contexts": "declaration: typora, home",
+      "audit": "\u2014 / \u2014; pending",
+      "variants": [
+        {
+          "name": "typora",
+          "path": "/nix/store/vzvd0idxl9y1hdbcbbfx32qf354c8sz0-typora-1.14.9",
+          "version": "1.14.9",
+          "scope": "home"
+        },
+        {
+          "name": "typora",
+          "path": "/nix/store/vzvd0idxl9y1hdbcbbfx32qf354c8sz0-typora-1.14.9",
+          "version": "1.14.9",
+          "scope": "declaration: typora",
           "declarations": [
             "home/modules/gui-clients.nix"
           ]

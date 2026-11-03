@@ -42,6 +42,7 @@ in
     }) # WeChat bundles the Fcitx Qt plugin but only enables it via QT_IM_MODULE.
     pkgs.unstable.qq # QQ messaging client with native Wayland input support.
     pkgs.ticktick # Time management client.
+    pkgs.typora # Markdown editor and reader; includes its desktop entry.
     (withFcitxQt {
       package = pkgs.qt6Packages.fcitx5-configtool;
       executables = [
