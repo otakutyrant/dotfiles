@@ -846,7 +846,7 @@
     {
       "id": "module/home/modules/gui-clients.nix",
       "priority": 1,
-      "version": "sha256:130659122911e87f7bc3087405187352d2a8eeaa3de23ccb9bef524963fca6c6",
+      "version": "sha256:4c25d12b404b3e51008c574171b80535064254d5af01c221d6094e2e96da0a7f",
       "location": "home/modules/gui-clients.nix",
       "contexts": "local module/helper",
       "audit": "\u2014 / \u2014; pending"
@@ -1669,6 +1669,26 @@
       ]
     },
     {
+      "id": "package/qq",
+      "priority": 1,
+      "version": "3.2.34-2026-09-24",
+      "location": "home/modules/gui-clients.nix, home/options/xdg.nix",
+      "contexts": "declaration: unstable.qq",
+      "audit": "\u2014 / \u2014; pending",
+      "variants": [
+        {
+          "name": "qq",
+          "path": "/nix/store/78c4314w3p96la81qxbnil0yw9yi7yf2-qq-3.2.34-2026-09-24",
+          "version": "3.2.34-2026-09-24",
+          "scope": "declaration: unstable.qq",
+          "declarations": [
+            "home/modules/gui-clients.nix",
+            "home/options/xdg.nix"
+          ]
+        }
+      ]
+    },
+    {
       "id": "package/rqbit",
       "priority": 1,
       "version": "9.0.1",
@@ -2300,7 +2320,7 @@
     {
       "id": "module/home/options/xdg.nix",
       "priority": 2,
-      "version": "sha256:f16b9d2fd9f3be6e9e6e550b5c88f1db66e67c878232e14a8bc45cc4ea582775",
+      "version": "sha256:f3d687a781075c56b280da6898234e14491a4108062bb76e96e84fcdb37ad5ba",
       "location": "home/options/xdg.nix",
       "contexts": "local module/helper",
       "audit": "\u2014 / \u2014; pending"

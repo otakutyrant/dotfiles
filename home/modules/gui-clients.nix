@@ -40,6 +40,7 @@ in
         (toString config.home.pointerCursor.size)
       ];
     }) # WeChat bundles the Fcitx Qt plugin but only enables it via QT_IM_MODULE.
+    pkgs.unstable.qq # QQ messaging client with native Wayland input support.
     pkgs.ticktick # Time management client.
     (withFcitxQt {
       package = pkgs.qt6Packages.fcitx5-configtool;

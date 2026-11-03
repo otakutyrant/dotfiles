@@ -104,6 +104,9 @@ in
       };
   xdg.dataFile."applications/qbittorrent.desktop".source = qbittorrentDesktopEntry;
 
+  # Expose QQ's packaged launcher directly in the user's XDG application menu.
+  xdg.dataFile."applications/qq.desktop".source = "${pkgs.unstable.qq}/share/applications/qq.desktop";
+
   xdg.dataFile."applications/poweroff.desktop".source = ../files/applications/poweroff.desktop;
   xdg.dataFile."applications/reboot.desktop".source = ../files/applications/reboot.desktop;
   xdg.dataFile."applications/screenshot-all-monitors.desktop".source =
