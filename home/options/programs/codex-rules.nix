@@ -144,7 +144,6 @@ in
             }
             {
               pattern = [ "actionlint" ];
-              decision = "prompt";
               justification = "Review workflow linting that can select external executables through tool options";
               match = [ "actionlint .github/workflows/check.yml" ];
             }
@@ -219,7 +218,6 @@ in
               ];
               # Trailing flags can re-enable external drivers or choose output
               # files, so a supposedly safe leading flag cannot narrow this.
-              decision = "prompt";
               justification = "Review diff options that can write output files or execute external diff and text-conversion drivers";
               match = [
                 "git diff"
@@ -232,7 +230,6 @@ in
                 "git"
                 "add"
               ];
-              decision = "prompt";
               justification = "Review staged paths; force-add can include ignored secrets and broad pathspecs can include unrelated work";
               match = [ "git add home/options/programs/codex-rules.nix" ];
             }
@@ -241,7 +238,6 @@ in
                 "git"
                 "commit"
               ];
-              decision = "prompt";
               justification = "Review commit scope, history amendments, hook execution, and verification bypass options";
               match = [ "git commit -m 'feat(codex): manage command rules'" ];
             }
@@ -253,7 +249,6 @@ in
                   "pull"
                 ]
               ];
-              decision = "prompt";
               justification = "Review remote helpers, configuration, hooks, destination paths, and history integration before fetching repository content";
               match = [
                 "git clone https://example.invalid/repo.git"
@@ -265,7 +260,6 @@ in
                 "git"
                 "reset"
               ];
-              decision = "prompt";
               justification = "Reset can rewrite the index, worktree, or branch history";
               match = [ "git reset --soft HEAD~1" ];
             }
@@ -274,7 +268,6 @@ in
                 "git"
                 "push"
               ];
-              decision = "prompt";
               justification = "Pushing changes shared remote state";
               match = [ "git push origin main" ];
             }
@@ -309,7 +302,6 @@ in
                 "auth"
                 "status"
               ];
-              decision = "prompt";
               justification = "Review authentication status options because --show-token and -t can disclose credentials";
               match = [
                 "gh auth status"
@@ -355,7 +347,6 @@ in
                 "repo"
                 "fork"
               ];
-              decision = "prompt";
               justification = "Review remote fork creation, optional cloning, and local remote changes";
               match = [ "gh repo fork owner/repo --clone" ];
             }
@@ -490,7 +481,6 @@ in
             "home"
             "switch"
           ];
-          decision = "prompt";
           justification = "Review the selected Home Manager configuration and activation scripts before running them with user privileges";
           match = [
             "nh home switch"
@@ -502,7 +492,6 @@ in
             "nix"
             "build"
           ];
-          decision = "prompt";
           justification = "Review build targets and options; --no-link suppresses a result symlink but does not restrict evaluation or builds";
           match = [ "nix build --no-link .#checks.x86_64-linux.default" ];
         }
@@ -512,7 +501,6 @@ in
             "nix"
             "develop"
           ];
-          decision = "prompt";
           justification = "Review development-shell hooks and arbitrary commands selected with -c before host execution";
           match = [
             "nix develop --no-update-lock-file -c nur check"
@@ -528,7 +516,6 @@ in
               "metadata"
             ]
           ];
-          decision = "prompt";
           justification = "Review the selected flake and options before evaluation, builds, downloads, or lock-file changes";
           match = [
             "nix flake check"
