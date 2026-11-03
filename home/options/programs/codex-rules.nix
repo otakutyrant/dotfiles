@@ -85,6 +85,7 @@ let
 
     ${lib.concatMapStringsSep "\n" renderRule (managedRules ++ cfg.systemRules)}
   '';
+  toolsRulesSource = pkgs.writeText "codex-tools.rules" renderedToolsRules;
 in
 {
   options.programs.codex = {
@@ -109,14 +110,16 @@ in
   };
 
   config = {
-    programs.codex = {
-      # Let the upstream Home Manager module place these under CODEX_HOME so
-      # home.preferXdgDirectories applies consistently.
-      rules = {
-        tools = renderedToolsRules;
-        safety = ../../files/codex/safety.rules;
-      };
+    # Codex 0.163.0 skips symlinked .rules files. Copy the declarative sources
+    # after Home Manager removes the former managed links; leave default.rules
+    # under Codex's control and preserve changed copies before refreshing them.
+    home.activation.copyCodexRules = lib.hm.dag.entryAfter [ "linkGeneration" ] ''
+      run ${pkgs.nushell}/bin/nu --no-config-file ${../../files/libexec/copy_codex_rules.nu} \
+        ${lib.escapeShellArg "${config.xdg.configHome}/codex/rules"} \
+        ${toolsRulesSource} ${../../files/codex/safety.rules}
+    '';
 
+    programs.codex = {
       managedTools = [
         {
           packages = [

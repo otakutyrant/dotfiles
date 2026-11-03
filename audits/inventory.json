@@ -54,7 +54,7 @@
     {
       "id": "module/home/options/programs/codex-rules.nix",
       "priority": 0,
-      "version": "sha256:baa141c97a0348d2bf409162216d59924be977b89a4063d428705cb2c79aea82",
+      "version": "sha256:aabe4830488a88457b3d2bc7f4f3f3e32f21ea2f39ae4b2f95bab18e1fde7850",
       "location": "home/options/programs/codex-rules.nix",
       "contexts": "local module/helper",
       "audit": "\u2014 / \u2014; pending"
@@ -6436,6 +6436,10 @@
     {
       "path": "home/files/config/wired/wired.ron",
       "sha256": "1577f2755a59c57b8151aa853a72c0a1ca180e56062f753458da05e41cabc9d6"
+    },
+    {
+      "path": "home/files/libexec/copy_codex_rules.nu",
+      "sha256": "06db8adb3b5e646175e093d0fce1a3184179d4a11a10e8950b8c64d2d1acedac"
     },
     {
       "path": "home/files/libexec/gpu_status.nu",
