@@ -155,6 +155,11 @@ in
   # the declared XDG user-directory layout is kept complete.
   xdg.userDirs.enable = true;
   xdg.userDirs.createDirectories = true;
+  # Mapping a special directory to Home hides its GTK sidebar entry without
+  # removing existing files. Projects also needs a bookmark for older GTK clients.
+  xdg.userDirs.documents = home;
+  xdg.userDirs.music = home;
+  xdg.userDirs.projects = "${home}/Projects";
   # xdg-user-dirs may create this file before Home Manager manages it.
   xdg.configFile."user-dirs.dirs".force = true;
 }

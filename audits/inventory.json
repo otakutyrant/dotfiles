@@ -2265,7 +2265,7 @@
     {
       "id": "module/home/options/gtk.nix",
       "priority": 2,
-      "version": "sha256:cfeec8504c340bb5bcf1443874d85c5ddd6295f738bd7ef884b5b88a8547b1cc",
+      "version": "sha256:72c7dd1dd9b6796e79a35b939e7c8062b0d5a457862fd3a53f0b0066853cf2eb",
       "location": "home/options/gtk.nix",
       "contexts": "local module/helper",
       "audit": "\u2014 / \u2014; pending"
@@ -2345,7 +2345,7 @@
     {
       "id": "module/home/options/xdg.nix",
       "priority": 2,
-      "version": "sha256:f3d687a781075c56b280da6898234e14491a4108062bb76e96e84fcdb37ad5ba",
+      "version": "sha256:d793f793bb23023e957533a928f3e1f82387a24b1210544ed364ea0cd303f02a",
       "location": "home/options/xdg.nix",
       "contexts": "local module/helper",
       "audit": "\u2014 / \u2014; pending"

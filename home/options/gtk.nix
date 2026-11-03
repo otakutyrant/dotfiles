@@ -24,10 +24,12 @@ in
       name = "Adwaita";
     };
     gtk3 = {
+      # Keep sidebar bookmarks alphabetical by displayed name, not full path.
       bookmarks = [
-        "file://${home}/Pictures/Screenshots"
-        "file://${home}/Nutstore%20Files/Nutstore"
         "file://${home}/Downloads"
+        "file://${home}/Nutstore%20Files/Nutstore"
+        "file://${home}/Projects"
+        "file://${home}/Pictures/Screenshots"
         "file://${home}/Videos"
       ];
     };
