@@ -118,6 +118,12 @@ Codex command rules are managed by dotfiles. Persist command policy changes in
 `home/files/codex/safety.rules`, then activate Home Manager. The installed
 `tools.rules` and `safety.rules` files are immutable Nix sources.
 
+# Prefer Nix's new command interface.
+
+Use `nix <subcommand>` whenever it provides the required operation. For example,
+use `nix store optimise` instead of `nix-store --optimise`. Use legacy commands
+only when the new interface lacks the required functionality.
+
 # Copy text through Clipcat.
 
 When asked to copy text, run `clipcatctl insert "<text>"` directly in Nushell.
