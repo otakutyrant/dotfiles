@@ -10,10 +10,10 @@ The repository is a NixOS and Home Manager configuration built primarily with
 Nix, with Lua application configuration and Nushell automation; it deliberately
 has no application framework or separate language package graph.
 
-Read `nurfile` and `tasks.nu` before changing tooling or workflows. Read the
-relevant README section before changing user-visible desktop behavior. When
-working below `home/`, `nixos/`, or `lib/`, inspect that tree's configuration
-entrypoint and the module or helper that owns the affected file.
+Read `nurfile` before changing tooling or workflows. Read the relevant README
+section before changing user-visible desktop behavior. When working below
+`home/`, `nixos/`, or `lib/`, inspect that tree's configuration entrypoint and
+the module or helper that owns the affected file.
 
 ## Development environment and commands
 

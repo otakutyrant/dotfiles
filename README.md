@@ -141,7 +141,7 @@ The authoritative bindings live in the
 | `home/pkgs`                      | Local derivations exposed through `pkgs.local`                                        |
 | `home/files`                     | Application configuration, scripts, desktop entries, and agent instructions           |
 | `lib`                            | Shared Nix helpers                                                                    |
-| `nurfile`, `tasks.nu`, `tasks/`  | Discoverable repository commands and Panoptor controls                                |
+| `nurfile`                        | Discoverable repository commands and Panoptor controls                                |
 | `process-compose.yaml`           | Panoptor validation roles and file watches                                            |
 | `audits`                         | Security inventory, ledger, and retained evidence                                     |
 | `docs`                           | Development and tool-selection conventions                                            |

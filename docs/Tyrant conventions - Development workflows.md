@@ -4,10 +4,12 @@ This is a Tyrant convention.
 
 ## Task catalog
 
-Keep the root `nurfile` small and split a growing catalog into focused Nushell
-modules. A task is important when it is a common entrypoint, composes commands,
-prepares state, controls a long-running process, or preserves ordering, cleanup,
-safety, or environment boundaries.
+Keep the complete task catalog in a single root `nurfile` without importing task
+modules while it remains manageable. Split it only when its complexity warrants
+multiple modules; place those implementations under `tasks/` and import them
+from `nurfile`. A task is important when it is a common entrypoint, composes
+commands, prepares state, controls a long-running process, or preserves
+ordering, cleanup, safety, or environment boundaries.
 
 Provide applicable focused commands for formatting, linting, type checking,
 architecture, tests, licenses, vulnerabilities, builds, frameworks, generated
