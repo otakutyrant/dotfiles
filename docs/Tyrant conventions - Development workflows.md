@@ -50,6 +50,10 @@ Panoptor is a persistent, language-agnostic Process Compose session for useful
 validation watches, servers, workers, local services, and runtime health. Every
 process invokes a Nur task; Process Compose does not own command implementation.
 
+Provide a standalone `nur panoptor` command. Invoking it without a subcommand
+must show the available subcommands and their usage, without starting or
+changing the session.
+
 Start headlessly by default and attach the TUI on demand. Attaching must not
 start duplicate roles, detaching must leave the session running, and stopping
 must terminate roles and the server. Keep headless composite workflows usable;

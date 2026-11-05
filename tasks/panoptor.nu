@@ -152,6 +152,14 @@ def stop-panoptor [] {
     print "Dotfiles Panoptor stopped."
 }
 
+# Show every subcommand's usage without accessing or changing session state.
+export def "nur panoptor" []: nothing -> string {
+    help commands
+    | where name =~ '^nur panoptor '
+    | each {|command| help $command.name }
+    | str join "\n\n"
+}
+
 # Validate the checked-in Process Compose graph without starting its roles.
 export def "nur panoptor check" [] {
     with-env {PANOPTOR_PROJECT_ROOT: (repository-root)} {
