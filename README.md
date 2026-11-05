@@ -119,6 +119,9 @@ arrange containers vertically and horizontally, and `Super+t` selects a tabbed
 layout. Kitty uses `Alt+s` and `Alt+v` to launch horizontal and vertical splits,
 with `Alt+n` for a new tab.
 
+`Super+Shift+l` locks the screen while keeping the Sway session and running
+applications open.
+
 The authoritative bindings live in the
 [Sway configuration](home/files/config/sway/config),
 [Kitty module](home/options/programs/kitty.nix), and

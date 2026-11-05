@@ -176,8 +176,10 @@ bindsym $mod+n exec nautilus
 bindsym $mod+c exec google-chrome-stable
 # Start the warm Walker service and open it with mod+d.
 bindsym $mod+d exec --no-startup-id walker
-# Lock
-bindsym $mod+shift+l exec swaylock -f
+# Keep Swaylock so authentication preserves the session and running applications.
+# Returning to ReGreet while preserving this session would require custom session
+# switching or a different display manager; that complexity is not wanted here.
+bindsym $mod+Shift+l exec swaylock -f
 # Select a Clipcat item, then paste it into the application that had focus
 # before Walker opened. `&&` prevents a paste if the menu is cancelled.
 bindsym $mod+p exec --no-startup-id clipcat-menu insert && wdotool key --clearmodifiers ctrl+v
