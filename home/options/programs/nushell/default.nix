@@ -48,7 +48,7 @@ in
       # Enables ssh trusted X11 forwarding. So you can access the X of remote hosts.
       ssh = "ssh -Y";
 
-      # Show Git status for direct repository subdirectories.
+      # Show ~/Projects repository status from any working directory.
       gss = "git-status-subdirs";
 
       # Push direct child repositories in ~/Projects to their configured upstreams.

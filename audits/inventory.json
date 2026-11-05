@@ -894,7 +894,7 @@
     {
       "id": "module/home/options/programs/nushell/default.nix",
       "priority": 1,
-      "version": "sha256:36cf4cffc7aaebfcfc55980d26a89ef7518d421ba7ea2cb5371450de637dc229",
+      "version": "sha256:088bc76b464ed18ede2a534f0bb4c03cc11527561b63a005925a0e95e7c1d774",
       "location": "home/options/programs/nushell/default.nix",
       "contexts": "local module/helper",
       "audit": "\u2014 / \u2014; pending"
@@ -6500,7 +6500,7 @@
     },
     {
       "path": "home/options/programs/nushell/extra-config.nu",
-      "sha256": "bcf3b6cf29f56a43e3075f980fecacf3df20834599d84d28bd3f446ab8b0328a"
+      "sha256": "25c259ceffd9c5065a616bb0bb30fa664a9480c70fd7e9effacb1716bab50804"
     },
     {
       "path": "nixos/files/nvidia/50-limit-free-buffer-pool-in-wayland-compositors.json",

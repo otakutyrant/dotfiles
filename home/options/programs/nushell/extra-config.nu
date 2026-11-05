@@ -27,14 +27,15 @@ def highlight-path [path: string, clean: bool] {
     $"(ansi $color)(ansi bo)($path)(ansi reset)"
 }
 
-# Show Git status for direct child directories that are repository roots.
-def git-status-subdirs [] {
-    let current = (pwd)
+# Show direct child repository status in ~/Projects from any working directory.
+# An explicit directory overrides the default without changing the caller's cwd.
+def git-status-subdirs [directory?: path] {
+    let directory = $directory | default "~/Projects" | path expand
 
-    ls
+    ls $directory
     | where type == dir
     | each {|entry|
-        let path = $current | path join $entry.name
+        let path = $entry.name | path expand
         let root = (^git --no-optional-locks -C $path rev-parse --show-toplevel | complete)
         if $root.exit_code != 0 or ($root.stdout | str trim) != $path {
             return null
@@ -61,7 +62,7 @@ def git-status-subdirs [] {
         let clean = $ahead == 0 and $behind == 0 and $staged == 0 and $unstaged == 0 and $untracked == 0
 
         {
-            path: (highlight-path $entry.name $clean),
+            path: (highlight-path ($path | path basename) $clean),
             branch: $branch,
             ahead: (highlight-count $ahead cyan),
             behind: (highlight-count $behind red),
