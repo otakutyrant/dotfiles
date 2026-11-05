@@ -894,7 +894,7 @@
     {
       "id": "module/home/options/programs/nushell/default.nix",
       "priority": 1,
-      "version": "sha256:ead332ac58b388a4d2f42d21ef7235273070055613ad1e266b087d6184d865ce",
+      "version": "sha256:0ee98f0d1822e2a4e52a365ecb5fce64b7f5d26c1fc55631e79afcb31a0dd312",
       "location": "home/options/programs/nushell/default.nix",
       "contexts": "local module/helper",
       "audit": "\u2014 / \u2014; pending"

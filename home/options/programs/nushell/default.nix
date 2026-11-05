@@ -51,6 +51,11 @@ in
       # Show Git status for direct repository subdirectories.
       gss = "git-status-subdirs";
 
+      # --keep 1 retains at least one generation per Nix profile.
+      # --keep-one preserves active direnv GC roots so cleanup does not discard
+      # cached project environments and require their packages to be fetched again.
+      nhc = "nh clean all --keep 1 --keep-one";
+
     };
     # `with pkgs.nushellPlugins;` lets the list use plugin package names
     # directly. These packages are registered by Home Manager so Nushell can
