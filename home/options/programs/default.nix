@@ -45,6 +45,13 @@ in
     package = withFcitxQt {
       package = pkgs.obs-studio;
       executables = [ "obs" ];
+      # OBS 32.1.2 crashes in its Wayland keyboard modifier handler under Sway,
+      # including in Safe Mode. XWayland allows normal startup with Fcitx input.
+      extraWrapperArgs = [
+        "--set"
+        "QT_QPA_PLATFORM"
+        "xcb"
+      ];
     };
   };
   programs.ripgrep.enable = true; # Grep alternative.

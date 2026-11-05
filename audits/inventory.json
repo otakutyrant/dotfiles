@@ -2273,7 +2273,7 @@
     {
       "id": "module/home/options/programs/default.nix",
       "priority": 2,
-      "version": "sha256:56cb47e07c74e492c5f8c188a53569510d82d33bb18dfa8fc25248b5ff6ec538",
+      "version": "sha256:f5712ee5a45c9f15a29cd097bf04d3ac188735bd8f4223e86ca1601b99b2b12a",
       "location": "home/options/programs/default.nix",
       "contexts": "local module/helper",
       "audit": "\u2014 / \u2014; pending"
@@ -5678,7 +5678,7 @@
       "variants": [
         {
           "name": "wrapped-obs-studio-with-fcitx-qt",
-          "path": "/nix/store/q98p7li8r2iwzv4d18phm7maihdsk7i3-wrapped-obs-studio-with-fcitx-qt",
+          "path": "/nix/store/qjpw43918wk2ffamzajm2npmac31rhc6-wrapped-obs-studio-with-fcitx-qt",
           "version": "unknown",
           "scope": "home"
         }
