@@ -1,8 +1,5 @@
 { config, pkgs, ... }:
 
-let
-  home = config.home.homeDirectory;
-in
 {
   # These variables belong beyond Nushell, but Home Manager's session variables
   # reach only consumers of its generated environment. A compositor started by
@@ -11,10 +8,10 @@ in
   home.sessionVariables = rec {
     # XDG base directories. Tool-specific variables below reuse these paths so
     # applications store config, cache, data, and state in predictable places.
-    XDG_CONFIG_HOME = "${home}/.config";
-    XDG_CACHE_HOME = "${home}/.cache";
-    XDG_DATA_HOME = "${home}/.local/share";
-    XDG_STATE_HOME = "${home}/.local/state";
+    XDG_CONFIG_HOME = config.xdg.configHome;
+    XDG_CACHE_HOME = config.xdg.cacheHome;
+    XDG_DATA_HOME = config.xdg.dataHome;
+    XDG_STATE_HOME = config.xdg.stateHome;
 
     # Default command-line tools used by many programs, not just by Nushell.
     EDITOR = "nvim";

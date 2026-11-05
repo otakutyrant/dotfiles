@@ -176,6 +176,11 @@ locations, and Bash history and Xauthority under XDG state.
 `home.preferXdgDirectories` selects XDG paths in Home Manager modules that
 support the preference; application-specific overrides cover other tools.
 
+CodeQL and NVIDIA Settings use small launcher templates supplied with Home
+Manager's XDG paths. CodeQL calls its declared package directly; NVIDIA Settings
+uses the system executable to match the active driver. Both honor XDG variables
+provided at runtime and fall back to the configured Home Manager locations.
+
 ChatGPT's desktop launcher explicitly supplies the CLI's `CODEX_HOME` and keeps
 its Electron profile at `$XDG_CONFIG_HOME/Codex`, including when launched from
 the application menu before the shell environment is loaded. The explicit

@@ -31,7 +31,7 @@ in
   home.sessionPath = [
     "${home}/.local/bin"
     "${config.home.profileDirectory}/bin"
-    "${home}/.local/share/cargo/bin"
+    "${config.xdg.dataHome}/cargo/bin"
     "${config.xdg.dataHome}/go/bin"
   ];
 

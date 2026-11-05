@@ -46,7 +46,7 @@
     {
       "id": "module/home/configuration.nix",
       "priority": 0,
-      "version": "sha256:6854804cdbba354122c19f800b68dd558416ed74d9876ef952e01d50171292a9",
+      "version": "sha256:29a50e8296cc423c3125e85ffdd89768725bc50ba0054982a079b40175674bab",
       "location": "home/configuration.nix",
       "contexts": "local module/helper",
       "audit": "\u2014 / \u2014; pending"
@@ -86,7 +86,7 @@
     {
       "id": "module/home/options/scripts.nix",
       "priority": 0,
-      "version": "sha256:64f60557b55fb8ccee442cc0e927eab22cda41c52e2f65e0589461932970687a",
+      "version": "sha256:989cb22e2a379e67b8cd929c00ea43f7b7a1fe55ef66bf5f02d7147d946ec005",
       "location": "home/options/scripts.nix",
       "contexts": "local module/helper",
       "audit": "\u2014 / \u2014; pending"
@@ -2258,7 +2258,7 @@
     {
       "id": "module/home/options/env.nix",
       "priority": 2,
-      "version": "sha256:a2f8ca22651c9b43651471ad048d9cdb011ea968c112862f12b9dd5c5d0f988f",
+      "version": "sha256:380ccb154087b297d22d173a6dbb09a8a8a6d29a91a592d05f170119e6f396b8",
       "location": "home/options/env.nix",
       "contexts": "local module/helper",
       "audit": "\u2014 / \u2014; pending"
@@ -2720,7 +2720,7 @@
       "id": "package/codeql",
       "priority": 2,
       "version": "2.25.4",
-      "location": "home/modules/development.nix, ",
+      "location": "home/modules/development.nix, home/options/scripts.nix, ",
       "contexts": "declaration: codeql, home",
       "audit": "\u2014 / \u2014; pending",
       "variants": [
@@ -2736,7 +2736,8 @@
           "version": "2.25.4",
           "scope": "declaration: codeql",
           "declarations": [
-            "home/modules/development.nix"
+            "home/modules/development.nix",
+            "home/options/scripts.nix"
           ]
         }
       ]
@@ -6324,8 +6325,8 @@
       "sha256": "e7fd34fe615d3c71ff32c61eeba7f42d2b44c1730d6895649197f6f6e20b0955"
     },
     {
-      "path": "home/files/bin/codeql",
-      "sha256": "e8ed5a130f63d0f3cc003acb0eae992f3f62b8efb798b53cb89c49162cd0cd6a"
+      "path": "home/files/libexec/codeql.nu",
+      "sha256": "938c3ae9dd3f84fb5a0b7eee3efdbf6398337b32196f942a881dfbc12e3121a0"
     },
     {
       "path": "home/files/bin/codex-sandbox",
@@ -6340,8 +6341,8 @@
       "sha256": "a4aa16cb9924202ef4e30100ae74eca3fbaa41b96ec304347442bb1ed7843677"
     },
     {
-      "path": "home/files/bin/nvidia-settings",
-      "sha256": "64d81da0685eecc4325c9f76e20e89afcd7db252c305d524c263e4dcbb11e6e5"
+      "path": "home/files/libexec/nvidia-settings.nu",
+      "sha256": "22a143be94e1a8d011b66c5270b058931ca248fec3a06f104e74fbeb074c92d0"
     },
     {
       "path": "home/files/bin/page",
@@ -6515,6 +6516,20 @@
       "retired": "2026-10-31",
       "successor": "home/options/programs/codex-rules.nix",
       "reason": "Rules migrated into systemRules and rendered in tools.rules; the separate source and declaration were removed."
+    },
+    {
+      "path": "home/files/bin/codeql",
+      "sha256": "e8ed5a130f63d0f3cc003acb0eae992f3f62b8efb798b53cb89c49162cd0cd6a",
+      "retired": "2026-11-05",
+      "successor": "home/files/libexec/codeql.nu",
+      "reason": "Moved into a Home Manager-rendered launcher template with configured XDG paths."
+    },
+    {
+      "path": "home/files/bin/nvidia-settings",
+      "sha256": "64d81da0685eecc4325c9f76e20e89afcd7db252c305d524c263e4dcbb11e6e5",
+      "retired": "2026-11-05",
+      "successor": "home/files/libexec/nvidia-settings.nu",
+      "reason": "Moved into a Home Manager-rendered launcher template with configured XDG paths."
     }
   ]
 }
