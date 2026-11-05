@@ -21,6 +21,7 @@
       userDataPath = "${config.xdg.configHome}/Codex";
     }) # ChatGPT desktop app; retain the existing Electron profile.
     pkgs.local.cindy # Cindy desktop agent (China edition).
+    # Intentionally use unstable for bleeding-edge OpenCode releases and features.
     pkgs.unstable.opencode # Open AI harness.
 
     ## Database

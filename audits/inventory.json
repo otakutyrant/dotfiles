@@ -62,7 +62,7 @@
     {
       "id": "module/home/options/programs/codex.nix",
       "priority": 0,
-      "version": "sha256:540ca8d507e0d53a9c617ebeccee7cefbc49df65cc61bb0f1e19dc21102a915c",
+      "version": "sha256:c745e943928a9a4493f90ab4781879557da62e636e2c09c8d91477b64275316b",
       "location": "home/options/programs/codex.nix",
       "contexts": "local module/helper",
       "audit": "\u2014 / \u2014; pending"
@@ -839,7 +839,7 @@
     {
       "id": "module/home/modules/development.nix",
       "priority": 1,
-      "version": "sha256:a0f5c932b748a21f105d47ac18bba2121e609eb26523994a36bb12335c2e2173",
+      "version": "sha256:ac627bc3cc4ba7ea5ce3365fd5593b32fa81c312c2e5c1542088ce506addf073",
       "location": "home/modules/development.nix",
       "contexts": "local module/helper",
       "audit": "\u2014 / \u2014; pending"

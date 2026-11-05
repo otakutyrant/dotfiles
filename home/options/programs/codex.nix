@@ -5,6 +5,7 @@
 }:
 
 let
+  # Intentionally use unstable for bleeding-edge Codex releases and features.
   # Keep Codex's mutable config.toml under Codex's control while overriding the
   # new one-row-per-event scroll default for every CLI invocation.
   codexWithFasterScrolling = pkgs.symlinkJoin {
