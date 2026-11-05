@@ -6,7 +6,7 @@
     {
       "id": "definition/home/pkgs/chatgpt.nix",
       "priority": 0,
-      "version": "sha256:54b6a0c1e46a513ba675fade3fcaac36be807ae20edbaec2cca69ae94f002168",
+      "version": "sha256:c5d21bc5d71664f834a9f2755f4c7749920508f289be6b5fd9994405057cc0b8",
       "location": "home/pkgs/chatgpt.nix",
       "contexts": "local derivation; selection recorded in package rows",
       "audit": "\u2014 / \u2014; pending"
@@ -233,7 +233,7 @@
       "variants": [
         {
           "name": "chatgpt",
-          "path": "/nix/store/w73llx3b2gbvq7gymbynn6w2wvf5ckjv-chatgpt-26.917.71314",
+          "path": "/nix/store/4acxaa18pfv6d15mnzc1baxswrz57fyr-chatgpt-26.917.71314",
           "version": "26.917.71314",
           "scope": "home"
         },
@@ -246,7 +246,8 @@
             "home/modules/development.nix"
           ]
         }
-      ]
+      ],
+      "configurationUpdate": "2026-11-05: ChatGPT package extends its existing launcher wrapper with Home Manager CODEX_HOME and CODEX_ELECTRON_USER_DATA_PATH defaults; pending audit."
     },
     {
       "id": "package/cindy",
@@ -838,7 +839,7 @@
     {
       "id": "module/home/modules/development.nix",
       "priority": 1,
-      "version": "sha256:3067aedad894234688e7642900abbd7c591b4b54a147b8072c5348f6b2e5364a",
+      "version": "sha256:a0f5c932b748a21f105d47ac18bba2121e609eb26523994a36bb12335c2e2173",
       "location": "home/modules/development.nix",
       "contexts": "local module/helper",
       "audit": "\u2014 / \u2014; pending"

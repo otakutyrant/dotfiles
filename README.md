@@ -176,6 +176,15 @@ locations, and Bash history and Xauthority under XDG state.
 `home.preferXdgDirectories` selects XDG paths in Home Manager modules that
 support the preference; application-specific overrides cover other tools.
 
+ChatGPT's desktop launcher explicitly supplies the CLI's `CODEX_HOME` and keeps
+its Electron profile at `$XDG_CONFIG_HOME/Codex`, including when launched from
+the application menu before the shell environment is loaded. The explicit
+profile path also preserves `CODEX_HOME` during ChatGPT's shell-environment
+reload. Existing `~/.codex` data is left intact: quit ChatGPT before merging any
+needed configuration, credentials, or sessions into `$XDG_CONFIG_HOME/codex`; do
+not overwrite files already used by the CLI. Restart ChatGPT after activation to
+use the new launcher.
+
 The known XDG “traitors” are **WeChat, Nutstore, and Steam**: they remain
 exceptions to the goal of keeping application configuration and runtime state
 out of the home directory's top level. Protocol-defined paths such as `~/.ssh`

@@ -16,7 +16,10 @@
     # provided by the pinned NixOS 26.05 nixpkgs package set. It provides the
     # `kimi` command and replaces the legacy Python-based kimi-cli.
     config.programs.codex.package # Codex CLI.
-    pkgs.local.chatgpt # ChatGPT desktop app.
+    (pkgs.local.chatgpt.override {
+      codexHome = config.home.sessionVariables.CODEX_HOME;
+      userDataPath = "${config.xdg.configHome}/Codex";
+    }) # ChatGPT desktop app; retain the existing Electron profile.
     pkgs.local.cindy # Cindy desktop agent (China edition).
     pkgs.unstable.opencode # Open AI harness.
 
