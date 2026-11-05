@@ -73,3 +73,56 @@ def git-status-subdirs [] {
     | compact
     | sort-by path
 }
+
+# Push current branches in direct child repositories, defaulting to ~/Projects.
+# Keep upstream selection explicit: branches without an upstream and detached
+# HEADs are skipped. Continue after failures, then return an error for the batch.
+def git-push-subdirs [directory?: path, --dry-run] {
+    let directory = $directory | default "~/Projects" | path expand
+    let results = (
+        ls $directory
+        | where type == dir
+        | sort-by name
+        | each {|entry|
+            let path = $entry.name | path expand
+            let root = (^git --no-optional-locks -C $path rev-parse --show-toplevel | complete)
+            if $root.exit_code != 0 or ($root.stdout | str trim) != $path {
+                return null
+            }
+
+            let branch = (^git -C $path symbolic-ref --quiet --short HEAD | complete)
+            if $branch.exit_code != 0 {
+                return {path: $path, result: skipped, detail: "Detached HEAD or no current branch"}
+            }
+            let upstream = (^git -C $path rev-parse --abbrev-ref --symbolic-full-name '@{upstream}' | complete)
+            if $upstream.exit_code != 0 {
+                return {path: $path, result: skipped, detail: "No configured upstream"}
+            }
+
+            let branch_name = $branch.stdout | str trim
+            let remote = (^git -C $path config --get $"branch.($branch_name).remote" | complete)
+            let target = (^git -C $path config --get $"branch.($branch_name).merge" | complete)
+            if $remote.exit_code != 0 or $target.exit_code != 0 {
+                return {path: $path, result: failed, detail: "Could not read upstream configuration"}
+            }
+
+            # Specify one branch so push.default and remote push refspecs cannot
+            # publish additional branches. Ordinary pushes retain Git's checks.
+            let options = if $dry_run { [--dry-run] } else { [] }
+            let pushed = (^git -C $path push ...$options -- ($remote.stdout | str trim) $"HEAD:($target.stdout | str trim)" | complete)
+            {
+                path: $path,
+                result: (if $pushed.exit_code == 0 { "ok" } else { "failed" }),
+                detail: (($pushed.stdout + $pushed.stderr) | str trim),
+            }
+        }
+        | compact
+    )
+    print $results
+    let failures = $results | where result == failed | length
+    if $failures > 0 {
+        error make {
+            msg: $"Push failed in ($failures) repositories; see the results above."
+        }
+    }
+}

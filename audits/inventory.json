@@ -894,7 +894,7 @@
     {
       "id": "module/home/options/programs/nushell/default.nix",
       "priority": 1,
-      "version": "sha256:0ee98f0d1822e2a4e52a365ecb5fce64b7f5d26c1fc55631e79afcb31a0dd312",
+      "version": "sha256:36cf4cffc7aaebfcfc55980d26a89ef7518d421ba7ea2cb5371450de637dc229",
       "location": "home/options/programs/nushell/default.nix",
       "contexts": "local module/helper",
       "audit": "\u2014 / \u2014; pending"
@@ -6497,6 +6497,10 @@
     {
       "path": "home/files/rime/terra_pinyin.extended.dict.yaml",
       "sha256": "2a981246a69ab0f1cde6e632565125b28f93f1d7d3d85c7103f44bb5f5410b94"
+    },
+    {
+      "path": "home/options/programs/nushell/extra-config.nu",
+      "sha256": "bcf3b6cf29f56a43e3075f980fecacf3df20834599d84d28bd3f446ab8b0328a"
     },
     {
       "path": "nixos/files/nvidia/50-limit-free-buffer-pool-in-wayland-compositors.json",

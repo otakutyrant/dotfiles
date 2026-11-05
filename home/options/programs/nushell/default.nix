@@ -51,6 +51,9 @@ in
       # Show Git status for direct repository subdirectories.
       gss = "git-status-subdirs";
 
+      # Push direct child repositories in ~/Projects to their configured upstreams.
+      gps = "git-push-subdirs";
+
       # --keep 1 retains at least one generation per Nix profile.
       # --keep-one preserves active direnv GC roots so cleanup does not discard
       # cached project environments and require their packages to be fetched again.
