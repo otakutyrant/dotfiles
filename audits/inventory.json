@@ -2346,7 +2346,7 @@
     {
       "id": "module/home/options/xdg.nix",
       "priority": 2,
-      "version": "sha256:d793f793bb23023e957533a928f3e1f82387a24b1210544ed364ea0cd303f02a",
+      "version": "sha256:87722b4437fe8a13cc7be9e986b9c812c3d6c79a833285271b35f79262a09f07",
       "location": "home/options/xdg.nix",
       "contexts": "local module/helper",
       "audit": "\u2014 / \u2014; pending"
