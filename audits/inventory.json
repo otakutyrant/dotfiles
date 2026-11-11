@@ -1039,7 +1039,7 @@
     {
       "id": "module/nixos/options/bluetooth.nix",
       "priority": 1,
-      "version": "sha256:66334821f091833d18a77bff03473c5e20f43708af05c517bc0da7621eba8e26",
+      "version": "sha256:6363900ef444d90b00cc59788ec7d3d15eeb8cd3d1113e7cc2e27d4594c89e5c",
       "location": "nixos/options/bluetooth.nix",
       "contexts": "local module/helper",
       "audit": "\u2014 / \u2014; pending"
