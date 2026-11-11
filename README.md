@@ -208,9 +208,18 @@ in `home/files/libexec`. Session sockets and locks belong under
 `XDG_RUNTIME_DIR`, while ordinary scratch files use `TMPDIR`.
 
 User session variables belong in [home/options/env.nix](home/options/env.nix).
-Values needed before greetd starts Sway belong in
-[nixos/options/env.nix](nixos/options/env.nix). Default applications and desktop
-entries are managed through [the XDG module](home/options/xdg.nix).
+Static desktop defaults are shared through
+[lib/session-environment.nix](lib/session-environment.nix):
+[nixos/options/env.nix](nixos/options/env.nix) supplies them through PAM to both
+greetd and the user manager. Home Manager publishes an explicit public subset of
+personal variables through `~/.profile` and `environment.d`, so desktop
+launchers and user services do not depend on opening Nushell first. The fixed
+`.profile` entry only sources the XDG-managed session environment; it does not
+load interactive shell configuration or credentials. Sway publishes the live
+display environment before starting graphical services through one ordered
+session helper. App-specific input modules remain in their wrappers. Default
+applications and desktop entries are managed through
+[the XDG module](home/options/xdg.nix).
 
 ## Agents and security reviews
 

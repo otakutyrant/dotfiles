@@ -1,6 +1,6 @@
-# Home Manager's `home.sessionPath` is written for login-session setup, but
-# Nushell starts from its own generated environment. Keep these user paths in
-# Nushell too so wrappers in ~/.local/bin can override Nix profile binaries.
+# Desktop login and systemd already receive home.sessionPath. Retain this
+# idempotent fallback for Nushell started outside those entry points, without
+# making graphical applications depend on an interactive shell running first.
 $env.PATH = (@sessionPath@ | append $env.PATH | uniq)
 
 # Prisma's downloaded schema engine is not reliable on NixOS.

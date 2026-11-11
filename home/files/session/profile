@@ -1,0 +1,4 @@
+# greetd reads this POSIX login entry before starting the compositor. Keep
+# personal desktop variables in the XDG configuration tree; do not start an
+# interactive Nushell or load its credentials and shell-only customizations.
+. "@environmentFile@"

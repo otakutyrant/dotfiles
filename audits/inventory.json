@@ -706,7 +706,7 @@
       "id": "package/systemd",
       "priority": 0,
       "version": "260.5",
-      "location": "home/options/services/swayidle.nix, home/options/xdg.nix, , home/options/services/gnome-keyring.nix",
+      "location": "home/options/services/swayidle.nix, home/options/xdg.nix, home/options/env.nix, home/options/services/gnome-keyring.nix",
       "contexts": "declaration: systemd, system/fonts",
       "audit": "\u2014 / \u2014; pending",
       "variants": [
@@ -1015,7 +1015,7 @@
     {
       "id": "module/home/options/services/walker.nix",
       "priority": 1,
-      "version": "sha256:aec0d790c7e4b478c1d77d8891b989bddc0c77d59fe10c40ba2dd4e493ea0469",
+      "version": "sha256:1261efd0cf74e216aa0054c127ec680ac7477262d14638e78c0eb64aeae81f63",
       "location": "home/options/services/walker.nix",
       "contexts": "local module/helper",
       "audit": "\u2014 / \u2014; pending"
@@ -1114,7 +1114,7 @@
       "id": "package/dbus",
       "priority": 1,
       "version": "1.16.2",
-      "location": "",
+      "location": ", home/options/env.nix",
       "contexts": "system/fonts",
       "audit": "\u2014 / \u2014; pending",
       "variants": [
@@ -2306,7 +2306,7 @@
     {
       "id": "module/home/options/env.nix",
       "priority": 2,
-      "version": "sha256:380ccb154087b297d22d173a6dbb09a8a8a6d29a91a592d05f170119e6f396b8",
+      "version": "sha256:3f8c3bb3101879238564b4475ead468c693302fee5d64b034fb415c92ed313ab",
       "location": "home/options/env.nix",
       "contexts": "local module/helper",
       "audit": "\u2014 / \u2014; pending"
@@ -2408,6 +2408,14 @@
       "audit": "\u2014 / \u2014; pending"
     },
     {
+      "id": "module/lib/session-environment.nix",
+      "priority": 2,
+      "version": "sha256:f3893e1548ef08dee689a4284226d4bc61f31ed3a052bfae09ef9f434d203a9a",
+      "location": "lib/session-environment.nix",
+      "contexts": "local module/helper; shared static desktop environment",
+      "audit": "\u2014 / \u2014; pending"
+    },
+    {
       "id": "module/nixos/modules/desktop.nix",
       "priority": 2,
       "version": "sha256:75619e417457c39ac72c754923014f27b72f5c3851bfd18f1e11e4a1039612ed",
@@ -2436,7 +2444,7 @@
     {
       "id": "module/nixos/options/env.nix",
       "priority": 2,
-      "version": "sha256:38b72ebbde7c961ad98a3e24542a567d0908dc84f7e52d1fa9f707ed72df205d",
+      "version": "sha256:d045ea474ae3d17d7e69228695ba3bfbd98d693505371b059b0ac183781cc2a9",
       "location": "nixos/options/env.nix",
       "contexts": "local module/helper",
       "audit": "\u2014 / \u2014; pending"
@@ -6373,10 +6381,6 @@
       "sha256": "e7fd34fe615d3c71ff32c61eeba7f42d2b44c1730d6895649197f6f6e20b0955"
     },
     {
-      "path": "home/files/libexec/codeql.nu",
-      "sha256": "938c3ae9dd3f84fb5a0b7eee3efdbf6398337b32196f942a881dfbc12e3121a0"
-    },
-    {
       "path": "home/files/bin/codex-sandbox",
       "sha256": "6d835c5662140b80c99e04d6cd3cb2fab9d3da39a37af31fac0fce124297f80f"
     },
@@ -6387,10 +6391,6 @@
     {
       "path": "home/files/bin/l",
       "sha256": "a4aa16cb9924202ef4e30100ae74eca3fbaa41b96ec304347442bb1ed7843677"
-    },
-    {
-      "path": "home/files/libexec/nvidia-settings.nu",
-      "sha256": "22a143be94e1a8d011b66c5270b058931ca248fec3a06f104e74fbeb074c92d0"
     },
     {
       "path": "home/files/bin/page",
@@ -6506,11 +6506,15 @@
     },
     {
       "path": "home/files/config/sway/config",
-      "sha256": "5b7135b170442f9bb1a2adfdb29efa4ee82fee436405e5434dc46668160a7b2b"
+      "sha256": "0e8f91946e119c6ff131c3fe46540901348d3e5f2c49bad317cb68e083270220"
     },
     {
       "path": "home/files/config/wired/wired.ron",
       "sha256": "1577f2755a59c57b8151aa853a72c0a1ca180e56062f753458da05e41cabc9d6"
+    },
+    {
+      "path": "home/files/libexec/codeql.nu",
+      "sha256": "938c3ae9dd3f84fb5a0b7eee3efdbf6398337b32196f942a881dfbc12e3121a0"
     },
     {
       "path": "home/files/libexec/copy_codex_rules.nu",
@@ -6525,12 +6529,20 @@
       "sha256": "2fbca1d79024265dec75c247e67e29bf20b41a28889ef88752516587512e3e2b"
     },
     {
+      "path": "home/files/libexec/nvidia-settings.nu",
+      "sha256": "22a143be94e1a8d011b66c5270b058931ca248fec3a06f104e74fbeb074c92d0"
+    },
+    {
       "path": "home/files/libexec/rqbit_magnet_handler.nu",
       "sha256": "f7696462b5e125138aa5967b1487608cefd898f99be9f8debdbeb64974bbc0c6"
     },
     {
       "path": "home/files/libexec/screenshot_delay.nu",
       "sha256": "3e456ecb6bad96ab31c3a4e822cd52c35cc15bafa305f95183d6ba37767655ac"
+    },
+    {
+      "path": "home/files/libexec/start-desktop-session.sh",
+      "sha256": "5bf0111f8df46ac275373281dcdfe3ed548e84ae91c0447b2797ee4bf3bfdecd"
     },
     {
       "path": "home/files/rime/default.custom.yaml",
@@ -6549,8 +6561,16 @@
       "sha256": "2a981246a69ab0f1cde6e632565125b28f93f1d7d3d85c7103f44bb5f5410b94"
     },
     {
+      "path": "home/files/session/profile",
+      "sha256": "176d2259b1096d378fcb4ba03d2070527dc4a0c80a10051f70ad8cd5e17d46cd"
+    },
+    {
       "path": "home/options/programs/nushell/extra-config.nu",
       "sha256": "25c259ceffd9c5065a616bb0bb30fa664a9480c70fd7e9effacb1716bab50804"
+    },
+    {
+      "path": "home/options/programs/nushell/extra-env.nu",
+      "sha256": "21457b870bb323d825fcc307e4d8e93324c3eeab89baf97844251f35ec8a412c"
     },
     {
       "path": "nixos/files/nvidia/50-limit-free-buffer-pool-in-wayland-compositors.json",

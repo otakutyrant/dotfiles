@@ -1,6 +1,8 @@
-# Load NixOS's Sway session integration, including its systemd targets and
-# environment setup.
-include /etc/sway/config.d/*
+# Own session startup here instead of including NixOS's independent exec
+# directives: environment publication must finish before graphical services
+# start. Keep shutdown tied to Sway without restarting services on reload.
+exec --no-startup-id "$HOME/.local/libexec/start-desktop-session"
+exec swaymsg -t subscribe '["shutdown"]' && systemctl --user stop sway-session.target
 
 # Set the win key as master key.
 set $mod Mod4
@@ -191,10 +193,6 @@ bindcode --no-repeat 107 exec --no-startup-id flock -n -o "$XDG_RUNTIME_DIR/scre
 bindcode --no-repeat Shift+107 exec --no-startup-id flock -n -o "$XDG_RUNTIME_DIR/screenshot-select-v2.lock" nu "$HOME/.local/libexec/screenshot_delay.nu" --window
 
 # # Startups
-
-# greetd starts Sway directly, so start NixOS's XDG autostart target here after
-# importing the live Wayland environment. Restart Elephant against this session.
-exec --no-startup-id sh -c 'systemctl --user import-environment DISPLAY WAYLAND_DISPLAY SWAYSOCK && systemctl --user start xdg-autostart-if-no-desktop-manager.target && systemctl --user restart elephant'
 
 # Keep the three-display layout in Sway so it also applies when outputs reconnect.
 # Sway's 270-degree transform preserves the old XRandR left rotation.

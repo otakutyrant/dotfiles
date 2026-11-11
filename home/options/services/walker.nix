@@ -24,6 +24,16 @@
         "reloadSystemd"
       ]
       ''
-        run ${pkgs.systemd}/bin/systemctl --user try-restart elephant.service
+        # NixOS also activates Home Manager before login, when no user bus exists.
+        # Match reloadSystemd's runtime-directory fallback and skip that boot phase;
+        # the graphical session starts Elephant later with its desktop environment.
+        elephantRuntimeDir="''${XDG_RUNTIME_DIR:-/run/user/$(id -u)}"
+        elephantSystemdStatus=$(env XDG_RUNTIME_DIR="$elephantRuntimeDir" \
+          ${pkgs.systemd}/bin/systemctl --user is-system-running 2>/dev/null || true)
+        if [[ "$elephantSystemdStatus" == running || "$elephantSystemdStatus" == degraded ]]; then
+          run env XDG_RUNTIME_DIR="$elephantRuntimeDir" \
+            ${pkgs.systemd}/bin/systemctl --user try-restart elephant.service
+        fi
+        unset elephantRuntimeDir elephantSystemdStatus
       '';
 }
