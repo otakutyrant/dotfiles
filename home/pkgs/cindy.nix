@@ -128,8 +128,10 @@ stdenv.mkDerivation rec {
   '';
 
   preFixup = ''
+    # Electron does not select libsecret automatically in a Sway session.
     makeWrapper "$out/lib/cindy/Cindy" "$out/bin/cindy" \
       "''${gappsWrapperArgs[@]}" \
+      --add-flags --password-store=gnome-libsecret \
       --prefix LD_LIBRARY_PATH : ${
         lib.makeLibraryPath [
           stdenv.cc.cc.lib

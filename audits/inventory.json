@@ -14,7 +14,7 @@
     {
       "id": "definition/home/pkgs/cindy.nix",
       "priority": 0,
-      "version": "sha256:8cb160382b4564480a6230aee07f55e0527792ccb57ff3d067fbe9ea2a381aae",
+      "version": "sha256:cb87abd760bd5dd617bfceb60649ed24b1cf44195d898f1eea17591d1ca03eb8",
       "location": "home/pkgs/cindy.nix",
       "contexts": "local derivation; selection recorded in package rows",
       "audit": "\u2014 / \u2014; pending"
@@ -89,6 +89,14 @@
       "version": "sha256:989cb22e2a379e67b8cd929c00ea43f7b7a1fe55ef66bf5f02d7147d946ec005",
       "location": "home/options/scripts.nix",
       "contexts": "local module/helper",
+      "audit": "\u2014 / \u2014; pending"
+    },
+    {
+      "id": "module/home/options/services/gnome-keyring.nix",
+      "priority": 0,
+      "version": "sha256:6dbc341d9ccf5c29483fbba06a6e30982787b79dc1faacab1559b42dd8109196",
+      "location": "home/options/services/gnome-keyring.nix",
+      "contexts": "local module/helper; encrypted Secret Service and unlock prompt",
       "audit": "\u2014 / \u2014; pending"
     },
     {
@@ -261,13 +269,13 @@
       "variants": [
         {
           "name": "cindy",
-          "path": "/nix/store/v2r9pyh8fxzp0sczb5kh0275rlgd0299-cindy-0.1.121",
+          "path": "/nix/store/8p40ssh2qz4vdyc6pj3y0fc10h297zby-cindy-0.1.121",
           "version": "0.1.121",
           "scope": "home"
         },
         {
           "name": "cindy",
-          "path": "/nix/store/v2r9pyh8fxzp0sczb5kh0275rlgd0299-cindy-0.1.121",
+          "path": "/nix/store/8p40ssh2qz4vdyc6pj3y0fc10h297zby-cindy-0.1.121",
           "version": "0.1.121",
           "scope": "declaration: local.cindy",
           "declarations": [
@@ -392,6 +400,44 @@
           "path": "/nix/store/kmjc4q8yylkr0xgdc7f344zbhnrbf66v-docker-29.9.1",
           "version": "29.9.1",
           "scope": "system/fonts"
+        }
+      ]
+    },
+    {
+      "id": "package/gcr",
+      "priority": 0,
+      "version": "3.41.2",
+      "location": "home/options/services/gnome-keyring.nix",
+      "contexts": "D-Bus keyring password prompt",
+      "audit": "\u2014 / \u2014; pending",
+      "variants": [
+        {
+          "name": "gcr",
+          "path": "/nix/store/qxav6hssh1fgf8qclphnf0i7iglayk12-gcr-3.41.2",
+          "version": "3.41.2",
+          "scope": "service dependency",
+          "declarations": [
+            "home/options/services/gnome-keyring.nix"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "package/gnome-keyring",
+      "priority": 0,
+      "version": "50.0",
+      "location": "home/options/services/gnome-keyring.nix",
+      "contexts": "user Secret Service; useWrappedDaemon=false; secrets component only",
+      "audit": "\u2014 / \u2014; pending",
+      "variants": [
+        {
+          "name": "gnome-keyring",
+          "path": "/nix/store/jfgn992hs3kp1bpfxv0hys4l3zff2i0a-gnome-keyring-50.0",
+          "version": "50.0",
+          "scope": "service dependency",
+          "declarations": [
+            "home/options/services/gnome-keyring.nix"
+          ]
         }
       ]
     },
@@ -660,7 +706,7 @@
       "id": "package/systemd",
       "priority": 0,
       "version": "260.5",
-      "location": "home/options/services/swayidle.nix, home/options/xdg.nix, ",
+      "location": "home/options/services/swayidle.nix, home/options/xdg.nix, , home/options/services/gnome-keyring.nix",
       "contexts": "declaration: systemd, system/fonts",
       "audit": "\u2014 / \u2014; pending",
       "variants": [

@@ -190,8 +190,13 @@ needed configuration, credentials, or sessions into `$XDG_CONFIG_HOME/codex`; do
 not overwrite files already used by the CLI. Restart ChatGPT after activation to
 use the new launcher.
 
-Cindy uses the international release, with its profile under
-`$XDG_CONFIG_HOME/CindyGlobal`.
+Cindy uses the international release and explicitly selects GNOME Keyring for
+encrypted sign-in credentials under Sway. Home Manager starts only the keyring's
+Secret Service and installs its D-Bus activation and password-prompt services.
+On first use, choose a keyring password in the desktop dialog; subsequent
+sessions can ask to unlock it. This user service does not configure PAM to
+unlock the keyring with the login password. Existing Cindy profiles remain in
+place, with the international profile under `$XDG_CONFIG_HOME/CindyGlobal`.
 
 The known XDG “traitors” are **WeChat, Nutstore, and Steam**: they remain
 exceptions to the goal of keeping application configuration and runtime state
