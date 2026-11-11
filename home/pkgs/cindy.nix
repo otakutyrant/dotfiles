@@ -46,11 +46,10 @@ stdenv.mkDerivation rec {
   pname = "cindy";
   version = "0.1.121";
 
-  # This host uses the China edition; the global edition has separate accounts
-  # and a separate Electron userData directory.
+  # Select the international edition explicitly, regardless of host locale.
   src = fetchurl {
-    url = "https://github.com/makecindy/cindy/releases/download/v${version}/cindy-${version}-linux-x64-cn.deb";
-    hash = "sha256-lB5VvCOByHRgxcYIekjlX01QNzWYKnNjvUt8gIwtKxQ=";
+    url = "https://github.com/makecindy/cindy/releases/download/v${version}/cindy-${version}-linux-x64-global.deb";
+    hash = "sha256-t1ZmPD8w1s+KddTY6jgzaEJomlBLaC1ixt09a6AeBmM=";
   };
 
   nativeBuildInputs = [
@@ -111,6 +110,11 @@ stdenv.mkDerivation rec {
   dontBuild = true;
   dontWrapGApps = true;
 
+  # patchelf 0.15 moves libvips' .init without updating DT_INIT, crashing
+  # Sharp at startup (NixOS/patchelf#639). Preserve this bundled library and
+  # supply its C++ runtime through the launcher instead.
+  dontAutoPatchelf = true;
+
   installPhase = ''
     runHook preInstall
 
@@ -126,11 +130,26 @@ stdenv.mkDerivation rec {
   preFixup = ''
     makeWrapper "$out/lib/cindy/Cindy" "$out/bin/cindy" \
       "''${gappsWrapperArgs[@]}" \
+      --prefix LD_LIBRARY_PATH : ${
+        lib.makeLibraryPath [
+          stdenv.cc.cc.lib
+          # Bundled ANGLE resolves native EGL through dlopen.
+          libGL
+        ]
+      } \
       --prefix PATH : ${lib.makeBinPath [ xdg-utils ]}
   '';
 
+  postFixup = ''
+    addAutoPatchelfSearchPath "$out"
+    mapfile -d "" -t patchTargets < <(
+      find "$out" -type f ! -path '*/@img/sharp-libvips-linux-x64/lib/libvips-cpp.so.*' -print0
+    )
+    autoPatchelf --no-recurse -- "''${patchTargets[@]}"
+  '';
+
   meta = {
-    description = "Cindy AI agent desktop client (China edition)";
+    description = "Cindy AI agent desktop client (international edition)";
     homepage = "https://github.com/makecindy/cindy";
     license = lib.licenses.asl20;
     platforms = [ "x86_64-linux" ];

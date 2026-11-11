@@ -190,6 +190,9 @@ needed configuration, credentials, or sessions into `$XDG_CONFIG_HOME/codex`; do
 not overwrite files already used by the CLI. Restart ChatGPT after activation to
 use the new launcher.
 
+Cindy uses the international release, with its profile under
+`$XDG_CONFIG_HOME/CindyGlobal`.
+
 The known XDG “traitors” are **WeChat, Nutstore, and Steam**: they remain
 exceptions to the goal of keeping application configuration and runtime state
 out of the home directory's top level. Protocol-defined paths such as `~/.ssh`

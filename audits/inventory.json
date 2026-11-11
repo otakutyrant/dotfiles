@@ -14,7 +14,7 @@
     {
       "id": "definition/home/pkgs/cindy.nix",
       "priority": 0,
-      "version": "sha256:8ada0c8a8b15d24e426ed03d908a852914240186f809129ab8690031c89b3a79",
+      "version": "sha256:8cb160382b4564480a6230aee07f55e0527792ccb57ff3d067fbe9ea2a381aae",
       "location": "home/pkgs/cindy.nix",
       "contexts": "local derivation; selection recorded in package rows",
       "audit": "\u2014 / \u2014; pending"
@@ -254,18 +254,20 @@
       "priority": 0,
       "version": "0.1.121",
       "location": "home/modules/development.nix, ",
-      "contexts": "declaration: local.cindy, home",
-      "audit": "— / —; pending",
+      "contexts": "declaration: local.cindy (international edition), home",
+      "sourceUrl": "https://github.com/makecindy/cindy/releases/download/v0.1.121/cindy-0.1.121-linux-x64-global.deb",
+      "sourceSha256": "b756663c3f30d6cf8a75d4d8ea38336842689a504b682d62c6dd3d6ba01e0663",
+      "audit": "\u2014 / \u2014; pending",
       "variants": [
         {
           "name": "cindy",
-          "path": "/nix/store/0nvnbwgx5wmrkdhgvq5w09l3dqlgbhfm-cindy-0.1.121",
+          "path": "/nix/store/v2r9pyh8fxzp0sczb5kh0275rlgd0299-cindy-0.1.121",
           "version": "0.1.121",
           "scope": "home"
         },
         {
           "name": "cindy",
-          "path": "/nix/store/0nvnbwgx5wmrkdhgvq5w09l3dqlgbhfm-cindy-0.1.121",
+          "path": "/nix/store/v2r9pyh8fxzp0sczb5kh0275rlgd0299-cindy-0.1.121",
           "version": "0.1.121",
           "scope": "declaration: local.cindy",
           "declarations": [
@@ -839,7 +841,7 @@
     {
       "id": "module/home/modules/development.nix",
       "priority": 1,
-      "version": "sha256:ac627bc3cc4ba7ea5ce3365fd5593b32fa81c312c2e5c1542088ce506addf073",
+      "version": "sha256:cbb9df44967d903132db8d085fc457271b6cefe97f54bef6692dd15e43f9a00e",
       "location": "home/modules/development.nix",
       "contexts": "local module/helper",
       "audit": "\u2014 / \u2014; pending"
