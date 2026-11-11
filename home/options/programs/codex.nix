@@ -33,10 +33,11 @@ in
     # complete directories under CODEX_HOME/skills. Codex rejects a symlinked
     # SKILL.md whose canonical path escapes the skill root.
     skills.english-writing-teacher = "${tyrantSkills}/english-writing-teacher";
-    skills.tyrant-agents = "${tyrantSkills}/tyrant-agents";
+    skills.project-agents-md = "${tyrantSkills}/project-agents-md";
     # Keep AGENTS.md structure separate from full project-convention adoption.
     skills.tyrant-agent-md-specification = "${tyrantSkills}/tyrant-agent-md-specification";
     skills.prompts-as-comments = "${tyrantSkills}/prompts-as-comments";
+    skills.review-command-permissions = "${tyrantSkills}/review-command-permissions";
     skills.tyrant-module-layers = "${tyrantSkills}/tyrant-module-layers";
     skills.tyrant-project-layers = "${tyrantSkills}/tyrant-project-layers";
   };

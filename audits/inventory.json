@@ -1,7 +1,7 @@
 {
   "reconciled": "2026-10-31",
   "basis": "Declared configuration, not a live-profile assertion. Evaluated Home Manager packages, NixOS system/font packages, explicit package references, plugins, local Nix modules/definitions, and locked flake inputs. Service implementation and runtime-managed plugins remain in owning module audit scope.",
-  "lockSha256": "554ecfe6616fa815e5ebbff107d6762df8e9b1301e9b2a1f7f5d7857d744a4c3",
+  "lockSha256": "3929457cf7576fd76a73ac68939244e34fb0b51246e616cce1bda4663a1a970d",
   "entities": [
     {
       "id": "definition/home/pkgs/chatgpt.nix",
@@ -62,7 +62,7 @@
     {
       "id": "module/home/options/programs/codex.nix",
       "priority": 0,
-      "version": "sha256:c745e943928a9a4493f90ab4781879557da62e636e2c09c8d91477b64275316b",
+      "version": "sha256:2f887db4fc64f9fe6b6463f8dba0fbfe2f9c24a7cb4fff1626876f46a88c7c23",
       "location": "home/options/programs/codex.nix",
       "contexts": "local module/helper",
       "audit": "\u2014 / \u2014; pending"
@@ -759,7 +759,7 @@
     {
       "id": "input/home-manager_2",
       "priority": 1,
-      "version": "095fef2f265c3c0da4fe315efba8f8a04495ab34",
+      "version": "24f2190587513b9c2f73db112a17844ae912d965",
       "location": "flake.nix / flake.lock",
       "contexts": "flake input, including transitive inputs",
       "audit": "\u2014 / \u2014; pending"
@@ -783,7 +783,7 @@
     {
       "id": "input/nixpkgs_2",
       "priority": 1,
-      "version": "31ecbaca1bdefa45dffc409f0250bd8039ea0010",
+      "version": "cd4ea8d57de16f4810bc5f14207bac45fbf19f67",
       "location": "flake.nix / flake.lock",
       "contexts": "flake input, including transitive inputs",
       "audit": "\u2014 / \u2014; pending"
@@ -823,7 +823,7 @@
     {
       "id": "input/tyrant-skills",
       "priority": 1,
-      "version": "bced718aa1a345241682be76f0d3d50ee196ffad",
+      "version": "cd959e922dfd5082eaa974f47bc168fc8d0a3d73",
       "location": "flake.nix / flake.lock",
       "contexts": "flake input, including transitive inputs",
       "audit": "\u2014 / \u2014; pending"
