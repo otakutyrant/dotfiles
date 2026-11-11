@@ -470,6 +470,53 @@ in
       # separate saved-approval file so every command has one declarative owner.
       systemRules = [
         {
+          # Panel inspection and control subcommands are intentionally allowed.
+          pattern = [ "ironbar" ];
+          justification = "Inspect and control Ironbar through its command interface";
+          match = [
+            "ironbar --version"
+            "ironbar ping"
+          ];
+        }
+        {
+          pattern = [ "readlink" ];
+          justification = "Inspect symbolic links and resolve filesystem paths";
+          match = [ "readlink -f /run/current-system/sw/bin/ironbar" ];
+        }
+        {
+          # Generic launcher invocation is intentionally allowed, including
+          # state-mount options; repository trust requirements still apply.
+          pattern = [ "sandbox" ];
+          justification = "Allow the trusted generic sandbox launcher and its command arguments";
+          match = [ "sandbox --no-nix-daemon nu" ];
+        }
+        {
+          # Desktop-handler dispatch is intentionally allowed for every target.
+          pattern = [ "xdg-open" ];
+          justification = "Open files and URLs through the configured desktop handlers";
+          match = [ "xdg-open https://example.com" ];
+        }
+        {
+          pattern = [
+            "elephant"
+            "query"
+          ];
+          justification = "Query the configured Elephant providers";
+          match = [ "elephant query 'files;documents;10;false'" ];
+          notMatch = [ "elephant activate 'files;example;open;;'" ];
+        }
+        {
+          # The full reload prefix is intentionally allowed, including trailing
+          # arguments that Swaymsg joins into its IPC message.
+          pattern = [
+            "swaymsg"
+            "reload"
+          ];
+          justification = "Reload Sway configuration through its IPC interface";
+          match = [ "swaymsg reload" ];
+          notMatch = [ "swaymsg exit" ];
+        }
+        {
           # The trusted launcher supplies containment independently of Codex
           # approvals; the worker must still follow repository trust rules.
           pattern = [ "codex-sandbox" ];
@@ -540,16 +587,21 @@ in
           justification = "Read package registry metadata without installing packages or running lifecycle scripts";
         }
         {
+          # Every subcommand under this prefix is intentionally allowed,
+          # including service lifecycle and persistence changes.
           pattern = [
             "systemctl"
             "--user"
-            "show"
           ];
-          justification = "Inspect user service state without changing it";
+          justification = "Inspect and manage user services with systemctl --user";
           match = [
             "systemctl --user show"
             "systemctl --user show panoptor.service"
+            "systemctl --user is-active ironbar.service"
+            "systemctl --user restart ironbar.service"
+            "systemctl --user enable ironbar.service"
           ];
+          notMatch = [ "systemctl --system restart ironbar.service" ];
         }
       ];
     };

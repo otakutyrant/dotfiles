@@ -54,7 +54,7 @@
     {
       "id": "module/home/options/programs/codex-rules.nix",
       "priority": 0,
-      "version": "sha256:aabe4830488a88457b3d2bc7f4f3f3e32f21ea2f39ae4b2f95bab18e1fde7850",
+      "version": "sha256:a7f632d04077eb088365e05dd86126833839fb4262b222ab79b7ae80199c65a5",
       "location": "home/options/programs/codex-rules.nix",
       "contexts": "local module/helper",
       "audit": "\u2014 / \u2014; pending"

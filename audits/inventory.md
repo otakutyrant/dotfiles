@@ -53,6 +53,14 @@ On 2026-11-03, the Walker module gained an activation hook to refresh an already
 running Elephant after profile and desktop-link updates. Its module digest was
 refreshed; its audit status remains pending.
 
+On 2026-11-06, the saved allows for `sandbox`, `xdg-open`, `elephant query`, and
+`swaymsg reload` were declared in the Codex rules module. Its digest was
+refreshed; audit status remains pending.
+
+On 2026-11-06, Codex command policy also allowed all `ironbar` and `readlink`
+invocations and expanded `systemctl --user` to every subcommand. The rules
+module digest was refreshed; audit status remains pending.
+
 The last column records audit date / audited version and coverage status. A dash
 means no audit is recorded in the current baseline. All entities are pending
 after the user-requested reset. See [ledger.md](ledger.md) for completion
@@ -78,7 +86,7 @@ are preserved under `retiredOwnedArtifacts`. Audit status remains pending.
 | P0       | `input/flake-utils`                                       | `11707dc2f618dd54ca8739b309ec4fc024de578b` | flake.nix / flake.lock                                                                                                                                                                                         | — / —; pending                    |
 | P0       | `module/flake.nix`                                        | `sha256:b12e78bfce9b`                      | flake.nix                                                                                                                                                                                                      | — / —; pending                    |
 | P0       | `module/home/configuration.nix`                           | `sha256:29a50e8296cc`                      | home/configuration.nix                                                                                                                                                                                         | — / —; pending                    |
-| P0       | `module/home/options/programs/codex-rules.nix`            | `sha256:aabe4830488a`                      | home/options/programs/codex-rules.nix                                                                                                                                                                          | — / —; pending                    |
+| P0       | `module/home/options/programs/codex-rules.nix`            | `sha256:a7f632d04077`                      | home/options/programs/codex-rules.nix                                                                                                                                                                          | — / —; pending                    |
 | P0       | `module/home/options/programs/codex.nix`                  | `sha256:c745e943928a`                      | home/options/programs/codex.nix                                                                                                                                                                                | — / —; pending                    |
 | P0       | `module/home/options/programs/direnv.nix`                 | `sha256:431505f0d948`                      | home/options/programs/direnv.nix                                                                                                                                                                               | — / —; pending                    |
 | P0       | `module/home/options/programs/kimi.nix`                   | `sha256:9719cc102cae`                      | home/options/programs/kimi.nix                                                                                                                                                                                 | — / —; pending                    |
