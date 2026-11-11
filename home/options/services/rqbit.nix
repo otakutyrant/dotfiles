@@ -24,6 +24,7 @@ in
       # Wi-Fi interface so DHT UDP bypasses Clash's unreliable gVisor TUN path.
       # uTP is still experimental in rqbit, but enabling it allows metadata
       # discovery from peers that do not accept BitTorrent connections over TCP.
+      # rqbit 8.1.1 in 26.05 lacks bind-device, uTP, and DHT-bootstrap flags.
       ExecStart = builtins.concatStringsSep " " [
         "${pkgs.unstable.rqbit}/bin/rqbit"
         "--bind-device wlp7s0"

@@ -72,7 +72,7 @@
           # sliding tray submenus require near the bottom edge of an output.
           inherit (unstablePackages) sway;
 
-          # Fast-moving packages intentionally come from unstable nixpkgs.
+          # nwg-notifications 0.7.0 requires Rust 1.97; 26.05 provides 1.95.
           nwg-notifications = unstablePackages.callPackage ./home/pkgs/nwg-notifications.nix { };
         };
       };

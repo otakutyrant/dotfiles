@@ -40,6 +40,7 @@ in
         (toString config.home.pointerCursor.size)
       ];
     }) # WeChat bundles the Fcitx Qt plugin but only enables it via QT_IM_MODULE.
+    # The pinned 26.05 QQ installer URL returns HTTP 404.
     pkgs.unstable.qq # QQ messaging client with native Wayland input support.
     pkgs.ticktick # Time management client.
     pkgs.typora # Markdown editor and reader; includes its desktop entry.
@@ -60,7 +61,7 @@ in
     pkgs.qbittorrent # Bittorrent client.
 
     # Wayland
-    pkgs.unstable.ironbar # Current GTK4 panel; sliding tray submenus rely on Sway 1.12.
+    pkgs.ironbar # GTK4 panel; sliding tray submenus rely on Sway 1.12.
     pkgs.swayidle # Idle timeout manager used by the Home Manager service.
     pkgs.swaylock # Screen locker invoked by Sway key bindings and idle timeouts.
     # Build upstream wayshot with the merged BGR888 stride fix before nixpkgs

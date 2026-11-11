@@ -38,7 +38,7 @@
     {
       "id": "module/flake.nix",
       "priority": 0,
-      "version": "sha256:b12e78bfce9b585f42d1444adc70dd99b27e33129c02aaefde0f25ff07c91879",
+      "version": "sha256:debfb936fb61a3e12d92386d3ab33c12892f0c7103c096bf1efbc75aba0ad2e0",
       "location": "flake.nix",
       "contexts": "local module/helper",
       "audit": "\u2014 / \u2014; pending"
@@ -895,7 +895,7 @@
     {
       "id": "module/home/modules/gui-clients.nix",
       "priority": 1,
-      "version": "sha256:3ce1de62dac0b31a1944571d4b9071ab02cb710380fd2d0afadf37e3f632b23f",
+      "version": "sha256:4a1d4be88214e9dc76b98abd41a2dec8a1ada68734c1764f179fca9b208d333a",
       "location": "home/modules/gui-clients.nix",
       "contexts": "local module/helper",
       "audit": "\u2014 / \u2014; pending"
@@ -999,7 +999,7 @@
     {
       "id": "module/home/options/services/rqbit.nix",
       "priority": 1,
-      "version": "sha256:03a7af272e14d01ebcc66e9f6296d4dd374a084d59c1a3c0d1f29e0a3e04bdc5",
+      "version": "sha256:f8f873aa615ef54d917e5df61c5492b2c8a881138c9d4b5ef9a3fb894a5924ca",
       "location": "home/options/services/rqbit.nix",
       "contexts": "local module/helper",
       "audit": "\u2014 / \u2014; pending"
@@ -1312,15 +1312,15 @@
     {
       "id": "package/ironbar",
       "priority": 1,
-      "version": "0.19.0, 0.19.1",
+      "version": "0.19.0",
       "location": "home/modules/gui-clients.nix, home/options/services/ironbar.nix, ",
-      "contexts": "declaration: ironbar, declaration: unstable.ironbar, home",
+      "contexts": "declaration: ironbar, home",
       "audit": "\u2014 / \u2014; pending",
       "variants": [
         {
           "name": "ironbar",
-          "path": "/nix/store/v46fvhi7bn13sfwvwwwdv3zcri27qnwg-ironbar-0.19.1",
-          "version": "0.19.1",
+          "path": "/nix/store/0a974n6szl4avpz2yzidikca75rhjqg2-ironbar-0.19.0",
+          "version": "0.19.0",
           "scope": "home"
         },
         {
@@ -1329,16 +1329,8 @@
           "version": "0.19.0",
           "scope": "declaration: ironbar",
           "declarations": [
+            "home/modules/gui-clients.nix",
             "home/options/services/ironbar.nix"
-          ]
-        },
-        {
-          "name": "ironbar",
-          "path": "/nix/store/v46fvhi7bn13sfwvwwwdv3zcri27qnwg-ironbar-0.19.1",
-          "version": "0.19.1",
-          "scope": "declaration: unstable.ironbar",
-          "declarations": [
-            "home/modules/gui-clients.nix"
           ]
         }
       ]
@@ -2298,7 +2290,7 @@
     {
       "id": "module/home/modules/cli-utilities.nix",
       "priority": 2,
-      "version": "sha256:e24642d4122ad48f4516568a4994a6190bfc1263a8db59091a84be70b9f03f2f",
+      "version": "sha256:cf1cd06c9dacd34faac0e44ecdbb60f13d349aea90f317e6b84002703c891e31",
       "location": "home/modules/cli-utilities.nix",
       "contexts": "local module/helper",
       "audit": "\u2014 / \u2014; pending"
