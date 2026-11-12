@@ -25,13 +25,13 @@ in
   # can activate Home Manager before login, when no user bus exists; the next
   # login discovers these files when it starts the bus.
   home.activation.reloadKeyringDbusServices =
-    lib.hm.dag.entryBetween [ "reloadSystemd" ] [ "linkGeneration" ]
-      ''
-        keyringRuntimeDir="''${XDG_RUNTIME_DIR:-/run/user/$(id -u)}"
-        if [[ -S "$keyringRuntimeDir/bus" ]]; then
-          run ${pkgs.systemd}/bin/busctl --address="unix:path=$keyringRuntimeDir/bus" \
-            call org.freedesktop.DBus /org/freedesktop/DBus org.freedesktop.DBus ReloadConfig
-        fi
-        unset keyringRuntimeDir
-      '';
+    # no-bash-allow: Home Manager activation requires its shell DAG interface.
+    lib.hm.dag.entryBetween [ "reloadSystemd" ] [ "linkGeneration" ] ''
+      keyringRuntimeDir="''${XDG_RUNTIME_DIR:-/run/user/$(id -u)}"
+      if [[ -S "$keyringRuntimeDir/bus" ]]; then
+        run ${pkgs.systemd}/bin/busctl --address="unix:path=$keyringRuntimeDir/bus" \
+          call org.freedesktop.DBus /org/freedesktop/DBus org.freedesktop.DBus ReloadConfig
+      fi
+      unset keyringRuntimeDir
+    '';
 }

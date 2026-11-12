@@ -52,6 +52,7 @@ rustPlatform.buildRustPackage rec {
     wayland
   ];
 
+  # no-bash-allow: Nix stdenv runs this build or wrapper phase through its shell interface.
   postInstall = ''
     installManPage docs/wayshot.1.gz docs/wayshot.5.gz docs/wayshot.7.gz
     installShellCompletion --cmd wayshot \

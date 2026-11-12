@@ -17,6 +17,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   sourceRoot = "nufmt-x86_64-unknown-linux-gnu";
 
+  # no-bash-allow: Nix stdenv runs this build or wrapper phase through its shell interface.
   installPhase = ''
     runHook preInstall
     install -Dm755 nufmt "$out/bin/nufmt"

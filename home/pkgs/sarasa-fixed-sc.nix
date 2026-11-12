@@ -21,12 +21,14 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ p7zip ];
 
+  # no-bash-allow: Nix stdenv runs this build or wrapper phase through its shell interface.
   unpackPhase = ''
     runHook preUnpack
     7z x $src
     runHook postUnpack
   '';
 
+  # no-bash-allow: Nix stdenv runs this build or wrapper phase through its shell interface.
   installPhase = ''
     runHook preInstall
     install -Dm444 SarasaFixedSC-Regular.ttf "$out/share/fonts/truetype/SarasaFixedSC-Regular.ttf"

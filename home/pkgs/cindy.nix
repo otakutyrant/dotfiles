@@ -98,6 +98,7 @@ stdenv.mkDerivation rec {
     vulkan-loader
   ];
 
+  # no-bash-allow: Nix stdenv runs this build or wrapper phase through its shell interface.
   unpackPhase = ''
     runHook preUnpack
     # Nix cannot install the Debian archive's setuid chrome-sandbox helper;
@@ -115,6 +116,7 @@ stdenv.mkDerivation rec {
   # supply its C++ runtime through the launcher instead.
   dontAutoPatchelf = true;
 
+  # no-bash-allow: Nix stdenv runs this build or wrapper phase through its shell interface.
   installPhase = ''
     runHook preInstall
 

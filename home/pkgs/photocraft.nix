@@ -34,6 +34,7 @@ stdenvNoCC.mkDerivation rec {
 
   dontBuild = true;
 
+  # no-bash-allow: Nix stdenv runs this build or wrapper phase through its shell interface.
   installPhase = ''
     runHook preInstall
 

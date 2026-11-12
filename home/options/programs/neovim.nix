@@ -21,6 +21,7 @@
   # enabled. Removing the directory from beneath that process makes the next
   # lazy Lua load, such as the Markdown filetype plugin, fail with ENOENT when
   # it tries to write new bytecode.
+  # no-bash-allow: Home Manager activation requires its shell DAG interface.
   home.activation.clearNvimLuacCache = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
     nvim_luac_cache=${lib.escapeShellArg "${config.xdg.cacheHome}/nvim/luac"}
     mkdir -p "$nvim_luac_cache"

@@ -20,6 +20,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ python3Packages.fonttools ];
 
+  # no-bash-allow: Nix stdenv runs this build or wrapper phase through its shell interface.
   installPhase = ''
     runHook preInstall
     # Upstream's deterministic FontTools build applies Zhongdou's focused

@@ -22,6 +22,7 @@ symlinkJoin {
   paths = [ package ];
   nativeBuildInputs = [ makeWrapper ];
 
+  # no-bash-allow: Nix stdenv runs this build or wrapper phase through its shell interface.
   postBuild = ''
     for executable in ${lib.escapeShellArgs executables}; do
       if [[ ! -x "$out/bin/$executable" ]]; then

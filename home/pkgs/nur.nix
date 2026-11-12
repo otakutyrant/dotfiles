@@ -19,6 +19,7 @@ stdenvNoCC.mkDerivation {
   nativeBuildInputs = [ autoPatchelfHook ];
   buildInputs = [ stdenv.cc.cc.lib ];
 
+  # no-bash-allow: Nix stdenv runs this build or wrapper phase through its shell interface.
   installPhase = ''
     runHook preInstall
     install -Dm755 nur $out/bin/nur

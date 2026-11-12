@@ -17,6 +17,7 @@
   # generation. Refresh it after package and desktop-link updates, without
   # starting the backend when no graphical session has started it.
   home.activation.refreshElephant =
+    # no-bash-allow: Home Manager activation requires its shell DAG interface.
     lib.hm.dag.entryAfter
       [
         "installPackages"

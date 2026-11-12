@@ -127,6 +127,7 @@ in
   # package profile, so refresh the per-user cache once those links are in
   # place. GTK's application chooser otherwise keeps an older mimeinfo.cache
   # and can report that no application supports a newly added URI scheme.
+  # no-bash-allow: Home Manager activation requires its shell DAG interface.
   home.activation.updateUserDesktopDatabase = lib.hm.dag.entryAfter [ "linkGeneration" ] ''
     run ${pkgs.desktop-file-utils}/bin/update-desktop-database ${lib.escapeShellArg "${config.xdg.dataHome}/applications"}
   '';

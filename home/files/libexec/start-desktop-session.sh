@@ -1,4 +1,5 @@
 #!/bin/sh
+# no-bash-script-allow: Approved POSIX desktop-session entry sources the shared login environment.
 set -eu
 
 # A single ordered entry owns session startup. Separate Sway exec directives

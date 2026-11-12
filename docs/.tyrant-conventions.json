@@ -1,0 +1,26 @@
+{
+  "Documentation.md": {
+    "revision": 2,
+    "sha256": "6b03c96d065c93df982b8e37ca54b8d0296943205773adba408cbe726d113e26"
+  },
+  "Domain errors.md": {
+    "revision": 2,
+    "sha256": "cc0de8ed37bf0cb6c8b5cb9210d4500a15c4b7e5a3035c4625433e9f228d328c"
+  },
+  "Module layers.md": {
+    "revision": 1,
+    "sha256": "8da303e59579526e7cabd91b992dc3fc9fc20210bbeadc6fb9ca37644cb47738"
+  },
+  "Resource ownership.md": {
+    "revision": 1,
+    "sha256": "3abd933e1489e2730a61d79c627f4dfd150e7495085c88430c321416ab4253bb"
+  },
+  "Test coverage.md": {
+    "revision": 1,
+    "sha256": "d34b2f8553a9aefcc48264c882484a9ac3dbe705e9e1461c53c9eacbc5cacd7b"
+  },
+  "Workflows.md": {
+    "revision": 7,
+    "sha256": "130c9e7f67706dd873c048758611ae4e6d028a0b9ad4602f3ad2fa599c018ec1"
+  }
+}

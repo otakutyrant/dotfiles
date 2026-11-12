@@ -16,6 +16,7 @@ let
     version = pkgs.unstable.codex.version;
     paths = [ pkgs.unstable.codex ];
     nativeBuildInputs = [ pkgs.makeWrapper ];
+    # no-bash-allow: Nix stdenv runs this build or wrapper phase through its shell interface.
     postBuild = ''
       wrapProgram $out/bin/codex \
         --add-flags "--config tui.mouse_scroll_speed=3.0"

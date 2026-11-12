@@ -44,6 +44,7 @@ rustPlatform.buildRustPackage {
   doCheck = false;
   doInstallCheck = true;
 
+  # no-bash-allow: Nix stdenv runs this build or wrapper phase through its shell interface.
   postInstall = ''
     install -D nmrs.desktop -t $out/share/applications
   '';

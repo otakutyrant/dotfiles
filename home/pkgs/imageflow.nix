@@ -46,6 +46,7 @@ stdenvNoCC.mkDerivation rec {
   # select the archive root instead of Nix's default first directory.
   sourceRoot = ".";
 
+  # no-bash-allow: Nix stdenv runs this build or wrapper phase through its shell interface.
   installPhase = ''
     runHook preInstall
 

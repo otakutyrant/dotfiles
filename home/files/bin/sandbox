@@ -92,7 +92,6 @@ def --wrapped main [
         "--dir", "/bin"
         "--symlink", "/run/current-system/sw/bin/sh"
         "/bin/sh"
-
         "--dir", "/var"
         "--symlink", "../tmp"
         "/var/tmp"

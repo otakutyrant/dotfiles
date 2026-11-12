@@ -76,6 +76,7 @@ stdenv.mkDerivation {
 
   dontStrip = true;
 
+  # no-bash-allow: Nix stdenv runs this build or wrapper phase through its shell interface.
   buildPhase = ''
     runHook preBuild
     export KIMI_CODE_BUILD_TARGET=${nativeTarget}
@@ -84,6 +85,7 @@ stdenv.mkDerivation {
     runHook postBuild
   '';
 
+  # no-bash-allow: Nix stdenv runs this build or wrapper phase through its shell interface.
   installPhase = ''
     runHook preInstall
     install -Dm755 \
@@ -92,6 +94,7 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+  # no-bash-allow: Nix stdenv runs this build or wrapper phase through its shell interface.
   postInstall = ''
     wrapProgram $out/bin/kimi --prefix PATH : ${
       lib.makeBinPath [

@@ -110,6 +110,7 @@ stdenv.mkDerivation rec {
     stdenv.cc.cc.lib
   ];
 
+  # no-bash-allow: Nix stdenv runs this build or wrapper phase through its shell interface.
   installPhase = ''
     runHook preInstall
 

@@ -94,6 +94,32 @@
       };
     in
     {
+      # Validate the same rendered scripts Home Manager installs. This output
+      # builds templates only; it does not activate or execute session code.
+      packages.${system}.workflow-templates =
+        let
+          homeConfig = inputs.self.homeConfigurations.${username}.config;
+          extraEnv = builtins.elemAt (builtins.match "source-env (.*)" homeConfig.programs.nushell.extraEnv) 0;
+        in
+        developmentPackages.linkFarm "dotfiles-workflow-templates" [
+          {
+            name = "extra-env.nu";
+            path = extraEnv;
+          }
+          {
+            name = "codeql.nu";
+            path = homeConfig.home.file.".local/bin/codeql".source;
+          }
+          {
+            name = "nvidia-settings.nu";
+            path = homeConfig.home.file.".local/bin/nvidia-settings".source;
+          }
+          {
+            name = "rqbit-magnet-handler.nu";
+            path = homeConfig.home.file.".local/libexec/rqbit-magnet-handler".source;
+          }
+        ];
+
       devShells.${system}.default = developmentPackages.mkShell {
         packages = with developmentPackages; [
           deadnix

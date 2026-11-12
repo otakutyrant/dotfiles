@@ -22,7 +22,11 @@ def lua-files [] {
 }
 
 def nu-files [] {
+    let scripts = (checked-files ""
+        | where {|path| $path | str starts-with "home/files/bin/" }
+        | where {|path| (open --raw $path | lines | first | default "") =~ '^#!.*\bnu(?:\s|$)' })
     checked-files ".nu"
+    | append $scripts
     | append "nurfile"
     | sort
     | uniq
@@ -34,9 +38,31 @@ def markdown-files [] {
 
 def formatted-nu-files [] {
 
-    # This Home Manager replaceVars template becomes valid Nu only after Nix
-    # substitutes its @sessionPath@ placeholder.
+    # The list placeholder is not valid source; check Home Manager's rendered
+    # result instead. Other templates retain parseable command/path strings.
     nu-files | where {|path| $path != "home/options/programs/nushell/extra-env.nu" }
+}
+
+# Capture diagnostic records: IDE mode reports errors with a successful exit.
+# Disable private config discovery without executing the inspected script.
+def check-nu-source [file: path] {
+    let result = (with-env {XDG_CONFIG_HOME: "/nonexistent/dotfiles-static-check"} {
+        ^nu --no-config-file --ide-check 10000 $file | complete
+    })
+    ensure-success $result $"Nushell diagnostics for ($file)"
+    let diagnostics = ($result.stdout | lines | where {|line| $line | str trim | is-not-empty }
+        | each {|line| $line | from json }
+        | where {|item| $item.type == diagnostic })
+    let errors = $diagnostics | where {|item| $item.severity == Error }
+    if ($errors | is-not-empty) {
+        error make {
+            msg: $"Nushell diagnostics failed for ($file)"
+            help: ($errors | to json)
+        }
+    }
+    for diagnostic in $diagnostics {
+        print --stderr $"($file): ($diagnostic.severity): ($diagnostic.message)"
+    }
 }
 
 def architecture-violations [files: list<record>] {
@@ -67,8 +93,11 @@ def assert-no-architecture-violations [files: list<record>] {
 
 def ensure-success [result: record, operation: string] {
     if $result.exit_code != 0 {
-        let message = $result.stderr | str trim
+        let message = ($result.stdout + $result.stderr) | str trim
         error make {msg: $"($operation) failed: ($message)"}
+    }
+    if ($result.stderr | str trim | is-not-empty) {
+        print --stderr ($result.stderr | str trim)
     }
 }
 
@@ -90,7 +119,8 @@ export def "nur format-lua" [] {
 
 # Format checked-in Nushell files with the pinned upstream nufmt release.
 export def "nur format-nushell" [] {
-    let files = (formatted-nu-files)
+    # Preserve the managed checker's exact canonical bytes.
+    let files = formatted-nu-files | where {|file| $file != "tasks/no_bash.nu" }
     if ($files | is-not-empty) {
         ^nufmt --shebang ...$files
     }
@@ -141,7 +171,7 @@ export def "nur lint-lua" [] {
 export def "nur lint-nushell" [] {
     let files = (formatted-nu-files)
     if ($files | is-not-empty) {
-        ^nufmt --dry-run --shebang ...$files
+        ^nufmt --dry-run --shebang ...($files | where {|file| $file != "tasks/no_bash.nu" })
         ^nu-lint ...($files | where {|file| $file != "nurfile" })
         open --raw nurfile | ^nu-lint --stdin
     }
@@ -185,16 +215,52 @@ export def "nur typecheck-lua" [] {
     ^lua-language-server --check . --checklevel Error --check_format pretty --logpath /tmp/dotfiles-lua-language-server-log
 }
 
-# Check every Nushell source and directly source autoload modules.
+# Statically check scripts and evaluated templates without sourcing user code.
 export def "nur typecheck-nushell" [] {
-    let files = (nu-files)
-    for file in ($files | where {|path| $path | str contains "/autoload/" }) {
-        ^nu -n -c $"source ($file)"
+    for file in (formatted-nu-files) {
+        check-nu-source $file
     }
+    let result = (
+        # Panoptor evaluates module types concurrently; avoid contending for
+        # the same SQLite evaluation-cache database in the template role.
+        ^nix build --option eval-cache false --no-update-lock-file --no-link --print-out-paths .#workflow-templates
+        | complete
+    )
+    ensure-success $result "Home Manager workflow template build"
+    for file in (glob ($result.stdout | str trim | path join "*.nu")) {
+        check-nu-source $file
+    }
+}
 
-    for file in $files {
-        ^nu --ide-check 0 $file | ignore
+# Check the sh/Bash prohibition with narrowly justified interface exceptions.
+export def "nur check-shell" [] {
+    ^nu --no-config-file tasks/no_bash.nu
+}
+
+# Verify the pinned environment without installing or activating configuration.
+export def "nur doctor" [] {
+    for command in [
+        nix
+        nu
+        nur
+        nixfmt
+        nu-lint
+        nufmt
+        prettier
+        selene
+        stylua
+        process-compose
+    ] {
+        if (which $command | is-empty) {
+            error make {msg: $"Missing development executable: ($command)"}
+        }
     }
+    nur panoptor check
+}
+
+# Prepare this dependency-free checkout by verifying its loaded Nix shell.
+export def "nur setup" [] {
+    nur doctor
 }
 
 # Run all type-aware and parser diagnostics.
@@ -263,8 +329,11 @@ export def "nur test-architecture" [] {
         { path: "home/options/example.nix", content: "import ../../../nixos/example.nix" }
         { path: "nixos/options/example.nix", content: "import ../../home/example.nix" }
         { path: "lib/example.nix", content: "import ../home/example.nix" }
+        { path: "home/example.nix", content: "imports = [ ../nixos/configuration.nix ];" }
+        { path: "nixos/deep/example.nix", content: "value = ../../home/configuration.nix;" }
+        { path: "lib/deep/example.nix", content: "value = ../../nixos/configuration.nix;" }
     ])
-    if ($forbidden | length) != 3 {
+    if ($forbidden | length) != 6 {
         error make {msg: "Architecture fixtures did not reject every forbidden dependency"}
     }
 }
@@ -279,15 +348,43 @@ export def "nur test-sandbox-shell" [] {
     ensure-success $result "Sandbox /bin/sh compatibility check"
 }
 
+# Prove that IDE diagnostics fail invalid source despite a zero exit status.
+export def "nur test-nushell-diagnostics" [] {
+    let directory = (^mktemp --directory | str trim)
+    let valid = $directory | path join valid.nu
+    let invalid = $directory | path join invalid.nu
+    "let value = 1\nprint $value\n" | save $valid
+    "def broken [" | save $invalid
+    let outcome = try {
+        check-nu-source $valid
+        let rejected = try {
+            check-nu-source $invalid
+            false
+        } catch {
+            true
+        }
+        $rejected
+    } catch {|failure|
+        ^rm -r -- $directory
+        error make {msg: $failure.msg}
+    }
+    ^rm -r -- $directory
+    if not $outcome {
+        error make {msg: "Nushell diagnostics accepted invalid source"}
+    }
+}
+
 # Run all deterministic repository tests.
 export def "nur test" [] {
     nur test-architecture
+    nur test-nushell-diagnostics
     nur test-sandbox-shell
 }
 
 # Run repository structure, raw-data, and deterministic fixture checks.
 export def "nur verify" [] {
     nur architecture
+    nur check-shell
     nur validate-data
     nur test
 }
@@ -314,7 +411,8 @@ export def "nur switch-nixos" [] {
     ^nh os switch ".#nixos" --no-update-lock-file
 }
 
-# Build and activate Home Manager. Run only when explicitly requested.
+# Activate Home Manager after the complete deterministic gate, as required by
+# this project's handoff policy. This never activates NixOS.
 export def "nur switch-home" [] {
     ^nh home switch . --configuration otakutyrant --no-update-lock-file
 }
@@ -435,7 +533,7 @@ def start-panoptor [] {
         }
     }
     if ($socket | path exists) {
-        rm --force $socket
+        rm $socket
     }
     let started = with-env {PANOPTOR_PROJECT_ROOT: (repository-root)} {
         ^process-compose --use-uds --unix-socket $socket --log-file (server-log-path) --ordered-shutdown up --config $CONFIG_PATH --detached --tui=false --disable-dotenv --keep-project | complete

@@ -4,7 +4,7 @@
 # `page` starts. This avoids typing search keys while `page` is still appending
 # command output into its buffer.
 def --wrapped main [...args: string] {
-    let wrapper = ($env.HOME | path join ".local/bin/page" | path expand)
+    let wrapper = $env.HOME | path join ".local/bin/page" | path expand
     # Skip this wrapper because ~/.local/bin comes before the real `page` in PATH.
     let real_page = (
         $env.PATH
@@ -13,7 +13,7 @@ def --wrapped main [...args: string] {
         | first
     )
 
-    if ($in == null) {
+    if $in == null {
         ^$real_page ...$args
     } else {
         $in | collect | ^$real_page ...$args

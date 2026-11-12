@@ -67,8 +67,10 @@ processes:
       debounce: 500ms
       paths:
         - path: .
-          include: ["*.nu", "nurfile"]
+          include: ["*.nu", "*.nix", "flake.lock", "nurfile"]
           exclude: [".direnv/**"]
+        # The default recursive excludes prune directories named bin.
+        - path: home/files/bin
 
   nushell_typecheck:
     command: nur typecheck-nushell
@@ -79,8 +81,9 @@ processes:
       debounce: 500ms
       paths:
         - path: .
-          include: ["*.nu", "nurfile"]
+          include: ["*.nu", "*.nix", "flake.lock", "nurfile"]
           exclude: [".direnv/**"]
+        - path: home/files/bin
 
   repository_checks:
     command: nur verify
@@ -92,5 +95,6 @@ processes:
       paths:
         - path: .
           include:
-            ["*.nix", "*.nu", "*.lua", "*.yaml", "*.yml", "*.toml", "*.json", "*.desktop", "nurfile"]
+            ["*.nix", "*.nu", "*.lua", "*.yaml", "*.yml", "*.toml", "*.json", "*.desktop", "*.md", "nurfile"]
           exclude: [".direnv/**"]
+        - path: home/files/bin

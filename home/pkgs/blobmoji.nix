@@ -17,6 +17,7 @@ stdenvNoCC.mkDerivation {
     hash = "sha256-nBAZjXC5P1E/txgXdYcI5SGKoqJZTXEoVa5peNq3GCU=";
   };
 
+  # no-bash-allow: Nix stdenv runs this build or wrapper phase through its shell interface.
   installPhase = ''
     runHook preInstall
     install -Dm444 system/fonts/Blobmoji.ttf "$out/share/fonts/truetype/Blobmoji.ttf"

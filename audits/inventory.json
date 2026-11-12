@@ -14,7 +14,7 @@
     {
       "id": "definition/home/pkgs/cindy.nix",
       "priority": 0,
-      "version": "sha256:cb87abd760bd5dd617bfceb60649ed24b1cf44195d898f1eea17591d1ca03eb8",
+      "version": "sha256:1ec7006d8952f786fa6990e417059caee484ddd5f5db3a13a85464c0fc1fdd5d",
       "location": "home/pkgs/cindy.nix",
       "contexts": "local derivation; selection recorded in package rows",
       "audit": "\u2014 / \u2014; pending"
@@ -22,7 +22,7 @@
     {
       "id": "definition/home/pkgs/kimi-code.nix",
       "priority": 0,
-      "version": "sha256:c4d6cc1f94233eb741aab3c2b0f0fc7ffefad4295689aa134ca02ee446002de7",
+      "version": "sha256:919a71fe62a3a4b84acffdfa60c6bbcd8c7dc9b2e739f684edc036c1bd07cd00",
       "location": "home/pkgs/kimi-code.nix",
       "contexts": "local derivation; selection recorded in package rows",
       "audit": "\u2014 / \u2014; pending"
@@ -38,7 +38,7 @@
     {
       "id": "module/flake.nix",
       "priority": 0,
-      "version": "sha256:debfb936fb61a3e12d92386d3ab33c12892f0c7103c096bf1efbc75aba0ad2e0",
+      "version": "sha256:5e5916480d26ff734b51cb978ca12241ae3b14a594a851a24c9faadfce59000d",
       "location": "flake.nix",
       "contexts": "local module/helper",
       "audit": "\u2014 / \u2014; pending"
@@ -54,7 +54,7 @@
     {
       "id": "module/home/options/programs/codex-rules.nix",
       "priority": 0,
-      "version": "sha256:a7f632d04077eb088365e05dd86126833839fb4262b222ab79b7ae80199c65a5",
+      "version": "sha256:81438139c2823ac0fc3ba196bd564a599608fc5f49f223f115837d3f185f4b82",
       "location": "home/options/programs/codex-rules.nix",
       "contexts": "local module/helper",
       "audit": "\u2014 / \u2014; pending"
@@ -62,7 +62,7 @@
     {
       "id": "module/home/options/programs/codex.nix",
       "priority": 0,
-      "version": "sha256:2f887db4fc64f9fe6b6463f8dba0fbfe2f9c24a7cb4fff1626876f46a88c7c23",
+      "version": "sha256:135853476f09bd7050f9ba8887735bded065c1a97418c6dc50fd6d4820dde2ac",
       "location": "home/options/programs/codex.nix",
       "contexts": "local module/helper",
       "audit": "\u2014 / \u2014; pending"
@@ -94,7 +94,7 @@
     {
       "id": "module/home/options/services/gnome-keyring.nix",
       "priority": 0,
-      "version": "sha256:6dbc341d9ccf5c29483fbba06a6e30982787b79dc1faacab1559b42dd8109196",
+      "version": "sha256:6a93fcaf6379464b0ab2d1e1ddb27fd747503950c906028c91f82c7e9e5ae5b5",
       "location": "home/options/services/gnome-keyring.nix",
       "contexts": "local module/helper; encrypted Secret Service and unlock prompt",
       "audit": "\u2014 / \u2014; pending"
@@ -110,7 +110,7 @@
     {
       "id": "module/lib/wrap-with-fcitx-qt.nix",
       "priority": 0,
-      "version": "sha256:72aaf166fb34562ff8a849cefeb359dcf587f54158ae02a90381781408391588",
+      "version": "sha256:13f8ceeef0a5f87459ce82b9b0645e575d76d89495a07ba782a43328d5b48f45",
       "location": "lib/wrap-with-fcitx-qt.nix",
       "contexts": "local module/helper",
       "audit": "\u2014 / \u2014; pending"
@@ -759,7 +759,7 @@
     {
       "id": "definition/home/pkgs/nutstore.nix",
       "priority": 1,
-      "version": "sha256:3c8e3eb6cdb3b6e47bc8fecc085a687b1c9e35abcbd6835e4b6d23967a250420",
+      "version": "sha256:62854de183e38ba23c783470a6b3a4b96f19543f91240982fdb2f5b57d6ced63",
       "location": "home/pkgs/nutstore.nix",
       "contexts": "local derivation; selection recorded in package rows",
       "audit": "\u2014 / \u2014; pending"
@@ -927,7 +927,7 @@
     {
       "id": "module/home/options/programs/neovim.nix",
       "priority": 1,
-      "version": "sha256:d251db99499837bbe4d554496d735d5e4f6881a9d3e8527d619c9150a0f7d680",
+      "version": "sha256:a5b542b26f6993618302c99ddba583c22ee7f3fb7a75eb60761a3e0c9bd6e9f1",
       "location": "home/options/programs/neovim.nix",
       "contexts": "local module/helper",
       "audit": "\u2014 / \u2014; pending"
@@ -1015,7 +1015,7 @@
     {
       "id": "module/home/options/services/walker.nix",
       "priority": 1,
-      "version": "sha256:1261efd0cf74e216aa0054c127ec680ac7477262d14638e78c0eb64aeae81f63",
+      "version": "sha256:fb0d64f31660c60a3c7c2ab458e293d840474d828618514ccdf177c8cf9edeb5",
       "location": "home/options/services/walker.nix",
       "contexts": "local module/helper",
       "audit": "\u2014 / \u2014; pending"
@@ -2210,7 +2210,7 @@
     {
       "id": "definition/home/pkgs/imageflow.nix",
       "priority": 2,
-      "version": "sha256:bc6f2ebe4b33057512877b31758978916e1d93b76e2b9f9b597f17a5bb4e0586",
+      "version": "sha256:68dfef650f561bde0e13f52f364b91746b448620785c23265f6177d681e196a8",
       "location": "home/pkgs/imageflow.nix",
       "contexts": "local derivation; selection recorded in package rows",
       "audit": "\u2014 / \u2014; pending"
@@ -2218,7 +2218,7 @@
     {
       "id": "definition/home/pkgs/nmrs.nix",
       "priority": 2,
-      "version": "sha256:9d8c4c255a2650d3fe0752362b65bcf6048a0b05eff9dc75fd8201e4c3a22016",
+      "version": "sha256:e04f77f194a5bf91e6bb2958e7705ae414bbf8d57e12b5d22f6cb2e3dad33fa6",
       "location": "home/pkgs/nmrs.nix",
       "contexts": "local derivation; selection recorded in package rows",
       "audit": "\u2014 / \u2014; pending"
@@ -2226,7 +2226,7 @@
     {
       "id": "definition/home/pkgs/nufmt.nix",
       "priority": 2,
-      "version": "sha256:4f9825282770405660efca82cdb176f38604e24b69d92df99dda7404084af341",
+      "version": "sha256:f482d3920263b7d232f1a2c64482b7ff915cafd9c367ff1c36f445ac9b9e23ae",
       "location": "home/pkgs/nufmt.nix",
       "contexts": "local derivation; selection recorded in package rows",
       "audit": "\u2014 / \u2014; pending"
@@ -2234,7 +2234,7 @@
     {
       "id": "definition/home/pkgs/nur.nix",
       "priority": 2,
-      "version": "sha256:0ce6e4e4bf45d17670eb6548553d4913efc3e69fb0400669b78614a658783a18",
+      "version": "sha256:d54727e620816797036ce3068080b0aa5d53cf18689bba0e976b906b9f722c26",
       "location": "home/pkgs/nur.nix",
       "contexts": "local derivation; selection recorded in package rows",
       "audit": "\u2014 / \u2014; pending"
@@ -2258,7 +2258,7 @@
     {
       "id": "definition/home/pkgs/photocraft.nix",
       "priority": 2,
-      "version": "sha256:8623ffc55124fb61489583a91ead637bae4177f46215c20fe39ab49d262be55d",
+      "version": "sha256:a2afcdb6488ccf2bb34077c3f19bb8d64b65a51703340f6ccec0128a9986768d",
       "location": "home/pkgs/photocraft.nix",
       "contexts": "local derivation; selection recorded in package rows",
       "audit": "\u2014 / \u2014; pending"
@@ -2274,7 +2274,7 @@
     {
       "id": "definition/home/pkgs/wayshot.nix",
       "priority": 2,
-      "version": "sha256:4c447e9d747ba3d47ef04aa405ffd9b63ed7026699d7beb5e0ec4bd64aaabc6b",
+      "version": "sha256:611462664f87836c3eafbf12e89172144a2deb8592637788898c1ce69cd5f35a",
       "location": "home/pkgs/wayshot.nix",
       "contexts": "local derivation; selection recorded in package rows",
       "audit": "\u2014 / \u2014; pending"
@@ -2386,7 +2386,7 @@
     {
       "id": "module/home/options/xdg.nix",
       "priority": 2,
-      "version": "sha256:87722b4437fe8a13cc7be9e986b9c812c3d6c79a833285271b35f79262a09f07",
+      "version": "sha256:d946711029bdbfb7285d0244c79f436f1751d69c26ffeb799a629d031a5b42e6",
       "location": "home/options/xdg.nix",
       "contexts": "local module/helper",
       "audit": "\u2014 / \u2014; pending"
@@ -5935,7 +5935,7 @@
     {
       "id": "definition/home/pkgs/blobmoji.nix",
       "priority": 3,
-      "version": "sha256:c1264de33172f996d9f88567377ba7988a58601e7ac7687dc379a40ef803246d",
+      "version": "sha256:3a5aac2593e73a79cab934a14da2e2d37bc3044e6706bacba39fc2bc854ef559",
       "location": "home/pkgs/blobmoji.nix",
       "contexts": "local derivation; selection recorded in package rows",
       "audit": "\u2014 / \u2014; pending"
@@ -5943,7 +5943,7 @@
     {
       "id": "definition/home/pkgs/sarasa-fixed-sc.nix",
       "priority": 3,
-      "version": "sha256:be3e179c035c887463ffdacbbd3eeaff39212db7a9da57a5139578409c576796",
+      "version": "sha256:15f80513f064a192695af29377ff0dd74e4126b4b3156796934ef5f0e7b6817f",
       "location": "home/pkgs/sarasa-fixed-sc.nix",
       "contexts": "local derivation; selection recorded in package rows",
       "audit": "\u2014 / \u2014; pending"
@@ -5951,7 +5951,7 @@
     {
       "id": "definition/home/pkgs/zhongdou-sans.nix",
       "priority": 3,
-      "version": "sha256:d28a93c120244bef56e5cfd67bc5a49ed2069662b7bf512a5cfea01d946fbd5a",
+      "version": "sha256:60a623a6301aeff172f9e97a086058aaeca08b3b96d57ed9a815257916fdeddd",
       "location": "home/pkgs/zhongdou-sans.nix",
       "contexts": "local derivation; selection recorded in package rows",
       "audit": "\u2014 / \u2014; pending"
